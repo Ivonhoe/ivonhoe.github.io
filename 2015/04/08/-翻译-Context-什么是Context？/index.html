@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>[译]Context?什么是Context？ | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="原文地址：http://possiblemobile.com/2013/06/context/
+##Context可能是Android应用中最常用的元素也是最容易误用的元素Context是经常被传递的对象，它可以很容易的构造一个你意想不到的情景，如加载资源，启动一个新的Activity，得到一个系统服务，得到内部文件路径和创建视图都需要一个Context去完成这个工作，我接下来为你在Context">
+<meta property="og:type" content="article">
+<meta property="og:title" content="[译]Context?什么是Context？">
+<meta property="og:url" content="http://yoursite.com/2015/04/08/-翻译-Context-什么是Context？/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="原文地址：http://possiblemobile.com/2013/06/context/
+##Context可能是Android应用中最常用的元素也是最容易误用的元素Context是经常被传递的对象，它可以很容易的构造一个你意想不到的情景，如加载资源，启动一个新的Activity，得到一个系统服务，得到内部文件路径和创建视图都需要一个Context去完成这个工作，我接下来为你在Context">
+<meta property="og:updated_time" content="2015-04-17T02:36:52.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="[译]Context?什么是Context？">
+<meta name="twitter:description" content="原文地址：http://possiblemobile.com/2013/06/context/
+##Context可能是Android应用中最常用的元素也是最容易误用的元素Context是经常被传递的对象，它可以很容易的构造一个你意想不到的情景，如加载资源，启动一个新的Activity，得到一个系统服务，得到内部文件路径和创建视图都需要一个Context去完成这个工作，我接下来为你在Context">
+  
+    <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  
+
+</head>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post--翻译-Context-什么是Context？" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/04/08/-翻译-Context-什么是Context？/" class="article-date">
+  <time datetime="2015-04-08T03:06:31.000Z" itemprop="datePublished">2015-04-08</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      [译]Context?什么是Context？
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>原文地址：<a href="http://possiblemobile.com/2013/06/context/" target="_blank" rel="external">http://possiblemobile.com/2013/06/context/</a></p>
+<p>##Context可能是Android应用中最常用的元素也是最容易误用的元素<br>Context是经常被传递的对象，它可以很容易的构造一个你意想不到的情景，如加载资源，启动一个新的Activity，得到一个系统服务，得到内部文件路径和创建视图都需要一个Context去完成这个工作，我接下来为你在Context到底是如何工作的和为你能在你的应用中更好的运用Context提供建议。<br><a id="more"></a></p>
+<p>##Context类型<br>并不是所有的Context实例都是相同的，对于不同的Android应用组件，Context会有一些差别。</p>
+<p>###Application<br>Application 是应用进程中的一个单例，它可以通过Activity或者Service的getApplication()方法或者从Context派生出的其他对象调用getApplicationContext()方法得到，在同一个进程里任意时刻你得到的都是相同的Application实例。</p>
+<p>###Activity和Service<br>Activity和Sevice继承ContextWrapper，而ContxtWrapper同样实现了Context的接口，但是ContextWrapper的所有的方法都是通过包装一个内部context对象实现的，也就是它的base context（注：看ContextWrapper源码，ContextWrapper顾名思义就是Context的包装，ContextWrapper的实际功能都是成员变量mBase完成的，ContextThemeWrapper集成ContextWrapper，增加了Theme和Configuration作为成员变量，Activity继承ContextThemeWrapper，所以说Activity才是唯一包含主题信息的context。详细见下文）。当framework创建一个新的Activity或者Service的实例时，也会创造一个新的ContextImpl实例去真正完成context的实际功能，每一个Activity或者服务，和他们相应的base context，都是不同的context实例。</p>
+<p>###BroadcastReceiver<br>BroadcastReceiver本身并不是Context，但是当广播事件传递的时候，framework都会在onReceive()方法中传递一个Context。这个Context是一个ReceiverRestrictedContext实例（注：看ContextImpl的getReceiverRestrictedContext()方法），它的registerReceiver()和bindService()方法是失效的，这两个功能是不允许通过onReceive()方法传递的Context调用的，（每次receiver处理一个广播，都会创建一个新的context实例。)</p>
+<p>###ContentProvider<br>ContentProvider同样也不是Context，但是已被创建就可以活取getContext方法，如果ContentProvider和调用者在同一个进程，那会返回相同的Application实例，如果在两个单独的进程里，getContext()会返回一个新创建的Context，代表这个provider进程的Context。（注：可以阅读ActivityThread.java中的installProvider()和ContentProvider的attachInfo()方法，installProvider方法会根据provider的包名和当前进程名进行比较，如果是同一个进程那就使用当前的application context，如果在不同的进程中，就会调用createPackageContext创建一个provider相关的Context，并通过attachInfo绑定provider）。</p>
+<p>##保存引用<br>我们首先关注的问题是，当我们在一个对象或者类里面保存一个context的引用，但是这个对象或者类的生命周期超过了你保存的context实例的生命周期。例如，创建需要一个Context对象去加载资源或者去调用CotentProvider，保存当前Activity或者Service的引用在这个单例中。</p>
+<p>失败的单例：</p>
+<pre><code><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">CustomManager</span> {
+    <span class="keyword">private</span> <span class="keyword">static</span> CustomManager sInstance;
+
+    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> CustomManager <span class="title">getInstance</span>(<span class="params">Context context</span>) </span>{
+        <span class="keyword">if</span> (sInstance == <span class="keyword">null</span>) {
+            sInstance = <span class="keyword">new</span> CustomManager(context);
+        }
+
+        <span class="keyword">return</span> sInstance;
+    }
+
+    <span class="keyword">private</span> Context mContext;
+
+    <span class="function"><span class="keyword">private</span> <span class="title">CustomManager</span>(<span class="params">Context context</span>) </span>{
+        mContext = context;
+    }
+}
+</code></pre><p>这里的问题是我们并不知道这个Context从哪里来，当持有一个结束的Activity或者Service是不安全的，这是因为在这个类里的单例是一个静态引用。这意味着我们引用的对象包括所有被这个对象引用的对象都不会被垃圾回收。如果这个Context是一个Activity，那么就会造成这个Activity引用的所有视图和其他可能跟它关联的对象持续占有内存，造成内存泄露。</p>
+<p>为了防止这种情况，我们把这个单例修改成引用appliction context。</p>
+<p>修改后的单例：</p>
+<pre><code><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">CustomManager</span> {
+    <span class="keyword">private</span> <span class="keyword">static</span> CustomManager sInstance;
+
+    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> CustomManager <span class="title">getInstance</span>(<span class="params">Context context</span>) </span>{
+        <span class="keyword">if</span> (sInstance == <span class="keyword">null</span>) {
+            <span class="comment">//Always pass in the Application Context</span>
+            sInstance = <span class="keyword">new</span> CustomManager(context.getApplicationContext());
+        }
+
+        <span class="keyword">return</span> sInstance;
+    }
+
+    <span class="keyword">private</span> Context mContext;
+
+    <span class="function"><span class="keyword">private</span> <span class="title">CustomManager</span>(<span class="params">Context context</span>) </span>{
+        mContext = context;
+    }
+}
+</code></pre><p>现在不用关心这个Context是什么，因为现在持有的引用是安全的。Application context本身就是一个单例，我们只是创建另一个静态引用并不会造成内存泄露。另一个类似例子就是在一个后台的线程或者等待的Handler里持有一个Context引用。<br>既然这样那我们为什么总是引用一个application context呢？我们就永远不用担心内存泄露的问题。答案当然是不可以，就想我在前面提到的那样，每种类型的Context类型都不相同。</p>
+<p>##Context的功能</p>
+<p>我们安全的调用Context的方法取决于这个Context是如何创建的，下面的表是Context功能的使用情况：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th style="text-align:center">Application</th>
+<th style="text-align:center">Activity</th>
+<th style="text-align:center">Service</th>
+<th style="text-align:center">ContentProvider</th>
+<th style="text-align:center">BroadcastReceiver</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Show a Dialog</td>
+<td style="text-align:center">NO</td>
+<td style="text-align:center">YES</td>
+<td style="text-align:center">NO</td>
+<td style="text-align:center">NO</td>
+<td style="text-align:center">NO</td>
+</tr>
+<tr>
+<td>Start an Activity</td>
+<td style="text-align:center">NO1</td>
+<td style="text-align:center">YES</td>
+<td style="text-align:center">NO1</td>
+<td style="text-align:center">NO1</td>
+<td style="text-align:center">NO1</td>
+</tr>
+<tr>
+<td>Layout Inflation</td>
+<td style="text-align:center">NO2</td>
+<td style="text-align:center">YES</td>
+<td style="text-align:center">NO2</td>
+<td style="text-align:center">NO2</td>
+<td style="text-align:center">NO2</td>
+</tr>
+<tr>
+<td>Start a Service</td>
+<td style="text-align:center">YES</td>
+<td style="text-align:center">YES</td>
+<td style="text-align:center">YES</td>
+<td style="text-align:center">YES</td>
+<td style="text-align:center">YES</td>
+</tr>
+<tr>
+<td>Bind to a Service</td>
+<td style="text-align:center">YES</td>
+<td style="text-align:center">YES</td>
+<td style="text-align:center">YES</td>
+<td style="text-align:center">YES</td>
+<td style="text-align:center">NO</td>
+</tr>
+<tr>
+<td>Send a Broadcast</td>
+<td style="text-align:center">YES</td>
+<td style="text-align:center">YES</td>
+<td style="text-align:center">YES</td>
+<td style="text-align:center">YES</td>
+<td style="text-align:center">YES</td>
+</tr>
+<tr>
+<td>Register BroadcastReceiver</td>
+<td style="text-align:center">YES</td>
+<td style="text-align:center">YES</td>
+<td style="text-align:center">YES</td>
+<td style="text-align:center">YES</td>
+<td style="text-align:center">NO3</td>
+</tr>
+<tr>
+<td>Load Resource Values</td>
+<td style="text-align:center">YES</td>
+<td style="text-align:center">YES</td>
+<td style="text-align:center">YES</td>
+<td style="text-align:center">YES</td>
+<td style="text-align:center">YES</td>
+</tr>
+</tbody>
+</table>
+<p>注：<br>1.一个application可以启动一个Activity，但是需要创建一个新的任务。这样做可能满足一些特定的需求，但是在应用中创建一个非标准的回退栈并不是一种经过深思熟虑的推荐做法。<br>2.这样是合法的，但是这样是加载出来的系统默认的主题布局，而并不是你在应用里定义的主题样式。<br>3.在receiver是null的情况下是允许的（注：看ContextImpl的内部类ReceiverRestrictedContext，ReceiverRestrictedContext进程ContentWrapper但是重写了注册广播和绑定服务的方法，会在这两个方法里抛出异常。为什么要这么做？），在4.2以上版本用来获取粘性广播。</p>
+<p>##用户接口<br>从上个表格你可以看出，有很多和UI处理相关的Context的功能并不适合用application context去处理。事实上，实现了所有和所有UI相关的操作接口的是Activity，而其他的类别的功能都几乎相同。<br>幸运的是这三个操作（注：指Application context不具备的三个Context功能）是application在Activity范围之外根本不需要去做的，这好像就是framework故意设计如此，如果你尝试通过一个application context去创建一个对话框或者启动一个Activity会抛出异常并造成应用程序终止，会有明显的指示告诉你这样出错了。<br>另一个值得注意的问题是加载布局，如果你阅读过我的文章<a href="http://www.doubleencore.com/2013/05/layout-inflation-as-intended" target="_blank" rel="external">layout inflation</a>,你会觉得这个过程会是稍微难理解的过程，使用正确的context就算一个。当你使用通过application context构造的LayoutInflater去加载视图，当然framework同样会返回一个正确的视图树，但是你在应用中设置的主题和样式是被忽略的，这是因为Activity才是真正关联你在manifest中设置的主题的Context。其他类型的Context实例会使用系统默认的主题样式去构建视图。所以这样构建出的视图可能并不是像你预期的那样。</p>
+<p>##交集<br>一定会有人得到这样的冲突的结论，在应用设计中会有一种情况，可能必须长期持有一个Activity Context引用，因为我想完成的任务包含UI的操作。如果是这样的话，那我只能强烈建议你重新考虑你的设计，因为那样的设计将是和Android应用架构背道而驰的过程。</p>
+<p>#总结<br>在大多数情况下，使用你当前封闭的组件中直接使用Context就是可以了，只有你持有引用不超过这个组件的生命周期就不会有问题，只要你需要保存一个Context的引用超出Activity或者Service的生命周期，哪怕是暂时的引用，那就请转换成保存application context的引用。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2015/04/08/-翻译-Context-什么是Context？/" data-id="cig7fk8eb0000qrmvzz2s5y4e" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Context/">Context</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/翻译/">翻译</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2015/04/17/基于贝塞尔曲线的Android动画差值器/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          基于贝塞尔曲线的Android动画差值器
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2015/02/09/Android动画总结/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Android动画总结</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Context/">Context</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Delvik/">Delvik</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Drawable/">Drawable</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GC/">GC</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/产品分析/">产品分析</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/动画/">动画</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/性能优化/">性能优化</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据解析/">数据解析</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/生产者消费者模式/">生产者消费者模式</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/翻译/">翻译</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/贝塞尔曲线/">贝塞尔曲线</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/转载/">转载</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/进度条/">进度条</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/Context/" style="font-size: 10px;">Context</a> <a href="/tags/Delvik/" style="font-size: 10px;">Delvik</a> <a href="/tags/Drawable/" style="font-size: 10px;">Drawable</a> <a href="/tags/GC/" style="font-size: 10px;">GC</a> <a href="/tags/产品分析/" style="font-size: 10px;">产品分析</a> <a href="/tags/动画/" style="font-size: 15px;">动画</a> <a href="/tags/性能优化/" style="font-size: 10px;">性能优化</a> <a href="/tags/数据解析/" style="font-size: 10px;">数据解析</a> <a href="/tags/生产者消费者模式/" style="font-size: 10px;">生产者消费者模式</a> <a href="/tags/翻译/" style="font-size: 10px;">翻译</a> <a href="/tags/贝塞尔曲线/" style="font-size: 10px;">贝塞尔曲线</a> <a href="/tags/转载/" style="font-size: 10px;">转载</a> <a href="/tags/进度条/" style="font-size: 10px;">进度条</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">October 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">August 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">April 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">February 2015</a><span class="archive-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recents</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2015/10/26/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/2015/10/25/如何写出GC友好的Android应用/">[转载]如何写出GC友好的Android应用</a>
+          </li>
+        
+          <li>
+            <a href="/2015/09/01/Android动画总结之有赞、邮箱大师进度条实现原理/">Android动画总结之有赞、邮箱大师进度条实现原理</a>
+          </li>
+        
+          <li>
+            <a href="/2015/08/19/数据解析工具设计文档/">数据解析工具</a>
+          </li>
+        
+          <li>
+            <a href="/2015/04/28/Drawable-从简化布局谈起/">Drawable,从简化布局谈起</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2015 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+  <script src="/fancybox/jquery.fancybox.pack.js" type="text/javascript"></script>
+
+
+<script src="/js/script.js" type="text/javascript"></script>
+
+  </div>
+</body>
+</html>
