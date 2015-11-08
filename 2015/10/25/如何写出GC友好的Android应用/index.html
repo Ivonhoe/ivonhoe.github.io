@@ -1,47 +1,51 @@
+
 <!DOCTYPE html>
 <html>
 <head>
   <meta charset="utf-8">
   
-  <title>[转载]如何写出GC友好的Android应用 | Hexo</title>
+  <title>[转载]如何写出GC友好的Android应用 | Ivonhoe</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="###作者：乐蛙科技高级研发经理 易宁
-Android应用普遍没有iOS应用流畅，这与Android应用是运行在Java虚拟机上有很大的关系，而关系最大的恐怕就是Java虚拟机上的Garbage Collection（GC）了。Java语言提供了自动内存管理，垃圾对象会在GC过程中自动被释放。这提供了开发效率，使开发者能集中精力在业务逻辑上；但天下没有免费的午餐，你写的Android应用的某些性能">
+  <meta name="description" content="作者：乐蛙科技高级研发经理 易宁
+Android应用普遍没有iOS应用流畅，这与Android应用是运行在Java虚拟机上有很大的关系，而关系最大的恐怕就是Java虚拟机上的Garbage Collection（GC）了。Java语言提供了自动内存管理，垃圾对象会在GC过程中自动被释放。这提供了开发效率，使开发者能集中精力在业务逻辑上；但天下没有免费的午餐，你写的Android应用的某些性能上的问">
 <meta property="og:type" content="article">
 <meta property="og:title" content="[转载]如何写出GC友好的Android应用">
-<meta property="og:url" content="http://yoursite.com/2015/10/25/如何写出GC友好的Android应用/index.html">
-<meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="###作者：乐蛙科技高级研发经理 易宁
-Android应用普遍没有iOS应用流畅，这与Android应用是运行在Java虚拟机上有很大的关系，而关系最大的恐怕就是Java虚拟机上的Garbage Collection（GC）了。Java语言提供了自动内存管理，垃圾对象会在GC过程中自动被释放。这提供了开发效率，使开发者能集中精力在业务逻辑上；但天下没有免费的午餐，你写的Android应用的某些性能">
-<meta property="og:image" content="http://yoursite.com/res/dalvik_gc/1.png">
-<meta property="og:image" content="http://yoursite.com/res/dalvik_gc/2.png">
-<meta property="og:image" content="http://yoursite.com/res/dalvik_gc/3.png">
-<meta property="og:updated_time" content="2015-10-25T13:41:00.000Z">
+<meta property="og:url" content="https://ivonhoe.github.io/2015/10/25/如何写出GC友好的Android应用/index.html">
+<meta property="og:site_name" content="Ivonhoe">
+<meta property="og:description" content="作者：乐蛙科技高级研发经理 易宁
+Android应用普遍没有iOS应用流畅，这与Android应用是运行在Java虚拟机上有很大的关系，而关系最大的恐怕就是Java虚拟机上的Garbage Collection（GC）了。Java语言提供了自动内存管理，垃圾对象会在GC过程中自动被释放。这提供了开发效率，使开发者能集中精力在业务逻辑上；但天下没有免费的午餐，你写的Android应用的某些性能上的问">
+<meta property="og:image" content="https://ivonhoe.github.io/res/dalvik_gc/1.png">
+<meta property="og:image" content="https://ivonhoe.github.io/res/dalvik_gc/2.png">
+<meta property="og:image" content="https://ivonhoe.github.io/res/dalvik_gc/3.png">
+<meta property="og:updated_time" content="2015-11-08T04:03:28.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="[转载]如何写出GC友好的Android应用">
-<meta name="twitter:description" content="###作者：乐蛙科技高级研发经理 易宁
-Android应用普遍没有iOS应用流畅，这与Android应用是运行在Java虚拟机上有很大的关系，而关系最大的恐怕就是Java虚拟机上的Garbage Collection（GC）了。Java语言提供了自动内存管理，垃圾对象会在GC过程中自动被释放。这提供了开发效率，使开发者能集中精力在业务逻辑上；但天下没有免费的午餐，你写的Android应用的某些性能">
+<meta name="twitter:description" content="作者：乐蛙科技高级研发经理 易宁
+Android应用普遍没有iOS应用流畅，这与Android应用是运行在Java虚拟机上有很大的关系，而关系最大的恐怕就是Java虚拟机上的Garbage Collection（GC）了。Java语言提供了自动内存管理，垃圾对象会在GC过程中自动被释放。这提供了开发效率，使开发者能集中精力在业务逻辑上；但天下没有免费的午餐，你写的Android应用的某些性能上的问">
   
-    <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
+    <link rel="alternative" href="/atom.xml" title="Ivonhoe" type="application/atom+xml">
   
   
     <link rel="icon" href="/favicon.png">
   
-  <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
   <link rel="stylesheet" href="/css/style.css" type="text/css">
+  <!--[if lt IE 9]><script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7/html5shiv.min.js"></script><![endif]-->
   
-
 </head>
 <body>
-  <div id="container">
-    <div id="wrap">
-      <header id="header">
+<div id="container">
+  <div id="wrap">
+    <header id="header">
   <div id="banner"></div>
   <div id="header-outer" class="outer">
     <div id="header-title" class="inner">
       <h1 id="logo-wrap">
-        <a href="/" id="logo">Hexo</a>
+        <a href="/" id="logo">Ivonhoe</a>
       </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">Read The Fucking Source Code</a>
+        </h2>
       
     </div>
     <div id="header-inner" class="inner">
@@ -60,16 +64,23 @@ Android应用普遍没有iOS应用流畅，这与Android应用是运行在Java�
         <a id="nav-search-btn" class="nav-icon" title="Search"></a>
       </nav>
       <div id="search-form-wrap">
-        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+        <form action="http://www.baidu.com/baidu" method="get" accept-charset="utf-8" class="search-form">
+          <input type="search" name="word" maxlength="20" class="search-form-input" placeholder="Search">
+          <input type="submit" value="" class="search-form-submit">
+          <input name=tn type=hidden value="bds">
+          <input name=cl type=hidden value="3">
+          <input name=ct type=hidden value="2097152">
+          <input type="hidden" name="si" value="ivonhoe.github.io">
+        </form>
       </div>
     </div>
   </div>
 </header>
-      <div class="outer">
-        <section id="main"><article id="post-如何写出GC友好的Android应用" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="outer">
+      <section id="main"><article id="post-如何写出GC友好的Android应用" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2015/10/25/如何写出GC友好的Android应用/" class="article-date">
-  <time datetime="2015-10-25T13:21:23.000Z" itemprop="datePublished">2015-10-25</time>
+  <time datetime="2015-10-25T13:21:23.000Z" itemprop="datePublished">Oct 25 2015</time>
 </a>
     
   </div>
@@ -88,7 +99,7 @@ Android应用普遍没有iOS应用流畅，这与Android应用是运行在Java�
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>###作者：乐蛙科技高级研发经理 易宁</p>
+        <p>作者：乐蛙科技高级研发经理 易宁</p>
 <p>Android应用普遍没有iOS应用流畅，这与Android应用是运行在Java虚拟机上有很大的关系，而关系最大的恐怕就是Java虚拟机上的Garbage Collection（GC）了。Java语言提供了自动内存管理，垃圾对象会在GC过程中自动被释放。这提供了开发效率，使开发者能集中精力在业务逻辑上；但天下没有免费的午餐，你写的Android应用的某些性能上的问题很可能就是GC导致的。</p>
 <p>下面是一段非常简单的Java语句：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">byte</span>[] data = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">512</span> * <span class="number">512</span> * <span class="number">4</span>];</span><br></pre></td></tr></table></figure></p>
 <p>这条语句申请了一块大小相等于512*512大小图片的内存。执行这条语句会消耗多少时间呢？0+ms吗？基本没有性能影响吗？</p>
@@ -106,7 +117,7 @@ Android应用普遍没有iOS应用流畅，这与Android应用是运行在Java�
 </blockquote>
 <p><code>GC_CONCURRENT</code>和<code>GC_EXPLICIT</code>是并行的，GC过程中应用不会被暂停，只在GC开始和结束时会暂停应用，每次暂停的时间比较短，一般只有3~4ms。<code>GC_FOR_MALLOC</code>是非并行的，GC过程中应用被暂停，耗时比较长，可能几十毫秒也可能几百毫秒。在应用向Dalvik申请内存时，Dalvik先检查当前Heap中有无足够的空余空间用来安排对象，当发现没有足够的空间的时候会先进行<code>GC_FOR_MALLOC</code>以试图释放垃圾对象来获取新的空间，如果发现空间还不够则进行Heap的增长。在每次成功分配完新的空间后，Dalvik会检查当前Heap的使用情况，如果使用空间超过一定的阈值的时候，<code>GC_CONCURRENT</code>就会触发。</p>
 <p>每次GC的时候会打印如下的Log信息：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">D/dalvikvm(<span class="number">10497</span>): GC_CONCURRENT freed <span class="number">2940</span>K, <span class="number">54</span>% <span class="built_in">free</span> <span class="number">2885</span>K/<span class="number">6204</span>K, paused <span class="number">1</span>ms+<span class="number">4</span>ms， total <span class="number">38</span>ms</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">D/dalvikvm(10497): GC_CONCURRENT freed 2940K, 54% free 2885K/6204K, paused 1ms+4ms&#65292; total 38ms</span><br></pre></td></tr></table></figure>
 <p>上面的Log信息表明：这次<code>GC_CONCURRENT</code>释放了2940K的空间，当前Heap使用率为54%，总的Heap大小是6204K，空余2885K，GC开始时暂停了1ms，GC结束时暂停了4ms，GC总共花了38ms。</p>
 <p>Dalvik虚拟机通过下面几个个属性值来控制Heap的空间配置：</p>
 <blockquote>
@@ -122,7 +133,7 @@ Android应用普遍没有iOS应用流畅，这与Android应用是运行在Java�
 <p>这些属性值都可以通过<code>system/build.prop</code>来配置，zygote启动dalvik虚拟机时会从该文件中读取这些参数。通常来说，Heap空余空间越大应用越流畅，消耗的内存也更多。</p>
 <p>下图为一次“顺利”的4M内存申请:<br><img src="/res/dalvik_gc/1.png" alt="Alt text"><br>可以看到在申请之前，空余的空间达到8M，申请4M的内存很顺利没有任何GC发生。</p>
 <p>下图为一次“不顺利”的8M内存申请：<br><img src="/res/dalvik_gc/2.png" alt="Alt text"><br>虽然空余的空间已经有8M，但是为了保证正常的Heap利用率，Heap空间还是增长了，并且增长Heap之前进行了一次<code>GC_FOR_MALLOC</code>。</p>
-<p>下图为继续申请8M的内存：<br><img src="/res/dalvik_gc/3.png" alt="Alt text"><br>相应的输出Log：<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">D/dalvikvm﹕ GC_FOR_ALLOC freed <span class="number">8195</span>K, <span class="number">34</span>% <span class="built_in">free</span> <span class="number">16726</span>K/<span class="number">24972</span>K, paused <span class="number">23</span>ms, total <span class="number">23</span>ms</span><br></pre></td></tr></table></figure></p>
+<p>下图为继续申请8M的内存：<br><img src="/res/dalvik_gc/3.png" alt="Alt text"><br>相应的输出Log：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">D/dalvikvm&#65109; GC_FOR_ALLOC freed 8195K, 34% free 16726K/24972K, paused 23ms, total 23ms</span><br></pre></td></tr></table></figure></p>
 <p>上图和Log更加清晰的表明Heap空间不够时会先进行一次GC，GC的类型就是<code>GC_FOR_MALLOC</code>。</p>
 <h3 id="Android流畅的关键：GC_FOR_MALLOC">Android流畅的关键：<code>GC_FOR_MALLOC</code></h3><p><code>GC_CONCURRENT</code>和<code>GC_FOR_MALLOC</code>虽然都是系统自动调用的，都暂停了应用，但它们花费的时间不在一个数量级。通过上面的分析我们知道每次申请内存空间不够时就会产生<code>GC_FOR_MALLOC</code>，我们不可能不申请内存，所以也不可能完全避免<code>GC_FOR_MALLOC</code>，但还是有些策略能降低<code>GC_FOR_MALLOC</code>的影响：</p>
 <ol>
@@ -164,8 +175,14 @@ Android应用普遍没有iOS应用流畅，这与Android应用是运行在Java�
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/10/25/如何写出GC友好的Android应用/" data-id="cig7fk8ev000cqrmvboevpf3h" class="article-share-link">Share</a>
       
+        <a data-url="https://ivonhoe.github.io/2015/10/25/如何写出GC友好的Android应用/" data-id="cigq0hm6d000czemvx0ase9hn" class="article-share-link" data-share="baidu">分享到</a>
+      
+
+      
+        <a href="https://ivonhoe.github.io/2015/10/25/如何写出GC友好的Android应用/#ds-thread" class="article-comment-link">評論</a>
+      
+
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Delvik/">Delvik</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/GC/">GC</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/转载/">转载</a></li></ul>
 
@@ -175,18 +192,9 @@ Android应用普遍没有iOS应用流畅，这与Android应用是运行在Java�
     
 <nav id="article-nav">
   
-    <a href="/2015/10/26/hello-world/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          Hello World
-        
-      </div>
-    </a>
-  
   
     <a href="/2015/09/01/Android动画总结之有赞、邮箱大师进度条实现原理/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Older</strong>
+      <strong class="article-nav-caption">上一篇</strong>
       <div class="article-nav-title">Android动画总结之有赞、邮箱大师进度条实现原理</div>
     </a>
   
@@ -195,15 +203,19 @@ Android应用普遍没有iOS应用流畅，这与Android应用是运行在Java�
   
 </article>
 
+
+  <section id="comments">
+    <div id="ds-thread" class="ds-thread" data-thread-key="2015/10/25/如何写出GC友好的Android应用/" data-title="[转载]如何写出GC友好的Android应用" data-url="https://ivonhoe.github.io/2015/10/25/如何写出GC友好的Android应用/"></div>
+  </section>
 </section>
-        
-          <aside id="sidebar">
+      
+      <aside id="sidebar">
   
     
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Tags</h3>
+    <h3 class="widget-title">標簽</h3>
     <div class="widget">
       <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Context/">Context</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Delvik/">Delvik</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Drawable/">Drawable</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GC/">GC</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/产品分析/">产品分析</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/动画/">动画</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/性能优化/">性能优化</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据解析/">数据解析</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/生产者消费者模式/">生产者消费者模式</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/翻译/">翻译</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/贝塞尔曲线/">贝塞尔曲线</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/转载/">转载</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/进度条/">进度条</a><span class="tag-list-count">1</span></li></ul>
     </div>
@@ -212,7 +224,7 @@ Android应用普遍没有iOS应用流畅，这与Android应用是运行在Java�
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Tag Cloud</h3>
+    <h3 class="widget-title">標簽雲</h3>
     <div class="widget tagcloud">
       <a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/Context/" style="font-size: 10px;">Context</a> <a href="/tags/Delvik/" style="font-size: 10px;">Delvik</a> <a href="/tags/Drawable/" style="font-size: 10px;">Drawable</a> <a href="/tags/GC/" style="font-size: 10px;">GC</a> <a href="/tags/产品分析/" style="font-size: 10px;">产品分析</a> <a href="/tags/动画/" style="font-size: 15px;">动画</a> <a href="/tags/性能优化/" style="font-size: 10px;">性能优化</a> <a href="/tags/数据解析/" style="font-size: 10px;">数据解析</a> <a href="/tags/生产者消费者模式/" style="font-size: 10px;">生产者消费者模式</a> <a href="/tags/翻译/" style="font-size: 10px;">翻译</a> <a href="/tags/贝塞尔曲线/" style="font-size: 10px;">贝塞尔曲线</a> <a href="/tags/转载/" style="font-size: 10px;">转载</a> <a href="/tags/进度条/" style="font-size: 10px;">进度条</a>
     </div>
@@ -221,22 +233,18 @@ Android应用普遍没有iOS应用流畅，这与Android应用是运行在Java�
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Archives</h3>
+    <h3 class="widget-title">歸檔</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">October 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">August 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">April 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">February 2015</a><span class="archive-list-count">1</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">October 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">August 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">April 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">February 2015</a><span class="archive-list-count">1</span></li></ul>
     </div>
   </div>
 
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Recents</h3>
+    <h3 class="widget-title">近期文章</h3>
     <div class="widget">
       <ul>
-        
-          <li>
-            <a href="/2015/10/26/hello-world/">Hello World</a>
-          </li>
         
           <li>
             <a href="/2015/10/25/如何写出GC友好的Android应用/">[转载]如何写出GC友好的Android应用</a>
@@ -254,42 +262,100 @@ Android应用普遍没有iOS应用流畅，这与Android应用是运行在Java�
             <a href="/2015/04/28/Drawable-从简化布局谈起/">Drawable,从简化布局谈起</a>
           </li>
         
+          <li>
+            <a href="/2015/04/23/ColorOS和APEX桌面产品分析/">ColorOS和APEX桌面产品分析</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">友情鏈接</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="http://xiguabaobao.com" target="_blank">主题作者</a>
+          </li>
+        
+          <li>
+            <a href="http://reqianduan.com" target="_blank">热前端</a>
+          </li>
+        
       </ul>
     </div>
   </div>
 
   
 </aside>
-        
-      </div>
-      <footer id="footer">
+      
+    </div>
+    <footer id="footer">
   
   <div class="outer">
     <div id="footer-info" class="inner">
-      &copy; 2015 John Doe<br>
+      &copy; 2015 Ivonhoe<br>
       Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+      .
+      Theme by <a href="https://github.com/xiangming/landscape-plus" target="_blank">Landscape-plus</a>
     </div>
   </div>
 </footer>
-    </div>
-    <nav id="mobile-nav">
+  </div>
+  <nav id="mobile-nav">
   
     <a href="/" class="mobile-nav-link">Home</a>
   
     <a href="/archives" class="mobile-nav-link">Archives</a>
   
 </nav>
-    
+  <!-- totop start -->
+<div id="totop">
+<a title="返回頂部"><img src="/img/scrollup.png"/></a>
+</div>
 
-<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<!-- totop end -->
+
+<!-- 多说公共js代码 start -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"ivonhoe"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0]
+     || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+  </script>
+<!-- 多说公共js代码 end -->
 
 
-  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
-  <script src="/fancybox/jquery.fancybox.pack.js" type="text/javascript"></script>
+<!-- 百度分享 start -->
+
+<div id="article-share-box" class="article-share-box">
+  <div id="bdshare" class="bdsharebuttonbox article-share-links">
+    <a class="article-share-weibo" data-cmd="tsina" title="分享到新浪微博"></a>
+    <a class="article-share-weixin" data-cmd="weixin" title="分享到微信"></a>
+    <a class="article-share-qq" data-cmd="sqq" title="分享到QQ"></a>
+    <a class="article-share-renren" data-cmd="renren" title="分享到人人网"></a>
+    <a class="article-share-more" data-cmd="more" title="更多"></a>
+  </div>
+</div>
+<script>window._bd_share_config={"common":{},"share":{"bdCustomStyle":"/css/bdshare.css"}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?cdnversion='+~(-new Date()/36e5)];</script>
+
+<!-- 百度分享 end -->
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+
 
 
 <script src="/js/script.js" type="text/javascript"></script>
 
-  </div>
+</div>
 </body>
 </html>

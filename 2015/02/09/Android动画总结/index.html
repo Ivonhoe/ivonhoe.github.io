@@ -1,9 +1,10 @@
+
 <!DOCTYPE html>
 <html>
 <head>
   <meta charset="utf-8">
   
-  <title>Android动画总结 | Hexo</title>
+  <title>Android动画总结 | Ivonhoe</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="###说在开始
 这篇文档记录了一下自己在实际工作中实现的一些Android动画效果时的开发思路，总结了我自己如何看待Android动画问题，希望能给大家的动画开发提供一些思路和帮助。
@@ -14,8 +15,8 @@ Frame Animation：帧动画，顺序播放事先做好的图像，是一种画�
 Tween Animation:补间动画（或者叫渐变动画），通过对场景">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Android动画总结">
-<meta property="og:url" content="http://yoursite.com/2015/02/09/Android动画总结/index.html">
-<meta property="og:site_name" content="Hexo">
+<meta property="og:url" content="https://ivonhoe.github.io/2015/02/09/Android动画总结/index.html">
+<meta property="og:site_name" content="Ivonhoe">
 <meta property="og:description" content="###说在开始
 这篇文档记录了一下自己在实际工作中实现的一些Android动画效果时的开发思路，总结了我自己如何看待Android动画问题，希望能给大家的动画开发提供一些思路和帮助。
 ###一、Android动画基础
@@ -23,13 +24,13 @@ Tween Animation:补间动画（或者叫渐变动画），通过对场景">
 
 Frame Animation：帧动画，顺序播放事先做好的图像，是一种画面转换动画
 Tween Animation:补间动画（或者叫渐变动画），通过对场景">
-<meta property="og:image" content="http://yoursite.com/res/android_animation/android_animation_animation_class.png">
-<meta property="og:image" content="http://yoursite.com/res/android_animation/jiasu_jiansu.png">
-<meta property="og:image" content="http://yoursite.com/res/android_animation/android_animation_interpolator_class.png">
-<meta property="og:image" content="http://yoursite.com/res/android_animation/xiangsi.jpg">
-<meta property="og:image" content="http://yoursite.com/android_animation/tubiaodonghua.jpg">
-<meta property="og:image" content="http://yoursite.com/android_animation/guangbixiaoguo.jpg">
-<meta property="og:image" content="http://yoursite.com/res/android_animation/choreographer_seq_diag.png">
+<meta property="og:image" content="https://ivonhoe.github.io/res/android_animation/android_animation_animation_class.png">
+<meta property="og:image" content="https://ivonhoe.github.io/res/android_animation/jiasu_jiansu.png">
+<meta property="og:image" content="https://ivonhoe.github.io/res/android_animation/android_animation_interpolator_class.png">
+<meta property="og:image" content="https://ivonhoe.github.io/res/android_animation/xiangsi.jpg">
+<meta property="og:image" content="https://ivonhoe.github.io/android_animation/tubiaodonghua.jpg">
+<meta property="og:image" content="https://ivonhoe.github.io/android_animation/guangbixiaoguo.jpg">
+<meta property="og:image" content="https://ivonhoe.github.io/res/android_animation/choreographer_seq_diag.png">
 <meta property="og:updated_time" content="2015-04-29T10:28:36.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android动画总结">
@@ -41,26 +42,29 @@ Tween Animation:补间动画（或者叫渐变动画），通过对场景">
 Frame Animation：帧动画，顺序播放事先做好的图像，是一种画面转换动画
 Tween Animation:补间动画（或者叫渐变动画），通过对场景">
   
-    <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
+    <link rel="alternative" href="/atom.xml" title="Ivonhoe" type="application/atom+xml">
   
   
     <link rel="icon" href="/favicon.png">
   
-  <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
   <link rel="stylesheet" href="/css/style.css" type="text/css">
+  <!--[if lt IE 9]><script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7/html5shiv.min.js"></script><![endif]-->
   
-
 </head>
 <body>
-  <div id="container">
-    <div id="wrap">
-      <header id="header">
+<div id="container">
+  <div id="wrap">
+    <header id="header">
   <div id="banner"></div>
   <div id="header-outer" class="outer">
     <div id="header-title" class="inner">
       <h1 id="logo-wrap">
-        <a href="/" id="logo">Hexo</a>
+        <a href="/" id="logo">Ivonhoe</a>
       </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">Read The Fucking Source Code</a>
+        </h2>
       
     </div>
     <div id="header-inner" class="inner">
@@ -79,16 +83,23 @@ Tween Animation:补间动画（或者叫渐变动画），通过对场景">
         <a id="nav-search-btn" class="nav-icon" title="Search"></a>
       </nav>
       <div id="search-form-wrap">
-        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+        <form action="http://www.baidu.com/baidu" method="get" accept-charset="utf-8" class="search-form">
+          <input type="search" name="word" maxlength="20" class="search-form-input" placeholder="Search">
+          <input type="submit" value="" class="search-form-submit">
+          <input name=tn type=hidden value="bds">
+          <input name=cl type=hidden value="3">
+          <input name=ct type=hidden value="2097152">
+          <input type="hidden" name="si" value="ivonhoe.github.io">
+        </form>
       </div>
     </div>
   </div>
 </header>
-      <div class="outer">
-        <section id="main"><article id="post-Android动画总结" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="outer">
+      <section id="main"><article id="post-Android动画总结" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2015/02/09/Android动画总结/" class="article-date">
-  <time datetime="2015-02-09T11:40:53.000Z" itemprop="datePublished">2015-02-09</time>
+  <time datetime="2015-02-09T11:40:53.000Z" itemprop="datePublished">Feb 9 2015</time>
 </a>
     
   </div>
@@ -471,8 +482,14 @@ animator.addUpdateListener(<span class="keyword">new</span> ValueAnimator.Animat
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/02/09/Android动画总结/" data-id="cig7fk8fj0014qrmv8j0x06fr" class="article-share-link">Share</a>
       
+        <a data-url="https://ivonhoe.github.io/2015/02/09/Android动画总结/" data-id="cigq0hm6s0014zemv988wq4gs" class="article-share-link" data-share="baidu">分享到</a>
+      
+
+      
+        <a href="https://ivonhoe.github.io/2015/02/09/Android动画总结/#ds-thread" class="article-comment-link">評論</a>
+      
+
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/动画/">动画</a></li></ul>
 
@@ -483,7 +500,7 @@ animator.addUpdateListener(<span class="keyword">new</span> ValueAnimator.Animat
 <nav id="article-nav">
   
     <a href="/2015/04/08/-翻译-Context-什么是Context？/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
+      <strong class="article-nav-caption">下一篇</strong>
       <div class="article-nav-title">
         
           [译]Context?什么是Context？
@@ -497,15 +514,19 @@ animator.addUpdateListener(<span class="keyword">new</span> ValueAnimator.Animat
   
 </article>
 
+
+  <section id="comments">
+    <div id="ds-thread" class="ds-thread" data-thread-key="2015/02/09/Android动画总结/" data-title="Android动画总结" data-url="https://ivonhoe.github.io/2015/02/09/Android动画总结/"></div>
+  </section>
 </section>
-        
-          <aside id="sidebar">
+      
+      <aside id="sidebar">
   
     
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Tags</h3>
+    <h3 class="widget-title">標簽</h3>
     <div class="widget">
       <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Context/">Context</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Delvik/">Delvik</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Drawable/">Drawable</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GC/">GC</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/产品分析/">产品分析</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/动画/">动画</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/性能优化/">性能优化</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据解析/">数据解析</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/生产者消费者模式/">生产者消费者模式</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/翻译/">翻译</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/贝塞尔曲线/">贝塞尔曲线</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/转载/">转载</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/进度条/">进度条</a><span class="tag-list-count">1</span></li></ul>
     </div>
@@ -514,7 +535,7 @@ animator.addUpdateListener(<span class="keyword">new</span> ValueAnimator.Animat
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Tag Cloud</h3>
+    <h3 class="widget-title">標簽雲</h3>
     <div class="widget tagcloud">
       <a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/Context/" style="font-size: 10px;">Context</a> <a href="/tags/Delvik/" style="font-size: 10px;">Delvik</a> <a href="/tags/Drawable/" style="font-size: 10px;">Drawable</a> <a href="/tags/GC/" style="font-size: 10px;">GC</a> <a href="/tags/产品分析/" style="font-size: 10px;">产品分析</a> <a href="/tags/动画/" style="font-size: 15px;">动画</a> <a href="/tags/性能优化/" style="font-size: 10px;">性能优化</a> <a href="/tags/数据解析/" style="font-size: 10px;">数据解析</a> <a href="/tags/生产者消费者模式/" style="font-size: 10px;">生产者消费者模式</a> <a href="/tags/翻译/" style="font-size: 10px;">翻译</a> <a href="/tags/贝塞尔曲线/" style="font-size: 10px;">贝塞尔曲线</a> <a href="/tags/转载/" style="font-size: 10px;">转载</a> <a href="/tags/进度条/" style="font-size: 10px;">进度条</a>
     </div>
@@ -523,22 +544,18 @@ animator.addUpdateListener(<span class="keyword">new</span> ValueAnimator.Animat
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Archives</h3>
+    <h3 class="widget-title">歸檔</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">October 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">August 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">April 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">February 2015</a><span class="archive-list-count">1</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">October 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">August 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">April 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">February 2015</a><span class="archive-list-count">1</span></li></ul>
     </div>
   </div>
 
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Recents</h3>
+    <h3 class="widget-title">近期文章</h3>
     <div class="widget">
       <ul>
-        
-          <li>
-            <a href="/2015/10/26/hello-world/">Hello World</a>
-          </li>
         
           <li>
             <a href="/2015/10/25/如何写出GC友好的Android应用/">[转载]如何写出GC友好的Android应用</a>
@@ -556,42 +573,100 @@ animator.addUpdateListener(<span class="keyword">new</span> ValueAnimator.Animat
             <a href="/2015/04/28/Drawable-从简化布局谈起/">Drawable,从简化布局谈起</a>
           </li>
         
+          <li>
+            <a href="/2015/04/23/ColorOS和APEX桌面产品分析/">ColorOS和APEX桌面产品分析</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">友情鏈接</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="http://xiguabaobao.com" target="_blank">主题作者</a>
+          </li>
+        
+          <li>
+            <a href="http://reqianduan.com" target="_blank">热前端</a>
+          </li>
+        
       </ul>
     </div>
   </div>
 
   
 </aside>
-        
-      </div>
-      <footer id="footer">
+      
+    </div>
+    <footer id="footer">
   
   <div class="outer">
     <div id="footer-info" class="inner">
-      &copy; 2015 John Doe<br>
+      &copy; 2015 Ivonhoe<br>
       Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+      .
+      Theme by <a href="https://github.com/xiangming/landscape-plus" target="_blank">Landscape-plus</a>
     </div>
   </div>
 </footer>
-    </div>
-    <nav id="mobile-nav">
+  </div>
+  <nav id="mobile-nav">
   
     <a href="/" class="mobile-nav-link">Home</a>
   
     <a href="/archives" class="mobile-nav-link">Archives</a>
   
 </nav>
-    
+  <!-- totop start -->
+<div id="totop">
+<a title="返回頂部"><img src="/img/scrollup.png"/></a>
+</div>
 
-<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<!-- totop end -->
+
+<!-- 多说公共js代码 start -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"ivonhoe"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0]
+     || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+  </script>
+<!-- 多说公共js代码 end -->
 
 
-  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
-  <script src="/fancybox/jquery.fancybox.pack.js" type="text/javascript"></script>
+<!-- 百度分享 start -->
+
+<div id="article-share-box" class="article-share-box">
+  <div id="bdshare" class="bdsharebuttonbox article-share-links">
+    <a class="article-share-weibo" data-cmd="tsina" title="分享到新浪微博"></a>
+    <a class="article-share-weixin" data-cmd="weixin" title="分享到微信"></a>
+    <a class="article-share-qq" data-cmd="sqq" title="分享到QQ"></a>
+    <a class="article-share-renren" data-cmd="renren" title="分享到人人网"></a>
+    <a class="article-share-more" data-cmd="more" title="更多"></a>
+  </div>
+</div>
+<script>window._bd_share_config={"common":{},"share":{"bdCustomStyle":"/css/bdshare.css"}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?cdnversion='+~(-new Date()/36e5)];</script>
+
+<!-- 百度分享 end -->
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+
 
 
 <script src="/js/script.js" type="text/javascript"></script>
 
-  </div>
+</div>
 </body>
 </html>
