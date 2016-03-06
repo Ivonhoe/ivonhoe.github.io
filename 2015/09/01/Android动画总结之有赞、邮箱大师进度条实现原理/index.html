@@ -6,22 +6,20 @@
   
   <title>Android动画总结之有赞、邮箱大师进度条实现原理 | Ivonhoe</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="##一、效果
-##二、有赞加载进度条
-四个正方形的运动可以分解成两个分运动，一个是平移运动，一个是自身的旋转运动。在实现这个动画上有两个思路：
+  <meta name="description" content="一、效果
+二、有赞加载进度条四个正方形的运动可以分解成两个分运动，一个是平移运动，一个是自身的旋转运动。在实现这个动画上有两个思路：
 
 一个是通过Android提供的Animation或者Animator操作视图，让一个正方形的视图在translate动画的同时进行rotate动画，只需要设置rotate动画的pivot坐标为视图的中心点就可以了。
-另一个是直接在canvas上绘制正方形">
+另一个是直接在canvas上绘制正方形，通过ca">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Android动画总结之有赞、邮箱大师进度条实现原理">
 <meta property="og:url" content="https://ivonhoe.github.io/2015/09/01/Android动画总结之有赞、邮箱大师进度条实现原理/index.html">
 <meta property="og:site_name" content="Ivonhoe">
-<meta property="og:description" content="##一、效果
-##二、有赞加载进度条
-四个正方形的运动可以分解成两个分运动，一个是平移运动，一个是自身的旋转运动。在实现这个动画上有两个思路：
+<meta property="og:description" content="一、效果
+二、有赞加载进度条四个正方形的运动可以分解成两个分运动，一个是平移运动，一个是自身的旋转运动。在实现这个动画上有两个思路：
 
 一个是通过Android提供的Animation或者Animator操作视图，让一个正方形的视图在translate动画的同时进行rotate动画，只需要设置rotate动画的pivot坐标为视图的中心点就可以了。
-另一个是直接在canvas上绘制正方形">
+另一个是直接在canvas上绘制正方形，通过ca">
 <meta property="og:image" content="https://ivonhoe.github.io/res/android_animation2/xiaoguo.gif">
 <meta property="og:image" content="https://ivonhoe.github.io/res/android_animation2/xuanzhuanzuobiao.png">
 <meta property="og:image" content="https://ivonhoe.github.io/res/android_animation2/chazhiqi.jpg">
@@ -37,15 +35,14 @@
 <meta property="og:image" content="https://ivonhoe.github.io/res/android_animation2/xuanzhuan2.png">
 <meta property="og:image" content="https://ivonhoe.github.io/res/android_animation2/xuanzhuan3.png">
 <meta property="og:image" content="https://ivonhoe.github.io/res/android_animation2/xuanzhuanMatrix_副本.png">
-<meta property="og:updated_time" content="2015-09-01T15:39:38.000Z">
+<meta property="og:updated_time" content="2016-03-06T13:36:56.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android动画总结之有赞、邮箱大师进度条实现原理">
-<meta name="twitter:description" content="##一、效果
-##二、有赞加载进度条
-四个正方形的运动可以分解成两个分运动，一个是平移运动，一个是自身的旋转运动。在实现这个动画上有两个思路：
+<meta name="twitter:description" content="一、效果
+二、有赞加载进度条四个正方形的运动可以分解成两个分运动，一个是平移运动，一个是自身的旋转运动。在实现这个动画上有两个思路：
 
 一个是通过Android提供的Animation或者Animator操作视图，让一个正方形的视图在translate动画的同时进行rotate动画，只需要设置rotate动画的pivot坐标为视图的中心点就可以了。
-另一个是直接在canvas上绘制正方形">
+另一个是直接在canvas上绘制正方形，通过ca">
   
     <link rel="alternative" href="/atom.xml" title="Ivonhoe" type="application/atom+xml">
   
@@ -123,9 +120,8 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>##一、效果<br><img src="/res/android_animation2/xiaoguo.gif" alt=" "></p>
-<p>##二、有赞加载进度条</p>
-<p>四个正方形的运动可以分解成两个分运动，一个是平移运动，一个是自身的旋转运动。在实现这个动画上有两个思路：</p>
+        <h2 id="一、效果">一、效果</h2><p><img src="/res/android_animation2/xiaoguo.gif" alt=" "></p>
+<h2 id="二、有赞加载进度条">二、有赞加载进度条</h2><p>四个正方形的运动可以分解成两个分运动，一个是平移运动，一个是自身的旋转运动。在实现这个动画上有两个思路：</p>
 <ul>
 <li>一个是通过Android提供的Animation或者Animator操作视图，让一个正方形的视图在translate动画的同时进行rotate动画，只需要设置rotate动画的pivot坐标为视图的中心点就可以了。</li>
 <li>另一个是直接在canvas上绘制正方形，通过canvas的坐标变换实现动画。</li>
@@ -144,8 +140,7 @@
 <li>动画插值：可以看到，每个正方形的平移运动周期是从起始点回到起始点，在时间的中点上达到平移的最大值。反应在平面坐标中的情况就是，一条通过(0, 0), (0.5, 1),(1, 0)三点，在(0.5, 1)达到最大值的一元二次方程。可以间接得到这个插值器是：<br><img src="/res/android_animation2/chazhiqi.jpg" alt=" "></li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">// &#36807;&#65288;0,0&#65289;&#65292;&#65288;0.5,1&#65289;&#65292;&#65288;1,0&#65289;&#30340;&#19968;&#20803;&#20108;&#27425;&#26041;&#31243;&#10;Interpolator mInterpolator = new Interpolator() &#123;&#10;    @Override&#10;    public float getInterpolation(float input) &#123;&#10;        return -4 * input * input + 4 * input;&#10;    &#125;&#10;&#125;;</span><br></pre></td></tr></table></figure>
-<p>##三、网易邮箱大师加载进度条</p>
-<p>圆弧的动画需要分解成四个分动画：</p>
+<h2 id="三、网易邮箱大师加载进度条">三、网易邮箱大师加载进度条</h2><p>圆弧的动画需要分解成四个分动画：</p>
 <ul>
 <li>画笔宽度变化：绘制圆弧的画笔宽度在动画</li>
 <li>圆弧长度变化：绘制圆弧的长度在动画</li>
@@ -153,17 +148,16 @@
 <li>圆弧半径变化：绘制圆弧的半径在动画</li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public ObjectAnimator[] getAtomAnimator(Atom atom, Rect bound) &#123;&#10;    ObjectAnimator[] result = new ObjectAnimator[4];&#10;    result[0] = ObjectAnimator.ofFloat(atom, &#34;delta&#34;, 4f, 9f);&#10;    result[0].setInterpolator(mPaintInterpolator);&#10;    switch (atom.getId()) &#123;&#10;        case 0:&#10;            result[1] = ObjectAnimator.ofInt(atom, &#34;rotate&#34;, 0, 360);&#10;            break;&#10;        case 1:&#10;            result[1] = ObjectAnimator.ofInt(atom, &#34;rotate&#34;, 120, 480);&#10;            break;&#10;        case 2:&#10;            result[1] = ObjectAnimator.ofInt(atom, &#34;rotate&#34;, 240, 600);&#10;            break;&#10;        default:&#10;            throw new RuntimeException();&#10;    &#125;&#10;    result[1].setInterpolator(mRotateInterpolator);&#10;    result[2] = ObjectAnimator.ofFloat(atom, &#34;length&#34;, 80f, 59f);&#10;    result[2].setInterpolator(mPaintInterpolator);&#10;    result[3] = ObjectAnimator.ofFloat(atom, &#34;r&#34;, 0, mScaleFactor * getIntrinsicWidth());&#10;    result[3].setInterpolator(mPaintInterpolator);&#10;    return result;&#10;&#125;</span><br></pre></td></tr></table></figure>
-<p>##四、Canvas图形变换原理</p>
-<p>###2.1、平移<br>设图形上点P(x, y)，在x轴和y轴方向分别移动Tx和Ty，结果生成新的点P’(x’, y’)，则:<br> <img src="/res/android_animation2/pingy0.png" alt=" "></p>
+<h2 id="四、Canvas图形变换原理">四、Canvas图形变换原理</h2><h3 id="2-1、平移">2.1、平移</h3><p>设图形上点P(x, y)，在x轴和y轴方向分别移动Tx和Ty，结果生成新的点P’(x’, y’)，则:<br> <img src="/res/android_animation2/pingy0.png" alt=" "></p>
 <p>用矩阵形式可表示为:<br><img src="/res/android_animation2/pingyi.png" alt=" "><br>平移变换矩阵为：<br><img src="/res/android_animation2/pingyi2.png" alt=" "><br><img src="/res/android_animation2/pingyimatrix_副本.png" alt=" "></p>
-<p>###2.2、缩放<br>设图形上的点P(x, y)在x轴和y轴方向分别作Sx倍和Sy倍的缩放，结果生成新的点坐标P’(x’, y’)，则:<br><img src="/res/android_animation2/suofang.png" alt=" "><br>用矩阵表示为：<br><img src="/res/android_animation2/suofang2.png" alt=" "><br>比例变换矩阵为：<br><img src="/res/android_animation2/suofang 3.png" alt=" "><br><img src="/res/android_animation2/suofangMatrix_副本.png" alt=" "></p>
-<p>###2.3、旋转<br>设点P(x, y)绕原点旋转变换θ角度(假设按逆时针旋转为正角)，生成的新的点坐标P’(x’, y’)，则：<br><img src="/res/android_animation2/xuanzhuan1.png" alt=" "><br>用矩阵表示为：<br><img src="/res/android_animation2/xuanzhuan2.png" alt=" "><br>旋转变换矩阵为：<br><img src="/res/android_animation2/xuanzhuan3.png" alt=" "><br><img src="/res/android_animation2/xuanzhuanMatrix_副本.png" alt=" "></p>
+<h3 id="2-2、缩放">2.2、缩放</h3><p>设图形上的点P(x, y)在x轴和y轴方向分别作Sx倍和Sy倍的缩放，结果生成新的点坐标P’(x’, y’)，则:<br><img src="/res/android_animation2/suofang.png" alt=" "><br>用矩阵表示为：<br><img src="/res/android_animation2/suofang2.png" alt=" "><br>比例变换矩阵为：<br><img src="/res/android_animation2/suofang 3.png" alt=" "><br><img src="/res/android_animation2/suofangMatrix_副本.png" alt=" "></p>
+<h3 id="2-3、旋转">2.3、旋转</h3><p>设点P(x, y)绕原点旋转变换θ角度(假设按逆时针旋转为正角)，生成的新的点坐标P’(x’, y’)，则：<br><img src="/res/android_animation2/xuanzhuan1.png" alt=" "><br>用矩阵表示为：<br><img src="/res/android_animation2/xuanzhuan2.png" alt=" "><br>旋转变换矩阵为：<br><img src="/res/android_animation2/xuanzhuan3.png" alt=" "><br><img src="/res/android_animation2/xuanzhuanMatrix_副本.png" alt=" "></p>
 
       
     </div>
     <footer class="article-footer">
       
-        <a data-url="https://ivonhoe.github.io/2015/09/01/Android动画总结之有赞、邮箱大师进度条实现原理/" data-id="cigq0hm6q000zzemvezu1cylc" class="article-share-link" data-share="baidu">分享到</a>
+        <a data-url="https://ivonhoe.github.io/2015/09/01/Android动画总结之有赞、邮箱大师进度条实现原理/" data-id="cilgll3ma000z8luqmaik4qbu" class="article-share-link" data-share="baidu">分享到</a>
       
 
       
@@ -293,7 +287,7 @@
   
   <div class="outer">
     <div id="footer-info" class="inner">
-      &copy; 2015 Ivonhoe<br>
+      &copy; 2016 Ivonhoe<br>
       Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
       .
       Theme by <a href="https://github.com/xiangming/landscape-plus" target="_blank">Landscape-plus</a>

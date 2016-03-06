@@ -94,9 +94,8 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>##一、效果<br><img src="/res/android_animation2/xiaoguo.gif" alt=" "></p>
-<p>##二、有赞加载进度条</p>
-<p>四个正方形的运动可以分解成两个分运动，一个是平移运动，一个是自身的旋转运动。在实现这个动画上有两个思路：</p>
+        <h2 id="一、效果">一、效果</h2><p><img src="/res/android_animation2/xiaoguo.gif" alt=" "></p>
+<h2 id="二、有赞加载进度条">二、有赞加载进度条</h2><p>四个正方形的运动可以分解成两个分运动，一个是平移运动，一个是自身的旋转运动。在实现这个动画上有两个思路：</p>
 <ul>
 <li>一个是通过Android提供的Animation或者Animator操作视图，让一个正方形的视图在translate动画的同时进行rotate动画，只需要设置rotate动画的pivot坐标为视图的中心点就可以了。</li>
 <li>另一个是直接在canvas上绘制正方形，通过canvas的坐标变换实现动画。</li>
@@ -110,7 +109,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="https://ivonhoe.github.io/2015/09/01/Android动画总结之有赞、邮箱大师进度条实现原理/" data-id="cigq0hm6q000zzemvezu1cylc" class="article-share-link" data-share="baidu">分享到</a>
+        <a data-url="https://ivonhoe.github.io/2015/09/01/Android动画总结之有赞、邮箱大师进度条实现原理/" data-id="cilgll3ma000z8luqmaik4qbu" class="article-share-link" data-share="baidu">分享到</a>
       
 
       
@@ -149,7 +148,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>##一、简介<br>贝塞尔曲线于1962，由法国工程师皮埃尔·贝塞尔（Pierre Bézier）所广泛发表，他运用贝塞尔曲线来为汽车的主体进行设计。贝塞尔曲线最初由Paul de Casteljau于1959年运用de Casteljau算法开发，以稳定数值的方法求出贝兹曲线。贝塞尔曲线不仅仅可以应用到工业设计中，在计算机动画开发中同样占有一席之地，通过构造贝塞尔曲线模拟物体运动的轨迹、速度甚至加速度，来达到想要的动画效果。在CSS开发中使用‘cubic-bezier’方法，传递三次贝赛尔曲线的两个控制点P1和P2来生成一条平滑的曲线。甚至也有很多javaScript动画库使用贝赛尔曲线来实现完美的动画效果。</p>
+        <h2 id="一、简介">一、简介</h2><p>贝塞尔曲线于1962，由法国工程师皮埃尔·贝塞尔（Pierre Bézier）所广泛发表，他运用贝塞尔曲线来为汽车的主体进行设计。贝塞尔曲线最初由Paul de Casteljau于1959年运用de Casteljau算法开发，以稳定数值的方法求出贝兹曲线。贝塞尔曲线不仅仅可以应用到工业设计中，在计算机动画开发中同样占有一席之地，通过构造贝塞尔曲线模拟物体运动的轨迹、速度甚至加速度，来达到想要的动画效果。在CSS开发中使用‘cubic-bezier’方法，传递三次贝赛尔曲线的两个控制点P1和P2来生成一条平滑的曲线。甚至也有很多javaScript动画库使用贝赛尔曲线来实现完美的动画效果。</p>
 <p><img src="/res/bezier/TimingFunction.png" alt="通过P1和P2控制曲线"></p>
         
           <p class="article-more-link">
@@ -160,7 +159,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="https://ivonhoe.github.io/2015/04/17/基于贝塞尔曲线的Android动画差值器/" data-id="cigq0hm6i000kzemvxsnq6miv" class="article-share-link" data-share="baidu">分享到</a>
+        <a data-url="https://ivonhoe.github.io/2015/04/17/基于贝塞尔曲线的Android动画差值器/" data-id="cilgll3m2000k8luqk1s5wros" class="article-share-link" data-share="baidu">分享到</a>
       
 
       
@@ -199,11 +198,8 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>###说在开始</p>
-<p>这篇文档记录了一下自己在实际工作中实现的一些Android动画效果时的开发思路，总结了我自己如何看待Android动画问题，希望能给大家的动画开发提供一些思路和帮助。</p>
-<p>###一、Android动画基础</p>
-<p>####1.1 动画类型</p>
-<ul>
+        <h3 id="说在开始">说在开始</h3><p>这篇文档记录了一下自己在实际工作中实现的一些Android动画效果时的开发思路，总结了我自己如何看待Android动画问题，希望能给大家的动画开发提供一些思路和帮助。</p>
+<h3 id="一、Android动画基础">一、Android动画基础</h3><h4 id="1-1_动画类型">1.1 动画类型</h4><ul>
 <li><strong>Frame Animation：</strong><br>帧动画，顺序播放事先做好的图像，是一种画面转换动画</li>
 <li><strong>Tween Animation:</strong><br>补间动画（或者叫渐变动画），通过对场景里的对象不断做图像变换(平移、缩放、旋转)产生动画效果
         
@@ -215,7 +211,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="https://ivonhoe.github.io/2015/02/09/Android动画总结/" data-id="cigq0hm6s0014zemv988wq4gs" class="article-share-link" data-share="baidu">分享到</a>
+        <a data-url="https://ivonhoe.github.io/2015/02/09/Android动画总结/" data-id="cilgll3me00148luqxifg5ypk" class="article-share-link" data-share="baidu">分享到</a>
       
 
       
@@ -323,7 +319,7 @@
   
   <div class="outer">
     <div id="footer-info" class="inner">
-      &copy; 2015 Ivonhoe<br>
+      &copy; 2016 Ivonhoe<br>
       Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
       .
       Theme by <a href="https://github.com/xiangming/landscape-plus" target="_blank">Landscape-plus</a>

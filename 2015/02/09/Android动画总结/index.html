@@ -6,24 +6,18 @@
   
   <title>Android动画总结 | Ivonhoe</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="###说在开始
-这篇文档记录了一下自己在实际工作中实现的一些Android动画效果时的开发思路，总结了我自己如何看待Android动画问题，希望能给大家的动画开发提供一些思路和帮助。
-###一、Android动画基础
-####1.1 动画类型
-
+  <meta name="description" content="说在开始这篇文档记录了一下自己在实际工作中实现的一些Android动画效果时的开发思路，总结了我自己如何看待Android动画问题，希望能给大家的动画开发提供一些思路和帮助。
+一、Android动画基础1.1 动画类型
 Frame Animation：帧动画，顺序播放事先做好的图像，是一种画面转换动画
-Tween Animation:补间动画（或者叫渐变动画），通过对场景">
+Tween Animation:补间动画（或者叫渐变动画），通过对场景里的对象不断做图像变换(平">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Android动画总结">
 <meta property="og:url" content="https://ivonhoe.github.io/2015/02/09/Android动画总结/index.html">
 <meta property="og:site_name" content="Ivonhoe">
-<meta property="og:description" content="###说在开始
-这篇文档记录了一下自己在实际工作中实现的一些Android动画效果时的开发思路，总结了我自己如何看待Android动画问题，希望能给大家的动画开发提供一些思路和帮助。
-###一、Android动画基础
-####1.1 动画类型
-
+<meta property="og:description" content="说在开始这篇文档记录了一下自己在实际工作中实现的一些Android动画效果时的开发思路，总结了我自己如何看待Android动画问题，希望能给大家的动画开发提供一些思路和帮助。
+一、Android动画基础1.1 动画类型
 Frame Animation：帧动画，顺序播放事先做好的图像，是一种画面转换动画
-Tween Animation:补间动画（或者叫渐变动画），通过对场景">
+Tween Animation:补间动画（或者叫渐变动画），通过对场景里的对象不断做图像变换(平">
 <meta property="og:image" content="https://ivonhoe.github.io/res/android_animation/android_animation_animation_class.png">
 <meta property="og:image" content="https://ivonhoe.github.io/res/android_animation/jiasu_jiansu.png">
 <meta property="og:image" content="https://ivonhoe.github.io/res/android_animation/android_animation_interpolator_class.png">
@@ -31,16 +25,13 @@ Tween Animation:补间动画（或者叫渐变动画），通过对场景">
 <meta property="og:image" content="https://ivonhoe.github.io/android_animation/tubiaodonghua.jpg">
 <meta property="og:image" content="https://ivonhoe.github.io/android_animation/guangbixiaoguo.jpg">
 <meta property="og:image" content="https://ivonhoe.github.io/res/android_animation/choreographer_seq_diag.png">
-<meta property="og:updated_time" content="2015-04-29T10:28:36.000Z">
+<meta property="og:updated_time" content="2016-03-06T13:36:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android动画总结">
-<meta name="twitter:description" content="###说在开始
-这篇文档记录了一下自己在实际工作中实现的一些Android动画效果时的开发思路，总结了我自己如何看待Android动画问题，希望能给大家的动画开发提供一些思路和帮助。
-###一、Android动画基础
-####1.1 动画类型
-
+<meta name="twitter:description" content="说在开始这篇文档记录了一下自己在实际工作中实现的一些Android动画效果时的开发思路，总结了我自己如何看待Android动画问题，希望能给大家的动画开发提供一些思路和帮助。
+一、Android动画基础1.1 动画类型
 Frame Animation：帧动画，顺序播放事先做好的图像，是一种画面转换动画
-Tween Animation:补间动画（或者叫渐变动画），通过对场景">
+Tween Animation:补间动画（或者叫渐变动画），通过对场景里的对象不断做图像变换(平">
   
     <link rel="alternative" href="/atom.xml" title="Ivonhoe" type="application/atom+xml">
   
@@ -118,16 +109,13 @@ Tween Animation:补间动画（或者叫渐变动画），通过对场景">
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>###说在开始</p>
-<p>这篇文档记录了一下自己在实际工作中实现的一些Android动画效果时的开发思路，总结了我自己如何看待Android动画问题，希望能给大家的动画开发提供一些思路和帮助。</p>
-<p>###一、Android动画基础</p>
-<p>####1.1 动画类型</p>
-<ul>
+        <h3 id="说在开始">说在开始</h3><p>这篇文档记录了一下自己在实际工作中实现的一些Android动画效果时的开发思路，总结了我自己如何看待Android动画问题，希望能给大家的动画开发提供一些思路和帮助。</p>
+<h3 id="一、Android动画基础">一、Android动画基础</h3><h4 id="1-1_动画类型">1.1 动画类型</h4><ul>
 <li><strong>Frame Animation：</strong><br>帧动画，顺序播放事先做好的图像，是一种画面转换动画</li>
 <li><strong>Tween Animation:</strong><br>补间动画（或者叫渐变动画），通过对场景里的对象不断做图像变换(平移、缩放、旋转)产生动画效果<a id="more"></a></li>
 <li><strong>Property Animation:</strong><br>属性动画，通过动态地改变对象的属性从而达到动画效果，属性动画为API 11新特性</li>
 </ul>
-<p>####1.2 帧动画：<br>是指顺序执行预先设置好的一组图片，类似电影胶片的形式，设置每一帧drawable，在java代码中加载资源生成一个AnimationDrawable对象。例如：在xml中配置spin_animation.xml在文件夹res/drawable/中：</p>
+<h4 id="1-2_帧动画：">1.2 帧动画：</h4><p>是指顺序执行预先设置好的一组图片，类似电影胶片的形式，设置每一帧drawable，在java代码中加载资源生成一个AnimationDrawable对象。例如：在xml中配置spin_animation.xml在文件夹res/drawable/中：</p>
 <pre><code><span class="pi">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span> 
 <span class="tag">&lt;<span class="title">animation-list</span>  
   <span class="attribute">xmlns:android</span>=<span class="value">"http://schemas.android.com/apk/res/android"</span>  
@@ -148,7 +136,7 @@ AnimationDrawable frameAnimation = (AnimationDrawable) img.getBackground();
 
 // <span class="operator"><span class="keyword">Start</span> the animation (looped playback <span class="keyword">by</span> <span class="keyword">default</span>).
 frameAnimation.<span class="keyword">start</span>();</span>
-</code></pre><p>####1.3 补间动画：<br>补间动画有四种动画形式，分别是:</p>
+</code></pre><h4 id="1-3_补间动画：">1.3 补间动画：</h4><p>补间动画有四种动画形式，分别是:</p>
 <ul>
 <li>alpha 渐变透明度动画效果</li>
 <li>scale 渐变尺寸伸缩动画效果</li>
@@ -174,8 +162,7 @@ Animation anim = AnimationUtils.loadAnimation(mContext, R.anim.rotate);
 Animation rotate = <span class="keyword">new</span> RotateAnimation(<span class="number">0.0f</span>, +<span class="number">360</span>,  Animation.RELATIVE_TO_SELF, <span class="number">0.5f</span>, 
                    Animation.RELATIVE_TO_SELF, <span class="number">0.5f</span>);
 </code></pre><p><img src="/res/android_animation/android_animation_animation_class.png" alt="Animation类图"></p>
-<p>####1.4 属性动画：</p>
-<p>补间动画只能应用于视图(View)对象，动画的方式也仅限于上面所说的四种方式，而属性动画可以应用于所有的Object对象，它通过改变对象的属性值完成动画效果，当然前提是需要有该属性的get和set方法，通过在动画的过程中调用get和set方法改变对象的属性值来完成动画效果。例如通过ObjectAnimator指定要改变的对象和属性名称：</p>
+<h4 id="1-4_属性动画：">1.4 属性动画：</h4><p>补间动画只能应用于视图(View)对象，动画的方式也仅限于上面所说的四种方式，而属性动画可以应用于所有的Object对象，它通过改变对象的属性值完成动画效果，当然前提是需要有该属性的get和set方法，通过在动画的过程中调用get和set方法改变对象的属性值来完成动画效果。例如通过ObjectAnimator指定要改变的对象和属性名称：</p>
 <pre><code>ObjectAnimator animator = ObjectAnimator.ofInt(testObject, <span class="string">"data"</span>, <span class="number">0</span>, <span class="number">10</span>);
 animator.start();
 
@@ -196,15 +183,12 @@ animator.addUpdateListener(<span class="keyword">new</span> ValueAnimator.Animat
     <span class="keyword">int</span> factor = (Integer) animation.getAnimatedValue();
     }
 });
-</code></pre><p>####1.5 动画插值：</p>
-<p>插值器的作用是根据时间运行的百分比来计算出当前属性改变的百分比，反映的是时间和动画进度（或属性变化）的关系，通过动画当前运行的时间，计算出当前动画的变化量。例如系统预制的线性插值器（LinearInterpolator），时间和动画进度的函数关系是y = x的直线方程，就表示当前动画是均速变化的。而当时间和动画进度的函数关系式表达为y=x^2的时候，那表示动画的变化率随着时间的增加而增加的，在视觉上就表现为加速动画。在理论上就可以通过动画插值器实现不同快慢效果的动画。</p>
+</code></pre><h4 id="1-5_动画插值：">1.5 动画插值：</h4><p>插值器的作用是根据时间运行的百分比来计算出当前属性改变的百分比，反映的是时间和动画进度（或属性变化）的关系，通过动画当前运行的时间，计算出当前动画的变化量。例如系统预制的线性插值器（LinearInterpolator），时间和动画进度的函数关系是y = x的直线方程，就表示当前动画是均速变化的。而当时间和动画进度的函数关系式表达为y=x^2的时候，那表示动画的变化率随着时间的增加而增加的，在视觉上就表现为加速动画。在理论上就可以通过动画插值器实现不同快慢效果的动画。</p>
 <p><img src="/res/android_animation/jiasu_jiansu.png" alt="加速减速插值器，曲线的斜率是先变大后变小，说明速度是先加速后减速的"></p>
 <p>在系统预制的插值器有：AccelerateInterpolator（加速插值器），AccelerateDecelerateInterpolator（加速减速插值器）， LinearInterpolator（线性插值器），BounceInterpolator（弹跳插值器），AnticipateInterpolator（回荡秋千插值器），AnticipateOvershootInterpolator， CycleInterpolator（正弦周期变化插值器），OvershootInterpolator ，我们也可以通过实现TimeTimeInterpolator或者Interpolatorr接口实现自定义的插值器。</p>
 <p><img src="/res/android_animation/android_animation_interpolator_class.png" alt="Interpolator类图"></p>
-<p>####1.6 动画估值器<br>估值器的作用是，根据插值器结果（当前属性变化的百分比）计算出当前属性的值，系统预置的有IntEvaluator（针对整型属性）、FloatEvaluator（针对浮点型属性）和ArgbEvaluator（针对Color属性）。满足的关系是：</p>
-<p>###二、桌面文件夹伸缩动画</p>
-<p>####2.1 IOS文件夹动画原理</p>
-<p>类似IOS的文件夹视图展开动画，简单说就是针对文件夹视图的一个伸缩动画，而视觉效果上的动画目标就是如何让文件夹的桌面图标和文件夹打开后的视图看起来是一个进行放大缩小的整体，处理伸缩动画的关键：<br>1.伸缩的前后比例（多少）<br>2.伸缩视图的中心坐标（相对于哪一点做伸缩）<br>针对伸缩的比例，应该是文件夹展开前后文件夹内应用图标大小确定的。针对如何确定伸缩视图的中心坐标，就需要首先确定坐标系，就是中心点是相对哪个坐标系确定的！伸缩动画坐标系的的原点在哪里？</p>
+<h4 id="1-6_动画估值器">1.6 动画估值器</h4><p>估值器的作用是，根据插值器结果（当前属性变化的百分比）计算出当前属性的值，系统预置的有IntEvaluator（针对整型属性）、FloatEvaluator（针对浮点型属性）和ArgbEvaluator（针对Color属性）。满足的关系是：</p>
+<h3 id="二、桌面文件夹伸缩动画">二、桌面文件夹伸缩动画</h3><h4 id="2-1_IOS文件夹动画原理">2.1 IOS文件夹动画原理</h4><p>类似IOS的文件夹视图展开动画，简单说就是针对文件夹视图的一个伸缩动画，而视觉效果上的动画目标就是如何让文件夹的桌面图标和文件夹打开后的视图看起来是一个进行放大缩小的整体，处理伸缩动画的关键：<br>1.伸缩的前后比例（多少）<br>2.伸缩视图的中心坐标（相对于哪一点做伸缩）<br>针对伸缩的比例，应该是文件夹展开前后文件夹内应用图标大小确定的。针对如何确定伸缩视图的中心坐标，就需要首先确定坐标系，就是中心点是相对哪个坐标系确定的！伸缩动画坐标系的的原点在哪里？</p>
 <ul>
 <li>伸缩动画的坐标系是由当前缩放视图确定的，当前视图的左上角为坐标系的原点，即（0，0）点。</li>
 <li>原点的水平向右方向为横坐标的正方向，平行手机屏幕垂直向下方向未纵坐标的正方向。</li>
@@ -483,7 +467,7 @@ animator.addUpdateListener(<span class="keyword">new</span> ValueAnimator.Animat
     </div>
     <footer class="article-footer">
       
-        <a data-url="https://ivonhoe.github.io/2015/02/09/Android动画总结/" data-id="cigq0hm6s0014zemv988wq4gs" class="article-share-link" data-share="baidu">分享到</a>
+        <a data-url="https://ivonhoe.github.io/2015/02/09/Android动画总结/" data-id="cilgll3me00148luqxifg5ypk" class="article-share-link" data-share="baidu">分享到</a>
       
 
       
@@ -608,7 +592,7 @@ animator.addUpdateListener(<span class="keyword">new</span> ValueAnimator.Animat
   
   <div class="outer">
     <div id="footer-info" class="inner">
-      &copy; 2015 Ivonhoe<br>
+      &copy; 2016 Ivonhoe<br>
       Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
       .
       Theme by <a href="https://github.com/xiangming/landscape-plus" target="_blank">Landscape-plus</a>

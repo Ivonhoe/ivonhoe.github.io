@@ -7,18 +7,18 @@
   <title>[译]Context?什么是Context？ | Ivonhoe</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="原文地址：http://possiblemobile.com/2013/06/context/
-##Context可能是Android应用中最常用的元素也是最容易误用的元素Context是经常被传递的对象，它可以很容易的构造一个你意想不到的情景，如加载资源，启动一个新的Activity，得到一个系统服务，得到内部文件路径和创建视图都需要一个Context去完成这个工作，我接下来为你在Context">
+Context可能是Android应用中最常用的元素也是最容易误用的元素Context是经常被传递的对象，它可以很容易的构造一个你意想不到的情景，如加载资源，启动一个新的Activity，得到一个系统服务，得到内部文件路径和创建视图都需要一个Context去完成这个工作，我接下来为你在Context到底">
 <meta property="og:type" content="article">
 <meta property="og:title" content="[译]Context?什么是Context？">
 <meta property="og:url" content="https://ivonhoe.github.io/2015/04/08/-翻译-Context-什么是Context？/index.html">
 <meta property="og:site_name" content="Ivonhoe">
 <meta property="og:description" content="原文地址：http://possiblemobile.com/2013/06/context/
-##Context可能是Android应用中最常用的元素也是最容易误用的元素Context是经常被传递的对象，它可以很容易的构造一个你意想不到的情景，如加载资源，启动一个新的Activity，得到一个系统服务，得到内部文件路径和创建视图都需要一个Context去完成这个工作，我接下来为你在Context">
-<meta property="og:updated_time" content="2015-04-17T02:36:52.000Z">
+Context可能是Android应用中最常用的元素也是最容易误用的元素Context是经常被传递的对象，它可以很容易的构造一个你意想不到的情景，如加载资源，启动一个新的Activity，得到一个系统服务，得到内部文件路径和创建视图都需要一个Context去完成这个工作，我接下来为你在Context到底">
+<meta property="og:updated_time" content="2016-03-06T13:33:29.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="[译]Context?什么是Context？">
 <meta name="twitter:description" content="原文地址：http://possiblemobile.com/2013/06/context/
-##Context可能是Android应用中最常用的元素也是最容易误用的元素Context是经常被传递的对象，它可以很容易的构造一个你意想不到的情景，如加载资源，启动一个新的Activity，得到一个系统服务，得到内部文件路径和创建视图都需要一个Context去完成这个工作，我接下来为你在Context">
+Context可能是Android应用中最常用的元素也是最容易误用的元素Context是经常被传递的对象，它可以很容易的构造一个你意想不到的情景，如加载资源，启动一个新的Activity，得到一个系统服务，得到内部文件路径和创建视图都需要一个Context去完成这个工作，我接下来为你在Context到底">
   
     <link rel="alternative" href="/atom.xml" title="Ivonhoe" type="application/atom+xml">
   
@@ -97,13 +97,13 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>原文地址：<a href="http://possiblemobile.com/2013/06/context/" target="_blank" rel="external">http://possiblemobile.com/2013/06/context/</a></p>
-<p>##Context可能是Android应用中最常用的元素也是最容易误用的元素<br>Context是经常被传递的对象，它可以很容易的构造一个你意想不到的情景，如加载资源，启动一个新的Activity，得到一个系统服务，得到内部文件路径和创建视图都需要一个Context去完成这个工作，我接下来为你在Context到底是如何工作的和为你能在你的应用中更好的运用Context提供建议。<br><a id="more"></a></p>
-<p>##Context类型<br>并不是所有的Context实例都是相同的，对于不同的Android应用组件，Context会有一些差别。</p>
-<p>###Application<br>Application 是应用进程中的一个单例，它可以通过Activity或者Service的getApplication()方法或者从Context派生出的其他对象调用getApplicationContext()方法得到，在同一个进程里任意时刻你得到的都是相同的Application实例。</p>
-<p>###Activity和Service<br>Activity和Sevice继承ContextWrapper，而ContxtWrapper同样实现了Context的接口，但是ContextWrapper的所有的方法都是通过包装一个内部context对象实现的，也就是它的base context（注：看ContextWrapper源码，ContextWrapper顾名思义就是Context的包装，ContextWrapper的实际功能都是成员变量mBase完成的，ContextThemeWrapper集成ContextWrapper，增加了Theme和Configuration作为成员变量，Activity继承ContextThemeWrapper，所以说Activity才是唯一包含主题信息的context。详细见下文）。当framework创建一个新的Activity或者Service的实例时，也会创造一个新的ContextImpl实例去真正完成context的实际功能，每一个Activity或者服务，和他们相应的base context，都是不同的context实例。</p>
-<p>###BroadcastReceiver<br>BroadcastReceiver本身并不是Context，但是当广播事件传递的时候，framework都会在onReceive()方法中传递一个Context。这个Context是一个ReceiverRestrictedContext实例（注：看ContextImpl的getReceiverRestrictedContext()方法），它的registerReceiver()和bindService()方法是失效的，这两个功能是不允许通过onReceive()方法传递的Context调用的，（每次receiver处理一个广播，都会创建一个新的context实例。)</p>
-<p>###ContentProvider<br>ContentProvider同样也不是Context，但是已被创建就可以活取getContext方法，如果ContentProvider和调用者在同一个进程，那会返回相同的Application实例，如果在两个单独的进程里，getContext()会返回一个新创建的Context，代表这个provider进程的Context。（注：可以阅读ActivityThread.java中的installProvider()和ContentProvider的attachInfo()方法，installProvider方法会根据provider的包名和当前进程名进行比较，如果是同一个进程那就使用当前的application context，如果在不同的进程中，就会调用createPackageContext创建一个provider相关的Context，并通过attachInfo绑定provider）。</p>
-<p>##保存引用<br>我们首先关注的问题是，当我们在一个对象或者类里面保存一个context的引用，但是这个对象或者类的生命周期超过了你保存的context实例的生命周期。例如，创建需要一个Context对象去加载资源或者去调用CotentProvider，保存当前Activity或者Service的引用在这个单例中。</p>
+<h2 id="Context可能是Android应用中最常用的元素也是最容易误用的元素">Context可能是Android应用中最常用的元素也是最容易误用的元素</h2><p>Context是经常被传递的对象，它可以很容易的构造一个你意想不到的情景，如加载资源，启动一个新的Activity，得到一个系统服务，得到内部文件路径和创建视图都需要一个Context去完成这个工作，我接下来为你在Context到底是如何工作的和为你能在你的应用中更好的运用Context提供建议。<br><a id="more"></a></p>
+<h2 id="Context类型">Context类型</h2><p>并不是所有的Context实例都是相同的，对于不同的Android应用组件，Context会有一些差别。</p>
+<h3 id="Application">Application</h3><p>Application 是应用进程中的一个单例，它可以通过Activity或者Service的getApplication()方法或者从Context派生出的其他对象调用getApplicationContext()方法得到，在同一个进程里任意时刻你得到的都是相同的Application实例。</p>
+<h3 id="Activity和Service">Activity和Service</h3><p>Activity和Sevice继承ContextWrapper，而ContxtWrapper同样实现了Context的接口，但是ContextWrapper的所有的方法都是通过包装一个内部context对象实现的，也就是它的base context（注：看ContextWrapper源码，ContextWrapper顾名思义就是Context的包装，ContextWrapper的实际功能都是成员变量mBase完成的，ContextThemeWrapper集成ContextWrapper，增加了Theme和Configuration作为成员变量，Activity继承ContextThemeWrapper，所以说Activity才是唯一包含主题信息的context。详细见下文）。当framework创建一个新的Activity或者Service的实例时，也会创造一个新的ContextImpl实例去真正完成context的实际功能，每一个Activity或者服务，和他们相应的base context，都是不同的context实例。</p>
+<h3 id="BroadcastReceiver">BroadcastReceiver</h3><p>BroadcastReceiver本身并不是Context，但是当广播事件传递的时候，framework都会在onReceive()方法中传递一个Context。这个Context是一个ReceiverRestrictedContext实例（注：看ContextImpl的getReceiverRestrictedContext()方法），它的registerReceiver()和bindService()方法是失效的，这两个功能是不允许通过onReceive()方法传递的Context调用的，（每次receiver处理一个广播，都会创建一个新的context实例。)</p>
+<h3 id="ContentProvider">ContentProvider</h3><p>ContentProvider同样也不是Context，但是已被创建就可以活取getContext方法，如果ContentProvider和调用者在同一个进程，那会返回相同的Application实例，如果在两个单独的进程里，getContext()会返回一个新创建的Context，代表这个provider进程的Context。（注：可以阅读ActivityThread.java中的installProvider()和ContentProvider的attachInfo()方法，installProvider方法会根据provider的包名和当前进程名进行比较，如果是同一个进程那就使用当前的application context，如果在不同的进程中，就会调用createPackageContext创建一个provider相关的Context，并通过attachInfo绑定provider）。</p>
+<h2 id="保存引用">保存引用</h2><p>我们首先关注的问题是，当我们在一个对象或者类里面保存一个context的引用，但是这个对象或者类的生命周期超过了你保存的context实例的生命周期。例如，创建需要一个Context对象去加载资源或者去调用CotentProvider，保存当前Activity或者Service的引用在这个单例中。</p>
 <p>失败的单例：</p>
 <pre><code><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">CustomManager</span> {
     <span class="keyword">private</span> <span class="keyword">static</span> CustomManager sInstance;
@@ -144,8 +144,7 @@
     }
 }
 </code></pre><p>现在不用关心这个Context是什么，因为现在持有的引用是安全的。Application context本身就是一个单例，我们只是创建另一个静态引用并不会造成内存泄露。另一个类似例子就是在一个后台的线程或者等待的Handler里持有一个Context引用。<br>既然这样那我们为什么总是引用一个application context呢？我们就永远不用担心内存泄露的问题。答案当然是不可以，就想我在前面提到的那样，每种类型的Context类型都不相同。</p>
-<p>##Context的功能</p>
-<p>我们安全的调用Context的方法取决于这个Context是如何创建的，下面的表是Context功能的使用情况：</p>
+<h2 id="Context的功能">Context的功能</h2><p>我们安全的调用Context的方法取决于这个Context是如何创建的，下面的表是Context功能的使用情况：</p>
 <table>
 <thead>
 <tr>
@@ -225,15 +224,15 @@
 </tbody>
 </table>
 <p>注：<br>1.一个application可以启动一个Activity，但是需要创建一个新的任务。这样做可能满足一些特定的需求，但是在应用中创建一个非标准的回退栈并不是一种经过深思熟虑的推荐做法。<br>2.这样是合法的，但是这样是加载出来的系统默认的主题布局，而并不是你在应用里定义的主题样式。<br>3.在receiver是null的情况下是允许的（注：看ContextImpl的内部类ReceiverRestrictedContext，ReceiverRestrictedContext进程ContentWrapper但是重写了注册广播和绑定服务的方法，会在这两个方法里抛出异常。为什么要这么做？），在4.2以上版本用来获取粘性广播。</p>
-<p>##用户接口<br>从上个表格你可以看出，有很多和UI处理相关的Context的功能并不适合用application context去处理。事实上，实现了所有和所有UI相关的操作接口的是Activity，而其他的类别的功能都几乎相同。<br>幸运的是这三个操作（注：指Application context不具备的三个Context功能）是application在Activity范围之外根本不需要去做的，这好像就是framework故意设计如此，如果你尝试通过一个application context去创建一个对话框或者启动一个Activity会抛出异常并造成应用程序终止，会有明显的指示告诉你这样出错了。<br>另一个值得注意的问题是加载布局，如果你阅读过我的文章<a href="http://www.doubleencore.com/2013/05/layout-inflation-as-intended" target="_blank" rel="external">layout inflation</a>,你会觉得这个过程会是稍微难理解的过程，使用正确的context就算一个。当你使用通过application context构造的LayoutInflater去加载视图，当然framework同样会返回一个正确的视图树，但是你在应用中设置的主题和样式是被忽略的，这是因为Activity才是真正关联你在manifest中设置的主题的Context。其他类型的Context实例会使用系统默认的主题样式去构建视图。所以这样构建出的视图可能并不是像你预期的那样。</p>
-<p>##交集<br>一定会有人得到这样的冲突的结论，在应用设计中会有一种情况，可能必须长期持有一个Activity Context引用，因为我想完成的任务包含UI的操作。如果是这样的话，那我只能强烈建议你重新考虑你的设计，因为那样的设计将是和Android应用架构背道而驰的过程。</p>
-<p>#总结<br>在大多数情况下，使用你当前封闭的组件中直接使用Context就是可以了，只有你持有引用不超过这个组件的生命周期就不会有问题，只要你需要保存一个Context的引用超出Activity或者Service的生命周期，哪怕是暂时的引用，那就请转换成保存application context的引用。</p>
+<h2 id="用户接口">用户接口</h2><p>从上个表格你可以看出，有很多和UI处理相关的Context的功能并不适合用application context去处理。事实上，实现了所有和所有UI相关的操作接口的是Activity，而其他的类别的功能都几乎相同。<br>幸运的是这三个操作（注：指Application context不具备的三个Context功能）是application在Activity范围之外根本不需要去做的，这好像就是framework故意设计如此，如果你尝试通过一个application context去创建一个对话框或者启动一个Activity会抛出异常并造成应用程序终止，会有明显的指示告诉你这样出错了。<br>另一个值得注意的问题是加载布局，如果你阅读过我的文章<a href="http://www.doubleencore.com/2013/05/layout-inflation-as-intended" target="_blank" rel="external">layout inflation</a>,你会觉得这个过程会是稍微难理解的过程，使用正确的context就算一个。当你使用通过application context构造的LayoutInflater去加载视图，当然framework同样会返回一个正确的视图树，但是你在应用中设置的主题和样式是被忽略的，这是因为Activity才是真正关联你在manifest中设置的主题的Context。其他类型的Context实例会使用系统默认的主题样式去构建视图。所以这样构建出的视图可能并不是像你预期的那样。</p>
+<h2 id="交集">交集</h2><p>一定会有人得到这样的冲突的结论，在应用设计中会有一种情况，可能必须长期持有一个Activity Context引用，因为我想完成的任务包含UI的操作。如果是这样的话，那我只能强烈建议你重新考虑你的设计，因为那样的设计将是和Android应用架构背道而驰的过程。</p>
+<h1 id="总结">总结</h1><p>在大多数情况下，使用你当前封闭的组件中直接使用Context就是可以了，只有你持有引用不超过这个组件的生命周期就不会有问题，只要你需要保存一个Context的引用超出Activity或者Service的生命周期，哪怕是暂时的引用，那就请转换成保存application context的引用。</p>
 
       
     </div>
     <footer class="article-footer">
       
-        <a data-url="https://ivonhoe.github.io/2015/04/08/-翻译-Context-什么是Context？/" data-id="cigq0hm5u0000zemvj99lv6be" class="article-share-link" data-share="baidu">分享到</a>
+        <a data-url="https://ivonhoe.github.io/2015/04/08/-翻译-Context-什么是Context？/" data-id="cilgll3lg00008luqriivxl84" class="article-share-link" data-share="baidu">分享到</a>
       
 
       
@@ -363,7 +362,7 @@
   
   <div class="outer">
     <div id="footer-info" class="inner">
-      &copy; 2015 Ivonhoe<br>
+      &copy; 2016 Ivonhoe<br>
       Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
       .
       Theme by <a href="https://github.com/xiangming/landscape-plus" target="_blank">Landscape-plus</a>
