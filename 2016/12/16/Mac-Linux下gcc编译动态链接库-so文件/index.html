@@ -4,17 +4,42 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Tag: GC | 别辜负自己</title>
+  <title>Mac/Linux下gcc编译动态链接库[.so文件] | 别辜负自己</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description">
-<meta property="og:type" content="website">
-<meta property="og:title" content="别辜负自己">
-<meta property="og:url" content="https://ivonhoe.github.io/tags/GC/index.html">
+  <meta name="description" content="##一、以bsdiff.c和bspatch.c为例编译bsdiff.sobsdiff.c和bspatch.c分别依赖bzip2
+###项目结构
+###步骤
+
+使用BsDiff.java生成BsDiff.class文件
+javac ivonhoe/spring/wrcenter/jni/BsDiff.java
+
+生成BsDiff.h文件
+javah ivonhoe.spring.wrcenter.j">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Mac/Linux下gcc编译动态链接库[.so文件]">
+<meta property="og:url" content="https://ivonhoe.github.io/2016/12/16/Mac-Linux下gcc编译动态链接库-so文件/index.html">
 <meta property="og:site_name" content="别辜负自己">
-<meta property="og:description">
+<meta property="og:description" content="##一、以bsdiff.c和bspatch.c为例编译bsdiff.sobsdiff.c和bspatch.c分别依赖bzip2
+###项目结构
+###步骤
+
+使用BsDiff.java生成BsDiff.class文件
+javac ivonhoe/spring/wrcenter/jni/BsDiff.java
+
+生成BsDiff.h文件
+javah ivonhoe.spring.wrcenter.j">
+<meta property="og:updated_time" content="2016-12-16T06:11:24.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="别辜负自己">
-<meta name="twitter:description">
+<meta name="twitter:title" content="Mac/Linux下gcc编译动态链接库[.so文件]">
+<meta name="twitter:description" content="##一、以bsdiff.c和bspatch.c为例编译bsdiff.sobsdiff.c和bspatch.c分别依赖bzip2
+###项目结构
+###步骤
+
+使用BsDiff.java生成BsDiff.class文件
+javac ivonhoe/spring/wrcenter/jni/BsDiff.java
+
+生成BsDiff.h文件
+javah ivonhoe.spring.wrcenter.j">
   
     <link rel="alternative" href="/atom.xml" title="别辜负自己" type="application/atom+xml">
   
@@ -70,12 +95,10 @@
   </div>
 </header>
     <div class="outer">
-      <section id="main">
-  
-    <article id="post-如何写出GC友好的Android应用" class="article article-type-post" itemscope itemprop="blogPost">
+      <section id="main"><article id="post-Mac-Linux下gcc编译动态链接库-so文件" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2015/10/25/如何写出GC友好的Android应用/" class="article-date">
-  <time datetime="2015-10-25T13:21:23.000Z" itemprop="datePublished">Oct 25 2015</time>
+    <a href="/2016/12/16/Mac-Linux下gcc编译动态链接库-so文件/" class="article-date">
+  <time datetime="2016-12-16T05:47:55.000Z" itemprop="datePublished">Dec 16 2016</time>
 </a>
     
   </div>
@@ -85,8 +108,8 @@
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/10/25/如何写出GC友好的Android应用/">[转载]如何写出GC友好的Android应用</a>
+    <h1 class="article-title" itemprop="name">
+      Mac/Linux下gcc编译动态链接库[.so文件]
     </h1>
   
 
@@ -94,37 +117,80 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>作者：乐蛙科技高级研发经理 易宁</p>
-<p>Android应用普遍没有iOS应用流畅，这与Android应用是运行在Java虚拟机上有很大的关系，而关系最大的恐怕就是Java虚拟机上的Garbage Collection（GC）了。Java语言提供了自动内存管理，垃圾对象会在GC过程中自动被释放。这提供了开发效率，使开发者能集中精力在业务逻辑上；但天下没有免费的午餐，你写的Android应用的某些性能上的问题很可能就是GC导致的。</p>
-<p>下面是一段非常简单的Java语句：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">byte</span>[] data = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">512</span> * <span class="number">512</span> * <span class="number">4</span>];</span><br></pre></td></tr></table></figure></p>
-<p>这条语句申请了一块大小相等于512*512大小图片的内存。执行这条语句会消耗多少时间呢？0+ms吗？基本没有性能影响吗？</p>
-        
-          <p class="article-more-link">
-            <a href="/2015/10/25/如何写出GC友好的Android应用/#more">Read More</a>
-          </p>
-        
+        <p>##一、以bsdiff.c和bspatch.c为例编译bsdiff.so<br>bsdiff.c和bspatch.c分别依赖bzip2</p>
+<p>###项目结构</p>
+<p>###步骤</p>
+<ul>
+<li><p>使用BsDiff.java生成BsDiff.class文件</p>
+<p><strong>javac</strong> ivonhoe/spring/wrcenter/jni/BsDiff.java</p>
+</li>
+<li><p>生成BsDiff.h文件</p>
+<p><strong>javah</strong> ivonhoe.spring.wrcenter.jni.BsDiff </p>
+</li>
+<li><p>生成bspatch.o</p>
+<p><strong>gcc -fPIC -D_REENTRANT</strong> -I<strong>JAVA_INCLUDE1</strong> -I/JAVA_INCLUDE2/ -I/Users/Ivonhoe/Downloads/VelocityDemo/src/main/java/jni/bzip2 -I/Users/Ivonhoe/Downloads/VelocityDemo/src/main/java/jni -c ./jni/bspatch.c</p>
+</li>
+<li><p>生成bsdiff.o</p>
+<p><strong>gcc -fPIC -D_REENTRANT</strong> -I/Library/Java/JavaVirtualMachines/jdk1.8.0_60.jdk/Contents/Home/include -I/Library/Java/JavaVirtualMachines/jdk1.8.0_60.jdk/Contents/Home/include/darwin -I/Users/Ivonhoe/Downloads/VelocityDemo/src/main/java/jni/bzip2 -I/Users/Ivonhoe/Downloads/VelocityDemo/src/main/java/jni -c ./jni/bsdiff.c</p>
+</li>
+<li><p>将bzip2下的c文件生成相应的.o文件</p>
+<p><strong>gcc -fPIC -D_REENTRANT</strong> -I/Library/Java/JavaVirtualMachines/jdk1.8.0_60.jdk/Contents/Home/include -I/Library/Java/JavaVirtualMachines/jdk1.8.0_60.jdk/Contents/Home/include/darwin -I/Users/Ivonhoe/Downloads/VelocityDemo/src/main/java/jni/bzip2 -c ./jni/bzip2/*.c</p>
+</li>
+<li><p>生成so文件</p>
+<p><strong>gcc *.o -o bsdiff.so -shared  -v</strong></p>
+</li>
+</ul>
+<ul>
+<li>注:</li>
+</ul>
+<p>  JAVA_INCLUDE1:/usr/local/java/jdk1.7.0_40/include<br>  JAVA_INCLUDE2:/usr/local/java/jdk1.7.0_40/include/linux<br>  是 jdk 中的 jni.h 文件的所在目录，这两个目录需要大家替换为自己的对应路径</p>
+<p>  BZIP2_INCLUDE:</p>
+<p>参考文档：<br><a href="http://www.cppblog.com/deane/articles/165216.html" target="_blank" rel="external">http://www.cppblog.com/deane/articles/165216.html</a><br><a href="http://blog.csdn.net/hongquan1991/article/details/12426615" target="_blank" rel="external">http://blog.csdn.net/hongquan1991/article/details/12426615</a><br><a href="http://codepub.cn/2015/05/19/How-to-load-dll-file-in-Java-Web-Project/" target="_blank" rel="external">http://codepub.cn/2015/05/19/How-to-load-dll-file-in-Java-Web-Project/</a></p>
+
       
     </div>
     <footer class="article-footer">
       
-        <a data-url="https://ivonhoe.github.io/2015/10/25/如何写出GC友好的Android应用/" data-id="ciyy7nkdb000hx7mv3otoyuwq" class="article-share-link" data-share="baidu">分享到</a>
+        <a data-url="https://ivonhoe.github.io/2016/12/16/Mac-Linux下gcc编译动态链接库-so文件/" data-id="ciyy7nkdi000vx7mvx3zmklbe" class="article-share-link" data-share="baidu">分享到</a>
       
 
       
-        <a href="https://ivonhoe.github.io/2015/10/25/如何写出GC友好的Android应用/#ds-thread" class="article-comment-link">評論</a>
+        <a href="https://ivonhoe.github.io/2016/12/16/Mac-Linux下gcc编译动态链接库-so文件/#ds-thread" class="article-comment-link">評論</a>
       
 
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Delvik/">Delvik</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/GC/">GC</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/转载/">转载</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/动态链接库/">动态链接库</a></li></ul>
 
     </footer>
   </div>
   
+    
+<nav id="article-nav">
+  
+    <a href="/2017/02/09/防止dex2jar工具/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">
+        
+          (no title)
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2015/10/25/如何写出GC友好的Android应用/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">[转载]如何写出GC友好的Android应用</div>
+    </a>
+  
+</nav>
+
+  
 </article>
 
 
-  
-  
+  <section id="comments">
+    <div id="ds-thread" class="ds-thread" data-thread-key="2016/12/16/Mac-Linux下gcc编译动态链接库-so文件/" data-title="Mac/Linux下gcc编译动态链接库[.so文件]" data-url="https://ivonhoe.github.io/2016/12/16/Mac-Linux下gcc编译动态链接库-so文件/"></div>
+  </section>
 </section>
       
       <aside id="sidebar">

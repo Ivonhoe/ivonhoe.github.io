@@ -4,17 +4,29 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Tag: Android | 别辜负自己</title>
+  <title>美团如何防dex2jar | 别辜负自己</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description">
-<meta property="og:type" content="website">
-<meta property="og:title" content="别辜负自己">
-<meta property="og:url" content="https://ivonhoe.github.io/tags/Android/index.html">
+  <meta name="description" content="###一、看美团最近在看美团外卖的代码，发现美团外卖4.1.1版本之后的安装包无法正常的通过dex2jar工具将dex转换出Java源代码，在转换过程中会提示出错，如图：
+
+查看转换出的Java源代码，会发现很多类方法提示下图所示异常：
+1public class AsyncTaskService extends IntentService &amp;#123; &amp;#10;  public void on">
+<meta property="og:type" content="article">
+<meta property="og:title" content="美团如何防dex2jar">
+<meta property="og:url" content="https://ivonhoe.github.io/2017/02/09/美团如何防dex2jar/index.html">
 <meta property="og:site_name" content="别辜负自己">
-<meta property="og:description">
+<meta property="og:description" content="###一、看美团最近在看美团外卖的代码，发现美团外卖4.1.1版本之后的安装包无法正常的通过dex2jar工具将dex转换出Java源代码，在转换过程中会提示出错，如图：
+
+查看转换出的Java源代码，会发现很多类方法提示下图所示异常：
+1public class AsyncTaskService extends IntentService &amp;#123; &amp;#10;  public void on">
+<meta property="og:image" content="https://ivonhoe.github.io/../res/dex2jar_error/dex2jar_error1.png">
+<meta property="og:image" content="https://ivonhoe.github.io/../res/dex2jar_error/dex2jar_error2.png">
+<meta property="og:updated_time" content="2017-02-09T09:57:29.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="别辜负自己">
-<meta name="twitter:description">
+<meta name="twitter:title" content="美团如何防dex2jar">
+<meta name="twitter:description" content="###一、看美团最近在看美团外卖的代码，发现美团外卖4.1.1版本之后的安装包无法正常的通过dex2jar工具将dex转换出Java源代码，在转换过程中会提示出错，如图：
+
+查看转换出的Java源代码，会发现很多类方法提示下图所示异常：
+1public class AsyncTaskService extends IntentService &amp;#123; &amp;#10;  public void on">
   
     <link rel="alternative" href="/atom.xml" title="别辜负自己" type="application/atom+xml">
   
@@ -70,9 +82,7 @@
   </div>
 </header>
     <div class="outer">
-      <section id="main">
-  
-    <article id="post-美团如何防dex2jar" class="article article-type-post" itemscope itemprop="blogPost">
+      <section id="main"><article id="post-美团如何防dex2jar" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2017/02/09/美团如何防dex2jar/" class="article-date">
   <time datetime="2017-02-09T09:55:01.000Z" itemprop="datePublished">Feb 9 2017</time>
@@ -85,8 +95,8 @@
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/02/09/美团如何防dex2jar/">美团如何防dex2jar</a>
+    <h1 class="article-title" itemprop="name">
+      美团如何防dex2jar
     </h1>
   
 
@@ -139,323 +149,24 @@
     </footer>
   </div>
   
-</article>
-
-
+    
+<nav id="article-nav">
   
-    <article id="post-如何写出GC友好的Android应用" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2015/10/25/如何写出GC友好的Android应用/" class="article-date">
-  <time datetime="2015-10-25T13:21:23.000Z" itemprop="datePublished">Oct 25 2015</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/10/25/如何写出GC友好的Android应用/">[转载]如何写出GC友好的Android应用</a>
-    </h1>
+    <a href="/2017/02/09/防止dex2jar工具/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title"></div>
+    </a>
   
+</nav>
 
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>作者：乐蛙科技高级研发经理 易宁</p>
-<p>Android应用普遍没有iOS应用流畅，这与Android应用是运行在Java虚拟机上有很大的关系，而关系最大的恐怕就是Java虚拟机上的Garbage Collection（GC）了。Java语言提供了自动内存管理，垃圾对象会在GC过程中自动被释放。这提供了开发效率，使开发者能集中精力在业务逻辑上；但天下没有免费的午餐，你写的Android应用的某些性能上的问题很可能就是GC导致的。</p>
-<p>下面是一段非常简单的Java语句：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">byte</span>[] data = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">512</span> * <span class="number">512</span> * <span class="number">4</span>];</span><br></pre></td></tr></table></figure></p>
-<p>这条语句申请了一块大小相等于512*512大小图片的内存。执行这条语句会消耗多少时间呢？0+ms吗？基本没有性能影响吗？</p>
-        
-          <p class="article-more-link">
-            <a href="/2015/10/25/如何写出GC友好的Android应用/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      
-        <a data-url="https://ivonhoe.github.io/2015/10/25/如何写出GC友好的Android应用/" data-id="ciyy7nkdb000hx7mv3otoyuwq" class="article-share-link" data-share="baidu">分享到</a>
-      
-
-      
-        <a href="https://ivonhoe.github.io/2015/10/25/如何写出GC友好的Android应用/#ds-thread" class="article-comment-link">評論</a>
-      
-
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Delvik/">Delvik</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/GC/">GC</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/转载/">转载</a></li></ul>
-
-    </footer>
-  </div>
   
 </article>
 
 
-  
-    <article id="post-Android动画总结之有赞、邮箱大师进度条实现原理" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2015/09/01/Android动画总结之有赞、邮箱大师进度条实现原理/" class="article-date">
-  <time datetime="2015-09-01T15:17:29.000Z" itemprop="datePublished">Sep 1 2015</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/09/01/Android动画总结之有赞、邮箱大师进度条实现原理/">Android动画总结之有赞、邮箱大师进度条实现原理</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="一、效果">一、效果</h2><p><img src="../res/android_animation2/xiaoguo.gif" alt=" "></p>
-<h2 id="二、有赞加载进度条">二、有赞加载进度条</h2><p>四个正方形的运动可以分解成两个分运动，一个是平移运动，一个是自身的旋转运动。在实现这个动画上有两个思路：</p>
-<ul>
-<li>一个是通过Android提供的Animation或者Animator操作视图，让一个正方形的视图在translate动画的同时进行rotate动画，只需要设置rotate动画的pivot坐标为视图的中心点就可以了。</li>
-<li>另一个是直接在canvas上绘制正方形，通过canvas的坐标变换实现动画。</li>
-</ul>
-        
-          <p class="article-more-link">
-            <a href="/2015/09/01/Android动画总结之有赞、邮箱大师进度条实现原理/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      
-        <a data-url="https://ivonhoe.github.io/2015/09/01/Android动画总结之有赞、邮箱大师进度条实现原理/" data-id="ciyy7nkdp0017x7mv97751f86" class="article-share-link" data-share="baidu">分享到</a>
-      
-
-      
-        <a href="https://ivonhoe.github.io/2015/09/01/Android动画总结之有赞、邮箱大师进度条实现原理/#ds-thread" class="article-comment-link">評論</a>
-      
-
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/动画/">动画</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/进度条/">进度条</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-Drawable-从简化布局谈起" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2015/04/28/Drawable-从简化布局谈起/" class="article-date">
-  <time datetime="2015-04-28T15:31:29.000Z" itemprop="datePublished">Apr 28 2015</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/04/28/Drawable-从简化布局谈起/">Drawable,从简化布局谈起</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="一、Drawble是干嘛的？">一、Drawble是干嘛的？</h2><p>说到Drawable肯定会第一时间想到图片资源，可能有人会认为Drawable就是图片。Drawble从字面上说就是“可绘制的”，google文档的描述:“A Drawable is a general abstraction for “something that can be drawn.””，Drawable其实就是为那些”可以被绘制的’’提供的抽象类。</p>
-<ul>
-<li><strong>哪些东西是”can be drawn”？</strong></li>
-<li><strong>绘制在哪里的？</strong></li>
-</ul>
-<p>看下android原生的Drawable和Canvas提供了的绘图的接口：<a href="http://developer.android.com/reference/android/graphics/drawable/package-summary.html">android.graphics.drawable</a><br><a href="http://developer.android.com/reference/android/graphics/Canvas.html">android.graphics.Canvas</a>。Canvas提供了一系列的接口去实现绘制想要的图形、图片、颜色或者其他something，Drawable就是为了这些”something”提供的。</p>
-        
-          <p class="article-more-link">
-            <a href="/2015/04/28/Drawable-从简化布局谈起/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      
-        <a data-url="https://ivonhoe.github.io/2015/04/28/Drawable-从简化布局谈起/" data-id="ciyy7nkdk000yx7mvcl1jsk1h" class="article-share-link" data-share="baidu">分享到</a>
-      
-
-      
-        <a href="https://ivonhoe.github.io/2015/04/28/Drawable-从简化布局谈起/#ds-thread" class="article-comment-link">評論</a>
-      
-
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Drawable/">Drawable</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/性能优化/">性能优化</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-基于贝塞尔曲线的Android动画差值器" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2015/04/17/基于贝塞尔曲线的Android动画差值器/" class="article-date">
-  <time datetime="2015-04-17T02:35:05.000Z" itemprop="datePublished">Apr 17 2015</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/04/17/基于贝塞尔曲线的Android动画差值器/">基于贝塞尔曲线的Android动画差值器</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="一、简介">一、简介</h2><p>贝塞尔曲线于1962，由法国工程师皮埃尔·贝塞尔（Pierre Bézier）所广泛发表，他运用贝塞尔曲线来为汽车的主体进行设计。贝塞尔曲线最初由Paul de Casteljau于1959年运用de Casteljau算法开发，以稳定数值的方法求出贝兹曲线。贝塞尔曲线不仅仅可以应用到工业设计中，在计算机动画开发中同样占有一席之地，通过构造贝塞尔曲线模拟物体运动的轨迹、速度甚至加速度，来达到想要的动画效果。在CSS开发中使用‘cubic-bezier’方法，传递三次贝赛尔曲线的两个控制点P1和P2来生成一条平滑的曲线。甚至也有很多javaScript动画库使用贝赛尔曲线来实现完美的动画效果。</p>
-<p><img src="/res/bezier/TimingFunction.png" alt="通过P1和P2控制曲线"></p>
-        
-          <p class="article-more-link">
-            <a href="/2015/04/17/基于贝塞尔曲线的Android动画差值器/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      
-        <a data-url="https://ivonhoe.github.io/2015/04/17/基于贝塞尔曲线的Android动画差值器/" data-id="ciyy7nkdg000px7mvkp9nq7vj" class="article-share-link" data-share="baidu">分享到</a>
-      
-
-      
-        <a href="https://ivonhoe.github.io/2015/04/17/基于贝塞尔曲线的Android动画差值器/#ds-thread" class="article-comment-link">評論</a>
-      
-
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/动画/">动画</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/贝塞尔曲线/">贝塞尔曲线</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post--翻译-Context-什么是Context？" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2015/04/08/-翻译-Context-什么是Context？/" class="article-date">
-  <time datetime="2015-04-08T03:06:31.000Z" itemprop="datePublished">Apr 8 2015</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/04/08/-翻译-Context-什么是Context？/">[译]Context?什么是Context？</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>原文地址：<a href="http://possiblemobile.com/2013/06/context/">http://possiblemobile.com/2013/06/context/</a></p>
-<h2 id="Context可能是Android应用中最常用的元素也是最容易误用的元素">Context可能是Android应用中最常用的元素也是最容易误用的元素</h2><p>Context是经常被传递的对象，它可以很容易的构造一个你意想不到的情景，如加载资源，启动一个新的Activity，得到一个系统服务，得到内部文件路径和创建视图都需要一个Context去完成这个工作，我接下来为你在Context到底是如何工作的和为你能在你的应用中更好的运用Context提供建议。<br>
-        
-          <p class="article-more-link">
-            <a href="/2015/04/08/-翻译-Context-什么是Context？/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      
-        <a data-url="https://ivonhoe.github.io/2015/04/08/-翻译-Context-什么是Context？/" data-id="ciyy7nkcp0000x7mv14xzl0wt" class="article-share-link" data-share="baidu">分享到</a>
-      
-
-      
-        <a href="https://ivonhoe.github.io/2015/04/08/-翻译-Context-什么是Context？/#ds-thread" class="article-comment-link">評論</a>
-      
-
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Context/">Context</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/翻译/">翻译</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-Android动画总结" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2015/02/09/Android动画总结/" class="article-date">
-  <time datetime="2015-02-09T11:40:53.000Z" itemprop="datePublished">Feb 9 2015</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/02/09/Android动画总结/">Android动画总结</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="说在开始">说在开始</h3><p>这篇文档记录了一下自己在实际工作中实现的一些Android动画效果时的开发思路，总结了我自己如何看待Android动画问题，希望能给大家的动画开发提供一些思路和帮助。</p>
-<h3 id="一、Android动画基础">一、Android动画基础</h3><h4 id="1-1_动画类型">1.1 动画类型</h4><ul>
-<li><strong>Frame Animation：</strong><br>帧动画，顺序播放事先做好的图像，是一种画面转换动画</li>
-<li><strong>Tween Animation:</strong><br>补间动画（或者叫渐变动画），通过对场景里的对象不断做图像变换(平移、缩放、旋转)产生动画效果
-        
-          <p class="article-more-link">
-            <a href="/2015/02/09/Android动画总结/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      
-        <a data-url="https://ivonhoe.github.io/2015/02/09/Android动画总结/" data-id="ciyy7nkds001cx7mvt7xwksto" class="article-share-link" data-share="baidu">分享到</a>
-      
-
-      
-        <a href="https://ivonhoe.github.io/2015/02/09/Android动画总结/#ds-thread" class="article-comment-link">評論</a>
-      
-
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/动画/">动画</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-  
+  <section id="comments">
+    <div id="ds-thread" class="ds-thread" data-thread-key="2017/02/09/美团如何防dex2jar/" data-title="美团如何防dex2jar" data-url="https://ivonhoe.github.io/2017/02/09/美团如何防dex2jar/"></div>
+  </section>
 </section>
       
       <aside id="sidebar">

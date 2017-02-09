@@ -4,12 +4,12 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Tag: GC | 别辜负自己</title>
+  <title>别辜负自己</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description">
 <meta property="og:type" content="website">
 <meta property="og:title" content="别辜负自己">
-<meta property="og:url" content="https://ivonhoe.github.io/tags/GC/index.html">
+<meta property="og:url" content="https://ivonhoe.github.io/page/2/index.html">
 <meta property="og:site_name" content="别辜负自己">
 <meta property="og:description">
 <meta name="twitter:card" content="summary">
@@ -72,10 +72,10 @@
     <div class="outer">
       <section id="main">
   
-    <article id="post-如何写出GC友好的Android应用" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-Android动画总结" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2015/10/25/如何写出GC友好的Android应用/" class="article-date">
-  <time datetime="2015-10-25T13:21:23.000Z" itemprop="datePublished">Oct 25 2015</time>
+    <a href="/2015/02/09/Android动画总结/" class="article-date">
+  <time datetime="2015-02-09T11:40:53.000Z" itemprop="datePublished">Feb 9 2015</time>
 </a>
     
   </div>
@@ -86,7 +86,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2015/10/25/如何写出GC友好的Android应用/">[转载]如何写出GC友好的Android应用</a>
+      <a class="article-title" href="/2015/02/09/Android动画总结/">Android动画总结</a>
     </h1>
   
 
@@ -94,28 +94,28 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>作者：乐蛙科技高级研发经理 易宁</p>
-<p>Android应用普遍没有iOS应用流畅，这与Android应用是运行在Java虚拟机上有很大的关系，而关系最大的恐怕就是Java虚拟机上的Garbage Collection（GC）了。Java语言提供了自动内存管理，垃圾对象会在GC过程中自动被释放。这提供了开发效率，使开发者能集中精力在业务逻辑上；但天下没有免费的午餐，你写的Android应用的某些性能上的问题很可能就是GC导致的。</p>
-<p>下面是一段非常简单的Java语句：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">byte</span>[] data = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">512</span> * <span class="number">512</span> * <span class="number">4</span>];</span><br></pre></td></tr></table></figure></p>
-<p>这条语句申请了一块大小相等于512*512大小图片的内存。执行这条语句会消耗多少时间呢？0+ms吗？基本没有性能影响吗？</p>
+        <h3 id="说在开始">说在开始</h3><p>这篇文档记录了一下自己在实际工作中实现的一些Android动画效果时的开发思路，总结了我自己如何看待Android动画问题，希望能给大家的动画开发提供一些思路和帮助。</p>
+<h3 id="一、Android动画基础">一、Android动画基础</h3><h4 id="1-1_动画类型">1.1 动画类型</h4><ul>
+<li><strong>Frame Animation：</strong><br>帧动画，顺序播放事先做好的图像，是一种画面转换动画</li>
+<li><strong>Tween Animation:</strong><br>补间动画（或者叫渐变动画），通过对场景里的对象不断做图像变换(平移、缩放、旋转)产生动画效果
         
           <p class="article-more-link">
-            <a href="/2015/10/25/如何写出GC友好的Android应用/#more">Read More</a>
+            <a href="/2015/02/09/Android动画总结/#more">Read More</a>
           </p>
         
       
     </div>
     <footer class="article-footer">
       
-        <a data-url="https://ivonhoe.github.io/2015/10/25/如何写出GC友好的Android应用/" data-id="ciyy7nkdb000hx7mv3otoyuwq" class="article-share-link" data-share="baidu">分享到</a>
+        <a data-url="https://ivonhoe.github.io/2015/02/09/Android动画总结/" data-id="ciyy7nkds001cx7mvt7xwksto" class="article-share-link" data-share="baidu">分享到</a>
       
 
       
-        <a href="https://ivonhoe.github.io/2015/10/25/如何写出GC友好的Android应用/#ds-thread" class="article-comment-link">評論</a>
+        <a href="https://ivonhoe.github.io/2015/02/09/Android动画总结/#ds-thread" class="article-comment-link">評論</a>
       
 
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Delvik/">Delvik</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/GC/">GC</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/转载/">转载</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/动画/">动画</a></li></ul>
 
     </footer>
   </div>
@@ -124,6 +124,10 @@
 
 
   
+  
+    <nav id="page-nav">
+      <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
+    </nav>
   
 </section>
       
