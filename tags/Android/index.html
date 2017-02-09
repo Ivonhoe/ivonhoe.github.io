@@ -95,7 +95,7 @@
     <div class="article-entry" itemprop="articleBody">
       
         <h3 id="一、看美团">一、看美团</h3><p>最近在看美团外卖的代码，发现美团外卖4.1.1版本之后的安装包无法正常的通过dex2jar工具将dex转换出Java源代码，在转换过程中会提示出错，如图：</p>
-<p><img src="../res/dex2jar_error/dex2jar_error1.png" alt=" "></p>
+<p><img src="/res/dex2jar_error/dex2jar_error1.png" alt="dex2jar异常图"></p>
 <p>查看转换出的Java源代码，会发现很多类方法提示下图所示异常：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public class AsyncTaskService extends IntentService &#123; &#10;  public void onCreate()&#123;&#10;    super.onCreate();&#10;  &#125;&#10;  &#10;  public void onDestroy()&#123;&#10;    throw new RuntimeException(&#34;d2j fail translate: java.lang.RuntimeException: can not merge I and Z\n\tat com.googlecode.dex2jar.ir.TypeClass.merge(TypeClass.java:100)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeRef.updateTypeClass(TypeTransformer.java:174)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.provideAs(TypeTransformer.java:783)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.enexpr(TypeTransformer.java:662)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.exExpr(TypeTransformer.java:722)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.exExpr(TypeTransformer.java:706)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.enexpr(TypeTransformer.java:701)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.exExpr(TypeTransformer.java:722)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.exExpr(TypeTransformer.java:706)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.s1stmt(TypeTransformer.java:813)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.sxStmt(TypeTransformer.java:843)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.analyze(TypeTransformer.java:206)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer.transform(TypeTransformer.java:44)\n\tat com.googlecode.d2j.dex.Dex2jar$2.optimize(Dex2jar.java:161)\n\tat com.googlecode.d2j.dex.Dex2Asm.convertCode(Dex2Asm.java:433)\n\tat com.googlecode.d2j.dex.ExDex2Asm.convertCode(ExDex2Asm.java:42)\n\tat com.googlecode.d2j.dex.Dex2jar$2.convertCode(Dex2jar.java:129)\n\tat com.googlecode.d2j.dex.Dex2Asm.convertMethod(Dex2Asm.java:528)\n\tat com.googlecode.d2j.dex.Dex2Asm.convertClass(Dex2Asm.java:425)\n\tat com.googlecode.d2j.dex.Dex2Asm.convertDex(Dex2Asm.java:441)\n\tat com.googlecode.d2j.dex.Dex2jar.doTranslate(Dex2jar.java:171)\n\tat com.googlecode.d2j.dex.Dex2jar.to(Dex2jar.java:271)\n\tat com.googlecode.dex2jar.tools.Dex2jarCmd.doCommandLine(Dex2jarCmd.java:109)\n\tat com.googlecode.dex2jar.tools.BaseCmd.doMain(BaseCmd.java:290)\n\tat com.googlecode.dex2jar.tools.Dex2jarCmd.main(Dex2jarCmd.java:33)\n&#34;);&#10;  &#125;&#10;  &#10;  protected void onHandleIntent(Intent paramIntent)&#123;&#10;    throw new RuntimeException(&#34;d2j fail translate: java.lang.RuntimeException: can not merge I and Z\n\tat com.googlecode.dex2jar.ir.TypeClass.merge(TypeClass.java:100)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeRef.updateTypeClass(TypeTransformer.java:174)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.provideAs(TypeTransformer.java:783)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.enexpr(TypeTransformer.java:662)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.exExpr(TypeTransformer.java:722)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.exExpr(TypeTransformer.java:706)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.enexpr(TypeTransformer.java:701)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.exExpr(TypeTransformer.java:722)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.exExpr(TypeTransformer.java:706)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.s1stmt(TypeTransformer.java:813)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.sxStmt(TypeTransformer.java:843)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.analyze(TypeTransformer.java:206)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer.transform(TypeTransformer.java:44)\n\tat com.googlecode.d2j.dex.Dex2jar$2.optimize(Dex2jar.java:161)\n\tat com.googlecode.d2j.dex.Dex2Asm.convertCode(Dex2Asm.java:433)\n\tat com.googlecode.d2j.dex.ExDex2Asm.convertCode(ExDex2Asm.java:42)\n\tat com.googlecode.d2j.dex.Dex2jar$2.convertCode(Dex2jar.java:129)\n\tat com.googlecode.d2j.dex.Dex2Asm.convertMethod(Dex2Asm.java:528)\n\tat com.googlecode.d2j.dex.Dex2Asm.convertClass(Dex2Asm.java:425)\n\tat com.googlecode.d2j.dex.Dex2Asm.convertDex(Dex2Asm.java:441)\n\tat com.googlecode.d2j.dex.Dex2jar.doTranslate(Dex2jar.java:171)\n\tat com.googlecode.d2j.dex.Dex2jar.to(Dex2jar.java:271)\n\tat com.googlecode.dex2jar.tools.Dex2jarCmd.doCommandLine(Dex2jarCmd.java:109)\n\tat com.googlecode.dex2jar.tools.BaseCmd.doMain(BaseCmd.java:290)\n\tat com.googlecode.dex2jar.tools.Dex2jarCmd.main(Dex2jarCmd.java:33)\n&#34;);&#10;  &#125;&#10;  &#10;  public int onStartCommand(Intent paramIntent, int paramInt1, int paramInt2)&#123;&#10;    throw new RuntimeException(&#34;d2j fail translate: java.lang.RuntimeException: can not merge I and Z\n\tat com.googlecode.dex2jar.ir.TypeClass.merge(TypeClass.java:100)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeRef.updateTypeClass(TypeTransformer.java:174)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.provideAs(TypeTransformer.java:783)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.enexpr(TypeTransformer.java:662)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.exExpr(TypeTransformer.java:722)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.exExpr(TypeTransformer.java:706)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.enexpr(TypeTransformer.java:701)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.exExpr(TypeTransformer.java:722)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.exExpr(TypeTransformer.java:706)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.s1stmt(TypeTransformer.java:813)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.sxStmt(TypeTransformer.java:843)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.analyze(TypeTransformer.java:206)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer.transform(TypeTransformer.java:44)\n\tat com.googlecode.d2j.dex.Dex2jar$2.optimize(Dex2jar.java:161)\n\tat com.googlecode.d2j.dex.Dex2Asm.convertCode(Dex2Asm.java:433)\n\tat com.googlecode.d2j.dex.ExDex2Asm.convertCode(ExDex2Asm.java:42)\n\tat com.googlecode.d2j.dex.Dex2jar$2.convertCode(Dex2jar.java:129)\n\tat com.googlecode.d2j.dex.Dex2Asm.convertMethod(Dex2Asm.java:528)\n\tat com.googlecode.d2j.dex.Dex2Asm.convertClass(Dex2Asm.java:425)\n\tat com.googlecode.d2j.dex.Dex2Asm.convertDex(Dex2Asm.java:441)\n\tat com.googlecode.d2j.dex.Dex2jar.doTranslate(Dex2jar.java:171)\n\tat com.googlecode.d2j.dex.Dex2jar.to(Dex2jar.java:271)\n\tat com.googlecode.dex2jar.tools.Dex2jarCmd.doCommandLine(Dex2jarCmd.java:109)\n\tat com.googlecode.dex2jar.tools.BaseCmd.doMain(BaseCmd.java:290)\n\tat com.googlecode.dex2jar.tools.Dex2jarCmd.main(Dex2jarCmd.java:33)\n&#34;);&#10;  &#125;&#10;&#125;</span><br></pre></td></tr></table></figure>
         
@@ -107,7 +107,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="https://ivonhoe.github.io/2017/02/09/美团如何防dex2jar/" data-id="ciyy7pljt0008xzmv3k46dnqb" class="article-share-link" data-share="baidu">分享到</a>
+        <a data-url="https://ivonhoe.github.io/2017/02/09/美团如何防dex2jar/" data-id="ciyy7yq5w0007zgmv4b7f8e2y" class="article-share-link" data-share="baidu">分享到</a>
       
 
       
@@ -159,7 +159,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="https://ivonhoe.github.io/2015/10/25/如何写出GC友好的Android应用/" data-id="ciyy7pljw000hxzmv9m8gzkwu" class="article-share-link" data-share="baidu">分享到</a>
+        <a data-url="https://ivonhoe.github.io/2015/10/25/如何写出GC友好的Android应用/" data-id="ciyy7yq62000gzgmvshpsub4s" class="article-share-link" data-share="baidu">分享到</a>
       
 
       
@@ -198,7 +198,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="一、效果">一、效果</h2><p><img src="../res/android_animation2/xiaoguo.gif" alt=" "></p>
+        <h2 id="一、效果">一、效果</h2><p><img src="/res/android_animation2/xiaoguo.gif" alt=" "></p>
 <h2 id="二、有赞加载进度条">二、有赞加载进度条</h2><p>四个正方形的运动可以分解成两个分运动，一个是平移运动，一个是自身的旋转运动。在实现这个动画上有两个思路：</p>
 <ul>
 <li>一个是通过Android提供的Animation或者Animator操作视图，让一个正方形的视图在translate动画的同时进行rotate动画，只需要设置rotate动画的pivot坐标为视图的中心点就可以了。</li>
@@ -213,7 +213,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="https://ivonhoe.github.io/2015/09/01/Android动画总结之有赞、邮箱大师进度条实现原理/" data-id="ciyy7plk70017xzmvzvuj7s0m" class="article-share-link" data-share="baidu">分享到</a>
+        <a data-url="https://ivonhoe.github.io/2015/09/01/Android动画总结之有赞、邮箱大师进度条实现原理/" data-id="ciyy7yq6f0016zgmvcb7xmy17" class="article-share-link" data-share="baidu">分享到</a>
       
 
       
@@ -267,7 +267,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="https://ivonhoe.github.io/2015/04/28/Drawable-从简化布局谈起/" data-id="ciyy7plk3000yxzmv03emhtrr" class="article-share-link" data-share="baidu">分享到</a>
+        <a data-url="https://ivonhoe.github.io/2015/04/28/Drawable-从简化布局谈起/" data-id="ciyy7yq6a000xzgmvmbw93h8g" class="article-share-link" data-share="baidu">分享到</a>
       
 
       
@@ -317,7 +317,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="https://ivonhoe.github.io/2015/04/17/基于贝塞尔曲线的Android动画差值器/" data-id="ciyy7pljy000pxzmv3gpzue53" class="article-share-link" data-share="baidu">分享到</a>
+        <a data-url="https://ivonhoe.github.io/2015/04/17/基于贝塞尔曲线的Android动画差值器/" data-id="ciyy7yq65000ozgmvemrk2rk4" class="article-share-link" data-share="baidu">分享到</a>
       
 
       
@@ -367,7 +367,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="https://ivonhoe.github.io/2015/04/08/-翻译-Context-什么是Context？/" data-id="ciyy7plj80000xzmvxwwp4ptb" class="article-share-link" data-share="baidu">分享到</a>
+        <a data-url="https://ivonhoe.github.io/2015/04/08/-翻译-Context-什么是Context？/" data-id="ciyy7yq5d0000zgmvavmhjta9" class="article-share-link" data-share="baidu">分享到</a>
       
 
       
@@ -419,7 +419,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="https://ivonhoe.github.io/2015/02/09/Android动画总结/" data-id="ciyy7plk9001cxzmvinxek1kx" class="article-share-link" data-share="baidu">分享到</a>
+        <a data-url="https://ivonhoe.github.io/2015/02/09/Android动画总结/" data-id="ciyy7yq6h001bzgmvry5mppch" class="article-share-link" data-share="baidu">分享到</a>
       
 
       
