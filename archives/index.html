@@ -94,39 +94,20 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>###一、看美团<br>最近在看美团外卖的代码，发现美团外卖4.1.1版本之后的安装包无法正常的通过dex2jar工具将dex转换出Java源代码，在转换过程中会提示出错，如图：</p>
+        <h3 id="一、看美团">一、看美团</h3><p>最近在看美团外卖的代码，发现美团外卖4.1.1版本之后的安装包无法正常的通过dex2jar工具将dex转换出Java源代码，在转换过程中会提示出错，如图：</p>
 <p><img src="../res/dex2jar_error/dex2jar_error1.png" alt=" "></p>
 <p>查看转换出的Java源代码，会发现很多类方法提示下图所示异常：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public class AsyncTaskService extends IntentService &#123; &#10;  public void onCreate()&#123;&#10;    super.onCreate();&#10;  &#125;&#10;  &#10;  public void onDestroy()&#123;&#10;    throw new RuntimeException(&#34;d2j fail translate: java.lang.RuntimeException: can not merge I and Z\n\tat com.googlecode.dex2jar.ir.TypeClass.merge(TypeClass.java:100)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeRef.updateTypeClass(TypeTransformer.java:174)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.provideAs(TypeTransformer.java:783)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.enexpr(TypeTransformer.java:662)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.exExpr(TypeTransformer.java:722)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.exExpr(TypeTransformer.java:706)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.enexpr(TypeTransformer.java:701)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.exExpr(TypeTransformer.java:722)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.exExpr(TypeTransformer.java:706)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.s1stmt(TypeTransformer.java:813)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.sxStmt(TypeTransformer.java:843)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.analyze(TypeTransformer.java:206)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer.transform(TypeTransformer.java:44)\n\tat com.googlecode.d2j.dex.Dex2jar$2.optimize(Dex2jar.java:161)\n\tat com.googlecode.d2j.dex.Dex2Asm.convertCode(Dex2Asm.java:433)\n\tat com.googlecode.d2j.dex.ExDex2Asm.convertCode(ExDex2Asm.java:42)\n\tat com.googlecode.d2j.dex.Dex2jar$2.convertCode(Dex2jar.java:129)\n\tat com.googlecode.d2j.dex.Dex2Asm.convertMethod(Dex2Asm.java:528)\n\tat com.googlecode.d2j.dex.Dex2Asm.convertClass(Dex2Asm.java:425)\n\tat com.googlecode.d2j.dex.Dex2Asm.convertDex(Dex2Asm.java:441)\n\tat com.googlecode.d2j.dex.Dex2jar.doTranslate(Dex2jar.java:171)\n\tat com.googlecode.d2j.dex.Dex2jar.to(Dex2jar.java:271)\n\tat com.googlecode.dex2jar.tools.Dex2jarCmd.doCommandLine(Dex2jarCmd.java:109)\n\tat com.googlecode.dex2jar.tools.BaseCmd.doMain(BaseCmd.java:290)\n\tat com.googlecode.dex2jar.tools.Dex2jarCmd.main(Dex2jarCmd.java:33)\n&#34;);&#10;  &#125;&#10;  &#10;  protected void onHandleIntent(Intent paramIntent)&#123;&#10;    throw new RuntimeException(&#34;d2j fail translate: java.lang.RuntimeException: can not merge I and Z\n\tat com.googlecode.dex2jar.ir.TypeClass.merge(TypeClass.java:100)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeRef.updateTypeClass(TypeTransformer.java:174)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.provideAs(TypeTransformer.java:783)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.enexpr(TypeTransformer.java:662)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.exExpr(TypeTransformer.java:722)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.exExpr(TypeTransformer.java:706)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.enexpr(TypeTransformer.java:701)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.exExpr(TypeTransformer.java:722)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.exExpr(TypeTransformer.java:706)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.s1stmt(TypeTransformer.java:813)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.sxStmt(TypeTransformer.java:843)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.analyze(TypeTransformer.java:206)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer.transform(TypeTransformer.java:44)\n\tat com.googlecode.d2j.dex.Dex2jar$2.optimize(Dex2jar.java:161)\n\tat com.googlecode.d2j.dex.Dex2Asm.convertCode(Dex2Asm.java:433)\n\tat com.googlecode.d2j.dex.ExDex2Asm.convertCode(ExDex2Asm.java:42)\n\tat com.googlecode.d2j.dex.Dex2jar$2.convertCode(Dex2jar.java:129)\n\tat com.googlecode.d2j.dex.Dex2Asm.convertMethod(Dex2Asm.java:528)\n\tat com.googlecode.d2j.dex.Dex2Asm.convertClass(Dex2Asm.java:425)\n\tat com.googlecode.d2j.dex.Dex2Asm.convertDex(Dex2Asm.java:441)\n\tat com.googlecode.d2j.dex.Dex2jar.doTranslate(Dex2jar.java:171)\n\tat com.googlecode.d2j.dex.Dex2jar.to(Dex2jar.java:271)\n\tat com.googlecode.dex2jar.tools.Dex2jarCmd.doCommandLine(Dex2jarCmd.java:109)\n\tat com.googlecode.dex2jar.tools.BaseCmd.doMain(BaseCmd.java:290)\n\tat com.googlecode.dex2jar.tools.Dex2jarCmd.main(Dex2jarCmd.java:33)\n&#34;);&#10;  &#125;&#10;  &#10;  public int onStartCommand(Intent paramIntent, int paramInt1, int paramInt2)&#123;&#10;    throw new RuntimeException(&#34;d2j fail translate: java.lang.RuntimeException: can not merge I and Z\n\tat com.googlecode.dex2jar.ir.TypeClass.merge(TypeClass.java:100)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeRef.updateTypeClass(TypeTransformer.java:174)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.provideAs(TypeTransformer.java:783)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.enexpr(TypeTransformer.java:662)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.exExpr(TypeTransformer.java:722)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.exExpr(TypeTransformer.java:706)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.enexpr(TypeTransformer.java:701)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.exExpr(TypeTransformer.java:722)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.exExpr(TypeTransformer.java:706)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.s1stmt(TypeTransformer.java:813)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.sxStmt(TypeTransformer.java:843)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.analyze(TypeTransformer.java:206)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer.transform(TypeTransformer.java:44)\n\tat com.googlecode.d2j.dex.Dex2jar$2.optimize(Dex2jar.java:161)\n\tat com.googlecode.d2j.dex.Dex2Asm.convertCode(Dex2Asm.java:433)\n\tat com.googlecode.d2j.dex.ExDex2Asm.convertCode(ExDex2Asm.java:42)\n\tat com.googlecode.d2j.dex.Dex2jar$2.convertCode(Dex2jar.java:129)\n\tat com.googlecode.d2j.dex.Dex2Asm.convertMethod(Dex2Asm.java:528)\n\tat com.googlecode.d2j.dex.Dex2Asm.convertClass(Dex2Asm.java:425)\n\tat com.googlecode.d2j.dex.Dex2Asm.convertDex(Dex2Asm.java:441)\n\tat com.googlecode.d2j.dex.Dex2jar.doTranslate(Dex2jar.java:171)\n\tat com.googlecode.d2j.dex.Dex2jar.to(Dex2jar.java:271)\n\tat com.googlecode.dex2jar.tools.Dex2jarCmd.doCommandLine(Dex2jarCmd.java:109)\n\tat com.googlecode.dex2jar.tools.BaseCmd.doMain(BaseCmd.java:290)\n\tat com.googlecode.dex2jar.tools.Dex2jarCmd.main(Dex2jarCmd.java:33)\n&#34;);&#10;  &#125;&#10;&#125;</span><br></pre></td></tr></table></figure>
-<p>查看日志文件会发现很多类似的错误信息：</p>
-<p><img src="../res/dex2jar_error/dex2jar_error2.png" alt=" "></p>
-<p>###二、为什么？</p>
-<p>  <strong>java.lang.RuntimeException: can not merge I and Z这个异常，</strong>在<a href="https://sourceforge.net/p/dex2jar/tickets/238/" target="_blank" rel="external">https://sourceforge.net/p/dex2jar/tickets/238/</a>这里解释的比较清楚，其实是一个dex2jar工具检查出的一个参数异常，”<strong>The problem is caused by strict type calculation, because in java syntaxt, a boolean can not assign to an inteager. so dex2jar forbid merge type Z and I.</strong>“ 一个参数为整型的函数，你用布尔类型入参调用，当然会检查出错，为啥这么说，看下面👇。</p>
-<p>本来以为这是dex2jar工具低版本的一个bug，但更新了dex2jar以后，转换还是出错，所以就使用apktool工具，看了一下apk的smali代码。发现报错的函数的最前面都含有一段奇怪smali的代码：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">invoke-static &#123;&#125;, Lpnf/this/object/does/not/Exist;-&#62;a()Z&#10;&#10;move-result v0&#10;&#10;invoke-static &#123;v0&#125;, Lpnf/this/object/does/not/Exist;-&#62;b(I)V</span><br></pre></td></tr></table></figure>
-<p>看上面的代码，<strong>pnf.this.object.does.not.Exist.a()</strong>方法返回一个boolean类型数据，放入v0寄存器，作为<strong>pnf.this.object.does.not.Exist.b(int)</strong>函数的入参。照理说这样的语法错误在java代码编译时就不会通过的。难道是美团故意这样做的？我的迫害妄想症~~<br>看到这里你会不会想，如果我不想别人直接看到我的Java代码，是不是可以通过在核心函数中插入上面这段有语法错误的代码，以达到dex2jar工具检查出错的目的呢？从java代码到smali字节码，这样又提高了代码被别人阅读的门口。但是？有语法错误的代码运行时为啥不会出错？？？</p>
-<p>###三、验证<br>为了验证上面的猜想，分三步。</p>
-<ul>
-<li>1.反编译一个apk。</li>
-<li>2.修改他的smali代码，插入上面这三句有语法错误的代码。</li>
-<li>3.看运行时是否出错，用dex2jar工具转换新包的dex，看是否能正常转换出Java源代码。</li>
-</ul>
-<p>我这里用一个三方应用来测试，没有用自己的应用所以没有源码，使用apktool反编译出smali代码，并在Application的onCreate方法中插入这段有语法错误的代码。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># virtual methods&#10;.method public onCreate()V&#10;    .locals 3&#10;&#10;    invoke-super &#123;p0&#125;, Lcn/trinea/android/lib/h/c;-&#62;onCreate()V&#10;&#10;    invoke-virtual &#123;p0&#125;, Lcn/trinea/android/developertools/MyApplication;-&#62;getApplicationContext()Landroid/content/Context;&#10;&#10;    move-result-object v0&#10;&#10;    invoke-static &#123;&#125;, Lpnf/object/does/not/Exist;-&#62;a()Z&#10;&#10;    move-result v3&#10;&#10;    invoke-static &#123;v3&#125;, Lpnf/object/does/not/Exist;-&#62;b(I)V&#10;&#10;    const-string v1, &#34;1d0854dc96&#34;&#10;&#10;    const/4 v2, 0x0&#10;&#10;    invoke-static &#123;v0, v1, v2&#125;, Lcom/tencent/bugly/crashreport/CrashReport;-&#62;initCrashReport(Landroid/content/Context;Ljava/lang/String;Z)V&#10;&#10;    return-void&#10;.end method</span><br></pre></td></tr></table></figure>
-<p>并且不要忘了，你可能需要另外添加Exist.smali这个文件，不然运行时一定会爆出ClassNotFound异常。将下面的Exist.java<strong>编译出Exist.smali</strong>放入步骤一中的测试包重打包就可以了。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public class Exist &#123;&#10;    public static boolean a() &#123;&#10;        return false;&#10;    &#125;&#10;&#10;    public static void b(int test) &#123;&#10;&#10;    &#125;&#10;&#125;</span><br></pre></td></tr></table></figure>
-<p>最后，验证下，果然重新打包后的apk，不能正常转换出Java源代码，这里就不贴图了(因为转换出错日志是一样的)。并且运行时也不会出错。接下来会写一个Gradle编译插件，针对特定的函数，插入代码，防止dex2jar工具查看Java源代码。</p>
-<p>###四、参考文档</p>
-<ul>
-<li><a href="https://sourceforge.net/p/dex2jar/tickets/238/" target="_blank" rel="external">https://sourceforge.net/p/dex2jar/tickets/238/</a></li>
-<li><a href="http://www.jianshu.com/p/730c6e3e21f6" target="_blank" rel="external">http://www.jianshu.com/p/730c6e3e21f6</a></li>
-</ul>
-
+        
+          <p class="article-more-link">
+            <a href="/2017/02/09/美团如何防dex2jar/#more">Read More</a>
+          </p>
+        
       
     </div>
     <footer class="article-footer">
       
-        <a data-url="https://ivonhoe.github.io/2017/02/09/美团如何防dex2jar/" data-id="ciyy7nkd80008x7mvehqlcspl" class="article-share-link" data-share="baidu">分享到</a>
+        <a data-url="https://ivonhoe.github.io/2017/02/09/美团如何防dex2jar/" data-id="ciyy7pljt0008xzmv3k46dnqb" class="article-share-link" data-share="baidu">分享到</a>
       
 
       
@@ -136,66 +117,6 @@
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/dex2jar/">dex2jar</a></li></ul>
 
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-防止dex2jar工具" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/02/09/防止dex2jar工具/" class="article-date">
-  <time datetime="2017-02-09T09:44:50.000Z" itemprop="datePublished">Feb 9 2017</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>##美团是如何防止核心代码被dex2jar工具转Java源代码的？</p>
-<p>###1.看美团<br>最近在看美团外卖的代码，发现美团外卖4.1.1版本之后的安装包无法正常的通过dex2jar工具将dex转换出Java源代码，在转换过程中会提示出错，如图：</p>
-<p><img src="../res/dex2jar_error/dex2jar_error1.png" alt=" "></p>
-<p>查看转换出的Java源代码，会发现很多类方法提示下图所示异常：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public class AsyncTaskService extends IntentService &#123; &#10;  public void onCreate()&#123;&#10;    super.onCreate();&#10;  &#125;&#10;  &#10;  public void onDestroy()&#123;&#10;    throw new RuntimeException(&#34;d2j fail translate: java.lang.RuntimeException: can not merge I and Z\n\tat com.googlecode.dex2jar.ir.TypeClass.merge(TypeClass.java:100)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeRef.updateTypeClass(TypeTransformer.java:174)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.provideAs(TypeTransformer.java:783)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.enexpr(TypeTransformer.java:662)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.exExpr(TypeTransformer.java:722)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.exExpr(TypeTransformer.java:706)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.enexpr(TypeTransformer.java:701)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.exExpr(TypeTransformer.java:722)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.exExpr(TypeTransformer.java:706)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.s1stmt(TypeTransformer.java:813)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.sxStmt(TypeTransformer.java:843)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.analyze(TypeTransformer.java:206)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer.transform(TypeTransformer.java:44)\n\tat com.googlecode.d2j.dex.Dex2jar$2.optimize(Dex2jar.java:161)\n\tat com.googlecode.d2j.dex.Dex2Asm.convertCode(Dex2Asm.java:433)\n\tat com.googlecode.d2j.dex.ExDex2Asm.convertCode(ExDex2Asm.java:42)\n\tat com.googlecode.d2j.dex.Dex2jar$2.convertCode(Dex2jar.java:129)\n\tat com.googlecode.d2j.dex.Dex2Asm.convertMethod(Dex2Asm.java:528)\n\tat com.googlecode.d2j.dex.Dex2Asm.convertClass(Dex2Asm.java:425)\n\tat com.googlecode.d2j.dex.Dex2Asm.convertDex(Dex2Asm.java:441)\n\tat com.googlecode.d2j.dex.Dex2jar.doTranslate(Dex2jar.java:171)\n\tat com.googlecode.d2j.dex.Dex2jar.to(Dex2jar.java:271)\n\tat com.googlecode.dex2jar.tools.Dex2jarCmd.doCommandLine(Dex2jarCmd.java:109)\n\tat com.googlecode.dex2jar.tools.BaseCmd.doMain(BaseCmd.java:290)\n\tat com.googlecode.dex2jar.tools.Dex2jarCmd.main(Dex2jarCmd.java:33)\n&#34;);&#10;  &#125;&#10;  &#10;  protected void onHandleIntent(Intent paramIntent)&#123;&#10;    throw new RuntimeException(&#34;d2j fail translate: java.lang.RuntimeException: can not merge I and Z\n\tat com.googlecode.dex2jar.ir.TypeClass.merge(TypeClass.java:100)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeRef.updateTypeClass(TypeTransformer.java:174)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.provideAs(TypeTransformer.java:783)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.enexpr(TypeTransformer.java:662)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.exExpr(TypeTransformer.java:722)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.exExpr(TypeTransformer.java:706)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.enexpr(TypeTransformer.java:701)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.exExpr(TypeTransformer.java:722)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.exExpr(TypeTransformer.java:706)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.s1stmt(TypeTransformer.java:813)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.sxStmt(TypeTransformer.java:843)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.analyze(TypeTransformer.java:206)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer.transform(TypeTransformer.java:44)\n\tat com.googlecode.d2j.dex.Dex2jar$2.optimize(Dex2jar.java:161)\n\tat com.googlecode.d2j.dex.Dex2Asm.convertCode(Dex2Asm.java:433)\n\tat com.googlecode.d2j.dex.ExDex2Asm.convertCode(ExDex2Asm.java:42)\n\tat com.googlecode.d2j.dex.Dex2jar$2.convertCode(Dex2jar.java:129)\n\tat com.googlecode.d2j.dex.Dex2Asm.convertMethod(Dex2Asm.java:528)\n\tat com.googlecode.d2j.dex.Dex2Asm.convertClass(Dex2Asm.java:425)\n\tat com.googlecode.d2j.dex.Dex2Asm.convertDex(Dex2Asm.java:441)\n\tat com.googlecode.d2j.dex.Dex2jar.doTranslate(Dex2jar.java:171)\n\tat com.googlecode.d2j.dex.Dex2jar.to(Dex2jar.java:271)\n\tat com.googlecode.dex2jar.tools.Dex2jarCmd.doCommandLine(Dex2jarCmd.java:109)\n\tat com.googlecode.dex2jar.tools.BaseCmd.doMain(BaseCmd.java:290)\n\tat com.googlecode.dex2jar.tools.Dex2jarCmd.main(Dex2jarCmd.java:33)\n&#34;);&#10;  &#125;&#10;  &#10;  public int onStartCommand(Intent paramIntent, int paramInt1, int paramInt2)&#123;&#10;    throw new RuntimeException(&#34;d2j fail translate: java.lang.RuntimeException: can not merge I and Z\n\tat com.googlecode.dex2jar.ir.TypeClass.merge(TypeClass.java:100)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeRef.updateTypeClass(TypeTransformer.java:174)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.provideAs(TypeTransformer.java:783)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.enexpr(TypeTransformer.java:662)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.exExpr(TypeTransformer.java:722)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.exExpr(TypeTransformer.java:706)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.enexpr(TypeTransformer.java:701)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.exExpr(TypeTransformer.java:722)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.exExpr(TypeTransformer.java:706)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.s1stmt(TypeTransformer.java:813)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.sxStmt(TypeTransformer.java:843)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.analyze(TypeTransformer.java:206)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer.transform(TypeTransformer.java:44)\n\tat com.googlecode.d2j.dex.Dex2jar$2.optimize(Dex2jar.java:161)\n\tat com.googlecode.d2j.dex.Dex2Asm.convertCode(Dex2Asm.java:433)\n\tat com.googlecode.d2j.dex.ExDex2Asm.convertCode(ExDex2Asm.java:42)\n\tat com.googlecode.d2j.dex.Dex2jar$2.convertCode(Dex2jar.java:129)\n\tat com.googlecode.d2j.dex.Dex2Asm.convertMethod(Dex2Asm.java:528)\n\tat com.googlecode.d2j.dex.Dex2Asm.convertClass(Dex2Asm.java:425)\n\tat com.googlecode.d2j.dex.Dex2Asm.convertDex(Dex2Asm.java:441)\n\tat com.googlecode.d2j.dex.Dex2jar.doTranslate(Dex2jar.java:171)\n\tat com.googlecode.d2j.dex.Dex2jar.to(Dex2jar.java:271)\n\tat com.googlecode.dex2jar.tools.Dex2jarCmd.doCommandLine(Dex2jarCmd.java:109)\n\tat com.googlecode.dex2jar.tools.BaseCmd.doMain(BaseCmd.java:290)\n\tat com.googlecode.dex2jar.tools.Dex2jarCmd.main(Dex2jarCmd.java:33)\n&#34;);&#10;  &#125;&#10;&#125;</span><br></pre></td></tr></table></figure>
-<p>查看日志文件会发现很多类似的错误信息：</p>
-<p><img src="../res/dex2jar_error/dex2jar_error2.png" alt=" "></p>
-<p>###2.为什么？</p>
-<p>  <strong>java.lang.RuntimeException: can not merge I and Z这个异常，</strong>在<a href="https://sourceforge.net/p/dex2jar/tickets/238/" target="_blank" rel="external">https://sourceforge.net/p/dex2jar/tickets/238/</a>这里解释的比较清楚，其实是一个dex2jar工具检查出的一个参数异常，”<strong>The problem is caused by strict type calculation, because in java syntaxt, a boolean can not assign to an inteager. so dex2jar forbid merge type Z and I.</strong>“ 一个参数为整型的函数，你用布尔类型入参调用，当然会检查出错，为啥这么说，看下面👇。</p>
-<p>本来以为这是dex2jar工具低版本的一个bug，但更新了dex2jar以后，转换还是出错，所以就使用apktool工具，看了一下apk的smali代码。发现报错的函数的最前面都含有一段奇怪smali的代码：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">invoke-static &#123;&#125;, Lpnf/this/object/does/not/Exist;-&#62;a()Z&#10;&#10;move-result v0&#10;&#10;invoke-static &#123;v0&#125;, Lpnf/this/object/does/not/Exist;-&#62;b(I)V</span><br></pre></td></tr></table></figure>
-<p>看上面的代码，<strong>pnf.this.object.does.not.Exist.a()</strong>方法返回一个boolean类型数据，放入v0寄存器，作为<strong>pnf.this.object.does.not.Exist.b(int)</strong>函数的入参。照理说这样的语法错误在java代码编译时就不会通过的。难道是美团故意这样做的？我的迫害妄想症~~<br>看到这里你会不会想，如果我不想别人直接看到我的Java代码，是不是可以通过在核心函数中插入上面这段有语法错误的代码，以达到dex2jar工具检查出错的目的呢？从java代码到smali字节码，这样又提高了代码被别人阅读的门口。但是？有语法错误的代码运行时为啥不会出错？？？</p>
-<p>###3.验证<br>为了验证上面的猜想，分三步。</p>
-<ul>
-<li>1.反编译一个apk。</li>
-<li>2.修改他的smali代码，插入上面这三句有语法错误的代码。</li>
-<li>3.看运行时是否出错，用dex2jar工具转换新包的dex，看是否能正常转换出Java源代码。</li>
-</ul>
-<p>我这里用一个三方应用来测试，没有用自己的应用所以没有源码，使用apktool反编译出smali代码，并在Application的onCreate方法中插入这段有语法错误的代码。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># virtual methods&#10;.method public onCreate()V&#10;    .locals 3&#10;&#10;    invoke-super &#123;p0&#125;, Lcn/trinea/android/lib/h/c;-&#62;onCreate()V&#10;&#10;    invoke-virtual &#123;p0&#125;, Lcn/trinea/android/developertools/MyApplication;-&#62;getApplicationContext()Landroid/content/Context;&#10;&#10;    move-result-object v0&#10;&#10;    invoke-static &#123;&#125;, Lpnf/object/does/not/Exist;-&#62;a()Z&#10;&#10;    move-result v3&#10;&#10;    invoke-static &#123;v3&#125;, Lpnf/object/does/not/Exist;-&#62;b(I)V&#10;&#10;    const-string v1, &#34;1d0854dc96&#34;&#10;&#10;    const/4 v2, 0x0&#10;&#10;    invoke-static &#123;v0, v1, v2&#125;, Lcom/tencent/bugly/crashreport/CrashReport;-&#62;initCrashReport(Landroid/content/Context;Ljava/lang/String;Z)V&#10;&#10;    return-void&#10;.end method</span><br></pre></td></tr></table></figure>
-<p>并且不要忘了，你可能需要另外添加Exist.smali这个文件，不然运行时一定会爆出ClassNotFound异常。将下面的Exist.java<strong>编译出Exist.smali</strong>放入步骤一中的测试包重打包就可以了。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public class Exist &#123;&#10;    public static boolean a() &#123;&#10;        return false;&#10;    &#125;&#10;&#10;    public static void b(int test) &#123;&#10;&#10;    &#125;&#10;&#125;</span><br></pre></td></tr></table></figure>
-<p>最后，验证下，果然重新打包后的apk，不能正常转换出Java源代码，这里就不贴图了(因为转换出错日志是一样的)。并且运行时也不会出错。接下来会写一个Gradle编译插件，针对特定的函数，插入代码，防止dex2jar工具查看Java源代码。</p>
-<p>###四、参考文档</p>
-<ul>
-<li><a href="https://sourceforge.net/p/dex2jar/tickets/238/" target="_blank" rel="external">https://sourceforge.net/p/dex2jar/tickets/238/</a></li>
-<li><a href="http://www.jianshu.com/p/730c6e3e21f6" target="_blank" rel="external">http://www.jianshu.com/p/730c6e3e21f6</a></li>
-</ul>
-
-      
-    </div>
-    <footer class="article-footer">
-      
-        <a data-url="https://ivonhoe.github.io/2017/02/09/防止dex2jar工具/" data-id="ciyy7nkd50007x7mvr0lscjph" class="article-share-link" data-share="baidu">分享到</a>
-      
-
-      
-        <a href="https://ivonhoe.github.io/2017/02/09/防止dex2jar工具/#ds-thread" class="article-comment-link">評論</a>
-      
-
-      
     </footer>
   </div>
   
@@ -225,10 +146,8 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>##一、以bsdiff.c和bspatch.c为例编译bsdiff.so<br>bsdiff.c和bspatch.c分别依赖bzip2</p>
-<p>###项目结构</p>
-<p>###步骤</p>
-<ul>
+        <h2 id="一、以bsdiff-c和bspatch-c为例编译bsdiff-so">一、以bsdiff.c和bspatch.c为例编译bsdiff.so</h2><p>bsdiff.c和bspatch.c分别依赖bzip2</p>
+<h3 id="项目结构">项目结构</h3><h3 id="步骤">步骤</h3><ul>
 <li><p>使用BsDiff.java生成BsDiff.class文件</p>
 <p><strong>javac</strong> ivonhoe/spring/wrcenter/jni/BsDiff.java</p>
 </li>
@@ -236,30 +155,16 @@
 <p><strong>javah</strong> ivonhoe.spring.wrcenter.jni.BsDiff </p>
 </li>
 <li><p>生成bspatch.o</p>
-<p><strong>gcc -fPIC -D_REENTRANT</strong> -I<strong>JAVA_INCLUDE1</strong> -I/JAVA_INCLUDE2/ -I/Users/Ivonhoe/Downloads/VelocityDemo/src/main/java/jni/bzip2 -I/Users/Ivonhoe/Downloads/VelocityDemo/src/main/java/jni -c ./jni/bspatch.c</p>
-</li>
-<li><p>生成bsdiff.o</p>
-<p><strong>gcc -fPIC -D_REENTRANT</strong> -I/Library/Java/JavaVirtualMachines/jdk1.8.0_60.jdk/Contents/Home/include -I/Library/Java/JavaVirtualMachines/jdk1.8.0_60.jdk/Contents/Home/include/darwin -I/Users/Ivonhoe/Downloads/VelocityDemo/src/main/java/jni/bzip2 -I/Users/Ivonhoe/Downloads/VelocityDemo/src/main/java/jni -c ./jni/bsdiff.c</p>
-</li>
-<li><p>将bzip2下的c文件生成相应的.o文件</p>
-<p><strong>gcc -fPIC -D_REENTRANT</strong> -I/Library/Java/JavaVirtualMachines/jdk1.8.0_60.jdk/Contents/Home/include -I/Library/Java/JavaVirtualMachines/jdk1.8.0_60.jdk/Contents/Home/include/darwin -I/Users/Ivonhoe/Downloads/VelocityDemo/src/main/java/jni/bzip2 -c ./jni/bzip2/*.c</p>
-</li>
-<li><p>生成so文件</p>
-<p><strong>gcc *.o -o bsdiff.so -shared  -v</strong></p>
-</li>
-</ul>
-<ul>
-<li>注:</li>
-</ul>
-<p>  JAVA_INCLUDE1:/usr/local/java/jdk1.7.0_40/include<br>  JAVA_INCLUDE2:/usr/local/java/jdk1.7.0_40/include/linux<br>  是 jdk 中的 jni.h 文件的所在目录，这两个目录需要大家替换为自己的对应路径</p>
-<p>  BZIP2_INCLUDE:</p>
-<p>参考文档：<br><a href="http://www.cppblog.com/deane/articles/165216.html" target="_blank" rel="external">http://www.cppblog.com/deane/articles/165216.html</a><br><a href="http://blog.csdn.net/hongquan1991/article/details/12426615" target="_blank" rel="external">http://blog.csdn.net/hongquan1991/article/details/12426615</a><br><a href="http://codepub.cn/2015/05/19/How-to-load-dll-file-in-Java-Web-Project/" target="_blank" rel="external">http://codepub.cn/2015/05/19/How-to-load-dll-file-in-Java-Web-Project/</a></p>
-
+        
+          <p class="article-more-link">
+            <a href="/2016/12/16/Mac-Linux下gcc编译动态链接库-so文件/#more">Read More</a>
+          </p>
+        
       
     </div>
     <footer class="article-footer">
       
-        <a data-url="https://ivonhoe.github.io/2016/12/16/Mac-Linux下gcc编译动态链接库-so文件/" data-id="ciyy7nkdi000vx7mvx3zmklbe" class="article-share-link" data-share="baidu">分享到</a>
+        <a data-url="https://ivonhoe.github.io/2016/12/16/Mac-Linux下gcc编译动态链接库-so文件/" data-id="ciyy7plk2000vxzmvhr7cga74" class="article-share-link" data-share="baidu">分享到</a>
       
 
       
@@ -311,7 +216,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="https://ivonhoe.github.io/2015/10/25/如何写出GC友好的Android应用/" data-id="ciyy7nkdb000hx7mv3otoyuwq" class="article-share-link" data-share="baidu">分享到</a>
+        <a data-url="https://ivonhoe.github.io/2015/10/25/如何写出GC友好的Android应用/" data-id="ciyy7pljw000hxzmv9m8gzkwu" class="article-share-link" data-share="baidu">分享到</a>
       
 
       
@@ -365,7 +270,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="https://ivonhoe.github.io/2015/09/01/Android动画总结之有赞、邮箱大师进度条实现原理/" data-id="ciyy7nkdp0017x7mv97751f86" class="article-share-link" data-share="baidu">分享到</a>
+        <a data-url="https://ivonhoe.github.io/2015/09/01/Android动画总结之有赞、邮箱大师进度条实现原理/" data-id="ciyy7plk70017xzmvzvuj7s0m" class="article-share-link" data-share="baidu">分享到</a>
       
 
       
@@ -422,7 +327,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="https://ivonhoe.github.io/2015/08/19/数据解析工具设计文档/" data-id="ciyy7nkda000cx7mvltgmaaz6" class="article-share-link" data-share="baidu">分享到</a>
+        <a data-url="https://ivonhoe.github.io/2015/08/19/数据解析工具设计文档/" data-id="ciyy7plju000cxzmv9ma59v28" class="article-share-link" data-share="baidu">分享到</a>
       
 
       
@@ -476,7 +381,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="https://ivonhoe.github.io/2015/04/28/Drawable-从简化布局谈起/" data-id="ciyy7nkdk000yx7mvcl1jsk1h" class="article-share-link" data-share="baidu">分享到</a>
+        <a data-url="https://ivonhoe.github.io/2015/04/28/Drawable-从简化布局谈起/" data-id="ciyy7plk3000yxzmv03emhtrr" class="article-share-link" data-share="baidu">分享到</a>
       
 
       
@@ -528,7 +433,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="https://ivonhoe.github.io/2015/04/23/ColorOS和APEX桌面产品分析/" data-id="ciyy7nkdm0014x7mv37owrt0r" class="article-share-link" data-share="baidu">分享到</a>
+        <a data-url="https://ivonhoe.github.io/2015/04/23/ColorOS和APEX桌面产品分析/" data-id="ciyy7plk50014xzmvcd8gqwz9" class="article-share-link" data-share="baidu">分享到</a>
       
 
       
@@ -578,7 +483,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="https://ivonhoe.github.io/2015/04/17/基于贝塞尔曲线的Android动画差值器/" data-id="ciyy7nkdg000px7mvkp9nq7vj" class="article-share-link" data-share="baidu">分享到</a>
+        <a data-url="https://ivonhoe.github.io/2015/04/17/基于贝塞尔曲线的Android动画差值器/" data-id="ciyy7pljy000pxzmv3gpzue53" class="article-share-link" data-share="baidu">分享到</a>
       
 
       
@@ -628,7 +533,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="https://ivonhoe.github.io/2015/04/08/-翻译-Context-什么是Context？/" data-id="ciyy7nkcp0000x7mv14xzl0wt" class="article-share-link" data-share="baidu">分享到</a>
+        <a data-url="https://ivonhoe.github.io/2015/04/08/-翻译-Context-什么是Context？/" data-id="ciyy7plj80000xzmvxwwp4ptb" class="article-share-link" data-share="baidu">分享到</a>
       
 
       
@@ -645,10 +550,58 @@
 
 
   
+    <article id="post-Android动画总结" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/02/09/Android动画总结/" class="article-date">
+  <time datetime="2015-02-09T11:40:53.000Z" itemprop="datePublished">Feb 9 2015</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
   
-    <nav id="page-nav">
-      <span class="page-number current">1</span><a class="page-number" href="/archives/page/2/">2</a><a class="extend next" rel="next" href="/archives/page/2/">Next &raquo;</a>
-    </nav>
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/02/09/Android动画总结/">Android动画总结</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="说在开始">说在开始</h3><p>这篇文档记录了一下自己在实际工作中实现的一些Android动画效果时的开发思路，总结了我自己如何看待Android动画问题，希望能给大家的动画开发提供一些思路和帮助。</p>
+<h3 id="一、Android动画基础">一、Android动画基础</h3><h4 id="1-1_动画类型">1.1 动画类型</h4><ul>
+<li><strong>Frame Animation：</strong><br>帧动画，顺序播放事先做好的图像，是一种画面转换动画</li>
+<li><strong>Tween Animation:</strong><br>补间动画（或者叫渐变动画），通过对场景里的对象不断做图像变换(平移、缩放、旋转)产生动画效果
+        
+          <p class="article-more-link">
+            <a href="/2015/02/09/Android动画总结/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="https://ivonhoe.github.io/2015/02/09/Android动画总结/" data-id="ciyy7plk9001cxzmvinxek1kx" class="article-share-link" data-share="baidu">分享到</a>
+      
+
+      
+        <a href="https://ivonhoe.github.io/2015/02/09/Android动画总结/#ds-thread" class="article-comment-link">評論</a>
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/动画/">动画</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
   
 </section>
       
@@ -678,7 +631,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">歸檔</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">December 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">October 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">August 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">April 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">February 2015</a><span class="archive-list-count">1</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">December 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">October 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">August 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">April 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">February 2015</a><span class="archive-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -694,10 +647,6 @@
           </li>
         
           <li>
-            <a href="/2017/02/09/防止dex2jar工具/">(no title)</a>
-          </li>
-        
-          <li>
             <a href="/2016/12/16/Mac-Linux下gcc编译动态链接库-so文件/">Mac/Linux下gcc编译动态链接库[.so文件]</a>
           </li>
         
@@ -707,6 +656,10 @@
         
           <li>
             <a href="/2015/09/01/Android动画总结之有赞、邮箱大师进度条实现原理/">Android动画总结之有赞、邮箱大师进度条实现原理</a>
+          </li>
+        
+          <li>
+            <a href="/2015/08/19/数据解析工具设计文档/">数据解析工具</a>
           </li>
         
       </ul>

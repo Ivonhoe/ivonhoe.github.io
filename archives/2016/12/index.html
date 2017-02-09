@@ -94,10 +94,8 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>##一、以bsdiff.c和bspatch.c为例编译bsdiff.so<br>bsdiff.c和bspatch.c分别依赖bzip2</p>
-<p>###项目结构</p>
-<p>###步骤</p>
-<ul>
+        <h2 id="一、以bsdiff-c和bspatch-c为例编译bsdiff-so">一、以bsdiff.c和bspatch.c为例编译bsdiff.so</h2><p>bsdiff.c和bspatch.c分别依赖bzip2</p>
+<h3 id="项目结构">项目结构</h3><h3 id="步骤">步骤</h3><ul>
 <li><p>使用BsDiff.java生成BsDiff.class文件</p>
 <p><strong>javac</strong> ivonhoe/spring/wrcenter/jni/BsDiff.java</p>
 </li>
@@ -105,30 +103,16 @@
 <p><strong>javah</strong> ivonhoe.spring.wrcenter.jni.BsDiff </p>
 </li>
 <li><p>生成bspatch.o</p>
-<p><strong>gcc -fPIC -D_REENTRANT</strong> -I<strong>JAVA_INCLUDE1</strong> -I/JAVA_INCLUDE2/ -I/Users/Ivonhoe/Downloads/VelocityDemo/src/main/java/jni/bzip2 -I/Users/Ivonhoe/Downloads/VelocityDemo/src/main/java/jni -c ./jni/bspatch.c</p>
-</li>
-<li><p>生成bsdiff.o</p>
-<p><strong>gcc -fPIC -D_REENTRANT</strong> -I/Library/Java/JavaVirtualMachines/jdk1.8.0_60.jdk/Contents/Home/include -I/Library/Java/JavaVirtualMachines/jdk1.8.0_60.jdk/Contents/Home/include/darwin -I/Users/Ivonhoe/Downloads/VelocityDemo/src/main/java/jni/bzip2 -I/Users/Ivonhoe/Downloads/VelocityDemo/src/main/java/jni -c ./jni/bsdiff.c</p>
-</li>
-<li><p>将bzip2下的c文件生成相应的.o文件</p>
-<p><strong>gcc -fPIC -D_REENTRANT</strong> -I/Library/Java/JavaVirtualMachines/jdk1.8.0_60.jdk/Contents/Home/include -I/Library/Java/JavaVirtualMachines/jdk1.8.0_60.jdk/Contents/Home/include/darwin -I/Users/Ivonhoe/Downloads/VelocityDemo/src/main/java/jni/bzip2 -c ./jni/bzip2/*.c</p>
-</li>
-<li><p>生成so文件</p>
-<p><strong>gcc *.o -o bsdiff.so -shared  -v</strong></p>
-</li>
-</ul>
-<ul>
-<li>注:</li>
-</ul>
-<p>  JAVA_INCLUDE1:/usr/local/java/jdk1.7.0_40/include<br>  JAVA_INCLUDE2:/usr/local/java/jdk1.7.0_40/include/linux<br>  是 jdk 中的 jni.h 文件的所在目录，这两个目录需要大家替换为自己的对应路径</p>
-<p>  BZIP2_INCLUDE:</p>
-<p>参考文档：<br><a href="http://www.cppblog.com/deane/articles/165216.html" target="_blank" rel="external">http://www.cppblog.com/deane/articles/165216.html</a><br><a href="http://blog.csdn.net/hongquan1991/article/details/12426615" target="_blank" rel="external">http://blog.csdn.net/hongquan1991/article/details/12426615</a><br><a href="http://codepub.cn/2015/05/19/How-to-load-dll-file-in-Java-Web-Project/" target="_blank" rel="external">http://codepub.cn/2015/05/19/How-to-load-dll-file-in-Java-Web-Project/</a></p>
-
+        
+          <p class="article-more-link">
+            <a href="/2016/12/16/Mac-Linux下gcc编译动态链接库-so文件/#more">Read More</a>
+          </p>
+        
       
     </div>
     <footer class="article-footer">
       
-        <a data-url="https://ivonhoe.github.io/2016/12/16/Mac-Linux下gcc编译动态链接库-so文件/" data-id="ciyy7nkdi000vx7mvx3zmklbe" class="article-share-link" data-share="baidu">分享到</a>
+        <a data-url="https://ivonhoe.github.io/2016/12/16/Mac-Linux下gcc编译动态链接库-so文件/" data-id="ciyy7plk2000vxzmvhr7cga74" class="article-share-link" data-share="baidu">分享到</a>
       
 
       
@@ -174,7 +158,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">歸檔</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">December 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">October 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">August 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">April 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">February 2015</a><span class="archive-list-count">1</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">December 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">October 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">August 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">April 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">February 2015</a><span class="archive-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -190,10 +174,6 @@
           </li>
         
           <li>
-            <a href="/2017/02/09/防止dex2jar工具/">(no title)</a>
-          </li>
-        
-          <li>
             <a href="/2016/12/16/Mac-Linux下gcc编译动态链接库-so文件/">Mac/Linux下gcc编译动态链接库[.so文件]</a>
           </li>
         
@@ -203,6 +183,10 @@
         
           <li>
             <a href="/2015/09/01/Android动画总结之有赞、邮箱大师进度条实现原理/">Android动画总结之有赞、邮箱大师进度条实现原理</a>
+          </li>
+        
+          <li>
+            <a href="/2015/08/19/数据解析工具设计文档/">数据解析工具</a>
           </li>
         
       </ul>
