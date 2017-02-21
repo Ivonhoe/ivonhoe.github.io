@@ -20,7 +20,8 @@
 <meta property="og:image" content="https://ivonhoe.github.io/res/compile_android_source/android-source2.jpeg">
 <meta property="og:image" content="https://ivonhoe.github.io/res/compile_android_source/android-source3.jpeg">
 <meta property="og:image" content="https://ivonhoe.github.io/res/compile_android_source/android-source4.png">
-<meta property="og:updated_time" content="2017-02-21T02:26:27.000Z">
+<meta property="og:image" content="https://ivonhoe.github.io/res/compile_android_source/android-source5.png">
+<meta property="og:updated_time" content="2017-02-21T08:12:58.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Mac OS上编译Android源码">
 <meta name="twitter:description" content="一、制作一个大小写敏感的磁盘分区1.1.Mac OS磁盘工具这里我使用一块移动硬盘，将移动硬盘的一个分区使用Mac OS的硬盘工具，抹掉数据，选择MacOS扩展(区分大小写，日志式)，创建成大小写敏感的分区。
@@ -129,6 +130,11 @@
 <p>使用命令启动emulator，加载指定的kernel内核和img</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kans-MacBook-Pro:android-6.0.1_r17-x86_64 Ivonhoe$&#10;emulator -kernel  /Volumes/AOSP/android-6.0.1_r17-x86_64/prebuilts/qemu-kernel/x86_64/kernel-qemu -sysdir ./out/target/product/generic_x86_64/ -system /Volumes/AOSP/android-6.0.1_r17-x86_64/out/target/product/generic_x86_64/system.img -data /Volumes/AOSP/android-6.0.1_r17-x86_64/out/target/product/generic_x86_64/userdata.img -ramdisk /Volumes/AOSP/android-6.0.1_r17-x86_64/out/target/product/generic_x86_64/ramdisk.img</span><br></pre></td></tr></table></figure>
 <p>参考老罗的博客<a href="http://blog.csdn.net/luoshengyang/article/details/6559955" target="_blank" rel="external">在Ubuntu上下载、编译和安装Android最新源代码</a></p>
+<h3 id="五、刷入Nexus6真机">五、刷入Nexus6真机</h3><p>Nexus6关机状态下,长按音量下+电源,进入recovery模式</p>
+<p>然后在源码根目录下(Android根目录下)执行下面命令:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fastboot -w flashall</span><br></pre></td></tr></table></figure>
+<p><img src="/res/compile_android_source/android-source5.png" alt=""></p>
+<p><a href="http://blog.csdn.net/ljphhj/article/details/51512263" target="_blank" rel="external">Android系统源码下载与编译、刷机–Nexus6实测</a></p>
 
       
     </div>
@@ -241,7 +247,7 @@
 
     <footer class="article-footer">
       
-        <a data-url="https://ivonhoe.github.io/2017/01/20/MacOS上编译Android源码/" data-id="cizews4vk000v93mvqdm3r84r" class="article-share-link" data-share="baidu">分享到</a>
+        <a data-url="https://ivonhoe.github.io/2017/01/20/MacOS上编译Android源码/" data-id="cizf947fi000va0mvs45ciqxv" class="article-share-link" data-share="baidu">分享到</a>
       
 
       
