@@ -14,10 +14,10 @@
 <meta property="og:site_name" content="别辜负自己">
 <meta property="og:description" content="一、概述上一篇，我大致分析了美团外卖Android客户端在防止其Java代码被dex2jar工具转换而做的防护措施，其实就是借助dex2jar的语法检查机制，将有语法错误的字节码插入到想要保护的Java函数中里面，以达到dex2jar转换出错的目的。这篇文章就大致记录下如何开发Gradle编译插件，在编译过程中实现上述防护思路。
 二、思路先看下Android APK打包流程：">
-<meta property="og:image" content="https://ivonhoe.github.io/res/dexguard/dexguard1.jpeg">
-<meta property="og:image" content="https://ivonhoe.github.io/res/dexguard/dexguard2.png">
+<meta property="og:image" content="https://ivonhoe.github.io/res/dexguard/dexguard4.jpeg">
+<meta property="og:image" content="https://ivonhoe.github.io/res/dexguard/dexguard5.png">
 <meta property="og:image" content="https://ivonhoe.github.io/res/dexguard/dexguard3.png">
-<meta property="og:updated_time" content="2017-03-07T12:18:56.000Z">
+<meta property="og:updated_time" content="2017-03-07T12:26:20.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android安全之---美团防dex2jar实现">
 <meta name="twitter:description" content="一、概述上一篇，我大致分析了美团外卖Android客户端在防止其Java代码被dex2jar工具转换而做的防护措施，其实就是借助dex2jar的语法检查机制，将有语法错误的字节码插入到想要保护的Java函数中里面，以达到dex2jar转换出错的目的。这篇文章就大致记录下如何开发Gradle编译插件，在编译过程中实现上述防护思路。
@@ -100,14 +100,14 @@
         <h3 id="一、概述">一、概述</h3><p><a href="https://ivonhoe.github.io/2017/02/13/Android%E5%AE%89%E5%85%A8%E4%B9%8B---%E7%BE%8E%E5%9B%A2%E9%98%B2dex2jar%E5%8E%9F%E7%90%86/">上一篇</a>，我大致分析了美团外卖Android客户端在防止其Java代码被dex2jar工具转换而做的防护措施，其实就是借助dex2jar的语法检查机制，将有语法错误的字节码插入到想要保护的Java函数中里面，以达到dex2jar转换出错的目的。这篇文章就大致记录下如何开发Gradle编译插件，在编译过程中实现上述防护思路。</p>
 <h3 id="二、思路">二、思路</h3><p><strong>先看下Android APK打包流程：</strong></p>
 <a id="more"></a>
-<p><img src="/res/dexguard/dexguard1.jpeg" alt="Android apk打包流程"></p>
+<p><img src="/res/dexguard/dexguard4.jpeg" alt="Android apk打包流程"></p>
 <p>Android APK打包流程如上图所示，Java代码先通过Java Compiler生成.class文件，在通过dx工具生成dex文件，最后使用apkbuilder工具完成代码与资源文件的打包，并使用jarsigner签名，最后可能还有使用zipalign对签名后的apk做对齐处理。</p>
 <p>如果需要完成对特定函数的代码注入，可以在Java代码编译生成class文件后，在dex文件生成前，动态生成需要的Exsit类文件的字节码。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">// &#21160;&#24577;&#29983;&#25104;Exist.class&#10;public class Exist &#123;&#10;    public static boolean a() &#123;&#10;        return false;&#10;    &#125;&#10;&#10;    public static void b(int test) &#123;&#10;&#10;    &#125;&#10;&#125;</span><br></pre></td></tr></table></figure>
 <p>动态修改特定方法的字节码，将下列Java代码转换成字节码插入特定的函数中。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">// &#25554;&#20837;&#21040;&#29305;&#23450;&#30340;Java&#20989;&#25968;&#20869;&#10;Exist.b(Exist.a());</span><br></pre></td></tr></table></figure>
 <p>并将修改后的.class文件放入dex打包目录中，完成dex打包，具体流程如下图所示：</p>
-<p><img src="/res/dexguard/dexguard2.png" alt=""></p>
+<p><img src="/res/dexguard/dexguard5.png" alt=""></p>
 <p>Gradle提供了叫<code>Transform</code>的API，允许三方插件在class文件转换为dex文件前操作编译好的class文件，这个API的目标就是简化class文件的自定义的操作而不用对Task进行处理，并且可以更加灵活地进行操作。详细的可以参考<a href="http://blog.csdn.net/sbsujjbcy/article/details/50839263" target="_blank" rel="external">区长的博客</a>。</p>
 <h3 id="四、ASM操作Java字节码">四、ASM操作Java字节码</h3><p>ASM 是一个 Java 字节码操控框架。它能被用来动态生成类或者增强既有类的功能。ASM 可以直<br>接产生二进制 class 文件，也可以在类被加载入 Java 虚拟机之前动态改变类行为。这里推荐一个IDEA插件:<code>ASM ByteCode Outline</code>。可以查看.class文件的字节码，并可以生成成ASM框架代码。安装<code>ASM Bytecode Outline</code>插件后，可以在<code>Intellij IDEA</code>-&gt;<code>Code</code>-&gt;<code>Show Bytecode Outline</code>查看类文件对应个字节码和ASM框架代码，利用ASM框架代码就可以生成相应的.class文件了。</p>
 <p><img src="/res/dexguard/dexguard3.png" alt=""></p>
@@ -231,7 +231,7 @@
 
     <footer class="article-footer">
       
-        <a data-url="https://ivonhoe.github.io/2017/03/02/Android安全之---美团防dex2jar实现/" data-id="cizzide8t0015vlmvg9t9zmxy" class="article-share-link" data-share="baidu">分享到</a>
+        <a data-url="https://ivonhoe.github.io/2017/03/02/Android安全之---美团防dex2jar实现/" data-id="cizzigwur0015xfmvn0oorjng" class="article-share-link" data-share="baidu">分享到</a>
       
 
       
