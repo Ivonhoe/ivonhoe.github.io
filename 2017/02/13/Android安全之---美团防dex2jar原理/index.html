@@ -4,17 +4,29 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Archives: 2017 | 别辜负自己</title>
+  <title>Android安全之---美团防dex2jar原理 | 别辜负自己</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description">
-<meta property="og:type" content="website">
-<meta property="og:title" content="别辜负自己">
-<meta property="og:url" content="https://ivonhoe.github.io/archives/2017/index.html">
+  <meta name="description" content="一、反编译美团代码最近在看美团外卖的代码，发现美团外卖4.1.1版本之后的安装包无法正常的通过dex2jar工具将dex转换出Java源代码，在转换过程中会提示出错，如图：
+
+查看转换出的Java源代码，会发现很多类方法提示下图所示异常，很多方法中都会抛出RuntimeException:
+1public class AsyncTaskService extends IntentService &amp;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android安全之---美团防dex2jar原理">
+<meta property="og:url" content="https://ivonhoe.github.io/2017/02/13/Android安全之---美团防dex2jar原理/index.html">
 <meta property="og:site_name" content="别辜负自己">
-<meta property="og:description">
+<meta property="og:description" content="一、反编译美团代码最近在看美团外卖的代码，发现美团外卖4.1.1版本之后的安装包无法正常的通过dex2jar工具将dex转换出Java源代码，在转换过程中会提示出错，如图：
+
+查看转换出的Java源代码，会发现很多类方法提示下图所示异常，很多方法中都会抛出RuntimeException:
+1public class AsyncTaskService extends IntentService &amp;">
+<meta property="og:image" content="https://ivonhoe.github.io/res/dex2jar_error/dex2jar_error1.png">
+<meta property="og:image" content="https://ivonhoe.github.io/res/dex2jar_error/dex2jar_error2.png">
+<meta property="og:updated_time" content="2017-03-06T05:37:19.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="别辜负自己">
-<meta name="twitter:description">
+<meta name="twitter:title" content="Android安全之---美团防dex2jar原理">
+<meta name="twitter:description" content="一、反编译美团代码最近在看美团外卖的代码，发现美团外卖4.1.1版本之后的安装包无法正常的通过dex2jar工具将dex转换出Java源代码，在转换过程中会提示出错，如图：
+
+查看转换出的Java源代码，会发现很多类方法提示下图所示异常，很多方法中都会抛出RuntimeException:
+1public class AsyncTaskService extends IntentService &amp;">
   
     <link rel="alternative" href="/atom.xml" title="别辜负自己" type="application/atom+xml">
   
@@ -68,62 +80,7 @@
   </div>
 </header>
     <div class="outer">
-      <section id="main">
-  
-    <article id="post-Android安全之---美团防dex2jar实现" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/03/02/Android安全之---美团防dex2jar实现/" class="article-date">
-  <time datetime="2017-03-02T09:04:10.000Z" itemprop="datePublished">3月 2 2017</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/03/02/Android安全之---美团防dex2jar实现/">Android安全之---美团防dex2jar实现</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="一、概述">一、概述</h3><p>上一篇，我大致分析了美团外卖Android客户端在防止其Java代码被dex2jar工具转换而做的防护措施，其实就是借助dex2jar的语法检查机制，将有语法错误的字节码插入到想要保护的Java函数中里面，以达到dex2jar转换出错的目的。这篇文章就大致记录下如何开发Gradle编译插件，在编译过程中实现上述防护思路。</p>
-<h3 id="二、思路">二、思路</h3><p><strong>先看下Android APK打包流程：</strong></p>
-        
-          <p class="article-more-link">
-            <a href="/2017/03/02/Android安全之---美团防dex2jar实现/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-
-    
-
-    <footer class="article-footer">
-      
-        <a data-url="https://ivonhoe.github.io/2017/03/02/Android安全之---美团防dex2jar实现/" data-id="cizzhsyxp0003rtmvn9n4fbm2" class="article-share-link" data-share="baidu">分享到</a>
-      
-
-      
-        <a href="https://ivonhoe.github.io/2017/03/02/Android安全之---美团防dex2jar实现/#ds-thread" class="article-comment-link">评论</a>
-      
-
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Gradle/">Gradle</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/dex2jar/">dex2jar</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/移动安全/">移动安全</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-Android安全之---美团防dex2jar原理" class="article article-type-post" itemscope itemprop="blogPost">
+      <section id="main"><article id="post-Android安全之---美团防dex2jar原理" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2017/02/13/Android安全之---美团防dex2jar原理/" class="article-date">
   <time datetime="2017-02-13T13:55:01.000Z" itemprop="datePublished">2月 13 2017</time>
@@ -136,8 +93,8 @@
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/02/13/Android安全之---美团防dex2jar原理/">Android安全之---美团防dex2jar原理</a>
+    <h1 class="article-title" itemprop="name">
+      Android安全之---美团防dex2jar原理
     </h1>
   
 
@@ -149,14 +106,135 @@
 <p><img src="/res/dex2jar_error/dex2jar_error1.png" alt="dex2jar异常图"></p>
 <p>查看转换出的Java源代码，会发现很多类方法提示下图所示异常，很多方法中都会抛出<code>RuntimeException</code>:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public class AsyncTaskService extends IntentService &#123; &#10;  &#10;  protected void onHandleIntent(Intent paramIntent)&#123;&#10;    throw new RuntimeException(&#34;d2j fail translate: java.lang.RuntimeException: can not merge I and Z\n\tat com.googlecode.dex2jar.ir.TypeClass.merge(TypeClass.java:100)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeRef.updateTypeClass(TypeTransformer.java:174)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.provideAs(TypeTransformer.java:783)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.enexpr(TypeTransformer.java:662)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.exExpr(TypeTransformer.java:722)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.exExpr(TypeTransformer.java:706)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.enexpr(TypeTransformer.java:701)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.exExpr(TypeTransformer.java:722)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.exExpr(TypeTransformer.java:706)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.s1stmt(TypeTransformer.java:813)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.sxStmt(TypeTransformer.java:843)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.analyze(TypeTransformer.java:206)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer.transform(TypeTransformer.java:44)\n\tat com.googlecode.d2j.dex.Dex2jar$2.optimize(Dex2jar.java:161)\n\tat com.googlecode.d2j.dex.Dex2Asm.convertCode(Dex2Asm.java:433)\n\tat com.googlecode.d2j.dex.ExDex2Asm.convertCode(ExDex2Asm.java:42)\n\tat com.googlecode.d2j.dex.Dex2jar$2.convertCode(Dex2jar.java:129)\n\tat com.googlecode.d2j.dex.Dex2Asm.convertMethod(Dex2Asm.java:528)\n\tat com.googlecode.d2j.dex.Dex2Asm.convertClass(Dex2Asm.java:425)\n\tat com.googlecode.d2j.dex.Dex2Asm.convertDex(Dex2Asm.java:441)\n\tat com.googlecode.d2j.dex.Dex2jar.doTranslate(Dex2jar.java:171)\n\tat com.googlecode.d2j.dex.Dex2jar.to(Dex2jar.java:271)\n\tat com.googlecode.dex2jar.tools.Dex2jarCmd.doCommandLine(Dex2jarCmd.java:109)\n\tat com.googlecode.dex2jar.tools.BaseCmd.doMain(BaseCmd.java:290)\n\tat com.googlecode.dex2jar.tools.Dex2jarCmd.main(Dex2jarCmd.java:33)\n&#34;);&#10;  &#125;&#10;  &#10;  public int onStartCommand(Intent paramIntent, int paramInt1, int paramInt2)&#123;&#10;    throw new RuntimeException(&#34;d2j fail translate: java.lang.RuntimeException: can not merge I and Z\n\tat com.googlecode.dex2jar.ir.TypeClass.merge(TypeClass.java:100)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeRef.updateTypeClass(TypeTransformer.java:174)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.provideAs(TypeTransformer.java:783)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.enexpr(TypeTransformer.java:662)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.exExpr(TypeTransformer.java:722)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.exExpr(TypeTransformer.java:706)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.enexpr(TypeTransformer.java:701)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.exExpr(TypeTransformer.java:722)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.exExpr(TypeTransformer.java:706)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.s1stmt(TypeTransformer.java:813)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.sxStmt(TypeTransformer.java:843)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.analyze(TypeTransformer.java:206)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer.transform(TypeTransformer.java:44)\n\tat com.googlecode.d2j.dex.Dex2jar$2.optimize(Dex2jar.java:161)\n\tat com.googlecode.d2j.dex.Dex2Asm.convertCode(Dex2Asm.java:433)\n\tat com.googlecode.d2j.dex.ExDex2Asm.convertCode(ExDex2Asm.java:42)\n\tat com.googlecode.d2j.dex.Dex2jar$2.convertCode(Dex2jar.java:129)\n\tat com.googlecode.d2j.dex.Dex2Asm.convertMethod(Dex2Asm.java:528)\n\tat com.googlecode.d2j.dex.Dex2Asm.convertClass(Dex2Asm.java:425)\n\tat com.googlecode.d2j.dex.Dex2Asm.convertDex(Dex2Asm.java:441)\n\tat com.googlecode.d2j.dex.Dex2jar.doTranslate(Dex2jar.java:171)\n\tat com.googlecode.d2j.dex.Dex2jar.to(Dex2jar.java:271)\n\tat com.googlecode.dex2jar.tools.Dex2jarCmd.doCommandLine(Dex2jarCmd.java:109)\n\tat com.googlecode.dex2jar.tools.BaseCmd.doMain(BaseCmd.java:290)\n\tat com.googlecode.dex2jar.tools.Dex2jarCmd.main(Dex2jarCmd.java:33)\n&#34;);&#10;  &#125;&#10;&#125;</span><br></pre></td></tr></table></figure>
-        
-          <p class="article-more-link">
-            <a href="/2017/02/13/Android安全之---美团防dex2jar原理/#more">Read More</a>
-          </p>
-        
+<a id="more"></a>
+<p>查看日志文件会发现很多类似的错误信息，可以看到方法内<code>RuntimeException</code>栈信息和反编译的错误信息是相同的，都提示<code>can not merge I and Z</code>。</p>
+<p><img src="/res/dex2jar_error/dex2jar_error2.png" alt="dex2jar日志"></p>
+<h3 id="二、为什么？">二、为什么？</h3><p>本来以为这是dex2jar工具低版本的一个bug，但更新了dex2jar以后，依然还是会出现上述错误。<br><code>java.lang.RuntimeException: can not merge I and Z</code>这个异常，在<a href="https://sourceforge.net/p/dex2jar/tickets/238/" target="_blank" rel="external">sourceforge</a>上解释的比较清楚，其实是一个dex2jar工具检查出的一个参数异常”，<strong>The problem is caused by strict type calculation, because in java syntaxt, a boolean can not assign to an inteager. so dex2jar forbid merge type Z and I.</strong> 你用布尔类型入参调用一个参数为整型的函数，当然会检查出错，为啥这么说，我使用apktool工具，看了一下apk的smali代码。发现报错的函数的最前面都含有一段奇怪smali的代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">invoke-static &#123;&#125;, Lpnf/this/object/does/not/Exist;-&#62;a()Z&#10;&#10;move-result v0&#10;&#10;invoke-static &#123;v0&#125;, Lpnf/this/object/does/not/Exist;-&#62;b(I)V</span><br></pre></td></tr></table></figure>
+<p>看上面的代码，<code>pnf.this.object.does.not.Exist.a()</code>方法返回一个boolean类型数据，放入v0寄存器，作为<code>pnf.this.object.does.not.Exist.b(int)</code>函数的入参。正常情况下这样的语法错误在java代码编译时就不会通过的。看到这里你会不会想，如果我不想别人直接看到我的Java代码，是不是可以通过在核心函数中插入上面这段有语法错误的代码，以达到dex2jar工具检查出错的目的呢？从而将代码被阅读的门槛从java代码提高到smali字节码，但是是否又会有个疑问，为啥有语法错误的代码能够出现在这里，为啥运行时不会出错？</p>
+<h3 id="三、手动代码注入">三、手动代码注入</h3><p>为了验证上面的猜想，这里我通过反编译一个apk，手动插入有语法错误的smali代码，以验证美团防dex2jar的思路，那就是借助dex2jar语法检查的机制，达到代码转换失败的目的。具体步骤如下：</p>
+<ul>
+<li>1.反编译一个apk。</li>
+<li>2.修改他的smali代码，插入上面这三句有语法错误的代码。</li>
+<li>3.重打包，使用dex2jar工具转换新包的dex，看是否能正常转换出Java源代码。并检查运行时是否出错。</li>
+</ul>
+<p>我这里用一个三方应用来测试，使用apktool反编译出smali代码，并在Application的onCreate方法中插入这段有语法错误的代码。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># virtual methods&#10;.method public onCreate()V&#10;    .locals 3&#10;&#10;    invoke-super &#123;p0&#125;, Lcn/trinea/android/lib/h/c;-&#62;onCreate()V&#10;&#10;    invoke-virtual &#123;p0&#125;, Lcn/trinea/android/developertools/MyApplication;-&#62;getApplicationContext()Landroid/content/Context;&#10;&#10;    move-result-object v0&#10;&#10;    invoke-static &#123;&#125;, Lpnf/object/does/not/Exist;-&#62;a()Z&#10;&#10;    move-result v3&#10;&#10;    invoke-static &#123;v3&#125;, Lpnf/object/does/not/Exist;-&#62;b(I)V&#10;&#10;    return-void&#10;.end method</span><br></pre></td></tr></table></figure>
+<p>这里不要忘了，你可能需要另外编译Exist.smali这个文件，不然运行时一定会爆出ClassNotFound异常。将下面的Exist.java<strong>编译出Exist.smali</strong>放入响应包路径，重打包就可以了。Java代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public class Exist &#123;&#10;    public static boolean a() &#123;&#10;        return false;&#10;    &#125;&#10;&#10;    public static void b(int test) &#123;&#10;&#10;    &#125;&#10;&#125;</span><br></pre></td></tr></table></figure>
+<p>最后，验证下果然重新打包后的apk，确实不能正常转换出Java源代码，这里就不贴图了，因为转换出错日志是一样的。并且运行时也不会出错。接下来会写一个Gradle编译插件，针对特定的函数，插入代码，防止dex2jar工具查看Java源代码。</p>
+<h3 id="四、参考文档">四、参考文档</h3><ul>
+<li><a href="https://sourceforge.net/p/dex2jar/tickets/238/" target="_blank" rel="external">https://sourceforge.net/p/dex2jar/tickets/238/</a></li>
+<li><a href="http://www.jianshu.com/p/730c6e3e21f6" target="_blank" rel="external">http://www.jianshu.com/p/730c6e3e21f6</a></li>
+</ul>
+
       
     </div>
 
+    
+    <!-- /上述代码 -->
+    
+  <!-- css -->
+  <style type="text/css">
+      .center {
+          text-align: center;
+      }
+      .hidden {
+          display: none;
+      }
+    .donate_bar a.btn_donate{
+      display: inline-block;
+      width: 82px;
+      height: 82px;
+      background: url("http://7xsl28.com1.z0.glb.clouddn.com/btn_reward.gif") no-repeat;
+      _background: url("http://7xsl28.com1.z0.glb.clouddn.com/btn_reward.gif") no-repeat;
+
+      <!-- http://img.t.sinajs.cn/t5/style/images/apps_PRF/e_media/btn_reward.gif
+           因为本 hexo 生成的博客所用的 theme 的 a:hover 带动画效果，
+         为了在让打赏按钮显示效果正常 而 添加了以下几行 css，
+         嵌入其它博客时不一定要它们。 -->
+      -webkit-transition: background 0s;
+      -moz-transition: background 0s;
+      -o-transition: background 0s;
+      -ms-transition: background 0s;
+      transition: background 0s;
+      <!-- /让打赏按钮的效果显示正常 而 添加的几行 css 到此结束 -->
+    }
+
+    .donate_bar a.btn_donate:hover{ background-position: 0px -82px;}
+    .donate_bar .donate_txt {
+      display: block;
+      color: #9d9d9d;
+      font: 14px/2 "Microsoft Yahei";
+    }
+    .bold{ font-weight: bold; }
+  </style>
+  <!-- /css -->
+
+    <!-- Donate Module -->
+    <div id="donate_module">
+
+  <!-- btn_donate & tips -->
+  <div id="donate_board" class="donate_bar center">
+      <br>
+      ------------------------------------------------------------------------------------------------------------------------------
+      <br>
+    <a id="btn_donate" class="btn_donate" target="_self" href="javascript:;" title="Donate 打赏"></a>
+    <span class="donate_txt">
+      求鼓励，求支持！
+    </span>
+      
+    
+  </div>
+  <!-- /btn_donate & tips -->
+
+  <!-- donate guide -->
+    
+  <div id="donate_guide" class="donate_bar center hidden">
+        <br>
+      ------------------------------------------------------------------------------------------------------------------------------
+      <br>
+
+    <a href="https://ivonhoe.github.io/res/dex2jar_error/WechatIMG56.png" title="用微信扫一扫哦~" class="fancybox" rel="article0">
+      <img src="https://ivonhoe.github.io/res/dex2jar_error/WechatIMG56.png" title="微信打赏 Colin" height="190px" width="auto"/>
+    </a>
+        
+        &nbsp;&nbsp;
+
+    <a href="https://ivonhoe.github.io/res/dex2jar_error/WechatIMG57.jpeg" title="用支付宝扫一扫即可~" class="fancybox" rel="article0">
+      <img src="https://ivonhoe.github.io/res/dex2jar_error/WechatIMG57.jpeg" title="支付宝打赏 Colin" height="190px" width="auto"/>
+    </a>
+
+    <span class="donate_txt">
+      求鼓励，求支持！
+    </span>
+
+  </div>
+  <!-- /donate guide -->
+
+  <!-- donate script -->
+  <script type="text/javascript">
+    document.getElementById('btn_donate').onclick = function() {
+      $('#donate_board').addClass('hidden');
+      $('#donate_guide').removeClass('hidden');
+    }
+
+    function donate_on_web(){
+      $('#donate').submit();
+        }
+
+    var original_window_onload = window.onload;
+        window.onload = function () {
+            if (original_window_onload) {
+                original_window_onload();
+            }
+            document.getElementById('donate_board_wdg').className = 'hidden';
+    }
+  </script>
+  <!-- /donate script -->
+</div>
+<!-- /Donate Module -->
+   
     
 
     <footer class="article-footer">
@@ -174,126 +252,33 @@
     </footer>
   </div>
   
-</article>
-
-
+    
+<nav id="article-nav">
   
-    <article id="post-Android安全之---APP去广告" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/02/09/Android安全之---APP去广告/" class="article-date">
-  <time datetime="2017-02-09T05:27:20.000Z" itemprop="datePublished">2月 9 2017</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
+    <a href="/2017/03/02/Android安全之---美团防dex2jar实现/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">
         
+          Android安全之---美团防dex2jar实现
+        
+      </div>
+    </a>
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/02/09/Android安全之---APP去广告/">Android安全之---APP去广告</a>
-    </h1>
   
+    <a href="/2017/02/09/Android安全之---APP去广告/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">Android安全之---APP去广告</div>
+    </a>
+  
+</nav>
 
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="一、工具介绍">一、工具介绍</h3><ul>
-<li><strong>apktool：</strong>google提供Android apk编译与反编译工具，<a href="https://ibotpeaches.github.io/Apktool/">https://ibotpeaches.github.io/Apktool/</a></li>
-<li><strong>dex2jar：</strong>dex文件转jar文件工具，<a href="https://github.com/pxb1988/dex2jar">https://github.com/pxb1988/dex2jar</a></li>
-<li><strong>jd-gui：</strong>查看jar文件，<a href="http://jd.benow.ca/">http://jd.benow.ca/</a></li>
-<li><strong>keytool：</strong>制作和管理数字证书</li>
-<li><strong>jarsigner：</strong>使用数字证书对jar和apk进行签名</li>
-<li><strong>Android killer：</strong>Window系统中，上述工具的集成工具</li>
-</ul>
-<p>更多反编译工具可查看：<a href="http://unclechen.github.io/2016/09/07/Android%E5%8F%8D%E7%BC%96%E8%AF%91%E6%8A%80%E6%9C%AF%E6%80%BB%E7%BB%93/">Uncle Chen—Android反编译技术总结</a></p>
-<h3 id="二、去除应用开发助手的广告">二、去除应用开发助手的广告</h3><p>CodeKK公众号在17年初推出了一个<a href="https://mp.weixin.qq.com/s?__biz=MzAxNjI3MDkzOQ==&amp;mid=2654472664&amp;idx=1&amp;sn=dfc2b5beb90daa8fd068d8064ce0dcce&amp;chksm=803bfaecb74c73fa9a9addfd4d8bce031186c34b7d7b59ee22df41799c7eaa71a34863890f56&amp;mpshare=1&amp;scene=1&amp;srcid=0220tEQNaL7PwIgfBT8sIITK&amp;key=776fc8cdd0b88c0d0b9a6c8e271e4cfe2b2363aeda110198d4250b0a422befd0f43f78e2a17d528112f757336e136c56f488bc174baa56c116045a9bdbb37dbccf508eb8c70e48a2d09ca1da1b4d92d3&amp;ascene=0&amp;uin=MTMzNzYxMDM2MQ%3D%3D&amp;devicetype=iMac+MacBookPro11%2C4+OSX+OSX+10.12.1+build(16B2555">应用开发助手</a>)。V1.0版本是有广告版本的，下面以这个版本为例，简单看下去广告过程。它的后续的V1.1.0和V1.2.0已经去除了广告功能。</p>
-        
-          <p class="article-more-link">
-            <a href="/2017/02/09/Android安全之---APP去广告/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-
-    
-
-    <footer class="article-footer">
-      
-        <a data-url="https://ivonhoe.github.io/2017/02/09/Android安全之---APP去广告/" data-id="cizzhsywl0000rtmv6lh06kge" class="article-share-link" data-share="baidu">分享到</a>
-      
-
-      
-        <a href="https://ivonhoe.github.io/2017/02/09/Android安全之---APP去广告/#ds-thread" class="article-comment-link">评论</a>
-      
-
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/去广告/">去广告</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/移动安全/">移动安全</a></li></ul>
-
-    </footer>
-  </div>
   
 </article>
 
 
-  
-    <article id="post-MacOS上编译Android源码" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/01/20/MacOS上编译Android源码/" class="article-date">
-  <time datetime="2017-01-20T14:16:46.000Z" itemprop="datePublished">1月 20 2017</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/01/20/MacOS上编译Android源码/">Mac OS上编译Android源码</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="一、制作一个大小写敏感的磁盘分区">一、制作一个大小写敏感的磁盘分区</h3><h4 id="1-1-Mac_OS磁盘工具">1.1.Mac OS磁盘工具</h4><p>这里我使用一块移动硬盘，将移动硬盘的一个分区使用Mac OS的硬盘工具，抹掉数据，选择MacOS扩展(区分大小写，日志式)，创建成大小写敏感的分区。</p>
-<p><img src="/res/compile_android_source/android-source-disk1.jpeg" alt=""></p>
-<p>这里会遇到一个问题，抹掉分区数据的时候，<code>会报错：“Mac OSX 抹盘发生错误:Mediakit 报告设备上空间不足以执行此操作”</code>，这里的原因是磁盘没有大于200M的UEFI分区。</p>
-        
-          <p class="article-more-link">
-            <a href="/2017/01/20/MacOS上编译Android源码/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-
-    
-
-    <footer class="article-footer">
-      
-        <a data-url="https://ivonhoe.github.io/2017/01/20/MacOS上编译Android源码/" data-id="cizwx8f6a000wnquqt66htlpl" class="article-share-link" data-share="baidu">分享到</a>
-      
-
-      
-        <a href="https://ivonhoe.github.io/2017/01/20/MacOS上编译Android源码/#ds-thread" class="article-comment-link">评论</a>
-      
-
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/源码编译/">源码编译</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-  
+  <section id="comments">
+    <div id="ds-thread" class="ds-thread" data-thread-key="2017/02/13/Android安全之---美团防dex2jar原理/" data-title="Android安全之---美团防dex2jar原理" data-url="https://ivonhoe.github.io/2017/02/13/Android安全之---美团防dex2jar原理/"></div>
+  </section>
 </section>
       
       <aside id="sidebar">

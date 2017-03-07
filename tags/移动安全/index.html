@@ -70,10 +70,10 @@
     <div class="outer">
       <section id="main">
   
-    <article id="post-Android App如何去广告，以dev-tools为例" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-Android安全之---美团防dex2jar实现" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2017/02/13/Android App如何去广告，以dev-tools为例/" class="article-date">
-  <time datetime="2017-02-13T05:27:20.000Z" itemprop="datePublished">2月 13 2017</time>
+    <a href="/2017/03/02/Android安全之---美团防dex2jar实现/" class="article-date">
+  <time datetime="2017-03-02T09:04:10.000Z" itemprop="datePublished">3月 2 2017</time>
 </a>
     
   </div>
@@ -84,7 +84,115 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/02/13/Android App如何去广告，以dev-tools为例/">App去广告</a>
+      <a class="article-title" href="/2017/03/02/Android安全之---美团防dex2jar实现/">Android安全之---美团防dex2jar实现</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="一、概述">一、概述</h3><p>上一篇，我大致分析了美团外卖Android客户端在防止其Java代码被dex2jar工具转换而做的防护措施，其实就是借助dex2jar的语法检查机制，将有语法错误的字节码插入到想要保护的Java函数中里面，以达到dex2jar转换出错的目的。这篇文章就大致记录下如何开发Gradle编译插件，在编译过程中实现上述防护思路。</p>
+<h3 id="二、思路">二、思路</h3><p><strong>先看下Android APK打包流程：</strong></p>
+        
+          <p class="article-more-link">
+            <a href="/2017/03/02/Android安全之---美团防dex2jar实现/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+
+    
+
+    <footer class="article-footer">
+      
+        <a data-url="https://ivonhoe.github.io/2017/03/02/Android安全之---美团防dex2jar实现/" data-id="cizzhsyxp0003rtmvn9n4fbm2" class="article-share-link" data-share="baidu">分享到</a>
+      
+
+      
+        <a href="https://ivonhoe.github.io/2017/03/02/Android安全之---美团防dex2jar实现/#ds-thread" class="article-comment-link">评论</a>
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Gradle/">Gradle</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/dex2jar/">dex2jar</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/移动安全/">移动安全</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Android安全之---美团防dex2jar原理" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/02/13/Android安全之---美团防dex2jar原理/" class="article-date">
+  <time datetime="2017-02-13T13:55:01.000Z" itemprop="datePublished">2月 13 2017</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/02/13/Android安全之---美团防dex2jar原理/">Android安全之---美团防dex2jar原理</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="一、反编译美团代码">一、反编译美团代码</h3><p>最近在看美团外卖的代码，发现美团外卖4.1.1版本之后的安装包无法正常的通过dex2jar工具将dex转换出Java源代码，在转换过程中会提示出错，如图：</p>
+<p><img src="/res/dex2jar_error/dex2jar_error1.png" alt="dex2jar异常图"></p>
+<p>查看转换出的Java源代码，会发现很多类方法提示下图所示异常，很多方法中都会抛出<code>RuntimeException</code>:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public class AsyncTaskService extends IntentService &#123; &#10;  &#10;  protected void onHandleIntent(Intent paramIntent)&#123;&#10;    throw new RuntimeException(&#34;d2j fail translate: java.lang.RuntimeException: can not merge I and Z\n\tat com.googlecode.dex2jar.ir.TypeClass.merge(TypeClass.java:100)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeRef.updateTypeClass(TypeTransformer.java:174)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.provideAs(TypeTransformer.java:783)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.enexpr(TypeTransformer.java:662)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.exExpr(TypeTransformer.java:722)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.exExpr(TypeTransformer.java:706)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.enexpr(TypeTransformer.java:701)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.exExpr(TypeTransformer.java:722)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.exExpr(TypeTransformer.java:706)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.s1stmt(TypeTransformer.java:813)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.sxStmt(TypeTransformer.java:843)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.analyze(TypeTransformer.java:206)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer.transform(TypeTransformer.java:44)\n\tat com.googlecode.d2j.dex.Dex2jar$2.optimize(Dex2jar.java:161)\n\tat com.googlecode.d2j.dex.Dex2Asm.convertCode(Dex2Asm.java:433)\n\tat com.googlecode.d2j.dex.ExDex2Asm.convertCode(ExDex2Asm.java:42)\n\tat com.googlecode.d2j.dex.Dex2jar$2.convertCode(Dex2jar.java:129)\n\tat com.googlecode.d2j.dex.Dex2Asm.convertMethod(Dex2Asm.java:528)\n\tat com.googlecode.d2j.dex.Dex2Asm.convertClass(Dex2Asm.java:425)\n\tat com.googlecode.d2j.dex.Dex2Asm.convertDex(Dex2Asm.java:441)\n\tat com.googlecode.d2j.dex.Dex2jar.doTranslate(Dex2jar.java:171)\n\tat com.googlecode.d2j.dex.Dex2jar.to(Dex2jar.java:271)\n\tat com.googlecode.dex2jar.tools.Dex2jarCmd.doCommandLine(Dex2jarCmd.java:109)\n\tat com.googlecode.dex2jar.tools.BaseCmd.doMain(BaseCmd.java:290)\n\tat com.googlecode.dex2jar.tools.Dex2jarCmd.main(Dex2jarCmd.java:33)\n&#34;);&#10;  &#125;&#10;  &#10;  public int onStartCommand(Intent paramIntent, int paramInt1, int paramInt2)&#123;&#10;    throw new RuntimeException(&#34;d2j fail translate: java.lang.RuntimeException: can not merge I and Z\n\tat com.googlecode.dex2jar.ir.TypeClass.merge(TypeClass.java:100)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeRef.updateTypeClass(TypeTransformer.java:174)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.provideAs(TypeTransformer.java:783)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.enexpr(TypeTransformer.java:662)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.exExpr(TypeTransformer.java:722)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.exExpr(TypeTransformer.java:706)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.enexpr(TypeTransformer.java:701)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.exExpr(TypeTransformer.java:722)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.exExpr(TypeTransformer.java:706)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.s1stmt(TypeTransformer.java:813)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.sxStmt(TypeTransformer.java:843)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.analyze(TypeTransformer.java:206)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer.transform(TypeTransformer.java:44)\n\tat com.googlecode.d2j.dex.Dex2jar$2.optimize(Dex2jar.java:161)\n\tat com.googlecode.d2j.dex.Dex2Asm.convertCode(Dex2Asm.java:433)\n\tat com.googlecode.d2j.dex.ExDex2Asm.convertCode(ExDex2Asm.java:42)\n\tat com.googlecode.d2j.dex.Dex2jar$2.convertCode(Dex2jar.java:129)\n\tat com.googlecode.d2j.dex.Dex2Asm.convertMethod(Dex2Asm.java:528)\n\tat com.googlecode.d2j.dex.Dex2Asm.convertClass(Dex2Asm.java:425)\n\tat com.googlecode.d2j.dex.Dex2Asm.convertDex(Dex2Asm.java:441)\n\tat com.googlecode.d2j.dex.Dex2jar.doTranslate(Dex2jar.java:171)\n\tat com.googlecode.d2j.dex.Dex2jar.to(Dex2jar.java:271)\n\tat com.googlecode.dex2jar.tools.Dex2jarCmd.doCommandLine(Dex2jarCmd.java:109)\n\tat com.googlecode.dex2jar.tools.BaseCmd.doMain(BaseCmd.java:290)\n\tat com.googlecode.dex2jar.tools.Dex2jarCmd.main(Dex2jarCmd.java:33)\n&#34;);&#10;  &#125;&#10;&#125;</span><br></pre></td></tr></table></figure>
+        
+          <p class="article-more-link">
+            <a href="/2017/02/13/Android安全之---美团防dex2jar原理/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+
+    
+
+    <footer class="article-footer">
+      
+        <a data-url="https://ivonhoe.github.io/2017/02/13/Android安全之---美团防dex2jar原理/" data-id="cizzhsyxs0007rtmvpfbp9k27" class="article-share-link" data-share="baidu">分享到</a>
+      
+
+      
+        <a href="https://ivonhoe.github.io/2017/02/13/Android安全之---美团防dex2jar原理/#ds-thread" class="article-comment-link">评论</a>
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/dex2jar/">dex2jar</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/移动安全/">移动安全</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Android安全之---APP去广告" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/02/09/Android安全之---APP去广告/" class="article-date">
+  <time datetime="2017-02-09T05:27:20.000Z" itemprop="datePublished">2月 9 2017</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/02/09/Android安全之---APP去广告/">Android安全之---APP去广告</a>
     </h1>
   
 
@@ -101,10 +209,10 @@
 <li><strong>Android killer：</strong>Window系统中，上述工具的集成工具</li>
 </ul>
 <p>更多反编译工具可查看：<a href="http://unclechen.github.io/2016/09/07/Android%E5%8F%8D%E7%BC%96%E8%AF%91%E6%8A%80%E6%9C%AF%E6%80%BB%E7%BB%93/">Uncle Chen—Android反编译技术总结</a></p>
-<h3 id="二、Android_应用开发助手-数十倍效率提升">二、Android 应用开发助手-数十倍效率提升</h3><p>CodeKK公众号在17年初推出了一个<a href="https://mp.weixin.qq.com/s?__biz=MzAxNjI3MDkzOQ==&amp;mid=2654472664&amp;idx=1&amp;sn=dfc2b5beb90daa8fd068d8064ce0dcce&amp;chksm=803bfaecb74c73fa9a9addfd4d8bce031186c34b7d7b59ee22df41799c7eaa71a34863890f56&amp;mpshare=1&amp;scene=1&amp;srcid=0220tEQNaL7PwIgfBT8sIITK&amp;key=776fc8cdd0b88c0d0b9a6c8e271e4cfe2b2363aeda110198d4250b0a422befd0f43f78e2a17d528112f757336e136c56f488bc174baa56c116045a9bdbb37dbccf508eb8c70e48a2d09ca1da1b4d92d3&amp;ascene=0&amp;uin=MTMzNzYxMDM2MQ%3D%3D&amp;devicetype=iMac+MacBookPro11%2C4+OSX+OSX+10.12.1+build(16B2555">应用开发助手</a>)。当时是有广告版本的，当然后续的V1.1.0和V1.2.0已经去除了广告功能。下面以这个应用为例，简单看下去广告过程。</p>
+<h3 id="二、去除应用开发助手的广告">二、去除应用开发助手的广告</h3><p>CodeKK公众号在17年初推出了一个<a href="https://mp.weixin.qq.com/s?__biz=MzAxNjI3MDkzOQ==&amp;mid=2654472664&amp;idx=1&amp;sn=dfc2b5beb90daa8fd068d8064ce0dcce&amp;chksm=803bfaecb74c73fa9a9addfd4d8bce031186c34b7d7b59ee22df41799c7eaa71a34863890f56&amp;mpshare=1&amp;scene=1&amp;srcid=0220tEQNaL7PwIgfBT8sIITK&amp;key=776fc8cdd0b88c0d0b9a6c8e271e4cfe2b2363aeda110198d4250b0a422befd0f43f78e2a17d528112f757336e136c56f488bc174baa56c116045a9bdbb37dbccf508eb8c70e48a2d09ca1da1b4d92d3&amp;ascene=0&amp;uin=MTMzNzYxMDM2MQ%3D%3D&amp;devicetype=iMac+MacBookPro11%2C4+OSX+OSX+10.12.1+build(16B2555">应用开发助手</a>)。V1.0版本是有广告版本的，下面以这个版本为例，简单看下去广告过程。它的后续的V1.1.0和V1.2.0已经去除了广告功能。</p>
         
           <p class="article-more-link">
-            <a href="/2017/02/13/Android App如何去广告，以dev-tools为例/#more">Read More</a>
+            <a href="/2017/02/09/Android安全之---APP去广告/#more">Read More</a>
           </p>
         
       
@@ -114,70 +222,15 @@
 
     <footer class="article-footer">
       
-        <a data-url="https://ivonhoe.github.io/2017/02/13/Android App如何去广告，以dev-tools为例/" data-id="cizf947fx001ia0mv2q1gu8jw" class="article-share-link" data-share="baidu">分享到</a>
+        <a data-url="https://ivonhoe.github.io/2017/02/09/Android安全之---APP去广告/" data-id="cizzhsywl0000rtmv6lh06kge" class="article-share-link" data-share="baidu">分享到</a>
       
 
       
-        <a href="https://ivonhoe.github.io/2017/02/13/Android App如何去广告，以dev-tools为例/#ds-thread" class="article-comment-link">评论</a>
+        <a href="https://ivonhoe.github.io/2017/02/09/Android安全之---APP去广告/#ds-thread" class="article-comment-link">评论</a>
       
 
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/去广告/">去广告</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/移动安全/">移动安全</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-美团如何防dex2jar" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/02/09/美团如何防dex2jar/" class="article-date">
-  <time datetime="2017-02-09T13:55:01.000Z" itemprop="datePublished">2月 9 2017</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/02/09/美团如何防dex2jar/">美团如何防dex2jar</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="一、看美团">一、看美团</h3><p>最近在看美团外卖的代码，发现美团外卖4.1.1版本之后的安装包无法正常的通过dex2jar工具将dex转换出Java源代码，在转换过程中会提示出错，如图：</p>
-<p><img src="/res/dex2jar_error/dex2jar_error1.png" alt="dex2jar异常图"></p>
-<p>查看转换出的Java源代码，会发现很多类方法提示下图所示异常：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public class AsyncTaskService extends IntentService &#123; &#10;  public void onCreate()&#123;&#10;    super.onCreate();&#10;  &#125;&#10;  &#10;  public void onDestroy()&#123;&#10;    throw new RuntimeException(&#34;d2j fail translate: java.lang.RuntimeException: can not merge I and Z\n\tat com.googlecode.dex2jar.ir.TypeClass.merge(TypeClass.java:100)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeRef.updateTypeClass(TypeTransformer.java:174)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.provideAs(TypeTransformer.java:783)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.enexpr(TypeTransformer.java:662)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.exExpr(TypeTransformer.java:722)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.exExpr(TypeTransformer.java:706)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.enexpr(TypeTransformer.java:701)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.exExpr(TypeTransformer.java:722)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.exExpr(TypeTransformer.java:706)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.s1stmt(TypeTransformer.java:813)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.sxStmt(TypeTransformer.java:843)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.analyze(TypeTransformer.java:206)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer.transform(TypeTransformer.java:44)\n\tat com.googlecode.d2j.dex.Dex2jar$2.optimize(Dex2jar.java:161)\n\tat com.googlecode.d2j.dex.Dex2Asm.convertCode(Dex2Asm.java:433)\n\tat com.googlecode.d2j.dex.ExDex2Asm.convertCode(ExDex2Asm.java:42)\n\tat com.googlecode.d2j.dex.Dex2jar$2.convertCode(Dex2jar.java:129)\n\tat com.googlecode.d2j.dex.Dex2Asm.convertMethod(Dex2Asm.java:528)\n\tat com.googlecode.d2j.dex.Dex2Asm.convertClass(Dex2Asm.java:425)\n\tat com.googlecode.d2j.dex.Dex2Asm.convertDex(Dex2Asm.java:441)\n\tat com.googlecode.d2j.dex.Dex2jar.doTranslate(Dex2jar.java:171)\n\tat com.googlecode.d2j.dex.Dex2jar.to(Dex2jar.java:271)\n\tat com.googlecode.dex2jar.tools.Dex2jarCmd.doCommandLine(Dex2jarCmd.java:109)\n\tat com.googlecode.dex2jar.tools.BaseCmd.doMain(BaseCmd.java:290)\n\tat com.googlecode.dex2jar.tools.Dex2jarCmd.main(Dex2jarCmd.java:33)\n&#34;);&#10;  &#125;&#10;  &#10;  protected void onHandleIntent(Intent paramIntent)&#123;&#10;    throw new RuntimeException(&#34;d2j fail translate: java.lang.RuntimeException: can not merge I and Z\n\tat com.googlecode.dex2jar.ir.TypeClass.merge(TypeClass.java:100)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeRef.updateTypeClass(TypeTransformer.java:174)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.provideAs(TypeTransformer.java:783)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.enexpr(TypeTransformer.java:662)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.exExpr(TypeTransformer.java:722)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.exExpr(TypeTransformer.java:706)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.enexpr(TypeTransformer.java:701)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.exExpr(TypeTransformer.java:722)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.exExpr(TypeTransformer.java:706)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.s1stmt(TypeTransformer.java:813)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.sxStmt(TypeTransformer.java:843)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.analyze(TypeTransformer.java:206)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer.transform(TypeTransformer.java:44)\n\tat com.googlecode.d2j.dex.Dex2jar$2.optimize(Dex2jar.java:161)\n\tat com.googlecode.d2j.dex.Dex2Asm.convertCode(Dex2Asm.java:433)\n\tat com.googlecode.d2j.dex.ExDex2Asm.convertCode(ExDex2Asm.java:42)\n\tat com.googlecode.d2j.dex.Dex2jar$2.convertCode(Dex2jar.java:129)\n\tat com.googlecode.d2j.dex.Dex2Asm.convertMethod(Dex2Asm.java:528)\n\tat com.googlecode.d2j.dex.Dex2Asm.convertClass(Dex2Asm.java:425)\n\tat com.googlecode.d2j.dex.Dex2Asm.convertDex(Dex2Asm.java:441)\n\tat com.googlecode.d2j.dex.Dex2jar.doTranslate(Dex2jar.java:171)\n\tat com.googlecode.d2j.dex.Dex2jar.to(Dex2jar.java:271)\n\tat com.googlecode.dex2jar.tools.Dex2jarCmd.doCommandLine(Dex2jarCmd.java:109)\n\tat com.googlecode.dex2jar.tools.BaseCmd.doMain(BaseCmd.java:290)\n\tat com.googlecode.dex2jar.tools.Dex2jarCmd.main(Dex2jarCmd.java:33)\n&#34;);&#10;  &#125;&#10;  &#10;  public int onStartCommand(Intent paramIntent, int paramInt1, int paramInt2)&#123;&#10;    throw new RuntimeException(&#34;d2j fail translate: java.lang.RuntimeException: can not merge I and Z\n\tat com.googlecode.dex2jar.ir.TypeClass.merge(TypeClass.java:100)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeRef.updateTypeClass(TypeTransformer.java:174)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.provideAs(TypeTransformer.java:783)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.enexpr(TypeTransformer.java:662)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.exExpr(TypeTransformer.java:722)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.exExpr(TypeTransformer.java:706)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.enexpr(TypeTransformer.java:701)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.exExpr(TypeTransformer.java:722)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.exExpr(TypeTransformer.java:706)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.s1stmt(TypeTransformer.java:813)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.sxStmt(TypeTransformer.java:843)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer$TypeAnalyze.analyze(TypeTransformer.java:206)\n\tat com.googlecode.dex2jar.ir.ts.TypeTransformer.transform(TypeTransformer.java:44)\n\tat com.googlecode.d2j.dex.Dex2jar$2.optimize(Dex2jar.java:161)\n\tat com.googlecode.d2j.dex.Dex2Asm.convertCode(Dex2Asm.java:433)\n\tat com.googlecode.d2j.dex.ExDex2Asm.convertCode(ExDex2Asm.java:42)\n\tat com.googlecode.d2j.dex.Dex2jar$2.convertCode(Dex2jar.java:129)\n\tat com.googlecode.d2j.dex.Dex2Asm.convertMethod(Dex2Asm.java:528)\n\tat com.googlecode.d2j.dex.Dex2Asm.convertClass(Dex2Asm.java:425)\n\tat com.googlecode.d2j.dex.Dex2Asm.convertDex(Dex2Asm.java:441)\n\tat com.googlecode.d2j.dex.Dex2jar.doTranslate(Dex2jar.java:171)\n\tat com.googlecode.d2j.dex.Dex2jar.to(Dex2jar.java:271)\n\tat com.googlecode.dex2jar.tools.Dex2jarCmd.doCommandLine(Dex2jarCmd.java:109)\n\tat com.googlecode.dex2jar.tools.BaseCmd.doMain(BaseCmd.java:290)\n\tat com.googlecode.dex2jar.tools.Dex2jarCmd.main(Dex2jarCmd.java:33)\n&#34;);&#10;  &#125;&#10;&#125;</span><br></pre></td></tr></table></figure>
-        
-          <p class="article-more-link">
-            <a href="/2017/02/09/美团如何防dex2jar/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-
-    
-
-    <footer class="article-footer">
-      
-        <a data-url="https://ivonhoe.github.io/2017/02/09/美团如何防dex2jar/" data-id="cizf947f80007a0mv16h5lm3e" class="article-share-link" data-share="baidu">分享到</a>
-      
-
-      
-        <a href="https://ivonhoe.github.io/2017/02/09/美团如何防dex2jar/#ds-thread" class="article-comment-link">评论</a>
-      
-
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/dex2jar/">dex2jar</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/移动安全/">移动安全</a></li></ul>
 
     </footer>
   </div>
@@ -197,7 +250,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">标签云</h3>
     <div class="widget tagcloud">
-      <a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/Context/" style="font-size: 10px;">Context</a> <a href="/tags/Delvik/" style="font-size: 10px;">Delvik</a> <a href="/tags/Drawable/" style="font-size: 10px;">Drawable</a> <a href="/tags/GC/" style="font-size: 10px;">GC</a> <a href="/tags/dex2jar/" style="font-size: 10px;">dex2jar</a> <a href="/tags/产品分析/" style="font-size: 10px;">产品分析</a> <a href="/tags/动态链接库/" style="font-size: 10px;">动态链接库</a> <a href="/tags/动画/" style="font-size: 16.67px;">动画</a> <a href="/tags/去广告/" style="font-size: 10px;">去广告</a> <a href="/tags/性能优化/" style="font-size: 10px;">性能优化</a> <a href="/tags/数据解析/" style="font-size: 10px;">数据解析</a> <a href="/tags/源码编译/" style="font-size: 10px;">源码编译</a> <a href="/tags/生产者消费者模式/" style="font-size: 10px;">生产者消费者模式</a> <a href="/tags/移动安全/" style="font-size: 13.33px;">移动安全</a> <a href="/tags/翻译/" style="font-size: 10px;">翻译</a> <a href="/tags/贝塞尔曲线/" style="font-size: 10px;">贝塞尔曲线</a> <a href="/tags/转载/" style="font-size: 10px;">转载</a> <a href="/tags/进度条/" style="font-size: 10px;">进度条</a>
+      <a href="/tags/Android/" style="font-size: 20px;">Android</a> <a href="/tags/Context/" style="font-size: 10px;">Context</a> <a href="/tags/Delvik/" style="font-size: 10px;">Delvik</a> <a href="/tags/Drawable/" style="font-size: 10px;">Drawable</a> <a href="/tags/GC/" style="font-size: 10px;">GC</a> <a href="/tags/Gradle/" style="font-size: 10px;">Gradle</a> <a href="/tags/dex2jar/" style="font-size: 13.33px;">dex2jar</a> <a href="/tags/产品分析/" style="font-size: 10px;">产品分析</a> <a href="/tags/动态链接库/" style="font-size: 10px;">动态链接库</a> <a href="/tags/动画/" style="font-size: 16.67px;">动画</a> <a href="/tags/去广告/" style="font-size: 10px;">去广告</a> <a href="/tags/性能优化/" style="font-size: 10px;">性能优化</a> <a href="/tags/数据解析/" style="font-size: 10px;">数据解析</a> <a href="/tags/源码编译/" style="font-size: 10px;">源码编译</a> <a href="/tags/生产者消费者模式/" style="font-size: 10px;">生产者消费者模式</a> <a href="/tags/移动安全/" style="font-size: 16.67px;">移动安全</a> <a href="/tags/翻译/" style="font-size: 10px;">翻译</a> <a href="/tags/贝塞尔曲线/" style="font-size: 10px;">贝塞尔曲线</a> <a href="/tags/转载/" style="font-size: 10px;">转载</a> <a href="/tags/进度条/" style="font-size: 10px;">进度条</a>
     </div>
   </div>
 
@@ -206,7 +259,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">归档</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">九月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">四月 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">二月 2015</a><span class="archive-list-count">1</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">九月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">四月 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">二月 2015</a><span class="archive-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -218,11 +271,15 @@
       <ul>
         
           <li>
-            <a href="/2017/02/13/Android App如何去广告，以dev-tools为例/">App去广告</a>
+            <a href="/2017/03/02/Android安全之---美团防dex2jar实现/">Android安全之---美团防dex2jar实现</a>
           </li>
         
           <li>
-            <a href="/2017/02/09/美团如何防dex2jar/">美团如何防dex2jar</a>
+            <a href="/2017/02/13/Android安全之---美团防dex2jar原理/">Android安全之---美团防dex2jar原理</a>
+          </li>
+        
+          <li>
+            <a href="/2017/02/09/Android安全之---APP去广告/">Android安全之---APP去广告</a>
           </li>
         
           <li>
@@ -231,10 +288,6 @@
         
           <li>
             <a href="/2016/12/16/Mac-Linux下gcc编译动态链接库-so文件/">Mac/Linux下gcc编译动态链接库[.so文件]</a>
-          </li>
-        
-          <li>
-            <a href="/2015/10/25/如何写出GC友好的Android应用/">[转载]如何写出GC友好的Android应用</a>
           </li>
         
       </ul>

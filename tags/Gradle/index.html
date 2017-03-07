@@ -4,36 +4,17 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Mac/Linux下gcc编译动态链接库[.so文件] | 别辜负自己</title>
+  <title>Tag: Gradle | 别辜负自己</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="一、以bsdiff.c和bspatch.c为例编译bsdiff.sobsdiff.c和bspatch.c分别依赖bzip2
-项目结构步骤
-使用BsDiff.java生成BsDiff.class文件
-javac ivonhoe/spring/wrcenter/jni/BsDiff.java
-
-生成BsDiff.h文件
-javah ivonhoe.spring.wrcenter.jni.BsDiff">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Mac/Linux下gcc编译动态链接库[.so文件]">
-<meta property="og:url" content="https://ivonhoe.github.io/2016/12/16/Mac-Linux下gcc编译动态链接库-so文件/index.html">
+  <meta name="description">
+<meta property="og:type" content="website">
+<meta property="og:title" content="别辜负自己">
+<meta property="og:url" content="https://ivonhoe.github.io/tags/Gradle/index.html">
 <meta property="og:site_name" content="别辜负自己">
-<meta property="og:description" content="一、以bsdiff.c和bspatch.c为例编译bsdiff.sobsdiff.c和bspatch.c分别依赖bzip2
-项目结构步骤
-使用BsDiff.java生成BsDiff.class文件
-javac ivonhoe/spring/wrcenter/jni/BsDiff.java
-
-生成BsDiff.h文件
-javah ivonhoe.spring.wrcenter.jni.BsDiff">
-<meta property="og:updated_time" content="2017-02-09T10:03:54.000Z">
+<meta property="og:description">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Mac/Linux下gcc编译动态链接库[.so文件]">
-<meta name="twitter:description" content="一、以bsdiff.c和bspatch.c为例编译bsdiff.sobsdiff.c和bspatch.c分别依赖bzip2
-项目结构步骤
-使用BsDiff.java生成BsDiff.class文件
-javac ivonhoe/spring/wrcenter/jni/BsDiff.java
-
-生成BsDiff.h文件
-javah ivonhoe.spring.wrcenter.jni.BsDiff">
+<meta name="twitter:title" content="别辜负自己">
+<meta name="twitter:description">
   
     <link rel="alternative" href="/atom.xml" title="别辜负自己" type="application/atom+xml">
   
@@ -87,10 +68,12 @@ javah ivonhoe.spring.wrcenter.jni.BsDiff">
   </div>
 </header>
     <div class="outer">
-      <section id="main"><article id="post-Mac-Linux下gcc编译动态链接库-so文件" class="article article-type-post" itemscope itemprop="blogPost">
+      <section id="main">
+  
+    <article id="post-Android安全之---美团防dex2jar实现" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2016/12/16/Mac-Linux下gcc编译动态链接库-so文件/" class="article-date">
-  <time datetime="2016-12-16T05:47:55.000Z" itemprop="datePublished">12月 16 2016</time>
+    <a href="/2017/03/02/Android安全之---美团防dex2jar实现/" class="article-date">
+  <time datetime="2017-03-02T09:04:10.000Z" itemprop="datePublished">3月 2 2017</time>
 </a>
     
   </div>
@@ -100,8 +83,8 @@ javah ivonhoe.spring.wrcenter.jni.BsDiff">
       <header class="article-header">
         
   
-    <h1 class="article-title" itemprop="name">
-      Mac/Linux下gcc编译动态链接库[.so文件]
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/03/02/Android安全之---美团防dex2jar实现/">Android安全之---美团防dex2jar实现</a>
     </h1>
   
 
@@ -109,186 +92,38 @@ javah ivonhoe.spring.wrcenter.jni.BsDiff">
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="一、以bsdiff-c和bspatch-c为例编译bsdiff-so">一、以bsdiff.c和bspatch.c为例编译bsdiff.so</h2><p>bsdiff.c和bspatch.c分别依赖bzip2</p>
-<h3 id="项目结构">项目结构</h3><h3 id="步骤">步骤</h3><ul>
-<li><p>使用BsDiff.java生成BsDiff.class文件</p>
-<p><strong>javac</strong> ivonhoe/spring/wrcenter/jni/BsDiff.java</p>
-</li>
-<li><p>生成BsDiff.h文件</p>
-<p><strong>javah</strong> ivonhoe.spring.wrcenter.jni.BsDiff </p>
-</li>
-<li><p>生成bspatch.o</p>
-<a id="more"></a>
-<p><strong>gcc -fPIC -D_REENTRANT</strong> -I<strong>JAVA_INCLUDE1</strong> -I/JAVA_INCLUDE2/ -I/Users/Ivonhoe/Downloads/VelocityDemo/src/main/java/jni/bzip2 -I/Users/Ivonhoe/Downloads/VelocityDemo/src/main/java/jni -c ./jni/bspatch.c</p>
-</li>
-<li><p>生成bsdiff.o</p>
-<p><strong>gcc -fPIC -D_REENTRANT</strong> -I/Library/Java/JavaVirtualMachines/jdk1.8.0_60.jdk/Contents/Home/include -I/Library/Java/JavaVirtualMachines/jdk1.8.0_60.jdk/Contents/Home/include/darwin -I/Users/Ivonhoe/Downloads/VelocityDemo/src/main/java/jni/bzip2 -I/Users/Ivonhoe/Downloads/VelocityDemo/src/main/java/jni -c ./jni/bsdiff.c</p>
-</li>
-<li><p>将bzip2下的c文件生成相应的.o文件</p>
-<p><strong>gcc -fPIC -D_REENTRANT</strong> -I/Library/Java/JavaVirtualMachines/jdk1.8.0_60.jdk/Contents/Home/include -I/Library/Java/JavaVirtualMachines/jdk1.8.0_60.jdk/Contents/Home/include/darwin -I/Users/Ivonhoe/Downloads/VelocityDemo/src/main/java/jni/bzip2 -c ./jni/bzip2/*.c</p>
-</li>
-<li><p>生成so文件</p>
-<p><strong>gcc *.o -o bsdiff.so -shared  -v</strong></p>
-</li>
-</ul>
-<ul>
-<li>注:</li>
-</ul>
-<p>  JAVA_INCLUDE1:/usr/local/java/jdk1.7.0_40/include<br>  JAVA_INCLUDE2:/usr/local/java/jdk1.7.0_40/include/linux<br>  是 jdk 中的 jni.h 文件的所在目录，这两个目录需要大家替换为自己的对应路径</p>
-<p>  BZIP2_INCLUDE:</p>
-<p>参考文档：<br><a href="http://www.cppblog.com/deane/articles/165216.html" target="_blank" rel="external">http://www.cppblog.com/deane/articles/165216.html</a><br><a href="http://blog.csdn.net/hongquan1991/article/details/12426615" target="_blank" rel="external">http://blog.csdn.net/hongquan1991/article/details/12426615</a><br><a href="http://codepub.cn/2015/05/19/How-to-load-dll-file-in-Java-Web-Project/" target="_blank" rel="external">http://codepub.cn/2015/05/19/How-to-load-dll-file-in-Java-Web-Project/</a></p>
-
+        <h3 id="一、概述">一、概述</h3><p>上一篇，我大致分析了美团外卖Android客户端在防止其Java代码被dex2jar工具转换而做的防护措施，其实就是借助dex2jar的语法检查机制，将有语法错误的字节码插入到想要保护的Java函数中里面，以达到dex2jar转换出错的目的。这篇文章就大致记录下如何开发Gradle编译插件，在编译过程中实现上述防护思路。</p>
+<h3 id="二、思路">二、思路</h3><p><strong>先看下Android APK打包流程：</strong></p>
+        
+          <p class="article-more-link">
+            <a href="/2017/03/02/Android安全之---美团防dex2jar实现/#more">Read More</a>
+          </p>
+        
       
     </div>
 
     
-    <!-- /上述代码 -->
-    
-  <!-- css -->
-  <style type="text/css">
-      .center {
-          text-align: center;
-      }
-      .hidden {
-          display: none;
-      }
-    .donate_bar a.btn_donate{
-      display: inline-block;
-      width: 82px;
-      height: 82px;
-      background: url("http://7xsl28.com1.z0.glb.clouddn.com/btn_reward.gif") no-repeat;
-      _background: url("http://7xsl28.com1.z0.glb.clouddn.com/btn_reward.gif") no-repeat;
-
-      <!-- http://img.t.sinajs.cn/t5/style/images/apps_PRF/e_media/btn_reward.gif
-           因为本 hexo 生成的博客所用的 theme 的 a:hover 带动画效果，
-         为了在让打赏按钮显示效果正常 而 添加了以下几行 css，
-         嵌入其它博客时不一定要它们。 -->
-      -webkit-transition: background 0s;
-      -moz-transition: background 0s;
-      -o-transition: background 0s;
-      -ms-transition: background 0s;
-      transition: background 0s;
-      <!-- /让打赏按钮的效果显示正常 而 添加的几行 css 到此结束 -->
-    }
-
-    .donate_bar a.btn_donate:hover{ background-position: 0px -82px;}
-    .donate_bar .donate_txt {
-      display: block;
-      color: #9d9d9d;
-      font: 14px/2 "Microsoft Yahei";
-    }
-    .bold{ font-weight: bold; }
-  </style>
-  <!-- /css -->
-
-    <!-- Donate Module -->
-    <div id="donate_module">
-
-  <!-- btn_donate & tips -->
-  <div id="donate_board" class="donate_bar center">
-      <br>
-      ------------------------------------------------------------------------------------------------------------------------------
-      <br>
-    <a id="btn_donate" class="btn_donate" target="_self" href="javascript:;" title="Donate 打赏"></a>
-    <span class="donate_txt">
-      求鼓励，求支持！
-    </span>
-      
-    
-  </div>
-  <!-- /btn_donate & tips -->
-
-  <!-- donate guide -->
-    
-  <div id="donate_guide" class="donate_bar center hidden">
-        <br>
-      ------------------------------------------------------------------------------------------------------------------------------
-      <br>
-
-    <a href="https://ivonhoe.github.io/res/dex2jar_error/WechatIMG56.png" title="用微信扫一扫哦~" class="fancybox" rel="article0">
-      <img src="https://ivonhoe.github.io/res/dex2jar_error/WechatIMG56.png" title="微信打赏 Colin" height="190px" width="auto"/>
-    </a>
-        
-        &nbsp;&nbsp;
-
-    <a href="https://ivonhoe.github.io/res/dex2jar_error/WechatIMG57.jpeg" title="用支付宝扫一扫即可~" class="fancybox" rel="article0">
-      <img src="https://ivonhoe.github.io/res/dex2jar_error/WechatIMG57.jpeg" title="支付宝打赏 Colin" height="190px" width="auto"/>
-    </a>
-
-    <span class="donate_txt">
-      求鼓励，求支持！
-    </span>
-
-  </div>
-  <!-- /donate guide -->
-
-  <!-- donate script -->
-  <script type="text/javascript">
-    document.getElementById('btn_donate').onclick = function() {
-      $('#donate_board').addClass('hidden');
-      $('#donate_guide').removeClass('hidden');
-    }
-
-    function donate_on_web(){
-      $('#donate').submit();
-        }
-
-    var original_window_onload = window.onload;
-        window.onload = function () {
-            if (original_window_onload) {
-                original_window_onload();
-            }
-            document.getElementById('donate_board_wdg').className = 'hidden';
-    }
-  </script>
-  <!-- /donate script -->
-</div>
-<!-- /Donate Module -->
-   
-    
 
     <footer class="article-footer">
       
-        <a data-url="https://ivonhoe.github.io/2016/12/16/Mac-Linux下gcc编译动态链接库-so文件/" data-id="cizwx8f6c000znquqx1rwoa2p" class="article-share-link" data-share="baidu">分享到</a>
+        <a data-url="https://ivonhoe.github.io/2017/03/02/Android安全之---美团防dex2jar实现/" data-id="cizzhsyxp0003rtmvn9n4fbm2" class="article-share-link" data-share="baidu">分享到</a>
       
 
       
-        <a href="https://ivonhoe.github.io/2016/12/16/Mac-Linux下gcc编译动态链接库-so文件/#ds-thread" class="article-comment-link">评论</a>
+        <a href="https://ivonhoe.github.io/2017/03/02/Android安全之---美团防dex2jar实现/#ds-thread" class="article-comment-link">评论</a>
       
 
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/动态链接库/">动态链接库</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Gradle/">Gradle</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/dex2jar/">dex2jar</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/移动安全/">移动安全</a></li></ul>
 
     </footer>
   </div>
   
-    
-<nav id="article-nav">
-  
-    <a href="/2017/01/20/MacOS上编译Android源码/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">下一篇</strong>
-      <div class="article-nav-title">
-        
-          Mac OS上编译Android源码
-        
-      </div>
-    </a>
-  
-  
-    <a href="/2015/10/25/如何写出GC友好的Android应用/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">上一篇</strong>
-      <div class="article-nav-title">[转载]如何写出GC友好的Android应用</div>
-    </a>
-  
-</nav>
-
-  
 </article>
 
 
-  <section id="comments">
-    <div id="ds-thread" class="ds-thread" data-thread-key="2016/12/16/Mac-Linux下gcc编译动态链接库-so文件/" data-title="Mac/Linux下gcc编译动态链接库[.so文件]" data-url="https://ivonhoe.github.io/2016/12/16/Mac-Linux下gcc编译动态链接库-so文件/"></div>
-  </section>
+  
+  
 </section>
       
       <aside id="sidebar">
