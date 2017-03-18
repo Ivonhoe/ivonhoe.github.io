@@ -4,12 +4,12 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Tag: Context | 别辜负自己</title>
+  <title>Tag: Gradle | 别辜负自己</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description">
 <meta property="og:type" content="website">
 <meta property="og:title" content="别辜负自己">
-<meta property="og:url" content="https://ivonhoe.github.io/tags/Context/index.html">
+<meta property="og:url" content="https://ivonhoe.github.io/tags/Gradle/index.html">
 <meta property="og:site_name" content="别辜负自己">
 <meta property="og:description">
 <meta name="twitter:card" content="summary">
@@ -70,10 +70,10 @@
     <div class="outer">
       <section id="main">
   
-    <article id="post--翻译-Context-什么是Context？" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-美团如何防dex2jar" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2015/04/08/-翻译-Context-什么是Context？/" class="article-date">
-  <time datetime="2015-04-08T03:06:31.000Z" itemprop="datePublished">4月 8 2015</time>
+    <a href="/2017/02/09/美团如何防dex2jar/" class="article-date">
+  <time datetime="2017-02-09T13:55:01.000Z" itemprop="datePublished">2月 9 2017</time>
 </a>
     
   </div>
@@ -84,7 +84,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2015/04/08/-翻译-Context-什么是Context？/">[译]Context?什么是Context？</a>
+      <a class="article-title" href="/2017/02/09/美团如何防dex2jar/">Android安全之---美团防dex2jar原理及实现</a>
     </h1>
   
 
@@ -92,11 +92,13 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>原文地址：<a href="http://possiblemobile.com/2013/06/context/">http://possiblemobile.com/2013/06/context/</a></p>
-<h2 id="Context可能是Android应用中最常用的元素也是最容易误用的元素">Context可能是Android应用中最常用的元素也是最容易误用的元素</h2><p>Context是经常被传递的对象，它可以很容易的构造一个你意想不到的情景，如加载资源，启动一个新的Activity，得到一个系统服务，得到内部文件路径和创建视图都需要一个Context去完成这个工作，我接下来为你在Context到底是如何工作的和为你能在你的应用中更好的运用Context提供建议。<br>
+        <h3 id="一、反编译美团代码">一、反编译美团代码</h3><p>最近在看美团外卖的代码，发现美团外卖最新版本版本无法正常的通过dex2jar工具将dex转换出Java源代码，在转换过程中会提示出错，如图：</p>
+<p><img src="https://ivonhoe.github.io/res/dex2jar_error/dex2jar_error1.png" alt="dex2jar异常图"></p>
+<p>查看转换出的Java源代码，会发现很多类方法提示下图所示异常，很多方法中都会抛出<code>RuntimeException：can not merge I and Z</code>:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public class AsyncTaskService extends IntentService &#123; &#10;  &#10;  protected void onHandleIntent(Intent paramIntent)&#123;&#10;    throw new RuntimeException(&#34;d2j fail translate: java.lang.RuntimeException: can not merge I and Z\n\tat...);&#10;  &#125;&#10;  &#10;  public int onStartCommand(Intent paramIntent, int paramInt1, int paramInt2)&#123;&#10;    throw new RuntimeException(&#34;d2j fail translate: java.lang.RuntimeException: can not merge I and Z\n\tat...&#34;);&#10;  &#125;&#10;&#125;</span><br></pre></td></tr></table></figure>
         
           <p class="article-more-link">
-            <a href="/2015/04/08/-翻译-Context-什么是Context？/#more">Read More</a>
+            <a href="/2017/02/09/美团如何防dex2jar/#more">Read More</a>
           </p>
         
       
@@ -106,15 +108,15 @@
 
     <footer class="article-footer">
       
-        <a data-url="https://ivonhoe.github.io/2015/04/08/-翻译-Context-什么是Context？/" data-id="cj0en13xj00002pmvb3g448i9" class="article-share-link" data-share="baidu">分享到</a>
+        <a data-url="https://ivonhoe.github.io/2017/02/09/美团如何防dex2jar/" data-id="cj0en13y400072pmvn60y1dym" class="article-share-link" data-share="baidu">分享到</a>
       
 
       
-        <a href="https://ivonhoe.github.io/2015/04/08/-翻译-Context-什么是Context？/#ds-thread" class="article-comment-link">评论</a>
+        <a href="https://ivonhoe.github.io/2017/02/09/美团如何防dex2jar/#ds-thread" class="article-comment-link">评论</a>
       
 
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Context/">Context</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/翻译/">翻译</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Gradle/">Gradle</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/dex2jar/">dex2jar</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/移动安全/">移动安全</a></li></ul>
 
     </footer>
   </div>
