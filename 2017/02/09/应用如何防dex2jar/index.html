@@ -4,32 +4,32 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Android安全之---美团防dex2jar原理及实现 | 别辜负自己</title>
+  <title>Android安全之---应用防dex2jar原理及实现 | 别辜负自己</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="一、反编译美团代码最近在看美团外卖的代码，发现美团外卖最新版本版本无法正常的通过dex2jar工具将dex转换出Java源代码，在转换过程中会提示出错，如图：
+  <meta name="description" content="一、反编译某平台代码最近在看某外卖平台的代码，发现某外卖平台最新版本版本无法正常的通过dex2jar工具将dex转换出Java源代码，在转换过程中会提示出错，如图：
 
 查看转换出的Java源代码，会发现很多类方法提示下图所示异常，很多方法中都会抛出RuntimeException：can not merge I and Z:
-1public class AsyncTaskService extends">
+1public class AsyncTaskService exten">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Android安全之---美团防dex2jar原理及实现">
-<meta property="og:url" content="https://ivonhoe.github.io/2017/02/09/美团如何防dex2jar/index.html">
+<meta property="og:title" content="Android安全之---应用防dex2jar原理及实现">
+<meta property="og:url" content="https://ivonhoe.github.io/2017/02/09/应用如何防dex2jar/index.html">
 <meta property="og:site_name" content="别辜负自己">
-<meta property="og:description" content="一、反编译美团代码最近在看美团外卖的代码，发现美团外卖最新版本版本无法正常的通过dex2jar工具将dex转换出Java源代码，在转换过程中会提示出错，如图：
+<meta property="og:description" content="一、反编译某平台代码最近在看某外卖平台的代码，发现某外卖平台最新版本版本无法正常的通过dex2jar工具将dex转换出Java源代码，在转换过程中会提示出错，如图：
 
 查看转换出的Java源代码，会发现很多类方法提示下图所示异常，很多方法中都会抛出RuntimeException：can not merge I and Z:
-1public class AsyncTaskService extends">
+1public class AsyncTaskService exten">
 <meta property="og:image" content="https://ivonhoe.github.io/res/dex2jar_error/dex2jar_error1.png">
 <meta property="og:image" content="https://ivonhoe.github.io/res/dex2jar_error/dex2jar_error2.png">
 <meta property="og:image" content="https://ivonhoe.github.io/res/dexguard/dexguard4.jpeg">
 <meta property="og:image" content="https://ivonhoe.github.io/res/dexguard/dexguard6.png">
 <meta property="og:image" content="https://ivonhoe.github.io/res/dexguard/dexguard3.png">
-<meta property="og:updated_time" content="2017-03-18T03:05:40.000Z">
+<meta property="og:updated_time" content="2017-03-23T03:54:47.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Android安全之---美团防dex2jar原理及实现">
-<meta name="twitter:description" content="一、反编译美团代码最近在看美团外卖的代码，发现美团外卖最新版本版本无法正常的通过dex2jar工具将dex转换出Java源代码，在转换过程中会提示出错，如图：
+<meta name="twitter:title" content="Android安全之---应用防dex2jar原理及实现">
+<meta name="twitter:description" content="一、反编译某平台代码最近在看某外卖平台的代码，发现某外卖平台最新版本版本无法正常的通过dex2jar工具将dex转换出Java源代码，在转换过程中会提示出错，如图：
 
 查看转换出的Java源代码，会发现很多类方法提示下图所示异常，很多方法中都会抛出RuntimeException：can not merge I and Z:
-1public class AsyncTaskService extends">
+1public class AsyncTaskService exten">
   
     <link rel="alternative" href="/atom.xml" title="别辜负自己" type="application/atom+xml">
   
@@ -83,9 +83,9 @@
   </div>
 </header>
     <div class="outer">
-      <section id="main"><article id="post-美团如何防dex2jar" class="article article-type-post" itemscope itemprop="blogPost">
+      <section id="main"><article id="post-应用如何防dex2jar" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2017/02/09/美团如何防dex2jar/" class="article-date">
+    <a href="/2017/02/09/应用如何防dex2jar/" class="article-date">
   <time datetime="2017-02-09T13:55:01.000Z" itemprop="datePublished">2月 9 2017</time>
 </a>
     
@@ -97,7 +97,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      Android安全之---美团防dex2jar原理及实现
+      Android安全之---应用防dex2jar原理及实现
     </h1>
   
 
@@ -105,7 +105,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h3 id="一、反编译美团代码">一、反编译美团代码</h3><p>最近在看美团外卖的代码，发现美团外卖最新版本版本无法正常的通过dex2jar工具将dex转换出Java源代码，在转换过程中会提示出错，如图：</p>
+        <h3 id="一、反编译某平台代码">一、反编译某平台代码</h3><p>最近在看某外卖平台的代码，发现某外卖平台最新版本版本无法正常的通过dex2jar工具将dex转换出Java源代码，在转换过程中会提示出错，如图：</p>
 <p><img src="https://ivonhoe.github.io/res/dex2jar_error/dex2jar_error1.png" alt="dex2jar异常图"></p>
 <p>查看转换出的Java源代码，会发现很多类方法提示下图所示异常，很多方法中都会抛出<code>RuntimeException：can not merge I and Z</code>:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public class AsyncTaskService extends IntentService &#123; &#10;  &#10;  protected void onHandleIntent(Intent paramIntent)&#123;&#10;    throw new RuntimeException(&#34;d2j fail translate: java.lang.RuntimeException: can not merge I and Z\n\tat...);&#10;  &#125;&#10;  &#10;  public int onStartCommand(Intent paramIntent, int paramInt1, int paramInt2)&#123;&#10;    throw new RuntimeException(&#34;d2j fail translate: java.lang.RuntimeException: can not merge I and Z\n\tat...&#34;);&#10;  &#125;&#10;&#125;</span><br></pre></td></tr></table></figure>
@@ -115,7 +115,7 @@
 <h3 id="二、为什么？">二、为什么？</h3><p>本来以为这是dex2jar工具低版本的一个bug，但更新了dex2jar以后，依然还是会出现上述错误。<br><code>java.lang.RuntimeException: can not merge I and Z</code>这个异常，在<a href="https://sourceforge.net/p/dex2jar/tickets/238/" target="_blank" rel="external">sourceforge</a>上解释的比较清楚，其实是一个dex2jar工具检查出的一个参数异常”，<strong>The problem is caused by strict type calculation, because in java syntaxt, a boolean can not assign to an inteager. so dex2jar forbid merge type Z and I.</strong> 你用布尔类型入参调用一个参数为整型的函数，当然会检查出错，为啥这么说，我使用apktool工具，看了一下apk的smali代码。发现报错的函数的最前面都含有一段奇怪smali的代码：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">invoke-static &#123;&#125;, Lpnf/this/object/does/not/Exist;-&#62;a()Z&#10;&#10;move-result v0&#10;&#10;invoke-static &#123;v0&#125;, Lpnf/this/object/does/not/Exist;-&#62;b(I)V</span><br></pre></td></tr></table></figure>
 <p>看上面的代码，<code>pnf.this.object.does.not.Exist.a()</code>方法返回一个boolean类型数据，放入v0寄存器，作为<code>pnf.this.object.does.not.Exist.b(int)</code>函数的入参。正常情况下这样的语法错误在java代码编译时就不会通过的。看到这里你会不会想，如果我不想别人直接看到我的Java代码，是不是可以通过在核心函数中插入上面这段有语法错误的代码，以达到dex2jar工具检查出错的目的呢？从而将代码被阅读的门槛从java提高到smali。</p>
-<h3 id="三、手动代码注入">三、手动代码注入</h3><p>为了验证上面的猜想，这里我通过反编译一个apk，手动插入有语法错误的smali代码，以验证美团防dex2jar的思路，具体步骤如下：</p>
+<h3 id="三、手动代码注入">三、手动代码注入</h3><p>为了验证上面的猜想，这里我通过反编译一个apk，手动插入有语法错误的smali代码，以验证防dex2jar的思路，具体步骤如下：</p>
 <ul>
 <li>1.反编译一个apk。</li>
 <li>2.修改smali代码，插入上面这三句有语法错误的代码。</li>
@@ -126,7 +126,7 @@
 <p>这里不要忘了，你可能需要另外编译出Exist.smali这个文件，不然运行时一定会爆出ClassNotFound异常。将下面的Exist.java<strong>编译出Exist.smali</strong>放入相应的包路径，重打包就可以了。Java代码如下：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public class Exist &#123;&#10;    public static boolean a() &#123;&#10;        return false;&#10;    &#125;&#10;&#10;    public static void b(int test) &#123;&#10;&#10;    &#125;&#10;&#125;</span><br></pre></td></tr></table></figure>
 <p>最后，验证下果然重新打包后的apk，确实不能正常转换出Java源代码，这里就不贴图了，因为转换出错日志是一样的。并且运行时也不会出错。接下来会写一个Gradle编译插件，针对特定的函数，插入代码，防止dex2jar工具查看Java源代码。</p>
-<h3 id="四、实现思路">四、实现思路</h3><p>美团外卖Android客户端在防止其Java代码被dex2jar转换时其实就是借助dex2jar的语法检查机制，将有语法错误的字节码插入到想要保护的Java函数中里面，以达到dex2jar转换出错的目的。接下来我就大致记录下如何开发Gradle编译插件，在编译过程中实现上述防护思路，先看下Android APK打包流程：</p>
+<h3 id="四、实现思路">四、实现思路</h3><p>Android客户端在防止其Java代码被dex2jar转换时其实就是借助dex2jar的语法检查机制，将有语法错误的字节码插入到想要保护的Java函数中里面，以达到dex2jar转换出错的目的。接下来我就大致记录下如何开发Gradle编译插件，在编译过程中实现上述防护思路，先看下Android APK打包流程：</p>
 <!--more-->
 <p><img src="https://ivonhoe.github.io/res/dexguard/dexguard4.jpeg" alt="Android apk打包流程"></p>
 <p>Android APK打包流程如上图所示，Java代码先通过Java Compiler生成.class文件，再通过dx工具生成dex文件，最后使用apkbuilder工具完成代码与资源文件的打包，并使用jarsigner签名，最后可能还有使用zipalign对签名后的apk做对齐处理。</p>
@@ -275,11 +275,11 @@
 
     <footer class="article-footer">
       
-        <a data-url="https://ivonhoe.github.io/2017/02/09/美团如何防dex2jar/" data-id="cj0hqm82j0007i5s6scd0pva4" class="article-share-link" data-share="baidu">分享到</a>
+        <a data-url="https://ivonhoe.github.io/2017/02/09/应用如何防dex2jar/" data-id="cj0lv9fvd000cjss6kgv2um7q" class="article-share-link" data-share="baidu">分享到</a>
       
 
       
-        <a href="https://ivonhoe.github.io/2017/02/09/美团如何防dex2jar/#ds-thread" class="article-comment-link">评论</a>
+        <a href="https://ivonhoe.github.io/2017/02/09/应用如何防dex2jar/#ds-thread" class="article-comment-link">评论</a>
       
 
       
@@ -304,7 +304,7 @@
 
 
   <section id="comments">
-    <div id="ds-thread" class="ds-thread" data-thread-key="2017/02/09/美团如何防dex2jar/" data-title="Android安全之---美团防dex2jar原理及实现" data-url="https://ivonhoe.github.io/2017/02/09/美团如何防dex2jar/"></div>
+    <div id="ds-thread" class="ds-thread" data-thread-key="2017/02/09/应用如何防dex2jar/" data-title="Android安全之---应用防dex2jar原理及实现" data-url="https://ivonhoe.github.io/2017/02/09/应用如何防dex2jar/"></div>
   </section>
 </section>
       
@@ -337,7 +337,7 @@
       <ul>
         
           <li>
-            <a href="/2017/02/09/美团如何防dex2jar/">Android安全之---美团防dex2jar原理及实现</a>
+            <a href="/2017/02/09/应用如何防dex2jar/">Android安全之---应用防dex2jar原理及实现</a>
           </li>
         
           <li>
