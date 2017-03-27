@@ -4,12 +4,12 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Archives: 2016/12 | 别辜负自己</title>
+  <title>Tag: 内存 | 别辜负自己</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description">
 <meta property="og:type" content="website">
 <meta property="og:title" content="别辜负自己">
-<meta property="og:url" content="https://ivonhoe.github.io/archives/2016/12/index.html">
+<meta property="og:url" content="https://ivonhoe.github.io/tags/内存/index.html">
 <meta property="og:site_name" content="别辜负自己">
 <meta property="og:description">
 <meta name="twitter:card" content="summary">
@@ -70,10 +70,10 @@
     <div class="outer">
       <section id="main">
   
-    <article id="post-Mac-Linux下gcc编译动态链接库-so文件" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-Bitmap&amp;Memory" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2016/12/16/Mac-Linux下gcc编译动态链接库-so文件/" class="article-date">
-  <time datetime="2016-12-16T05:47:55.000Z" itemprop="datePublished">12月 16 2016</time>
+    <a href="/2017/03/22/Bitmap&Memory/" class="article-date">
+  <time datetime="2017-03-22T11:35:36.000Z" itemprop="datePublished">3月 22 2017</time>
 </a>
     
   </div>
@@ -84,7 +84,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2016/12/16/Mac-Linux下gcc编译动态链接库-so文件/">Mac/Linux下gcc编译动态链接库[.so文件]</a>
+      <a class="article-title" href="/2017/03/22/Bitmap&Memory/">Android Bitmap的内存大小是如何计算的？</a>
     </h1>
   
 
@@ -92,18 +92,17 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="一、以bsdiff-c和bspatch-c为例编译bsdiff-so">一、以bsdiff.c和bspatch.c为例编译bsdiff.so</h2><p>bsdiff.c和bspatch.c分别依赖bzip2</p>
-<h3 id="项目结构">项目结构</h3><h3 id="步骤">步骤</h3><ul>
-<li><p>使用BsDiff.java生成BsDiff.class文件</p>
-<p><strong>javac</strong> ivonhoe/spring/wrcenter/jni/BsDiff.java</p>
-</li>
-<li><p>生成BsDiff.h文件</p>
-<p><strong>javah</strong> ivonhoe.spring.wrcenter.jni.BsDiff </p>
-</li>
-<li><p>生成bspatch.o</p>
+        <h3 id="一、前言">一、前言</h3><p>本来只想说下Bitmap和内存的基本关系，但发现如果真的想把这看似简单的事情说清楚，实际上未必那么简单，你不信？不妨先尝试下回答下面几个问题！</p>
+<ul>
+<li>问1：什么是dpi？什么是dp？答：你在侮辱我？我拒绝回答！（：无辜脸</li>
+<li>问2：以Nexus6为例，分辨率1440*2560，5.96英寸，ppi是什么？dpi是什么？1dp是多少像素？</li>
+<li>问3：还以Nexus6为例，一张180*180的图片，放置在设置了<code>wrap_content</code>属性的ImageView中，当这张图片，分别放在<code>drawable-nodpi</code>,<code>drawable-mdpi</code>,<code>drawable-hdpi</code>, <code>drawable-xxhdpi</code>,<code>drawable-xxxhdpi</code>这几个资源目录中，在屏幕上分别显示多大(像素)的图片？</li>
+<li>问4：这张图片占用的内存大小分别为多少？</li>
+</ul>
+<p>本文主要围绕上述问题，介绍Android图片资源加载的基本机制，图片的内存大小如何计算，以及内存图片分析工具。</p>
         
           <p class="article-more-link">
-            <a href="/2016/12/16/Mac-Linux下gcc编译动态链接库-so文件/#more">Read More</a>
+            <a href="/2017/03/22/Bitmap&Memory/#more">Read More</a>
           </p>
         
       
@@ -113,15 +112,15 @@
 
     <footer class="article-footer">
       
-        <a data-url="https://ivonhoe.github.io/2016/12/16/Mac-Linux下gcc编译动态链接库-so文件/" data-id="cj0ryoozy0010p4mvp70z4unb" class="article-share-link" data-share="baidu">分享到</a>
+        <a data-url="https://ivonhoe.github.io/2017/03/22/Bitmap&Memory/" data-id="cj0ryrocq0000p9mva1covj93" class="article-share-link" data-share="baidu">分享到</a>
       
 
       
-        <a href="https://ivonhoe.github.io/2016/12/16/Mac-Linux下gcc编译动态链接库-so文件/#ds-thread" class="article-comment-link">评论</a>
+        <a href="https://ivonhoe.github.io/2017/03/22/Bitmap&Memory/#ds-thread" class="article-comment-link">评论</a>
       
 
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/动态链接库/">动态链接库</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Bitmap/">Bitmap</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Drawable/">Drawable</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/内存/">内存</a></li></ul>
 
     </footer>
   </div>
