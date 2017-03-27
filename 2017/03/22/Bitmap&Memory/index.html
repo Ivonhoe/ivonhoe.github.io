@@ -24,7 +24,7 @@
 <meta property="og:image" content="https://ivonhoe.github.io/res/bitmap/bitmap_buffer.png">
 <meta property="og:image" content="https://ivonhoe.github.io/res/bitmap/1.png">
 <meta property="og:image" content="https://ivonhoe.github.io/res/bitmap/bitmap-analyzer.png">
-<meta property="og:updated_time" content="2017-03-27T11:59:26.000Z">
+<meta property="og:updated_time" content="2017-03-27T14:05:19.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android Bitmap的内存大小是如何计算的？">
 <meta name="twitter:description" content="一、前言本来只想说下Bitmap和内存的基本关系，但发现如果真的想把这看似简单的事情说清楚，实际上未必那么简单，你不信？不妨先尝试下回答下面几个问题！
@@ -124,7 +124,7 @@
 </ul>
 <p><strong>ppi</strong></p>
 <p>先说为啥很多对ppi的理解都有问题。很多文章利用勾股定理计算手机屏幕对角线像素个数！！ppi指的是水平方向或者竖直方向上每英寸的像素值，ppi的计算只是形式和勾股定理一样但并不是勾股定理的意思，分子也不是对角线的像素数！！因为手机屏幕的像素分布是点阵分布，点阵的对角线像素点不是用勾股定理算出来的，而是等于它的行数或者列数，为啥用对角线计算？因为一般手机的尺寸说的就是对角线英寸值，而不知道长宽的英寸值。这里有个公式推导：</p>
-<p>设 X/x = Y/y = ppi，这里X为水平像素值，x为水平英寸值，Y为竖直像素值，y为竖直英寸值。<br>则(X²+Y²）/（x²+y²）=（X/x）²=（Y/y）²，可通过勾股定理和相似三角形原理证明。所以，虽然ppi的计算公式可表示为：√(X²+Y²）/对角线英寸。</p>
+<p>设 X/x = Y/y = ppi，这里X为水平像素值，x为水平英寸值，Y为竖直像素值，y为竖直英寸值。则(X²+Y²）/（x²+y²）=（X/x）²=（Y/y）²，可通过勾股定理和相似三角形原理证明。所以ppi的计算公式可表示为：√(X²+Y²）/对角线英寸。但不意味着ppi是使用勾股定理计算对角线像素值获得的~~</p>
 <p><strong>dpi</strong></p>
 <p>dpi是由ppi确定的，还是以Nexue6为例，通过ppi的计算公式，可以计算出Nexues6的ppi为<code>492</code>,参照下表，应该在xxxhdpi的范围内，但它的dpi并不是<code>492</code>。实际上dpi只有120(low)、160(medium)、240(high)、260、280、300、320(xhigh)、340、360、400、420、480（xxhpdi）、560、640（xxxhpi）这几种，可以参照<code>android.util.DisplayMetrics</code>的源码。通过<code>getResources().getDisplayMetrics().densityDpi</code>可以获取手机实际的dpi。</p>
 <p><img src="/res/bitmap/dpi.png" alt=""></p>
@@ -140,17 +140,14 @@
 <p><strong>如何快速查看手机屏幕信息</strong></p>
 <p><code>adb shell dumpsys display | findstr DisplayDeviceInfo</code></p>
 <h3 id="三、回到问题">三、回到问题</h3><p>以Nexus6为例，一张180*180的图片，放在设置了<code>wrap_content</code>属性的ImageView中，当这张图片，分别放置在<code>drawable-nodpi</code>,<code>drawable-mdpi</code>,<code>drawable-hdpi</code>, <code>drawable-xxhdpi</code>,<code>drawable-xxxhdpi</code>这几个资源目录中，在屏幕上分别显示多大(像素)的图片？</p>
-<p>答：根据上面的分析，可以看到nexus6，是属于xxxhpi的屏幕，获取到dpi为560<br>如果把180大小的图片只放在xxxhdpi目录中，是不是屏幕就会显示180px的大小？其实并不是，dpi=640的才是真正的xxxhdpi(这里需要看DisplayMetrics的源码)，当Android系统加载图片时，会针对当前系统的dpi和source dpi比较做缩放，如果一张图片放在drawable-xxxhdpi目录，这是告诉系统，针对dpi为640的手机屏幕上，这张图片的scale为1.0，同理，drawable-xxhpi对应480dpi，drawable-xhdpi对应的是320dpi。如果希望<code>180*180</code>在nexues6的屏幕上按照原有尺寸显示，只有将其放在drawable-nodpi或者drawable-560dpi目录中才可以。</p>
-<p>回到问题，如果将<code>180*180</code>放入hdpi目录中，那实际显示的图片大小应该为：<code>int (180 * (560 / 240) +0.5f ) = 420px</code>实际图片的大小应该为420px！</p>
-<p>同理:<br>放入xhdpi目录中，实际大小应该为<code>int (180 * (560 / 320) +0.5f ) = 315px</code><br>放入xxhdpi目录中，实际大小应该为<code>int (180 * (560 / 480) +0.5f ) = 210px</code></p>
+<p>答：根据上面的分析，可以看到nexus6，是属于xxxhpi的屏幕，获取到dpi为560。如果把180大小的图片只放在xxxhdpi目录中，是不是屏幕就会显示180px的大小？其实并不是，dpi=640的才是真正的xxxhdpi(这里需要看DisplayMetrics的源码)，当Android系统加载图片时，会针对当前系统的dpi和source dpi比较做缩放，如果一张图片放在drawable-xxxhdpi目录，这是告诉系统，针对dpi为640的手机屏幕上，这张图片的scale为1.0，同理，drawable-xxhpi对应480dpi，drawable-xhdpi对应的是320dpi。如果希望<code>180*180</code>在nexues6的屏幕上按照原有尺寸显示，只有将其放在drawable-nodpi或者drawable-560dpi目录中才可以。</p>
+<p>回到问题，如果将<code>180*180</code>放入hdpi目录中，那实际显示的图片大小应该为：<code>int (180 * (560 / 240) +0.5f ) = 420px</code>实际图片的大小应该为420px！同理:<br>放入xhdpi目录中，实际大小应该为<code>int (180 * (560 / 320) +0.5f ) = 315px</code><br>放入xxhdpi目录中，实际大小应该为<code>int (180 * (560 / 480) +0.5f ) = 210px</code></p>
 <p><a href="https://android.googlesource.com/platform/frameworks/base/+/7b2f8b8/core/jni/android/graphics/BitmapFactory.cpp" target="_blank" rel="external">BitmapFactory.cpp源码链接</a></p>
 <h3 id="四、一张图片占多大内存">四、一张图片占多大内存</h3><p>现在我们已经知道了一张图片放置在不同的资源目录中，在屏幕显示像素大小是如何计算的了。一张图片大概占用多少内存，其实只用看一个像素占用多少内存就可以喽？我们都知道屏幕上的颜色是有R，G，B加透明度表示的，Android官方支持的RGB格式，主要是<code>ALPHA_8</code>，<code>RGB_565</code>，<code>ARGB_4444</code>，<code>ARGB_8888</code>这几种。</p>
 <p>以ARGB_8888为例，表示一个像素点，使用8位表示透明度，8位表示Red，8位表示Green，8位表示Blue。加起来，一个像素就需要4byte，同理，RGB_565一个像素需要2byte。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public enum Config &#123;&#10;    ALPHA_8     (1),&#10;    RGB_565     (3),&#10;    @Deprecated&#10;    ARGB_4444   (4),&#10;    ARGB_8888   (5);&#10;    final int nativeInt;&#10;    Config(int ni) &#123;&#10;        this.nativeInt = ni;&#10;    &#125;&#10;&#125;</span><br></pre></td></tr></table></figure>
-<p>Android decode资源图片时默认会选择ARGB_8888，如果将<code>180*180</code>放入hdpi目录中，那实际大小应该为<code>int (180 * (560 / 240) +0.5f ) = 420px</code>，像素内存大小为 <code>420 * 420 * 4 = 705600byte = 689kb</code>。同理:</p>
-<p>放入xhdpi目录中，实际大小应该为<code>int (180 * (560 / 320) +0.5f ) = 315px</code>，像素内存大小为<code>315 * 315 * 4 = 396900byte = 387.6kb</code></p>
-<p>放入xxhdpi目录中，实际大小应该为<code>int (180 * (560 / 480) +0.5f ) = 210px</code>，像素内存大小为<code>210 * 210 * 4 = 176400byte = 172.2kb</code></p>
-<h3 id="五、如何分析内存中的图片问题？">五、如何分析内存中的图片问题？</h3><p>个人感受，Android的内存优化需要重点关注的几个方面，图片的加载，Activity的泄露，webview内存等，如何简单的分析出内存中Bitmap的情况，这里提供一个工具。借助leakcanary的思路，通过分析内存堆dump文件中<code>android.graphics.Bitmap</code>对象的情况，<strong>将内存中Bitmap对象批量保存到图片文件中</strong>，这样就可以直观的看到内存中加载的Bitmap个数、内容和大小，进而分析可能的内存问题。</p>
+<p>Android decode资源图片时默认会选择ARGB_8888，如果将<code>180*180</code>放入hdpi目录中，那实际大小应该为<code>int (180 * (560 / 240) +0.5f ) = 420px</code>，像素内存大小为 <code>420 * 420 * 4 = 705600byte = 689kb</code>。同理:<br>放入xhdpi目录中，实际大小应该为<code>int (180 * (560 / 320) +0.5f ) = 315px</code>，像素内存大小为<code>315 * 315 * 4 = 396900byte = 387.6kb</code><br>放入xxhdpi目录中，实际大小应该为<code>int (180 * (560 / 480) +0.5f ) = 210px</code>，像素内存大小为<code>210 * 210 * 4 = 176400byte = 172.2kb</code></p>
+<h3 id="五、如何分析内存中的图片问题？">五、如何分析内存中的图片问题？</h3><p>Android的内存优化需要重点关注的几个方面，Bitmap的加载，Activity的泄露，webview内存等，如何简单的分析出内存中Bitmap的情况，这里提供一个工具。借助leakcanary的思路，通过分析内存堆dump文件中<code>android.graphics.Bitmap</code>对象的情况，<strong>将内存中Bitmap对象批量保存到图片文件中</strong>，这样就可以直观的看到内存中加载的Bitmap个数、内容和大小，进而分析可能的内存问题。</p>
 <p><img src="/res/bitmap/bitmap_buffer.png" alt=""></p>
 <p><img src="/res/bitmap/1.png" alt=""></p>
 <p><strong>示例</strong></p>
@@ -292,7 +289,7 @@
 
     <footer class="article-footer">
       
-        <a data-url="https://ivonhoe.github.io/2017/03/22/Bitmap&Memory/" data-id="cj0ryrocq0000p9mva1covj93" class="article-share-link" data-share="baidu">分享到</a>
+        <a data-url="https://ivonhoe.github.io/2017/03/22/Bitmap&Memory/" data-id="cj0s67fp0001clwuqhahyu5x0" class="article-share-link" data-share="baidu">分享到</a>
       
 
       
