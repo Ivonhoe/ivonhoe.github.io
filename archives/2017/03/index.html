@@ -98,6 +98,7 @@
 <li>问2：以Nexus6为例，分辨率1440*2560，5.96英寸，ppi是什么？dpi是什么？1dp是多少像素？</li>
 <li>问3：还以Nexus6为例，一张180*180的图片，放置在设置了<code>wrap_content</code>属性的ImageView中，当这张图片，分别放在<code>drawable-nodpi</code>,<code>drawable-mdpi</code>,<code>drawable-hdpi</code>, <code>drawable-xxhdpi</code>,<code>drawable-xxxhdpi</code>这几个资源目录中，在屏幕上分别显示多大(像素)的图片？</li>
 <li>问4：这张图片占用的内存大小分别为多少？</li>
+<li>问5：如果设置ImageView的宽和高为固定的值，如50px，那么上述情况下，加载的Bitmap占用内存大小分别为多大？</li>
 </ul>
 <p>本文主要围绕上述问题，介绍Android图片资源加载的基本机制，图片的内存大小如何计算，以及内存图片分析工具。</p>
         
@@ -112,7 +113,7 @@
 
     <footer class="article-footer">
       
-        <a data-url="https://ivonhoe.github.io/2017/03/22/Bitmap&Memory/" data-id="cj0s67fp0001clwuqhahyu5x0" class="article-share-link" data-share="baidu">分享到</a>
+        <a data-url="https://ivonhoe.github.io/2017/03/22/Bitmap&Memory/" data-id="cj13nlte7001crxuqaam1k711" class="article-share-link" data-share="baidu">分享到</a>
       
 
       

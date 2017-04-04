@@ -98,6 +98,7 @@
 <li>问2：以Nexus6为例，分辨率1440*2560，5.96英寸，ppi是什么？dpi是什么？1dp是多少像素？</li>
 <li>问3：还以Nexus6为例，一张180*180的图片，放置在设置了<code>wrap_content</code>属性的ImageView中，当这张图片，分别放在<code>drawable-nodpi</code>,<code>drawable-mdpi</code>,<code>drawable-hdpi</code>, <code>drawable-xxhdpi</code>,<code>drawable-xxxhdpi</code>这几个资源目录中，在屏幕上分别显示多大(像素)的图片？</li>
 <li>问4：这张图片占用的内存大小分别为多少？</li>
+<li>问5：如果设置ImageView的宽和高为固定的值，如50px，那么上述情况下，加载的Bitmap占用内存大小分别为多大？</li>
 </ul>
 <p>本文主要围绕上述问题，介绍Android图片资源加载的基本机制，图片的内存大小如何计算，以及内存图片分析工具。</p>
         
@@ -112,7 +113,7 @@
 
     <footer class="article-footer">
       
-        <a data-url="https://ivonhoe.github.io/2017/03/22/Bitmap&Memory/" data-id="cj0s67fp0001clwuqhahyu5x0" class="article-share-link" data-share="baidu">分享到</a>
+        <a data-url="https://ivonhoe.github.io/2017/03/22/Bitmap&Memory/" data-id="cj13nlte7001crxuqaam1k711" class="article-share-link" data-share="baidu">分享到</a>
       
 
       
@@ -167,7 +168,7 @@
 
     <footer class="article-footer">
       
-        <a data-url="https://ivonhoe.github.io/2017/02/09/美团如何防dex2jar/" data-id="cj0s67foe0007lwuqt6mfonsb" class="article-share-link" data-share="baidu">分享到</a>
+        <a data-url="https://ivonhoe.github.io/2017/02/09/美团如何防dex2jar/" data-id="cj13nltdo0007rxuqj693zc5x" class="article-share-link" data-share="baidu">分享到</a>
       
 
       
@@ -228,7 +229,7 @@
 
     <footer class="article-footer">
       
-        <a data-url="https://ivonhoe.github.io/2017/02/04/Android安全之---APP去广告/" data-id="cj0s67fp2001ilwuqvwude29y" class="article-share-link" data-share="baidu">分享到</a>
+        <a data-url="https://ivonhoe.github.io/2017/02/04/Android安全之---APP去广告/" data-id="cj13nlte9001irxuqr30b5112" class="article-share-link" data-share="baidu">分享到</a>
       
 
       
@@ -282,7 +283,7 @@
 
     <footer class="article-footer">
       
-        <a data-url="https://ivonhoe.github.io/2017/01/20/MacOS上编译Android源码/" data-id="cj0s67for000xlwuqfjmfjuj0" class="article-share-link" data-share="baidu">分享到</a>
+        <a data-url="https://ivonhoe.github.io/2017/01/20/MacOS上编译Android源码/" data-id="cj13nltdy000xrxuq1ryszbsc" class="article-share-link" data-share="baidu">分享到</a>
       
 
       
@@ -342,7 +343,7 @@
 
     <footer class="article-footer">
       
-        <a data-url="https://ivonhoe.github.io/2016/12/16/Mac-Linux下gcc编译动态链接库-so文件/" data-id="cj0s67fot0010lwuq0nuhh28r" class="article-share-link" data-share="baidu">分享到</a>
+        <a data-url="https://ivonhoe.github.io/2016/12/16/Mac-Linux下gcc编译动态链接库-so文件/" data-id="cj13nlte00010rxuqf2j9o61s" class="article-share-link" data-share="baidu">分享到</a>
       
 
       
@@ -397,7 +398,7 @@
 
     <footer class="article-footer">
       
-        <a data-url="https://ivonhoe.github.io/2015/10/25/如何写出GC友好的Android应用/" data-id="cj0s67foj000jlwuqn70gzgtn" class="article-share-link" data-share="baidu">分享到</a>
+        <a data-url="https://ivonhoe.github.io/2015/10/25/如何写出GC友好的Android应用/" data-id="cj13nltdt000jrxuqo0j12637" class="article-share-link" data-share="baidu">分享到</a>
       
 
       
@@ -454,7 +455,7 @@
 
     <footer class="article-footer">
       
-        <a data-url="https://ivonhoe.github.io/2015/09/01/Android动画总结之有赞、邮箱大师进度条实现原理/" data-id="cj0s67fp4001nlwuq6xjs9uh4" class="article-share-link" data-share="baidu">分享到</a>
+        <a data-url="https://ivonhoe.github.io/2015/09/01/Android动画总结之有赞、邮箱大师进度条实现原理/" data-id="cj13nlteb001nrxuqmyx3g8ic" class="article-share-link" data-share="baidu">分享到</a>
       
 
       
@@ -514,7 +515,7 @@
 
     <footer class="article-footer">
       
-        <a data-url="https://ivonhoe.github.io/2015/08/19/数据解析工具设计文档/" data-id="cj0s67foh000elwuqd4navopv" class="article-share-link" data-share="baidu">分享到</a>
+        <a data-url="https://ivonhoe.github.io/2015/08/19/数据解析工具设计文档/" data-id="cj13nltdr000erxuqe34v3r9m" class="article-share-link" data-share="baidu">分享到</a>
       
 
       
@@ -571,7 +572,7 @@
 
     <footer class="article-footer">
       
-        <a data-url="https://ivonhoe.github.io/2015/04/28/Drawable-从简化布局谈起/" data-id="cj0s67fow0013lwuqrk4iuiy8" class="article-share-link" data-share="baidu">分享到</a>
+        <a data-url="https://ivonhoe.github.io/2015/04/28/Drawable-从简化布局谈起/" data-id="cj13nlte20013rxuqlir69xk3" class="article-share-link" data-share="baidu">分享到</a>
       
 
       
@@ -626,7 +627,7 @@
 
     <footer class="article-footer">
       
-        <a data-url="https://ivonhoe.github.io/2015/04/23/ColorOS和APEX桌面产品分析/" data-id="cj0s67foy0019lwuqzz5dmgl4" class="article-share-link" data-share="baidu">分享到</a>
+        <a data-url="https://ivonhoe.github.io/2015/04/23/ColorOS和APEX桌面产品分析/" data-id="cj13nlte50019rxuqxypu90a2" class="article-share-link" data-share="baidu">分享到</a>
       
 
       
