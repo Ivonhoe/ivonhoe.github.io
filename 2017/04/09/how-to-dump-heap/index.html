@@ -71,7 +71,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Android,Drawable,性能优化," />
+  <meta name="keywords" content="dump heap,内存," />
 
 
 
@@ -89,24 +89,28 @@
 
 
 
-<meta name="description" content="一、Drawble是干嘛的？说到Drawable肯定会第一时间想到图片资源，可能有人会认为Drawable就是图片。Drawble从字面上说就是“可绘制的”，google文档的描述:“A Drawable is a general abstraction for “something that can be drawn.””，Drawable其实就是为那些”可以被绘制的’’提供的抽象类。
+<meta name="description" content="如何使用ddmlib dump出堆文件一般情况下如果我想要较详细的分析内存状况时，会使用android monitor和Memory Analyzer工具，但步骤有些麻烦。
 
-哪些东">
+使用monitor dump堆文件
+使用hprof-conv工具，将hprof转换成MAT能够识别的格式
+使用MAT分析">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Drawable,从简化布局谈起">
-<meta property="og:url" content="https://ivonhoe.github.io/2015/04/28/Drawable-从简化布局谈起/index.html">
+<meta property="og:title" content="how-to-dump-heap">
+<meta property="og:url" content="https://ivonhoe.github.io/2017/04/09/how-to-dump-heap/index.html">
 <meta property="og:site_name" content="别辜负自己">
-<meta property="og:description" content="一、Drawble是干嘛的？说到Drawable肯定会第一时间想到图片资源，可能有人会认为Drawable就是图片。Drawble从字面上说就是“可绘制的”，google文档的描述:“A Drawable is a general abstraction for “something that can be drawn.””，Drawable其实就是为那些”可以被绘制的’’提供的抽象类。
+<meta property="og:description" content="如何使用ddmlib dump出堆文件一般情况下如果我想要较详细的分析内存状况时，会使用android monitor和Memory Analyzer工具，但步骤有些麻烦。
 
-哪些东">
-<meta property="og:image" content="https://ivonhoe.github.io/res/drawable/1.jpg">
-<meta property="og:image" content="https://ivonhoe.github.io/res/drawable/2.jpg">
-<meta property="og:updated_time" content="2016-03-06T13:37:50.000Z">
+使用monitor dump堆文件
+使用hprof-conv工具，将hprof转换成MAT能够识别的格式
+使用MAT分析">
+<meta property="og:updated_time" content="2017-04-19T06:30:33.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Drawable,从简化布局谈起">
-<meta name="twitter:description" content="一、Drawble是干嘛的？说到Drawable肯定会第一时间想到图片资源，可能有人会认为Drawable就是图片。Drawble从字面上说就是“可绘制的”，google文档的描述:“A Drawable is a general abstraction for “something that can be drawn.””，Drawable其实就是为那些”可以被绘制的’’提供的抽象类。
+<meta name="twitter:title" content="how-to-dump-heap">
+<meta name="twitter:description" content="如何使用ddmlib dump出堆文件一般情况下如果我想要较详细的分析内存状况时，会使用android monitor和Memory Analyzer工具，但步骤有些麻烦。
 
-哪些东">
+使用monitor dump堆文件
+使用hprof-conv工具，将hprof转换成MAT能够识别的格式
+使用MAT分析">
 
 
 
@@ -134,13 +138,13 @@
 
 
 
-  <link rel="canonical" href="https://ivonhoe.github.io/2015/04/28/Drawable-从简化布局谈起/"/>
+  <link rel="canonical" href="https://ivonhoe.github.io/2017/04/09/how-to-dump-heap/"/>
 
 
 
 
 
-  <title> Drawable,从简化布局谈起 | 别辜负自己 </title>
+  <title> how-to-dump-heap | 别辜负自己 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -278,7 +282,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="https://ivonhoe.github.io/2015/04/28/Drawable-从简化布局谈起/">
+    <link itemprop="mainEntityOfPage" href="https://ivonhoe.github.io/2017/04/09/how-to-dump-heap/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="病已">
@@ -299,7 +303,7 @@
             
             
               
-                Drawable,从简化布局谈起
+                how-to-dump-heap
               
             
           </h1>
@@ -314,8 +318,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-04-28T23:31:29+08:00">
-                Apr 28 2015
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-09T19:03:01+08:00">
+                Apr 9 2017
               </time>
             
 
@@ -333,8 +337,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2015/04/28/Drawable-从简化布局谈起/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2015/04/28/Drawable-从简化布局谈起/" itemprop="commentCount"></span>
+                <a href="/2017/04/09/how-to-dump-heap/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/04/09/how-to-dump-heap/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -342,7 +346,7 @@
 
           
           
-             <span id="/2015/04/28/Drawable-从简化布局谈起/" class="leancloud_visitors" data-flag-title="Drawable,从简化布局谈起">
+             <span id="/2017/04/09/how-to-dump-heap/" class="leancloud_visitors" data-flag-title="how-to-dump-heap">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -371,83 +375,12 @@
       
 
       
-        <h2 id="一、Drawble是干嘛的？">一、Drawble是干嘛的？</h2><p>说到Drawable肯定会第一时间想到图片资源，可能有人会认为Drawable就是图片。Drawble从字面上说就是“可绘制的”，google文档的描述:“A Drawable is a general abstraction for “something that can be drawn.””，Drawable其实就是为那些”可以被绘制的’’提供的抽象类。</p>
-<ul>
-<li><strong>哪些东西是”can be drawn”？</strong></li>
-<li><strong>绘制在哪里的？</strong></li>
-</ul>
-<p>看下android原生的Drawable和Canvas提供了的绘图的接口：<a href="http://developer.android.com/reference/android/graphics/drawable/package-summary.html" target="_blank" rel="external">android.graphics.drawable</a><br><a href="http://developer.android.com/reference/android/graphics/Canvas.html" target="_blank" rel="external">android.graphics.Canvas</a>。Canvas提供了一系列的接口去实现绘制想要的图形、图片、颜色或者其他something，Drawable就是为了这些”something”提供的。</p>
-<a id="more"></a>
-<h2 id="二、如何自定义Drawable？如何简化布局？">二、如何自定义Drawable？如何简化布局？</h2><p><img src="/res/drawable/1.jpg" alt="Canvas和布局实现"></p>
-<p>相信一定见过类似这样的布局，在Android系统中如何把想要的图形绘制处理，一般有两种方式：</p>
-<ul>
-<li>把你想要的视图简单的定义到布局文件中，系统读取布局文件绘制视图</li>
-<li>把想要的图形通过canvas的绘图接口直接进行绘制<br>在第二种方式中，你需要通过比如Drawable，比如自定义的View的onDraw()方法，或者调用Canvas的draw…()方法，而View的方式实际上也是Canvas绘制的方式，View也可以看做是对Canvas绘图接口的包装。而直接绘制到Canvas上的方式也单单是这些，在主线程上你可以通过调用View的invalidate()方法触发绘制，在onDraw()方法处理绘图的回调。另一种非主线程绘制的方式就是SurfaceView了。</li>
-</ul>
-<p>通过Drawable绘制想要的图形是个不错的选择，Drawable是一个抽象类，draw()方法提供了绘制的Canvas，invalidateSelf()方法提供了重绘的可能。Drawable的抽象方法分别是：</p>
-<ul>
-<li><p><strong>draw(Canvas canvas)</strong>将想要的东西绘制到这个canvas对象上</p>
-</li>
-<li><p><strong>setAlpha(int alpha)</strong> 为drawable指定一个alpha值，0代表全透明，255代表全不透明。</p>
-</li>
-<li><p><strong>setColorFilter(ColorFilter cf)</strong> 为drawable指定一个颜色过滤器</p>
-</li>
-<li><p><strong>getOpacity()</strong> 获取透明度</p>
-</li>
-</ul>
-<p>实现自定义的Drawable只需要继承Drawable.java，并且在draw方法里通过canvas绘制需要的图形就可以了，听起来很简单。无论是一组图片、一条曲线还是一个色块，所有你想要的图形都可通过canvas参数绘制上去。举个例子，如何使用Drawable简化上图所示的网格布局？假设你需要在网格布局里显示不同的图片，就可以把场景微信朋友群组的图标。当然你可以使用view布局来做，当然也可以使用canvas方式。根据Drawable添加的顺序依次确定每个图片的坐标位置，在draw()方法里根据每个图片的坐标位置和图片显示位置绘制到canvas上。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">@Override&#10;public void draw(Canvas canvas) &#123;&#10;    final int N = Math.min(mChildDrawable.size(), mRowCount * mColumnCount);&#10;    for (int i = 0; i &#60; N; i++) &#123;&#10;        ChildDrawable itemToDraw = mChildDrawable.get(i);&#10;        Drawable drawable = itemToDraw.mDrawable;&#10;        if (drawable != null) &#123;&#10;            itemToDraw.mDrawable.setBounds(itemToDraw.mInsetL, itemToDraw.mInsetT, itemToDraw.mInsetR, itemToDraw.mInsetB);&#10;            drawable.draw(canvas);&#10;        &#125;&#10;    &#125;&#10;&#125;</span><br></pre></td></tr></table></figure></p>
-<h2 id="三、让Drawable动起来怎么样？">三、让Drawable动起来怎么样？</h2><ul>
-<li><strong>首先看下Drawable的Canvas从哪里来</strong></li>
-</ul>
-<p>一般使用ImageView显示drawable，看下ImageView的onDraw(Canvas canvas)，可以看到Drawable在ImageView里的绘制发生在View的onDraw回调里，根据scaleType和padding确定绘制的方式和位置。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">protected void onDraw(Canvas canvas) &#123;&#10;    super.onDraw(canvas);&#10;    ....&#10;&#10;    // mDrawMatrix&#26681;&#25454;ImageView&#30340;ScaleType&#26469;&#30830;&#23450;&#30340;&#10;    if (mDrawMatrix == null &#38;&#38; mPaddingTop == 0 &#38;&#38; mPaddingLeft == 0) &#123;&#10;        mDrawable.draw(canvas);&#10;    &#125; else &#123;&#10;        ......&#10;        mDrawable.draw(canvas);&#10;    &#125;&#10;&#125;</span><br></pre></td></tr></table></figure></p>
-<p>View绘制Background Drawable在draw(Canvas canvas)方法，并在setBackgroundDrawable时会执行background.setCallback(this)操作。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">// Step 1, draw the background, if needed&#10;if (background != null) &#123;&#10;     ......&#10;     if ((scrollX | scrollY) == 0) &#123;&#10;         background.draw(canvas);&#10;     &#125; else &#123;&#10;         ......&#10;         background.draw(canvas);&#10;         ......&#10;     &#125;&#10; &#125;</span><br></pre></td></tr></table></figure></p>
-<ul>
-<li><strong>再看Drawable如何重绘</strong>，<br>Drawable是依赖Canvas绘制的，查看Drawable源码发现调用invalidateSelf()方法需要获取Callback，在Callback是空的情况下无法重绘Drawable。那么在View里如何实现Drawable的重绘，显然需要先设置Drawable的重绘回调，View.java实现了Drawable.Callback接口，在View里调用setImageDrawable()方法里会首先设置当前View为Drawable的回调。<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public void invalidateSelf() &#123;&#10;    final Callback callback = getCallback();&#10;    if (callback != null) &#123;&#10;        callback.invalidateDrawable(this);&#10;    &#125;&#10;&#125;&#10;&#10;public static interface Callback &#123;&#10;    public void invalidateDrawable(Drawable who);&#10;    public void scheduleDrawable(Drawable who, Runnable what, long when);&#10;    public void unscheduleDrawable(Drawable who, Runnable what);&#10;&#125;</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<p>ImageView调用invalidate触发重绘，回调ImageView的onDraw()方法，完成Drawable的重绘。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">@Override&#10;public void invalidateDrawable(Drawable dr) &#123;&#10;    if (dr == mDrawable) &#123;&#10;        /* we invalidate the whole view in this case because it&#39;s very&#10;         * hard to know where the drawable actually is. This is made&#10;         * complicated because of the offsets and transformations that&#10;         * can be applied. In theory we could get the drawable&#39;s bounds&#10;         * and run them through the transformation and offsets, but this&#10;         * is probably not worth the effort.&#10;         */&#10;        invalidate();&#10;    &#125; else &#123;&#10;        super.invalidateDrawable(dr);&#10;    &#125;&#10;&#125;</span><br></pre></td></tr></table></figure></p>
-<p>了解了Drawable绘制的画布和重绘的方法，如何实现动画的Drawable只需要按时重绘Drawable就可以了，用动画控制重绘效果。具体实现可以看<a href="https://github.com/Ivonhoe/FancyDrawable" target="_blank" rel="external">https://github.com/Ivonhoe/FancyDrawable</a>，现在看如何实现我在<a href="https://ivonhoe.github.io/2015/04/17/%E5%9F%BA%E4%BA%8E%E8%B4%9D%E5%A1%9E%E5%B0%94%E6%9B%B2%E7%BA%BF%E7%9A%84Android%E5%8A%A8%E7%94%BB%E5%B7%AE%E5%80%BC%E5%99%A8/">贝赛尔插值器</a>里说过的BallsLine进度条效果，只需要在每次重绘的回调里动态的控制每个小球点的位置就可以了，需要的动画插值器参数可以参考<a href="http://thecodeplayer.com/walkthrough/windows-phone-loading-animation" target="_blank" rel="external">Web代码</a>。</p>
-<p><img src="/res/drawable/2.jpg" alt="动态Drawable和GridDrawable"></p>
-<pre><code><span class="keyword">protected</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> FRAME_DURATION = <span class="number">1000</span> / <span class="number">60</span>;
-
-<span class="keyword">protected</span> Runnable mUpdater = <span class="keyword">new</span> Runnable() {
-    <span class="annotation">@Override</span>
-    <span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>{
-        onFrame();
-
-        scheduleSelf(mUpdater, SystemClock.uptimeMillis() + FRAME_DURATION);
-        invalidateSelf();
-    }
-};
-
-<span class="annotation">@Override</span>
-<span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">start</span><span class="params">()</span> </span>{
-    <span class="keyword">if</span> (!isRunning()) {
-        mIsRunning = <span class="keyword">true</span>;
-
-        <span class="comment">// start</span>
-        onStart();
-        scheduleSelf(mUpdater, SystemClock.uptimeMillis() + FRAME_DURATION);
-        invalidateSelf();
-    }
-}
-
-<span class="annotation">@Override</span>
-<span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">stop</span><span class="params">()</span> </span>{
-    <span class="keyword">if</span> (isRunning()) {
-        mIsRunning = <span class="keyword">false</span>;
-        unscheduleSelf(mUpdater);
-
-        <span class="comment">//stop</span>
-        onStop();
-    }
-}
-</code></pre><h1 id="五、参考文档">五、参考文档</h1><p><a href="http://developer.android.com/reference/android/graphics/drawable/Drawable.html" target="_blank" rel="external">http://developer.android.com/reference/android/graphics/drawable/Drawable.html</a></p>
-<p><a href="http://developer.android.com/guide/topics/graphics/2d-graphics.html" target="_blank" rel="external">http://developer.android.com/guide/topics/graphics/2d-graphics.html</a></p>
-<p><a href="http://wiresareobsolete.com/2012/12/textdrawable-draw-some-text/" target="_blank" rel="external">http://wiresareobsolete.com/2012/12/textdrawable-draw-some-text/</a></p>
-<p><a href="http://cyrilmottier.com/2012/11/27/actionbar-on-the-move/" target="_blank" rel="external">http://cyrilmottier.com/2012/11/27/actionbar-on-the-move/</a></p>
-<p><a href="http://antoine-merle.com/blog/2013/11/12/make-your-progressbar-more-smooth/" target="_blank" rel="external">http://antoine-merle.com/blog/2013/11/12/make-your-progressbar-more-smooth/</a></p>
-<h2 id="六、Github">六、Github</h2><p><a href="https://github.com/Ivonhoe/FancyDrawable" target="_blank" rel="external">https://github.com/Ivonhoe/FancyDrawable</a></p>
+        <h3 id="如何使用ddmlib_dump出堆文件">如何使用ddmlib dump出堆文件</h3><p>一般情况下如果我想要较详细的分析内存状况时，会使用android monitor和Memory Analyzer工具，但步骤有些麻烦。</p>
+<ol>
+<li>使用monitor dump堆文件</li>
+<li>使用hprof-conv工具，将hprof转换成MAT能够识别的格式</li>
+<li>使用MAT分析</li>
+</ol>
 
       
     </div>
@@ -498,11 +431,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Android/" rel="tag"># Android</a>
+            <a href="/tags/dump-heap/" rel="tag"># dump heap</a>
           
-            <a href="/tags/Drawable/" rel="tag"># Drawable</a>
-          
-            <a href="/tags/性能优化/" rel="tag"># 性能优化</a>
+            <a href="/tags/内存/" rel="tag"># 内存</a>
           
         </div>
       
@@ -515,8 +446,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2015/04/23/ColorOS和APEX桌面产品分析/" rel="next" title="ColorOS和APEX桌面产品分析">
-                <i class="fa fa-chevron-left"></i> ColorOS和APEX桌面产品分析
+              <a href="/2017/03/22/Bitmap&Memory/" rel="next" title="Android Bitmap的内存大小是如何计算的？">
+                <i class="fa fa-chevron-left"></i> Android Bitmap的内存大小是如何计算的？
               </a>
             
           </div>
@@ -524,10 +455,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2015/08/19/数据解析工具设计文档/" rel="prev" title="数据解析工具">
-                数据解析工具 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -553,8 +480,8 @@
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2015/04/28/Drawable-从简化布局谈起/"
-           data-title="Drawable,从简化布局谈起" data-url="https://ivonhoe.github.io/2015/04/28/Drawable-从简化布局谈起/">
+      <div class="ds-thread" data-thread-key="2017/04/09/how-to-dump-heap/"
+           data-title="how-to-dump-heap" data-url="https://ivonhoe.github.io/2017/04/09/how-to-dump-heap/">
       </div>
     
   </div>
@@ -669,7 +596,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一、Drawble是干嘛的？"><span class="nav-number">1.</span> <span class="nav-text">一、Drawble是干嘛的？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、如何自定义Drawable？如何简化布局？"><span class="nav-number">2.</span> <span class="nav-text">二、如何自定义Drawable？如何简化布局？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三、让Drawable动起来怎么样？"><span class="nav-number">3.</span> <span class="nav-text">三、让Drawable动起来怎么样？</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#五、参考文档"><span class="nav-number"></span> <span class="nav-text">五、参考文档</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#六、Github"><span class="nav-number">1.</span> <span class="nav-text">六、Github</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#如何使用ddmlib_dump出堆文件"><span class="nav-number">1.</span> <span class="nav-text">如何使用ddmlib dump出堆文件</span></a></li></ol></div>
             
 
           </div>
