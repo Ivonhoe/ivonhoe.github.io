@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://ivonhoe.github.io/"/>
-  <updated>2017-04-19T06:30:33.000Z</updated>
+  <updated>2017-04-20T03:10:15.000Z</updated>
   <id>https://ivonhoe.github.io/</id>
   
   <author>
@@ -16,25 +16,39 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>how-to-dump-heap</title>
+    <title>使用BitmapAnalyzer分析内存Bitmap</title>
     <link href="https://ivonhoe.github.io/2017/04/09/how-to-dump-heap/"/>
     <id>https://ivonhoe.github.io/2017/04/09/how-to-dump-heap/</id>
     <published>2017-04-09T11:03:01.000Z</published>
-    <updated>2017-04-19T06:30:33.000Z</updated>
+    <updated>2017-04-20T03:10:15.000Z</updated>
     
-    <content type="html"><![CDATA[<h3 id="如何使用ddmlib_dump出堆文件">如何使用ddmlib dump出堆文件</h3><p>一般情况下如果我想要较详细的分析内存状况时，会使用android monitor和Memory Analyzer工具，但步骤有些麻烦。</p>
+    <content type="html"><![CDATA[<h3 id="如何使用ddmlib_dump出堆文件">如何使用ddmlib dump出堆文件</h3><p>一般情况下如果我想要较详细的分析内存状况，会使用android monitor(下简称monitor)和Memory Analyzer工具(下简称MAT)，但步骤有些麻烦。</p>
 <ol>
 <li>使用monitor dump堆文件</li>
 <li>使用hprof-conv工具，将hprof转换成MAT能够识别的格式</li>
 <li>使用MAT分析</li>
 </ol>
-]]></content>
+<p>需要手动dump hprof再使用hprof-conv工具手动转码，上篇<a href="https://ivonhoe.github.io/2017/03/22/Bitmap&amp;Memory/">Android Bitmap的内存大小是如何计算的？</a>说到使用square的<a href="https://github.com/square/haha" target="_blank" rel="external">haha</a>来做内存堆中Bitmap的分析。所以在思考如何一键完成内存dump和analyze的过程，当然可以不单是对Bitmap对象做分析。<br>如何完成dump和转码，思路还是Read the fucking source code，看下monitor是如何dump hprof文件的。打开Android sdk目录，monitor和其依赖的jar分别在<code>/tools</code>和’/tools/lib’目录，核心代码在<code>ddmlib.jar</code>中，Java swring代码在<code>ddms.jar</code>和<code>ddmuilib.jar</code>中，ddmlib需要依赖<code>common.jar</code>和<code>guava.jar</code>。</p>
+<a id="more"></a>
+<p><img src="/res/hprof/hprof-1.png" alt=""></p>
+<h3 id="如何使用ddmlib获取adb连接的设备">如何使用ddmlib获取adb连接的设备</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public static void main(String[] args) &#123;&#10;        IDevice device;&#10;        // &#36825;&#37324;&#38656;&#35201;&#20256;&#21442;true&#65292;&#19981;&#28982;&#24453;&#20250;&#20250;&#25343;&#19981;&#21040;&#25163;&#26426;&#19978;&#30340;client&#10;        AndroidDebugBridge.init(true);&#10;        AndroidDebugBridge bridge = AndroidDebugBridge.createBridge(&#10;                &#34;/Users/Ivonhoe/Library/Android/sdk/platform-tools/adb&#34;, false);&#10;        waitForDevice(bridge);&#10;        IDevice devices[] = bridge.getDevices();&#10;        device = devices[0];&#10;    &#125;&#10;&#10;    private static void waitForDevice(AndroidDebugBridge bridge) &#123;&#10;        int count = 0;&#10;        while (!bridge.hasInitialDeviceList()) &#123;&#10;            try &#123;&#10;                Thread.sleep(100);&#10;                count++;&#10;            &#125; catch (InterruptedException ignored) &#123;&#10;            &#125;&#10;            if (count &#62; 300) &#123;&#10;                System.err.print(&#34;Time out&#34;);&#10;                break;&#10;            &#125;&#10;        &#125;&#10;    &#125;</span><br></pre></td></tr></table></figure>
+<h3 id="如何dump_hprof">如何dump hprof</h3><p><strong>这里不说看ddms源码的过程了，主要还是通过关键字搜索跟一下dump操作的处理逻辑</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/**&#10; * &#35774;&#32622;HprofDumpHandler&#65292;&#23545;dump&#20107;&#20214;&#20570;&#30417;&#21548;&#22788;&#29702;dump&#25104;&#21151;&#25110;&#32773;&#22833;&#36133;&#30340;&#22238;&#35843;&#65292;&#10; * &#24182;&#20445;&#23384;hprof&#25991;&#20214;&#25968;&#25454;&#10; *&#10; * @param device&#10; */&#10;public HprofDump(Device device) &#123;&#10;    mDevice = device;&#10;&#10;    ClientData.IHprofDumpHandler hprofDumpHandler = new ClientData.IHprofDumpHandler() &#123;&#10;&#10;        @Override&#10;        public void onSuccess(String remoteFilePath, Client client) &#123;&#10;            String hprofPath = getHprofPath(client.getClientData().getClientDescription());&#10;            mDevice.pull(hprofPath, remoteFilePath);&#10;&#10;            conversionAndRemoveHprof(hprofPath);&#10;&#10;            isDumping = false;&#10;        &#125;&#10;&#10;        @Override&#10;        public void onSuccess(byte[] bytes, Client client) &#123;&#10;            String hprofPath = getHprofPath(client.getClientData().getClientDescription());&#10;            Utilities.saveFile(bytes, hprofPath);&#10;&#10;            conversionAndRemoveHprof(hprofPath);&#10;&#10;            isDumping = false;&#10;        &#125;&#10;&#10;        @Override&#10;        public void onEndFailure(Client client, String s) &#123;&#10;            isDumping = false;&#10;        &#125;&#10;    &#125;;&#10;    ClientData.setHprofDumpHandler(hprofDumpHandler);&#10;&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>这里默认选择栈顶进程做dump操作，通过adb shell dumpsys activity top命令获取栈顶TASK的ApplicationId，通过IDevice接口的getClient方法获取Client对象，执行dumpHprof操作</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/**&#10; * dump&#26632;&#39030;&#36827;&#31243;&#30340;hprof&#10; */&#10;public void dumpTopTaskHprof() &#123;&#10;    if (isDumping) &#123;&#10;        return;&#10;    &#125;&#10;&#10;    IDevice iDevice = mDevice.getIDevice();&#10;&#10;    /**&#10;     * &#36825;&#37324;&#33258;&#21160;&#36873;&#25321;&#25163;&#26426;&#19978;&#26632;&#39030;&#36827;&#31243;&#20570;dump&#25805;&#20316;&#65292;&#33719;&#21462;applicationName&#10;     */&#10;    String topApp = getTopApplication();&#10;    Client client = iDevice.getClient(topApp);&#10;&#10;    if (client == null) &#123;&#10;        throw new RuntimeException(&#34;Can not dump app:&#34; + topApp);&#10;    &#125;&#10;    client.dumpHprof();&#10;    isDumping = true;&#10;&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>在IHprofDumpHandler的回调中, 保存hprof文件，做格式转换，分析Bitmap对象的状况。BitmapAnalyzer.java的代码在上文说过。</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">private void conversionAndRemoveHprof(String hprofPath) &#123;&#10;    String convHprofPath = getConvHprofPath(hprofPath);&#10;    hprofConv(hprofPath, convHprofPath);&#10;    removeFile(hprofPath);&#10;&#10;    analyzerBitmap(convHprofPath);&#10;&#125;&#10;&#10;private void hprofConv(String hprofPath, String convHprofPath) &#123;&#10;    String adbPath = Adb.instance().getAdbPath();&#10;    String hprofConvPath = adbPath.replace(&#34;adb&#34;, &#34;hprof-conv&#34;);&#10;    ShellCommand.exec(hprofConvPath + &#34; &#34; + hprofPath + &#34; &#34; + convHprofPath);&#10;&#125;&#10;&#10;private void analyzerBitmap(String hprofPath) &#123;&#10;    String[] args = new String[2];&#10;    args[0] = hprofPath;&#10;    args[1] = &#34;bitmap&#34;;&#10;    BitmapAnalyzer.main(args);&#10;&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="后续会补充通过BitmapAnalyzer发现的问题和优化方案">后续会补充通过BitmapAnalyzer发现的问题和优化方案</h3>]]></content>
     
     <summary type="html">
     
-      &lt;h3 id=&quot;如何使用ddmlib_dump出堆文件&quot;&gt;如何使用ddmlib dump出堆文件&lt;/h3&gt;&lt;p&gt;一般情况下如果我想要较详细的分析内存状况时，会使用android monitor和Memory Analyzer工具，但步骤有些麻烦。&lt;/p&gt;
+      &lt;h3 id=&quot;如何使用ddmlib_dump出堆文件&quot;&gt;如何使用ddmlib dump出堆文件&lt;/h3&gt;&lt;p&gt;一般情况下如果我想要较详细的分析内存状况，会使用android monitor(下简称monitor)和Memory Analyzer工具(下简称MAT)，但步骤有些麻烦。&lt;/p&gt;
 &lt;ol&gt;
-&lt;li&gt;使用m
+&lt;li&gt;使用monitor dump堆文件&lt;/li&gt;
+&lt;li&gt;使用hprof-conv工具，将hprof转换成MAT能够识别的格式&lt;/li&gt;
+&lt;li&gt;使用MAT分析&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;需要手动dump hprof再使用hprof-conv工具手动转码，上篇&lt;a href=&quot;https://ivonhoe.github.io/2017/03/22/Bitmap&amp;amp;Memory/&quot;&gt;Android Bitmap的内存大小是如何计算的？&lt;/a&gt;说到使用square的&lt;a href=&quot;https://github.com/square/haha&quot;&gt;haha&lt;/a&gt;来做内存堆中Bitmap的分析。所以在思考如何一键完成内存dump和analyze的过程，当然可以不单是对Bitmap对象做分析。&lt;br&gt;如何完成dump和转码，思路还是Read the fucking source code，看下monitor是如何dump hprof文件的。打开Android sdk目录，monitor和其依赖的jar分别在&lt;code&gt;/tools&lt;/code&gt;和’/tools/lib’目录，核心代码在&lt;code&gt;ddmlib.jar&lt;/code&gt;中，Java swring代码在&lt;code&gt;ddms.jar&lt;/code&gt;和&lt;code&gt;ddmuilib.jar&lt;/code&gt;中，ddmlib需要依赖&lt;code&gt;common.jar&lt;/code&gt;和&lt;code&gt;guava.jar&lt;/code&gt;。&lt;/p&gt;
     
     </summary>
     

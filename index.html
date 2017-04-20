@@ -294,7 +294,7 @@
               
                 
                 <a class="post-title-link" href="/2017/04/09/how-to-dump-heap/" itemprop="url">
-                  how-to-dump-heap
+                  使用BitmapAnalyzer分析内存Bitmap
                 </a>
               
             
@@ -338,7 +338,7 @@
 
           
           
-             <span id="/2017/04/09/how-to-dump-heap/" class="leancloud_visitors" data-flag-title="how-to-dump-heap">
+             <span id="/2017/04/09/how-to-dump-heap/" class="leancloud_visitors" data-flag-title="使用BitmapAnalyzer分析内存Bitmap">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -368,15 +368,20 @@
 
       
         
-          
-            <h3 id="如何使用ddmlib_dump出堆文件">如何使用ddmlib dump出堆文件</h3><p>一般情况下如果我想要较详细的分析内存状况时，会使用android monitor和Memory Analyzer工具，但步骤有些麻烦。</p>
+          <h3 id="如何使用ddmlib_dump出堆文件">如何使用ddmlib dump出堆文件</h3><p>一般情况下如果我想要较详细的分析内存状况，会使用android monitor(下简称monitor)和Memory Analyzer工具(下简称MAT)，但步骤有些麻烦。</p>
 <ol>
 <li>使用monitor dump堆文件</li>
 <li>使用hprof-conv工具，将hprof转换成MAT能够识别的格式</li>
 <li>使用MAT分析</li>
 </ol>
-
-          
+<p>需要手动dump hprof再使用hprof-conv工具手动转码，上篇<a href="https://ivonhoe.github.io/2017/03/22/Bitmap&amp;Memory/">Android Bitmap的内存大小是如何计算的？</a>说到使用square的<a href="https://github.com/square/haha">haha</a>来做内存堆中Bitmap的分析。所以在思考如何一键完成内存dump和analyze的过程，当然可以不单是对Bitmap对象做分析。<br>如何完成dump和转码，思路还是Read the fucking source code，看下monitor是如何dump hprof文件的。打开Android sdk目录，monitor和其依赖的jar分别在<code>/tools</code>和’/tools/lib’目录，核心代码在<code>ddmlib.jar</code>中，Java swring代码在<code>ddms.jar</code>和<code>ddmuilib.jar</code>中，ddmlib需要依赖<code>common.jar</code>和<code>guava.jar</code>。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/04/09/how-to-dump-heap/#далее" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
