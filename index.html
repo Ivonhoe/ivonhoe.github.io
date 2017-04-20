@@ -374,7 +374,7 @@
 <li>使用hprof-conv工具，将hprof转换成MAT能够识别的格式</li>
 <li>使用MAT分析</li>
 </ol>
-<p>需要手动dump hprof再使用hprof-conv工具手动转码，上篇<a href="https://ivonhoe.github.io/2017/03/22/Bitmap&amp;Memory/">Android Bitmap的内存大小是如何计算的？</a>说到使用square的<a href="https://github.com/square/haha">haha</a>来做内存堆中Bitmap的分析。所以在思考如何一键完成内存dump和analyze的过程，当然可以不单是对Bitmap对象做分析。<br>如何完成dump和转码，思路还是Read the fucking source code，看下monitor是如何dump hprof文件的。打开Android sdk目录，monitor和其依赖的jar分别在<code>/tools</code>和’/tools/lib’目录，核心代码在<code>ddmlib.jar</code>中，Java swring代码在<code>ddms.jar</code>和<code>ddmuilib.jar</code>中，ddmlib需要依赖<code>common.jar</code>和<code>guava.jar</code>。</p>
+<p>需要手动dump hprof再使用hprof-conv工具手动转码，上篇<a href="https://ivonhoe.github.io/2017/03/22/Bitmap&amp;Memory/">Android Bitmap的内存大小是如何计算的？</a>说到使用square的<a href="https://github.com/square/haha">haha</a>来做内存堆中Bitmap的分析。所以在思考如何一键完成内存dump和analyze的过程，当然也可以任意其他Java对象做分析。<br>如何完成dump和转码，思路还是Read the fucking source code，看下monitor是如何dump hprof文件的。打开Android sdk目录，monitor和其依赖的jar分别在<code>/tools</code>和’/tools/lib’目录，核心代码在<code>ddmlib.jar</code>中，Java swring代码在<code>ddms.jar</code>和<code>ddmuilib.jar</code>中，ddmlib需要依赖<code>common.jar</code>和<code>guava.jar</code>。</p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2017/04/09/how-to-dump-heap/#далее" rel="contents">

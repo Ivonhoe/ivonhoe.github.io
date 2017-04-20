@@ -108,7 +108,7 @@
 
 需要手动dump hprof再使用hprof-conv工具手动">
 <meta property="og:image" content="https://ivonhoe.github.io/res/hprof/hprof-1.png">
-<meta property="og:updated_time" content="2017-04-20T03:10:15.000Z">
+<meta property="og:updated_time" content="2017-04-20T03:16:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用BitmapAnalyzer分析内存Bitmap">
 <meta name="twitter:description" content="如何使用ddmlib dump出堆文件一般情况下如果我想要较详细的分析内存状况，会使用android monitor(下简称monitor)和Memory Analyzer工具(下简称MAT)，但步骤有些麻烦。
@@ -388,7 +388,7 @@
 <li>使用hprof-conv工具，将hprof转换成MAT能够识别的格式</li>
 <li>使用MAT分析</li>
 </ol>
-<p>需要手动dump hprof再使用hprof-conv工具手动转码，上篇<a href="https://ivonhoe.github.io/2017/03/22/Bitmap&amp;Memory/">Android Bitmap的内存大小是如何计算的？</a>说到使用square的<a href="https://github.com/square/haha" target="_blank" rel="external">haha</a>来做内存堆中Bitmap的分析。所以在思考如何一键完成内存dump和analyze的过程，当然可以不单是对Bitmap对象做分析。<br>如何完成dump和转码，思路还是Read the fucking source code，看下monitor是如何dump hprof文件的。打开Android sdk目录，monitor和其依赖的jar分别在<code>/tools</code>和’/tools/lib’目录，核心代码在<code>ddmlib.jar</code>中，Java swring代码在<code>ddms.jar</code>和<code>ddmuilib.jar</code>中，ddmlib需要依赖<code>common.jar</code>和<code>guava.jar</code>。</p>
+<p>需要手动dump hprof再使用hprof-conv工具手动转码，上篇<a href="https://ivonhoe.github.io/2017/03/22/Bitmap&amp;Memory/">Android Bitmap的内存大小是如何计算的？</a>说到使用square的<a href="https://github.com/square/haha" target="_blank" rel="external">haha</a>来做内存堆中Bitmap的分析。所以在思考如何一键完成内存dump和analyze的过程，当然也可以任意其他Java对象做分析。<br>如何完成dump和转码，思路还是Read the fucking source code，看下monitor是如何dump hprof文件的。打开Android sdk目录，monitor和其依赖的jar分别在<code>/tools</code>和’/tools/lib’目录，核心代码在<code>ddmlib.jar</code>中，Java swring代码在<code>ddms.jar</code>和<code>ddmuilib.jar</code>中，ddmlib需要依赖<code>common.jar</code>和<code>guava.jar</code>。</p>
 <a id="more"></a>
 <p><img src="/res/hprof/hprof-1.png" alt=""></p>
 <h3 id="如何使用ddmlib获取adb连接的设备">如何使用ddmlib获取adb连接的设备</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public static void main(String[] args) &#123;&#10;        IDevice device;&#10;        // &#36825;&#37324;&#38656;&#35201;&#20256;&#21442;true&#65292;&#19981;&#28982;&#24453;&#20250;&#20250;&#25343;&#19981;&#21040;&#25163;&#26426;&#19978;&#30340;client&#10;        AndroidDebugBridge.init(true);&#10;        AndroidDebugBridge bridge = AndroidDebugBridge.createBridge(&#10;                &#34;/Users/Ivonhoe/Library/Android/sdk/platform-tools/adb&#34;, false);&#10;        waitForDevice(bridge);&#10;        IDevice devices[] = bridge.getDevices();&#10;        device = devices[0];&#10;    &#125;&#10;&#10;    private static void waitForDevice(AndroidDebugBridge bridge) &#123;&#10;        int count = 0;&#10;        while (!bridge.hasInitialDeviceList()) &#123;&#10;            try &#123;&#10;                Thread.sleep(100);&#10;                count++;&#10;            &#125; catch (InterruptedException ignored) &#123;&#10;            &#125;&#10;            if (count &#62; 300) &#123;&#10;                System.err.print(&#34;Time out&#34;);&#10;                break;&#10;            &#125;&#10;        &#125;&#10;    &#125;</span><br></pre></td></tr></table></figure>
