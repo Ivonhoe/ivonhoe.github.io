@@ -108,7 +108,8 @@
 
 需要手动dump hprof再使用hprof-conv工具手动">
 <meta property="og:image" content="https://ivonhoe.github.io/res/hprof/hprof-1.png">
-<meta property="og:updated_time" content="2017-04-20T03:16:33.000Z">
+<meta property="og:image" content="https://ivonhoe.github.io/res/hprof/hprof-3.png">
+<meta property="og:updated_time" content="2017-04-25T09:42:02.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用BitmapAnalyzer分析内存Bitmap">
 <meta name="twitter:description" content="如何使用ddmlib dump出堆文件一般情况下如果我想要较详细的分析内存状况，会使用android monitor(下简称monitor)和Memory Analyzer工具(下简称MAT)，但步骤有些麻烦。
@@ -398,7 +399,20 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/**&#10; * dump&#26632;&#39030;&#36827;&#31243;&#30340;hprof&#10; */&#10;public void dumpTopTaskHprof() &#123;&#10;    if (isDumping) &#123;&#10;        return;&#10;    &#125;&#10;&#10;    IDevice iDevice = mDevice.getIDevice();&#10;&#10;    /**&#10;     * &#36825;&#37324;&#33258;&#21160;&#36873;&#25321;&#25163;&#26426;&#19978;&#26632;&#39030;&#36827;&#31243;&#20570;dump&#25805;&#20316;&#65292;&#33719;&#21462;applicationName&#10;     */&#10;    String topApp = getTopApplication();&#10;    Client client = iDevice.getClient(topApp);&#10;&#10;    if (client == null) &#123;&#10;        throw new RuntimeException(&#34;Can not dump app:&#34; + topApp);&#10;    &#125;&#10;    client.dumpHprof();&#10;    isDumping = true;&#10;&#125;</span><br></pre></td></tr></table></figure>
 <p><strong>在IHprofDumpHandler的回调中, 保存hprof文件，做格式转换，分析Bitmap对象的状况。BitmapAnalyzer.java的代码在上文说过。</strong></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">private void conversionAndRemoveHprof(String hprofPath) &#123;&#10;    String convHprofPath = getConvHprofPath(hprofPath);&#10;    hprofConv(hprofPath, convHprofPath);&#10;    removeFile(hprofPath);&#10;&#10;    analyzerBitmap(convHprofPath);&#10;&#125;&#10;&#10;private void hprofConv(String hprofPath, String convHprofPath) &#123;&#10;    String adbPath = Adb.instance().getAdbPath();&#10;    String hprofConvPath = adbPath.replace(&#34;adb&#34;, &#34;hprof-conv&#34;);&#10;    ShellCommand.exec(hprofConvPath + &#34; &#34; + hprofPath + &#34; &#34; + convHprofPath);&#10;&#125;&#10;&#10;private void analyzerBitmap(String hprofPath) &#123;&#10;    String[] args = new String[2];&#10;    args[0] = hprofPath;&#10;    args[1] = &#34;bitmap&#34;;&#10;    BitmapAnalyzer.main(args);&#10;&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="后续会补充通过BitmapAnalyzer发现的问题和优化方案">后续会补充通过BitmapAnalyzer发现的问题和优化方案</h3>
+<h3 id="Zygote内存模型">Zygote内存模型</h3><p>仔细看一下可以发现，这些都是Android系统的主题资源图片，为什么会有这么多主题资源被加载？是不是选择其他的theme这些资源是会改变？不需要的无用资源能否避免被加载？How？毕竟单单Resources中sPreloadedDrawables所引用的Drawable就会占用10M以上的内存空间。</p>
+<p><img src="/res/hprof/hprof-3.png" alt=""></p>
+<p>使用Android Studio的monitor工具dump内存如上图所示，AS将hprof中的内存信息分为三类，分别是App heap，Image heap， Zygote heap。App heap很好理解，就是应用进程独占的内存空间，在应用中创建的对象都会在App heap上。而在使用Dalvik虚拟机的手机上，并没有Image heap。<a href="https://developer.android.com/studio/profile/am-hprof.html#why" target="_blank" rel="external">Android官网文档</a>的解释是：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">App heap - The heap used by the current app.&#10;&#10;Image heap - The memory mapped copy of the current app on disk.&#10;&#10;Zygote heap - The common set of libraries and runtime classes and data that all apps are forked from. The zygote space is created during device startup and is never allocated into.</span><br></pre></td></tr></table></figure>
+<p><code>app_process</code>调用Zygote的main()方法启动Zygote时并创建第一个虚拟机进程，接下来的<code>system_server</code>和应用进程都从Zygote中fork出来的。Zygote启动时会预加载所有需要的Java classes和”必要的”资源文件，这些资源文件就包括我们在hprof文件中看到的被sPreloadedDrawables所直接引用的Bitmap资源。Zygote会启动System Server并建立一个叫<code>zygote</code>的LocalSocketServer,用来监听fork新进程的请求。</p>
+<ul>
+<li>Dalvik Heap</li>
+</ul>
+<h3 id="参考">参考</h3><p><a href="https://developer.android.com/studio/profile/investigate-ram.html" target="_blank" rel="external"></a></p>
+<p><a href="https://developer.android.com/studio/profile/am-hprof.html#why" target="_blank" rel="external">HPROF Viewer and Analyzer</a></p>
+<p><a href="http://www.jianshu.com/p/d061fa36a0d9" target="_blank" rel="external">Manage Your App’s Memory</a></p>
+<p><a href="http://wiki.jikexueyuan.com/project/deep-android-v1/zygote.html" target="_blank" rel="external">深入理解 Zygote</a></p>
+<p><a href="http://blog.csdn.net/laisse/article/details/51612975?locationNum=1&amp;fps=1" target="_blank" rel="external"></a></p>
+
       
     </div>
 
@@ -472,6 +486,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/04/20/android-touch-event/" rel="prev" title="android-touch-event">
+                android-touch-event <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -547,7 +565,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-count">15</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -613,7 +631,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#如何使用ddmlib_dump出堆文件"><span class="nav-number">1.</span> <span class="nav-text">如何使用ddmlib dump出堆文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#如何使用ddmlib获取adb连接的设备"><span class="nav-number">2.</span> <span class="nav-text">如何使用ddmlib获取adb连接的设备</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#如何dump_hprof"><span class="nav-number">3.</span> <span class="nav-text">如何dump hprof</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#后续会补充通过BitmapAnalyzer发现的问题和优化方案"><span class="nav-number">4.</span> <span class="nav-text">后续会补充通过BitmapAnalyzer发现的问题和优化方案</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#如何使用ddmlib_dump出堆文件"><span class="nav-number">1.</span> <span class="nav-text">如何使用ddmlib dump出堆文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#如何使用ddmlib获取adb连接的设备"><span class="nav-number">2.</span> <span class="nav-text">如何使用ddmlib获取adb连接的设备</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#如何dump_hprof"><span class="nav-number">3.</span> <span class="nav-text">如何dump hprof</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Zygote内存模型"><span class="nav-number">4.</span> <span class="nav-text">Zygote内存模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考"><span class="nav-number">5.</span> <span class="nav-text">参考</span></a></li></ol></div>
             
 
           </div>

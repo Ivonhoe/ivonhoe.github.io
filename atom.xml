@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://ivonhoe.github.io/"/>
-  <updated>2017-04-20T03:16:33.000Z</updated>
+  <updated>2017-04-20T03:36:49.000Z</updated>
   <id>https://ivonhoe.github.io/</id>
   
   <author>
@@ -16,11 +16,31 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>android-touch-event</title>
+    <link href="https://ivonhoe.github.io/2017/04/20/android-touch-event/"/>
+    <id>https://ivonhoe.github.io/2017/04/20/android-touch-event/</id>
+    <published>2017-04-20T03:22:48.000Z</published>
+    <updated>2017-04-20T03:36:49.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="Android_事件传递">Android 事件传递</h2><p>###<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">protoc --java_out=./ ./proto/wire.proto</span><br></pre></td></tr></table></figure></p>
+<p><a href="http://www.jokinkuang.info/2016/09/22/mac-install-protobuf.html" target="_blank" rel="external">Mac如何安装protobuf</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;Android_事件传递&quot;&gt;Android 事件传递&lt;/h2&gt;&lt;p&gt;###&lt;br&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/sp
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
     <title>使用BitmapAnalyzer分析内存Bitmap</title>
     <link href="https://ivonhoe.github.io/2017/04/09/how-to-dump-heap/"/>
     <id>https://ivonhoe.github.io/2017/04/09/how-to-dump-heap/</id>
     <published>2017-04-09T11:03:01.000Z</published>
-    <updated>2017-04-20T03:16:33.000Z</updated>
+    <updated>2017-04-25T09:42:02.000Z</updated>
     
     <content type="html"><![CDATA[<h3 id="如何使用ddmlib_dump出堆文件">如何使用ddmlib dump出堆文件</h3><p>一般情况下如果我想要较详细的分析内存状况，会使用android monitor(下简称monitor)和Memory Analyzer工具(下简称MAT)，但步骤有些麻烦。</p>
 <ol>
@@ -38,7 +58,20 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/**&#10; * dump&#26632;&#39030;&#36827;&#31243;&#30340;hprof&#10; */&#10;public void dumpTopTaskHprof() &#123;&#10;    if (isDumping) &#123;&#10;        return;&#10;    &#125;&#10;&#10;    IDevice iDevice = mDevice.getIDevice();&#10;&#10;    /**&#10;     * &#36825;&#37324;&#33258;&#21160;&#36873;&#25321;&#25163;&#26426;&#19978;&#26632;&#39030;&#36827;&#31243;&#20570;dump&#25805;&#20316;&#65292;&#33719;&#21462;applicationName&#10;     */&#10;    String topApp = getTopApplication();&#10;    Client client = iDevice.getClient(topApp);&#10;&#10;    if (client == null) &#123;&#10;        throw new RuntimeException(&#34;Can not dump app:&#34; + topApp);&#10;    &#125;&#10;    client.dumpHprof();&#10;    isDumping = true;&#10;&#125;</span><br></pre></td></tr></table></figure>
 <p><strong>在IHprofDumpHandler的回调中, 保存hprof文件，做格式转换，分析Bitmap对象的状况。BitmapAnalyzer.java的代码在上文说过。</strong></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">private void conversionAndRemoveHprof(String hprofPath) &#123;&#10;    String convHprofPath = getConvHprofPath(hprofPath);&#10;    hprofConv(hprofPath, convHprofPath);&#10;    removeFile(hprofPath);&#10;&#10;    analyzerBitmap(convHprofPath);&#10;&#125;&#10;&#10;private void hprofConv(String hprofPath, String convHprofPath) &#123;&#10;    String adbPath = Adb.instance().getAdbPath();&#10;    String hprofConvPath = adbPath.replace(&#34;adb&#34;, &#34;hprof-conv&#34;);&#10;    ShellCommand.exec(hprofConvPath + &#34; &#34; + hprofPath + &#34; &#34; + convHprofPath);&#10;&#125;&#10;&#10;private void analyzerBitmap(String hprofPath) &#123;&#10;    String[] args = new String[2];&#10;    args[0] = hprofPath;&#10;    args[1] = &#34;bitmap&#34;;&#10;    BitmapAnalyzer.main(args);&#10;&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="后续会补充通过BitmapAnalyzer发现的问题和优化方案">后续会补充通过BitmapAnalyzer发现的问题和优化方案</h3>]]></content>
+<h3 id="Zygote内存模型">Zygote内存模型</h3><p>仔细看一下可以发现，这些都是Android系统的主题资源图片，为什么会有这么多主题资源被加载？是不是选择其他的theme这些资源是会改变？不需要的无用资源能否避免被加载？How？毕竟单单Resources中sPreloadedDrawables所引用的Drawable就会占用10M以上的内存空间。</p>
+<p><img src="/res/hprof/hprof-3.png" alt=""></p>
+<p>使用Android Studio的monitor工具dump内存如上图所示，AS将hprof中的内存信息分为三类，分别是App heap，Image heap， Zygote heap。App heap很好理解，就是应用进程独占的内存空间，在应用中创建的对象都会在App heap上。而在使用Dalvik虚拟机的手机上，并没有Image heap。<a href="https://developer.android.com/studio/profile/am-hprof.html#why" target="_blank" rel="external">Android官网文档</a>的解释是：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">App heap - The heap used by the current app.&#10;&#10;Image heap - The memory mapped copy of the current app on disk.&#10;&#10;Zygote heap - The common set of libraries and runtime classes and data that all apps are forked from. The zygote space is created during device startup and is never allocated into.</span><br></pre></td></tr></table></figure>
+<p><code>app_process</code>调用Zygote的main()方法启动Zygote时并创建第一个虚拟机进程，接下来的<code>system_server</code>和应用进程都从Zygote中fork出来的。Zygote启动时会预加载所有需要的Java classes和”必要的”资源文件，这些资源文件就包括我们在hprof文件中看到的被sPreloadedDrawables所直接引用的Bitmap资源。Zygote会启动System Server并建立一个叫<code>zygote</code>的LocalSocketServer,用来监听fork新进程的请求。</p>
+<ul>
+<li>Dalvik Heap</li>
+</ul>
+<h3 id="参考">参考</h3><p><a href="https://developer.android.com/studio/profile/investigate-ram.html" target="_blank" rel="external"></a></p>
+<p><a href="https://developer.android.com/studio/profile/am-hprof.html#why" target="_blank" rel="external">HPROF Viewer and Analyzer</a></p>
+<p><a href="http://www.jianshu.com/p/d061fa36a0d9" target="_blank" rel="external">Manage Your App’s Memory</a></p>
+<p><a href="http://wiki.jikexueyuan.com/project/deep-android-v1/zygote.html" target="_blank" rel="external">深入理解 Zygote</a></p>
+<p><a href="http://blog.csdn.net/laisse/article/details/51612975?locationNum=1&amp;fps=1" target="_blank" rel="external"></a></p>
+]]></content>
     
     <summary type="html">
     
@@ -64,7 +97,7 @@
     <link href="https://ivonhoe.github.io/2017/03/22/Bitmap&amp;Memory/"/>
     <id>https://ivonhoe.github.io/2017/03/22/Bitmap&amp;Memory/</id>
     <published>2017-03-22T11:35:36.000Z</published>
-    <updated>2017-03-28T15:18:25.000Z</updated>
+    <updated>2017-04-24T07:02:14.000Z</updated>
     
     <content type="html"><![CDATA[<h3 id="一、前言">一、前言</h3><p>本来只想说下Bitmap和内存的基本关系，但发现如果真的想把这看似简单的事情说清楚，实际上未必那么简单，你不信？不妨先尝试下回答下面几个问题！</p>
 <ul>
@@ -78,12 +111,14 @@
 <a id="more"></a>
 <h3 id="二、基础概念">二、基础概念</h3><ul>
 <li>px：像素(pixel)，指的是屏幕上的物理点，最小的独立显示单位</li>
-<li>ppi：每英寸像素点(Pixels Per Inch)，很多文章中的计算方式是使用勾股定理，通过屏幕长宽计算出对角线的长度，再除以屏幕对角线英寸值，<strong>如果你这样理解，那有可能是错的！</strong>。</li>
+<li>ppi：每英寸像素点(Pixels Per Inch)，之前我自己的理解就是使用勾股定理，通过屏幕长宽计算出对角线的长度，再除以屏幕对角线英寸值。</li>
 <li>dpi：每英寸点(Dots Per Inch)，和ppi有什么区别？</li>
 <li>dp：像素无关点(Density-Independent pixel)，这个Android定义的虚拟值，和px关系式是<code>px = dp * (dpi / 160)</code>，为啥？</li>
 </ul>
 <p><strong>ppi</strong></p>
 <p>ppi指的是水平方向或者竖直方向上每英寸的像素值，先说为啥很多对ppi的理解都有问题。很多文章利用勾股定理计算手机屏幕对角线像素个数！！但是手机屏幕的像素分布是点阵分布，点阵的对角线像素点不是用勾股定理算出来的，而是等于它的行数或者列数，为啥用对角线计算？因为一般手机的尺寸说的就是对角线英寸值，而不知道长宽的英寸值。这里有个公式推导：<br>设 X/x = Y/y = ppi，这里X为水平像素值，x为水平英寸值，Y为竖直像素值，y为竖直英寸值。则(X²+Y²）/（x²+y²）=（X/x）²=（Y/y）²，这个公式可通过勾股定理和相似三角形原理证明。ppi的计算只是形式和勾股定理一样但并不是勾股定理的意思，分子也不是对角线的像素数！！ppi的计算公式可表示为：√(X²+Y²）/对角线英寸。但不意味着ppi是使用勾股定理计算对角线像素值获得的~~</p>
+<p><img src="/res/bitmap/2.png" alt=""></p>
+<p><a href="https://www.zhihu.com/question/21220154/answer/69672901" target="_blank" rel="external">DPI、PPI、DP、PX 的详细计算方法及算法来源是什么？fsk的回答</a></p>
 <p><strong>dpi</strong></p>
 <p>dpi是由ppi确定的，还是以Nexue6为例，通过ppi的计算公式，可以计算出Nexues6的ppi为<code>492</code>,参照下表，应该在xxxhdpi的范围内，但它的dpi并不是<code>492</code>。实际上dpi只有120(low)、160(medium)、240(high)、260、280、300、320(xhigh)、340、360、400、420、480（xxhpdi）、560、640（xxxhpi）这几种，可以参照<code>android.util.DisplayMetrics</code>的源码。通过<code>getResources().getDisplayMetrics().densityDpi</code>可以获取手机实际的dpi。</p>
 <p><img src="/res/bitmap/dpi.png" alt=""></p>
@@ -102,9 +137,8 @@
 <p>答：根据上面的分析，可以看到nexus6，是属于xxxhpi的屏幕，获取到dpi为560。如果把180大小的图片只放在xxxhdpi目录中，是不是屏幕就会显示180px的大小？其实并不是，dpi=640的才是真正的xxxhdpi(这里需要看DisplayMetrics的源码)，当Android系统加载图片时，会针对当前系统的dpi和图片目录的source dpi比较做相应比例的缩放，如果一张图片放在drawable-xxxhdpi目录，这是告诉系统，针对dpi为640的手机屏幕上，这张图片是刚刚好的，它的scale为1.0，同理，drawable-xxhpi对应480dpi，drawable-xhdpi对应的是320dpi。如果希望<code>180*180</code>在nexues6的屏幕上按照原有尺寸显示，只有将其放在drawable-nodpi或者drawable-560dpi目录中才可以。</p>
 <p>回到问题，如果将<code>180*180</code>放入hdpi目录中，那实际显示的图片大小应该为：<code>int (180 * (560 / 240) +0.5f ) = 420px</code>，实际图片的大小应该为420px！同理:<br>放入xhdpi目录中，实际大小应该为<code>int (180 * (560 / 320) +0.5f ) = 315px</code><br>放入xxhdpi目录中，实际大小应该为<code>int (180 * (560 / 480) +0.5f ) = 210px</code></p>
 <p><a href="https://android.googlesource.com/platform/frameworks/base/+/7b2f8b8/core/jni/android/graphics/BitmapFactory.cpp" target="_blank" rel="external">BitmapFactory.cpp源码链接</a></p>
-<p><strong>问题5</strong></p>
-<p>其实这个问题描述的是，如果我用小的Bitmap容器，放置较大的Bitmap，那这个Bitmap的尺寸大小是按照容器的大小计算？还是按照dpi缩放的规则计算？</p>
-<h3 id="四、一张图片占多大内存">四、一张图片占多大内存</h3><p>现在我们已经知道了一张图片放置在不同的资源目录中，在屏幕显示像素大小是如何计算的了。一张图片大概占用多少内存，其实只用看一个像素占用多少内存就可以喽？我们都知道屏幕上的颜色是有R，G，B加透明度表示的，Android官方支持的RGB格式，主要是<code>ALPHA_8</code>，<code>RGB_565</code>，<code>ARGB_4444</code>，<code>ARGB_8888</code>这几种。</p>
+<p>如果用小的Bitmap容器，放置较大的Bitmap，那这个Bitmap的尺寸大小是按照容器的大小计算？还是按照dpi缩放的规则计算？</p>
+<h3 id="四、一张图片占多大内存">四、一张图片占多大内存</h3><p>现在我们已经知道了一张图片放置在不同的资源目录中，系统decode的bitmap的尺寸大小是如何计算的了。一张图片大概占用多少内存，其实只用看一个像素占用多少内存就可以喽？我们都知道屏幕上的颜色是有R，G，B加透明度表示的，Android官方支持的RGB格式，主要是<code>ALPHA_8</code>，<code>RGB_565</code>，<code>ARGB_4444</code>，<code>ARGB_8888</code>这几种。</p>
 <p>以ARGB_8888为例，表示一个像素点，使用8位表示透明度，8位表示Red，8位表示Green，8位表示Blue。加起来，一个像素就需要4byte，同理，RGB_565一个像素需要2byte。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public enum Config &#123;&#10;    ALPHA_8     (1),&#10;    RGB_565     (3),&#10;    @Deprecated&#10;    ARGB_4444   (4),&#10;    ARGB_8888   (5);&#10;    final int nativeInt;&#10;    Config(int ni) &#123;&#10;        this.nativeInt = ni;&#10;    &#125;&#10;&#125;</span><br></pre></td></tr></table></figure>
 <p>Android decode资源图片时默认会选择ARGB_8888，如果将<code>180*180</code>放入hdpi目录中，那实际大小应该为<code>int (180 * (560 / 240) +0.5f ) = 420px</code>，像素内存大小为 <code>420 * 420 * 4 = 705600byte = 689kb</code>。同理:<br>放入xhdpi目录中，实际大小应该为<code>int (180 * (560 / 320) +0.5f ) = 315px</code>，像素内存大小为<code>315 * 315 * 4 = 396900byte = 387.6kb</code><br>放入xxhdpi目录中，实际大小应该为<code>int (180 * (560 / 480) +0.5f ) = 210px</code>，像素内存大小为<code>210 * 210 * 4 = 176400byte = 172.2kb</code></p>
@@ -132,9 +166,7 @@
 </ul>
 <p><strong>Jar包地址</strong></p>
 <p><a href="https://raw.githubusercontent.com/Ivonhoe/mvn-repo/master/ivonhoe/java/heapanalyzer/bitmap-analyzer/0.0.1-SNAPSHOT/bitmap-analyzer-0.0.1-20170327.112600-1.jar" target="_blank" rel="external">https://raw.githubusercontent.com/Ivonhoe/mvn-repo/master/ivonhoe/java/heapanalyzer/bitmap-analyzer/0.0.1-SNAPSHOT/bitmap-analyzer-0.0.1-20170327.112600-1.jar</a></p>
-<h3 id="六、参考文档">六、参考文档</h3><p><a href="http://www.cnblogs.com/xiangism/p/5311314.html" target="_blank" rel="external">常见的图片格式</a></p>
-<p><a href="https://www.zhihu.com/question/21220154/answer/69672901" target="_blank" rel="external">DPI、PPI、DP、PX 的详细计算方法及算法来源是什么？fsk的回答</a></p>
-<p><a href="http://blog.csdn.net/guolin_blog/article/details/50727753" target="_blank" rel="external">Android drawable微技巧，你所不知道的drawable的那些细节</a></p>
+<h3 id="六、参考文档">六、参考文档</h3><p><a href="http://blog.csdn.net/guolin_blog/article/details/50727753" target="_blank" rel="external">Android drawable微技巧，你所不知道的drawable的那些细节</a></p>
 <p><a href="http://www.10tiao.com/html/336/201703/2652262290/1.html" target="_blank" rel="external">关于Android适配，看完这篇文章就够了</a></p>
 <p><a href="http://wangjunyan.github.io/2014/12/02/export-android-bitmap-from-dump-file/" target="_blank" rel="external">批量导出dump文件中的Bitmap</a></p>
 <p><a href="https://mp.weixin.qq.com/s?__biz=MzA3NTYzODYzMg==&amp;mid=403263974&amp;idx=1&amp;sn=b0315addbc47f3c38e65d9c633a12cd6&amp;scene=21#wechat_redirect" target="_blank" rel="external">Android 开发绕不过的坑：你的 Bitmap 究竟占多大内存？</a></p>

@@ -103,11 +103,12 @@
 问1：什么是dpi？什么是dp？答：你在侮辱我？我拒绝回答！（：无辜脸
 问2：以Nexus6为例，分辨率1440*2560，5.96英寸，ppi是什么？dpi是什么？1dp是多少像素？
 问3：还以Nexus6为例，一张180*180的图片，放置在">
+<meta property="og:image" content="https://ivonhoe.github.io/res/bitmap/2.png">
 <meta property="og:image" content="https://ivonhoe.github.io/res/bitmap/dpi.png">
 <meta property="og:image" content="https://ivonhoe.github.io/res/bitmap/bitmap_buffer.png">
 <meta property="og:image" content="https://ivonhoe.github.io/res/bitmap/1.png">
 <meta property="og:image" content="https://ivonhoe.github.io/res/bitmap/bitmap-analyzer.png">
-<meta property="og:updated_time" content="2017-03-28T15:18:25.000Z">
+<meta property="og:updated_time" content="2017-04-24T07:02:14.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android Bitmap的内存大小是如何计算的？">
 <meta name="twitter:description" content="一、前言本来只想说下Bitmap和内存的基本关系，但发现如果真的想把这看似简单的事情说清楚，实际上未必那么简单，你不信？不妨先尝试下回答下面几个问题！
@@ -391,12 +392,14 @@
 <a id="more"></a>
 <h3 id="二、基础概念">二、基础概念</h3><ul>
 <li>px：像素(pixel)，指的是屏幕上的物理点，最小的独立显示单位</li>
-<li>ppi：每英寸像素点(Pixels Per Inch)，很多文章中的计算方式是使用勾股定理，通过屏幕长宽计算出对角线的长度，再除以屏幕对角线英寸值，<strong>如果你这样理解，那有可能是错的！</strong>。</li>
+<li>ppi：每英寸像素点(Pixels Per Inch)，之前我自己的理解就是使用勾股定理，通过屏幕长宽计算出对角线的长度，再除以屏幕对角线英寸值。</li>
 <li>dpi：每英寸点(Dots Per Inch)，和ppi有什么区别？</li>
 <li>dp：像素无关点(Density-Independent pixel)，这个Android定义的虚拟值，和px关系式是<code>px = dp * (dpi / 160)</code>，为啥？</li>
 </ul>
 <p><strong>ppi</strong></p>
 <p>ppi指的是水平方向或者竖直方向上每英寸的像素值，先说为啥很多对ppi的理解都有问题。很多文章利用勾股定理计算手机屏幕对角线像素个数！！但是手机屏幕的像素分布是点阵分布，点阵的对角线像素点不是用勾股定理算出来的，而是等于它的行数或者列数，为啥用对角线计算？因为一般手机的尺寸说的就是对角线英寸值，而不知道长宽的英寸值。这里有个公式推导：<br>设 X/x = Y/y = ppi，这里X为水平像素值，x为水平英寸值，Y为竖直像素值，y为竖直英寸值。则(X²+Y²）/（x²+y²）=（X/x）²=（Y/y）²，这个公式可通过勾股定理和相似三角形原理证明。ppi的计算只是形式和勾股定理一样但并不是勾股定理的意思，分子也不是对角线的像素数！！ppi的计算公式可表示为：√(X²+Y²）/对角线英寸。但不意味着ppi是使用勾股定理计算对角线像素值获得的~~</p>
+<p><img src="/res/bitmap/2.png" alt=""></p>
+<p><a href="https://www.zhihu.com/question/21220154/answer/69672901" target="_blank" rel="external">DPI、PPI、DP、PX 的详细计算方法及算法来源是什么？fsk的回答</a></p>
 <p><strong>dpi</strong></p>
 <p>dpi是由ppi确定的，还是以Nexue6为例，通过ppi的计算公式，可以计算出Nexues6的ppi为<code>492</code>,参照下表，应该在xxxhdpi的范围内，但它的dpi并不是<code>492</code>。实际上dpi只有120(low)、160(medium)、240(high)、260、280、300、320(xhigh)、340、360、400、420、480（xxhpdi）、560、640（xxxhpi）这几种，可以参照<code>android.util.DisplayMetrics</code>的源码。通过<code>getResources().getDisplayMetrics().densityDpi</code>可以获取手机实际的dpi。</p>
 <p><img src="/res/bitmap/dpi.png" alt=""></p>
@@ -415,9 +418,8 @@
 <p>答：根据上面的分析，可以看到nexus6，是属于xxxhpi的屏幕，获取到dpi为560。如果把180大小的图片只放在xxxhdpi目录中，是不是屏幕就会显示180px的大小？其实并不是，dpi=640的才是真正的xxxhdpi(这里需要看DisplayMetrics的源码)，当Android系统加载图片时，会针对当前系统的dpi和图片目录的source dpi比较做相应比例的缩放，如果一张图片放在drawable-xxxhdpi目录，这是告诉系统，针对dpi为640的手机屏幕上，这张图片是刚刚好的，它的scale为1.0，同理，drawable-xxhpi对应480dpi，drawable-xhdpi对应的是320dpi。如果希望<code>180*180</code>在nexues6的屏幕上按照原有尺寸显示，只有将其放在drawable-nodpi或者drawable-560dpi目录中才可以。</p>
 <p>回到问题，如果将<code>180*180</code>放入hdpi目录中，那实际显示的图片大小应该为：<code>int (180 * (560 / 240) +0.5f ) = 420px</code>，实际图片的大小应该为420px！同理:<br>放入xhdpi目录中，实际大小应该为<code>int (180 * (560 / 320) +0.5f ) = 315px</code><br>放入xxhdpi目录中，实际大小应该为<code>int (180 * (560 / 480) +0.5f ) = 210px</code></p>
 <p><a href="https://android.googlesource.com/platform/frameworks/base/+/7b2f8b8/core/jni/android/graphics/BitmapFactory.cpp" target="_blank" rel="external">BitmapFactory.cpp源码链接</a></p>
-<p><strong>问题5</strong></p>
-<p>其实这个问题描述的是，如果我用小的Bitmap容器，放置较大的Bitmap，那这个Bitmap的尺寸大小是按照容器的大小计算？还是按照dpi缩放的规则计算？</p>
-<h3 id="四、一张图片占多大内存">四、一张图片占多大内存</h3><p>现在我们已经知道了一张图片放置在不同的资源目录中，在屏幕显示像素大小是如何计算的了。一张图片大概占用多少内存，其实只用看一个像素占用多少内存就可以喽？我们都知道屏幕上的颜色是有R，G，B加透明度表示的，Android官方支持的RGB格式，主要是<code>ALPHA_8</code>，<code>RGB_565</code>，<code>ARGB_4444</code>，<code>ARGB_8888</code>这几种。</p>
+<p>如果用小的Bitmap容器，放置较大的Bitmap，那这个Bitmap的尺寸大小是按照容器的大小计算？还是按照dpi缩放的规则计算？</p>
+<h3 id="四、一张图片占多大内存">四、一张图片占多大内存</h3><p>现在我们已经知道了一张图片放置在不同的资源目录中，系统decode的bitmap的尺寸大小是如何计算的了。一张图片大概占用多少内存，其实只用看一个像素占用多少内存就可以喽？我们都知道屏幕上的颜色是有R，G，B加透明度表示的，Android官方支持的RGB格式，主要是<code>ALPHA_8</code>，<code>RGB_565</code>，<code>ARGB_4444</code>，<code>ARGB_8888</code>这几种。</p>
 <p>以ARGB_8888为例，表示一个像素点，使用8位表示透明度，8位表示Red，8位表示Green，8位表示Blue。加起来，一个像素就需要4byte，同理，RGB_565一个像素需要2byte。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public enum Config &#123;&#10;    ALPHA_8     (1),&#10;    RGB_565     (3),&#10;    @Deprecated&#10;    ARGB_4444   (4),&#10;    ARGB_8888   (5);&#10;    final int nativeInt;&#10;    Config(int ni) &#123;&#10;        this.nativeInt = ni;&#10;    &#125;&#10;&#125;</span><br></pre></td></tr></table></figure>
 <p>Android decode资源图片时默认会选择ARGB_8888，如果将<code>180*180</code>放入hdpi目录中，那实际大小应该为<code>int (180 * (560 / 240) +0.5f ) = 420px</code>，像素内存大小为 <code>420 * 420 * 4 = 705600byte = 689kb</code>。同理:<br>放入xhdpi目录中，实际大小应该为<code>int (180 * (560 / 320) +0.5f ) = 315px</code>，像素内存大小为<code>315 * 315 * 4 = 396900byte = 387.6kb</code><br>放入xxhdpi目录中，实际大小应该为<code>int (180 * (560 / 480) +0.5f ) = 210px</code>，像素内存大小为<code>210 * 210 * 4 = 176400byte = 172.2kb</code></p>
@@ -445,9 +447,7 @@
 </ul>
 <p><strong>Jar包地址</strong></p>
 <p><a href="https://raw.githubusercontent.com/Ivonhoe/mvn-repo/master/ivonhoe/java/heapanalyzer/bitmap-analyzer/0.0.1-SNAPSHOT/bitmap-analyzer-0.0.1-20170327.112600-1.jar" target="_blank" rel="external">https://raw.githubusercontent.com/Ivonhoe/mvn-repo/master/ivonhoe/java/heapanalyzer/bitmap-analyzer/0.0.1-SNAPSHOT/bitmap-analyzer-0.0.1-20170327.112600-1.jar</a></p>
-<h3 id="六、参考文档">六、参考文档</h3><p><a href="http://www.cnblogs.com/xiangism/p/5311314.html" target="_blank" rel="external">常见的图片格式</a></p>
-<p><a href="https://www.zhihu.com/question/21220154/answer/69672901" target="_blank" rel="external">DPI、PPI、DP、PX 的详细计算方法及算法来源是什么？fsk的回答</a></p>
-<p><a href="http://blog.csdn.net/guolin_blog/article/details/50727753" target="_blank" rel="external">Android drawable微技巧，你所不知道的drawable的那些细节</a></p>
+<h3 id="六、参考文档">六、参考文档</h3><p><a href="http://blog.csdn.net/guolin_blog/article/details/50727753" target="_blank" rel="external">Android drawable微技巧，你所不知道的drawable的那些细节</a></p>
 <p><a href="http://www.10tiao.com/html/336/201703/2652262290/1.html" target="_blank" rel="external">关于Android适配，看完这篇文章就够了</a></p>
 <p><a href="http://wangjunyan.github.io/2014/12/02/export-android-bitmap-from-dump-file/" target="_blank" rel="external">批量导出dump文件中的Bitmap</a></p>
 <p><a href="https://mp.weixin.qq.com/s?__biz=MzA3NTYzODYzMg==&amp;mid=403263974&amp;idx=1&amp;sn=b0315addbc47f3c38e65d9c633a12cd6&amp;scene=21#wechat_redirect" target="_blank" rel="external">Android 开发绕不过的坑：你的 Bitmap 究竟占多大内存？</a></p>
@@ -606,7 +606,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-count">15</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
