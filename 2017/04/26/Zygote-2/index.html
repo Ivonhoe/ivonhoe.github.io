@@ -101,7 +101,7 @@
 <meta property="og:image" content="https://ivonhoe.github.io/res/hprof/hprof-5.png">
 <meta property="og:image" content="https://ivonhoe.github.io/res/hprof/hprof-4.png">
 <meta property="og:image" content="https://ivonhoe.github.io/res/hprof/hprof-8.jpg">
-<meta property="og:updated_time" content="2017-04-27T08:30:26.000Z">
+<meta property="og:updated_time" content="2017-04-27T09:00:20.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Zygote与内存">
 <meta name="twitter:description" content="BitmapAnalyer看Hello World当使用BitmapAnalyzer分析一个Android5.0+的Hello World App时你会dump出400+张图片，分析仔细看一下可以发现，这些都是Android系统的主题资源图片，为什么会有这么多主题资源被加载？是不是选择其他的theme这些资源是会改变？不需要的无用资源能否避免被加载？How？毕竟单单Resources中sPrelo">
@@ -374,13 +374,13 @@
 <p>使用Android Studio的monitor工具dump内存如上图所示，AS将hprof中的内存信息分为三类，分别是App heap，Image heap，Zygote heap。App heap很好理解，就是应用进程独占的内存空间，在应用中创建的对象都会在App heap上。而在使用Dalvik虚拟机的手机上，并没有Image heap，只有App heap和Zygote heap。<a href="https://developer.android.com/studio/profile/am-hprof.html#why" target="_blank" rel="external">Android官网文档</a>的三者的解释是：</p>
 <a id="more"></a>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">App heap - The heap used by the current app.&#10;&#10;Image heap - The memory mapped copy of the current app on disk.&#10;&#10;Zygote heap - The common set of libraries and runtime classes and data that all apps are forked from. The zygote space is created during device startup and is never allocated into.</span><br></pre></td></tr></table></figure>
-<p>较详细的Zygote机制可以看我翻译的<a href="https://ivonhoe.github.io/2017/04/25/Zygote/">Zygote https://ivonhoe.github.io/2017/04/25/Zygote/</a>这篇文章,总的来说是<code>app_process</code>启动Zygote并创建第一个虚拟机进程，Zygote启动时会预加载所有需要的Java classes和”必要的”资源文件，这些资源文件就包括我们在hprof文件中看到的被sPreloadedDrawables所直接引用的Bitmap资源。所以应用进程都是从Zygote中fork出来的，所以所有的应用进程都会包含上面提到的资源文件。而这些资源的拷贝可以看成浅拷贝，并不是真正的内存copy，而是作为进程间的共享内存使用。</p>
+<p>较详细的Zygote机制可以看我翻译的<a href="https://ivonhoe.github.io/2017/04/25/Zygote/">Zygote https://ivonhoe.github.io/2017/04/25/Zygote/</a>这篇文章,总的来说是<code>app_process</code>启动Zygote并创建第一个虚拟机进程，Zygote启动时会预加载所有需要的Java classes和”必要的”资源文件，这些资源文件就包括我们在hprof文件中看到的被sPreloadedDrawables所直接引用的Bitmap资源。应用进程都是从Zygote中fork出来的，所以所有的应用进程都会包含上面提到的资源文件。这些资源的拷贝可以看成浅拷贝，并不是真正的内存copy，而是作为进程间的共享内存使用。</p>
 <p><img src="/res/hprof/hprof-2.png" alt=""></p>
 <p>当通过反射手动清除sPreloadDrawable对这些资源的强引用，通过Android Studio的monitor工具发现，gc以后App heap发生了断崖式的内存回收，<code>adb shell dumpsys meminfo</code>发现Heap Alloc和Heap Size都发生了显著的减小，但Pss total并没有显著变化。这里的理解是PSS = Private RAM + 按比例计算的Shared RAM，这两部分都没有发生显著变化，所以PSS Total没有变化。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">private void clearPreloadedDrawables() &#123;&#10;    try &#123;&#10;        Field mFieldPreloadedDrawables = getField(Resources.class, &#34;sPreloadedDrawables&#34;);&#10;        if (mFieldPreloadedDrawables != null) &#123;&#10;            mFieldPreloadedDrawables.setAccessible(true);&#10;&#10;            boolean access = mFieldPreloadedDrawables.isAccessible();&#10;            if (!access) &#123;&#10;                mFieldPreloadedDrawables.setAccessible(true);&#10;            &#125;&#10;&#10;            if (Build.VERSION.SDK_INT &#60;= 17) &#123;&#10;                LongSparseArray&#60;Drawable.ConstantState&#62; dArray = (LongSparseArray&#60;Drawable.ConstantState&#62;) mFieldPreloadedDrawables.get(getResources());&#10;                if (dArray != null) &#123;&#10;                    dArray.clear();&#10;                &#125;&#10;&#10;                // dArray.put(1, createDrawableConstant());&#10;            &#125; else if (Build.VERSION.SDK_INT &#62;= 18) &#123;&#10;                LongSparseArray&#60;Drawable.ConstantState&#62;[] dArray = (LongSparseArray&#60;Drawable.ConstantState&#62;[]) mFieldPreloadedDrawables.get(getResources());&#10;                if (dArray != null) &#123;&#10;                    for (int i = 0; i &#60; dArray.length; i++) &#123;&#10;                        if (dArray[i] != null) &#123;&#10;                            dArray[i].clear();&#10;                            // dArray[i].put(1, createDrawableConstant());&#10;                        &#125;&#10;                    &#125;&#10;                &#125;&#10;            &#125;&#10;&#10;            mFieldPreloadedDrawables.setAccessible(true);&#10;        &#125;&#10;    &#125; catch (Exception e) &#123;&#10;        e.printStackTrace();&#10;    &#125;&#10;&#125;</span><br></pre></td></tr></table></figure>
 <p><img src="/res/hprof/hprof-7.png" alt=""></p>
 <p><img src="/res/hprof/hprof-5.png" alt=""></p>
-<p>那请问，上面👆的内存清理有意义吗？Heap allocated较少了10M，但PSS并没有明显的变化，给我的感觉就像大家在吃大锅饭，我只吃了1碗，别人吃了10碗，付钱的时候却是AA。</p>
+<p>那请问，上面👆的内存清理有意义吗？Heap allocated较少了10M，但PSS并没有明显的变化，给我的感觉就像大家在吃大锅饭，我只吃了1碗，别人吃了10碗，付钱的时候却是AA，甚至可能我付的还更多一些。你说你是不是萨？</p>
 <h3 id="Copy-On-Write(COW)">Copy-On-Write(COW)</h3><p>Zygote heap是系统共享内存heap，这里我尝试修改<code>sPreloadDrawable</code>对应数据时，如下图所示，系统默认预加载399张资源图片，当手动插入一张新的图片到缓存后，缓存大小变成了400。但让我觉得诡异的是，不是说Android系统使用COW机制吗？为啥插入前后sPreloadDrawable相关的内存地址根本没有变化？难道我把共享内存的数据也改掉了？其实并没有。</p>
 <p><img src="/res/hprof/hprof-4.png" alt=""></p>
 <p><img src="/res/hprof/hprof-8.jpg" alt=""></p>
@@ -391,7 +391,7 @@
 </li>
 <li><p>不需要的无用资源能否避免被加载？<br>这些默认系统资源无法避免被系统预加载，但是不同ROM厂商针对这些资源的看法差别还是很大的，根据测试的情况看，三星的预加载资源比源码的还要多，并且清空sPreloadDrawable也不能减少Heap allocte的大小。相反锤子手机对这些预加载资源的作用倒是不太看好，在锤子坚果上看到的预加载资源就很少，几乎可以忽略不计。而在Android 5.0以下的系统版本，这块预加载的资源也不是很夸张。</p>
 </li>
-<li><p>清空预加载资源对应用内存有无优化作用？<br>说下个人看法，如果你的应用分为UI进程和后台服务进程。在UI进程清除系统预加载资源可能并不是明智的选择，为啥？因为这是一件吃力未必讨好的事情，虽然这10M空间你并没有使用，但系统并没有领情，反而当你想要在使用系统资源的时候，那这些资源就会完全算到你的头上。那样反而会造成应用进程内存的上升。<br>如果是后台服务进程，打死也不会用到系统主题资源，清除预加载资源为什么不是对自己有利的事情呢？因为这样做确实让Heap变小了呀！</p>
+<li><p>清空预加载资源对应用内存有无优化作用？<br>说下个人看法，如果你的应用分为UI进程和后台服务进程。在UI进程清除系统预加载资源可能并不是明智的选择，为啥？因为这是一件吃力未必讨好的事情，虽然这10M空间你并没有使用，但系统并没有领情，反而当你想要在使用系统资源的时候，那这些资源就会完全算到你的头上。那样反而会造成应用进程内存的上升。为啥？清除系统的共享内存后，再加载系统资源时分配的就是应用的私有内存了。<br>如果是后台服务进程，打死也不会用到系统主题资源的情况下，清除预加载资源为什么不是对自己有利的事情呢？因为这样做确实让Heap变小了呀！</p>
 <p>当然以上都是个人的理解，如有理解错误，恳请能够指出。对于如何获取Java对象的物理地址，我还没有找到更好的办法，所以暂时还没有实践验证COW。</p>
 </li>
 </ul>
