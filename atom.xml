@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://ivonhoe.github.io/"/>
-  <updated>2017-04-20T03:36:49.000Z</updated>
+  <updated>2017-04-27T08:09:49.000Z</updated>
   <id>https://ivonhoe.github.io/</id>
   
   <author>
@@ -16,33 +16,106 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>android-touch-event</title>
-    <link href="https://ivonhoe.github.io/2017/04/20/android-touch-event/"/>
-    <id>https://ivonhoe.github.io/2017/04/20/android-touch-event/</id>
-    <published>2017-04-20T03:22:48.000Z</published>
-    <updated>2017-04-20T03:36:49.000Z</updated>
+    <title>Zygote与内存</title>
+    <link href="https://ivonhoe.github.io/2017/04/26/Zygote-2/"/>
+    <id>https://ivonhoe.github.io/2017/04/26/Zygote-2/</id>
+    <published>2017-04-25T16:49:27.000Z</published>
+    <updated>2017-04-27T08:09:49.000Z</updated>
     
-    <content type="html"><![CDATA[<h2 id="Android_事件传递">Android 事件传递</h2><p>###<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">protoc --java_out=./ ./proto/wire.proto</span><br></pre></td></tr></table></figure></p>
-<p><a href="http://www.jokinkuang.info/2016/09/22/mac-install-protobuf.html" target="_blank" rel="external">Mac如何安装protobuf</a></p>
+    <content type="html"><![CDATA[<h3 id="BitmapAnalyer看Hello_World">BitmapAnalyer看Hello World</h3><p>当使用BitmapAnalyzer分析一个Android5.0+的Hello World App时你会dump出400+张图片，分析仔细看一下可以发现，这些都是Android系统的主题资源图片，为什么会有这么多主题资源被加载？是不是选择其他的theme这些资源是会改变？不需要的无用资源能否避免被加载？How？毕竟单单Resources中sPreloadedDrawables所引用的Drawable就会占用10M以上的内存空间。</p>
+<p><img src="/res/hprof/hprof-3.png" alt=""></p>
+<p>使用Android Studio的monitor工具dump内存如上图所示，AS将hprof中的内存信息分为三类，分别是App heap，Image heap，Zygote heap。App heap很好理解，就是应用进程独占的内存空间，在应用中创建的对象都会在App heap上。而在使用Dalvik虚拟机的手机上，并没有Image heap，只有App heap和Zygote heap。<a href="https://developer.android.com/studio/profile/am-hprof.html#why" target="_blank" rel="external">Android官网文档</a>的三者的解释是：</p>
+<a id="more"></a>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">App heap - The heap used by the current app.&#10;&#10;Image heap - The memory mapped copy of the current app on disk.&#10;&#10;Zygote heap - The common set of libraries and runtime classes and data that all apps are forked from. The zygote space is created during device startup and is never allocated into.</span><br></pre></td></tr></table></figure>
+<p>较详细的Zygote机制可以看翻译的<a href="https://ivonhoe.github.io/2017/04/25/Zygote/">Zygote</a>,总的来说是<code>app_process</code>调用Zygote的main()方法启动Zygote并创建第一个虚拟机进程，Zygote启动时会预加载所有需要的Java classes和”必要的”资源文件，这些资源文件就包括我们在hprof文件中看到的被sPreloadedDrawables所直接引用的Bitmap资源。所以应用进程都是从Zygote中fork出来的，所以所有的应用进程都会包含上面提到的资源文件。而这些资源的拷贝可以看成浅拷贝，并不是真正的内存copy，而是作为进程间的共享内存使用。</p>
+<p><img src="/res/hprof/hprof-2.png" alt=""></p>
+<p>当通过反射手动清除sPreloadDrawable对这些资源的强引用，通过Android Studio的monitor工具发现，gc以后App heap发生了断崖式的内存回收，<code>adb shell dumpsys meminfo</code>发现Heap Alloc和Heap Size都发生了显著的减小，但Pss total并没有显著变化。这里的理解是PSS = Private RAM + 按比例计算的Shared RAM，这两部分都没有发生显著变化，所以PSS Total没有变化。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">private void clearPreloadedDrawables() &#123;&#10;    try &#123;&#10;        Field mFieldPreloadedDrawables = getField(Resources.class, &#34;sPreloadedDrawables&#34;);&#10;        if (mFieldPreloadedDrawables != null) &#123;&#10;            mFieldPreloadedDrawables.setAccessible(true);&#10;&#10;            boolean access = mFieldPreloadedDrawables.isAccessible();&#10;            if (!access) &#123;&#10;                mFieldPreloadedDrawables.setAccessible(true);&#10;            &#125;&#10;&#10;            if (Build.VERSION.SDK_INT &#60;= 17) &#123;&#10;                LongSparseArray&#60;Drawable.ConstantState&#62; dArray = (LongSparseArray&#60;Drawable.ConstantState&#62;) mFieldPreloadedDrawables.get(getResources());&#10;                if (dArray != null) &#123;&#10;                    dArray.clear();&#10;                &#125;&#10;&#10;                // dArray.put(1, createDrawableConstant());&#10;            &#125; else if (Build.VERSION.SDK_INT &#62;= 18) &#123;&#10;                LongSparseArray&#60;Drawable.ConstantState&#62;[] dArray = (LongSparseArray&#60;Drawable.ConstantState&#62;[]) mFieldPreloadedDrawables.get(getResources());&#10;                if (dArray != null) &#123;&#10;                    for (int i = 0; i &#60; dArray.length; i++) &#123;&#10;                        if (dArray[i] != null) &#123;&#10;                            dArray[i].clear();&#10;                            // dArray[i].put(1, createDrawableConstant());&#10;                        &#125;&#10;                    &#125;&#10;                &#125;&#10;            &#125;&#10;&#10;            mFieldPreloadedDrawables.setAccessible(true);&#10;        &#125;&#10;    &#125; catch (Exception e) &#123;&#10;        e.printStackTrace();&#10;    &#125;&#10;&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="/res/hprof/hprof-7.png" alt=""></p>
+<p><img src="/res/hprof/hprof-5.png" alt=""></p>
+<p>那请问，上面👆的内存清理有意义吗？Heap allocated较少了10M，但PSS并没有明显的变化，给我的感觉就像大家在吃大锅饭，我只吃了1碗，别人吃了10碗，付钱的时候却是AA。</p>
+<h3 id="Copy-On-Write(COW)">Copy-On-Write(COW)</h3><p>Zygote heap是系统共享内存heap，这里我尝试修改<code>sPreloadDrawable</code>对应数据时，如下图所示，系统默认预加载399张资源图片，当手动插入一张新的图片到缓存后，缓存大小变成了400。但让我觉得诡异的是，不是说Android系统使用COW机制吗？为啥插入前后sPreloadDrawable相关的内存地址根本没有变化？难道我把共享内存的数据也改掉了？其实并没有。</p>
+<p><img src="/res/hprof/hprof-4.png" alt=""></p>
+<p><img src="/res/hprof/hprof-8.jpg" alt=""></p>
+<p>linux没有那么傻，在fork子进程的时候并不会真正拷贝父进程内存数据，而是子进程的虚拟内存空间指向父进程的物理内存空间。子进程和父进程的虚拟空间不同，但物理空间是同一个。当子进程需要重写共享内存数据时，系统才会为子进程分配响应的物理内存。这里的虚拟内存空间对应用程序来说就是逻辑地址，对于CPU来说就是线性地址。</p>
+<h3 id="总结">总结</h3><p>回到之前思考的几个问题：</p>
+<ul>
+<li><p>为什么会有这么多主题资源被加载？是不是选择其他的theme这些资源是会改变？<br>这些主题资源是系统启动时Zygote预加载的系统资源，Zygote任务这些资源每个App都会用到，特别是5.0+的系统会达到400+的默认theme图片，占用10M+的内存空间，不过这些内存是系统共享的你用或不用他们都在那里。改变应用的主题样式并不会改变sPreloadDrawable的加载内容。</p>
+</li>
+<li><p>不需要的无用资源能否避免被加载？<br>这些默认系统资源无法避免被系统预加载，但是不同ROM厂商针对这些资源的看法差别还是很大的，根据测试的情况看，三星的预加载资源比源码的还要多，并且清空sPreloadDrawable也不能减少Heap allocte的大小。相反锤子手机对这些预加载资源的作用倒是不太看好，在锤子坚果上看到的预加载资源就很少，几乎可以忽略不计。而在Android 5.0以下的系统版本，这块预加载的资源也不是很夸张。</p>
+</li>
+<li><p>清空预加载资源对应用内存有无优化作用？<br>说下个人看法，如果你的应用分为UI进程和后台服务进程。在UI进程清除系统预加载资源可能并不是明智的选择，为啥？因为这是一件吃力未必讨好的事情，虽然这10M空间你并没有使用，但系统并没有领情，反而当你想要在使用系统资源的时候，那这些资源就会完全算到你的头上。反而会造成应用进程内存的上升。<br>如果是后台服务进程，打死也不会用到系统主题资源，清除预加载资源为什么不是对自己有利的事情呢？因为这样确实让Heap变小了呀！</p>
+<p>当然以上都是个人的理解，如有理解错误，恳请能够指出。对于如何获取Java对象的物理地址，我还没有找到更好的办法，所以暂时还没有实践验证COW。</p>
+</li>
+</ul>
+<p>临帖顿首，不知所言，2017.4.26日夜。</p>
+<h3 id="参考">参考</h3><p><a href="https://developer.android.com/studio/profile/investigate-ram.html" target="_blank" rel="external"></a></p>
+<p><a href="https://developer.android.com/studio/profile/am-hprof.html#why" target="_blank" rel="external">HPROF Viewer and Analyzer</a></p>
+<p><a href="http://www.jianshu.com/p/d061fa36a0d9" target="_blank" rel="external">Manage Your App’s Memory</a></p>
+<p><a href="http://wiki.jikexueyuan.com/project/deep-android-v1/zygote.html" target="_blank" rel="external">深入理解 Zygote</a></p>
+<p><a href="http://www.cnblogs.com/biyeymyhjob/archive/2012/07/20/2601655.html" target="_blank" rel="external">Linux写时拷贝技术(copy-on-write)</a></p>
+<p><a href="http://luodw.cc/2016/02/17/address/" target="_blank" rel="external">linux虚拟地址转物理地址</a></p>
 ]]></content>
     
     <summary type="html">
     
-      &lt;h2 id=&quot;Android_事件传递&quot;&gt;Android 事件传递&lt;/h2&gt;&lt;p&gt;###&lt;br&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/sp
+      &lt;h3 id=&quot;BitmapAnalyer看Hello_World&quot;&gt;BitmapAnalyer看Hello World&lt;/h3&gt;&lt;p&gt;当使用BitmapAnalyzer分析一个Android5.0+的Hello World App时你会dump出400+张图片，分析仔细看一下可以发现，这些都是Android系统的主题资源图片，为什么会有这么多主题资源被加载？是不是选择其他的theme这些资源是会改变？不需要的无用资源能否避免被加载？How？毕竟单单Resources中sPreloadedDrawables所引用的Drawable就会占用10M以上的内存空间。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/res/hprof/hprof-3.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;使用Android Studio的monitor工具dump内存如上图所示，AS将hprof中的内存信息分为三类，分别是App heap，Image heap，Zygote heap。App heap很好理解，就是应用进程独占的内存空间，在应用中创建的对象都会在App heap上。而在使用Dalvik虚拟机的手机上，并没有Image heap，只有App heap和Zygote heap。&lt;a href=&quot;https://developer.android.com/studio/profile/am-hprof.html#why&quot;&gt;Android官网文档&lt;/a&gt;的三者的解释是：&lt;/p&gt;
     
     </summary>
     
     
+      <category term="Copy-on-wirte" scheme="https://ivonhoe.github.io/tags/Copy-on-wirte/"/>
+    
+      <category term="Zygote" scheme="https://ivonhoe.github.io/tags/Zygote/"/>
+    
   </entry>
   
   <entry>
-    <title>使用BitmapAnalyzer分析内存Bitmap</title>
+    <title>Zygote</title>
+    <link href="https://ivonhoe.github.io/2017/04/15/Zygote/"/>
+    <id>https://ivonhoe.github.io/2017/04/15/Zygote/</id>
+    <published>2017-04-15T15:32:51.000Z</published>
+    <updated>2017-04-25T16:50:35.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="[译]Zygote">[译]Zygote</h2><p>原文地址：<a href="https://anatomyofandroid.com/2013/10/15/zygote/" target="_blank" rel="external">Zygote https://anatomyofandroid.com/2013/10/15/zygote/</a></p>
+<p>Zygote（受精卵）是一个启动应用的守护进程，在Server Manager之后被init.rc触发，但其实他是真正被app_process启动的，下面是启动这个特殊进程的流程。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">service zygote /system/bin/app_process -Xzygote /system/bin --zygote --start-system-server&#10;class main&#10;socket zygote stream 660 root system&#10;onrestart write /sys/android_power/request_state wake&#10;onrestart write /sys/power/state on&#10;onrestart restart media&#10;onrestart restart netd</span><br></pre></td></tr></table></figure>
+<p>你可以发现Zygote是如何当做系统服务启动的，你也可以看到app_process为什么说app_process是启动Zygote的真正命令。就像之前说的，Zygote是一个以专门启动应用为的守护进程。这意味着Zygote是所有App进程的父进程。当app_process启动Zygote时，它通过调用Zygote的main()方法创建了第一个Dalvik虚拟机。当Zygote启动后，zygote会预加载所有必须的Java类和资源，启动System Server并打开一个名为/dev/socket/zygote的socket服务，去监听所有启动应用的请求。 想之前的文章所说，System Server 是一个和它的父进程完全分离的进程。一旦System Server创建完成，它会初始化一系列不同的System Services并启动Activity Manager。那Zygote是如何启动新的应用的呢？</p>
+<a id="more"></a>
+<p>Zygote 通过/dev/socket/zygote(一个sockete Socket Server)接收启动应用的请求，就会触发一次fork()调用，会在另一个存储空间创建一个自身的拷贝。这个过程是很高效的。当Zygote执行fork时，它会精准创建一个预加载了应用进程所需的所有必要类和资源的Dalvik虚拟机，这样就会把创建虚拟机和加载资源的过程变得很高效。但这个设计不仅仅是这样。由于Android运行在Linux内核上，Linux Kernal实现了一个叫做Copy On Write（COW）的策略，在fork进程的过程中并不会真正的拷贝内存。一个进程想要修改这个共享的内存是，kernel会拦截这个请求，并对要修改的内存做一个拷贝。当一些Android的类库是不可写的情况下，那就意味着所有从Zygote fork出来的进程都在共享一份系统类文件和资源。另一个好处就是真的节省内存。不管启动多少应用进程在内存的增长上都会小很多。</p>
+<p>If you are in an early stage of a porting process, Zygote is another big process that you don’t need to start. You can disable it by adding the keyword “disabled” at the end of the boot sequence in init.rc</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">service zygote /system/bin/app_process -Xzygote /system/bin --zygote --start-system-server&#10;class main&#10;socket zygote stream 660 root system&#10;onrestart write /sys/android_power/request_state wake&#10;onrestart write /sys/power/state on&#10;onrestart restart media&#10;onrestart restart netd&#10;disabled</span><br></pre></td></tr></table></figure>
+<p>下面是一张说明Zygote在Android平台中作用的关系图(from Embedded Android)。</p>
+<p><img src="/res/zygote/zygote-1.png" alt=""></p>
+<p>zygote的main()方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public static void main(String argv[]) &#123;&#10; try &#123;&#10;     // Start profiling the zygote initialization.&#10;     SamplingProfilerIntegration.start();&#10;&#10;    registerZygoteSocket();&#10;    EventLog.writeEvent(LOG_BOOT_PROGRESS_PRELOAD_START,&#10;    SystemClock.uptimeMillis());&#10;    preload();&#10;    EventLog.writeEvent(LOG_BOOT_PROGRESS_PRELOAD_END,&#10;    SystemClock.uptimeMillis());&#10;&#10;    // Finish profiling the zygote initialization.&#10;    SamplingProfilerIntegration.writeZygoteSnapshot();&#10;&#10;    // Do an initial gc to clean up after startup&#10;    gc();&#10;&#10;    // Disable tracing so that forked processes do not inherit stale tracing tags from&#10;    // Zygote.&#10;    Trace.setTracingEnabled(false);&#10;&#10;    // If requested, start system server directly from Zygote&#10;    if (argv.length != 2) &#123;&#10;        throw new RuntimeException(argv[0] + USAGE_STRING);&#10;    &#125;&#10;&#10;    if (argv[1].equals(&#34;start-system-server&#34;)) &#123;&#10;        startSystemServer();&#10;    &#125; else if (!argv[1].equals(&#34;&#34;)) &#123;&#10;        throw new RuntimeException(argv[0] + USAGE_STRING);&#10;    &#125;&#10;&#10;    Log.i(TAG, &#34;Accepting command socket connections&#34;);&#10;&#10;    runSelectLoop();&#10;&#10;    closeServerSocket();&#10; &#125; catch (MethodAndArgsCaller caller) &#123;&#10;     caller.run();&#10; &#125; catch (RuntimeException ex) &#123;&#10;     Log.e(TAG, &#34;Zygote died with exception&#34;, ex);&#10;     closeServerSocket();&#10;     throw ex;&#10; &#125;&#10;&#125;</span><br></pre></td></tr></table></figure>
+<p>通过下面代码可以看到Zygote是如何启动System Server的。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/**&#10; * Prepare the arguments and fork for the system server process.&#10; */&#10;private static boolean startSystemServer()&#10;        throws MethodAndArgsCaller, RuntimeException &#123;&#10;    /* Hardcoded command line to start the system server */&#10;    String args[] = &#123;&#10;            &#34;--setuid=1000&#34;,&#10;            &#34;--setgid=1000&#34;,&#10;            &#34;--setgroups=1001,1002,1003,1004,1005,1006,1007,1008,1009,1010,1018,3001,3002,3003,3006,3007&#34;,&#10;            &#34;--capabilities=130104352,130104352&#34;,&#10;            &#34;--runtime-init&#34;,&#10;            &#34;--nice-name=system_server&#34;,&#10;            &#34;com.android.server.SystemServer&#34;,&#10;    &#125;;&#10;    ZygoteConnection.Arguments parsedArgs = null;&#10;&#10;    int pid;&#10;&#10;    try &#123;&#10;        parsedArgs = new ZygoteConnection.Arguments(args);&#10;        ZygoteConnection.applyDebuggerSystemProperty(parsedArgs);&#10;        ZygoteConnection.applyInvokeWithSystemProperty(parsedArgs);&#10;        &#10;        /* Request to fork the system server process */&#10;        pid = Zygote.forkSystemServer(&#10;                parsedArgs.uid, parsedArgs.gid,&#10;                parsedArgs.gids,&#10;                parsedArgs.debugFlags,&#10;                null,&#10;                parsedArgs.permittedCapabilities,&#10;                parsedArgs.effectiveCapabilities);&#10;    &#125; catch (IllegalArgumentException ex) &#123;&#10;        throw new RuntimeException(ex);&#10;    &#125;&#10;    &#10;    /* For child process */&#10;    if (pid == 0) &#123;&#10;        handleSystemServerProcess(parsedArgs);&#10;    &#125;&#10;&#10;    return true;&#10;&#125;</span><br></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;[译]Zygote&quot;&gt;[译]Zygote&lt;/h2&gt;&lt;p&gt;原文地址：&lt;a href=&quot;https://anatomyofandroid.com/2013/10/15/zygote/&quot;&gt;Zygote https://anatomyofandroid.com/2013/10/15/zygote/&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Zygote（受精卵）是一个启动应用的守护进程，在Server Manager之后被init.rc触发，但其实他是真正被app_process启动的，下面是启动这个特殊进程的流程。&lt;/p&gt;
+&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;service zygote /system/bin/app_process -Xzygote /system/bin --zygote --start-system-server&amp;#10;class main&amp;#10;socket zygote stream 660 root system&amp;#10;onrestart write /sys/android_power/request_state wake&amp;#10;onrestart write /sys/power/state on&amp;#10;onrestart restart media&amp;#10;onrestart restart netd&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;你可以发现Zygote是如何当做系统服务启动的，你也可以看到app_process为什么说app_process是启动Zygote的真正命令。就像之前说的，Zygote是一个以专门启动应用为的守护进程。这意味着Zygote是所有App进程的父进程。当app_process启动Zygote时，它通过调用Zygote的main()方法创建了第一个Dalvik虚拟机。当Zygote启动后，zygote会预加载所有必须的Java类和资源，启动System Server并打开一个名为/dev/socket/zygote的socket服务，去监听所有启动应用的请求。 想之前的文章所说，System Server 是一个和它的父进程完全分离的进程。一旦System Server创建完成，它会初始化一系列不同的System Services并启动Activity Manager。那Zygote是如何启动新的应用的呢？&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="Zygote" scheme="https://ivonhoe.github.io/tags/Zygote/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>如何使用ddmlib dump出堆文件</title>
     <link href="https://ivonhoe.github.io/2017/04/09/how-to-dump-heap/"/>
     <id>https://ivonhoe.github.io/2017/04/09/how-to-dump-heap/</id>
     <published>2017-04-09T11:03:01.000Z</published>
-    <updated>2017-04-25T09:42:02.000Z</updated>
+    <updated>2017-04-26T02:08:11.000Z</updated>
     
-    <content type="html"><![CDATA[<h3 id="如何使用ddmlib_dump出堆文件">如何使用ddmlib dump出堆文件</h3><p>一般情况下如果我想要较详细的分析内存状况，会使用android monitor(下简称monitor)和Memory Analyzer工具(下简称MAT)，但步骤有些麻烦。</p>
+    <content type="html"><![CDATA[<p>一般情况下如果我想要较详细的分析内存状况，会使用android monitor(下简称monitor)和Memory Analyzer工具(下简称MAT)，但步骤有些麻烦。</p>
 <ol>
 <li>使用monitor dump堆文件</li>
 <li>使用hprof-conv工具，将hprof转换成MAT能够识别的格式</li>
@@ -58,24 +131,11 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/**&#10; * dump&#26632;&#39030;&#36827;&#31243;&#30340;hprof&#10; */&#10;public void dumpTopTaskHprof() &#123;&#10;    if (isDumping) &#123;&#10;        return;&#10;    &#125;&#10;&#10;    IDevice iDevice = mDevice.getIDevice();&#10;&#10;    /**&#10;     * &#36825;&#37324;&#33258;&#21160;&#36873;&#25321;&#25163;&#26426;&#19978;&#26632;&#39030;&#36827;&#31243;&#20570;dump&#25805;&#20316;&#65292;&#33719;&#21462;applicationName&#10;     */&#10;    String topApp = getTopApplication();&#10;    Client client = iDevice.getClient(topApp);&#10;&#10;    if (client == null) &#123;&#10;        throw new RuntimeException(&#34;Can not dump app:&#34; + topApp);&#10;    &#125;&#10;    client.dumpHprof();&#10;    isDumping = true;&#10;&#125;</span><br></pre></td></tr></table></figure>
 <p><strong>在IHprofDumpHandler的回调中, 保存hprof文件，做格式转换，分析Bitmap对象的状况。BitmapAnalyzer.java的代码在上文说过。</strong></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">private void conversionAndRemoveHprof(String hprofPath) &#123;&#10;    String convHprofPath = getConvHprofPath(hprofPath);&#10;    hprofConv(hprofPath, convHprofPath);&#10;    removeFile(hprofPath);&#10;&#10;    analyzerBitmap(convHprofPath);&#10;&#125;&#10;&#10;private void hprofConv(String hprofPath, String convHprofPath) &#123;&#10;    String adbPath = Adb.instance().getAdbPath();&#10;    String hprofConvPath = adbPath.replace(&#34;adb&#34;, &#34;hprof-conv&#34;);&#10;    ShellCommand.exec(hprofConvPath + &#34; &#34; + hprofPath + &#34; &#34; + convHprofPath);&#10;&#125;&#10;&#10;private void analyzerBitmap(String hprofPath) &#123;&#10;    String[] args = new String[2];&#10;    args[0] = hprofPath;&#10;    args[1] = &#34;bitmap&#34;;&#10;    BitmapAnalyzer.main(args);&#10;&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="Zygote内存模型">Zygote内存模型</h3><p>仔细看一下可以发现，这些都是Android系统的主题资源图片，为什么会有这么多主题资源被加载？是不是选择其他的theme这些资源是会改变？不需要的无用资源能否避免被加载？How？毕竟单单Resources中sPreloadedDrawables所引用的Drawable就会占用10M以上的内存空间。</p>
-<p><img src="/res/hprof/hprof-3.png" alt=""></p>
-<p>使用Android Studio的monitor工具dump内存如上图所示，AS将hprof中的内存信息分为三类，分别是App heap，Image heap， Zygote heap。App heap很好理解，就是应用进程独占的内存空间，在应用中创建的对象都会在App heap上。而在使用Dalvik虚拟机的手机上，并没有Image heap。<a href="https://developer.android.com/studio/profile/am-hprof.html#why" target="_blank" rel="external">Android官网文档</a>的解释是：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">App heap - The heap used by the current app.&#10;&#10;Image heap - The memory mapped copy of the current app on disk.&#10;&#10;Zygote heap - The common set of libraries and runtime classes and data that all apps are forked from. The zygote space is created during device startup and is never allocated into.</span><br></pre></td></tr></table></figure>
-<p><code>app_process</code>调用Zygote的main()方法启动Zygote时并创建第一个虚拟机进程，接下来的<code>system_server</code>和应用进程都从Zygote中fork出来的。Zygote启动时会预加载所有需要的Java classes和”必要的”资源文件，这些资源文件就包括我们在hprof文件中看到的被sPreloadedDrawables所直接引用的Bitmap资源。Zygote会启动System Server并建立一个叫<code>zygote</code>的LocalSocketServer,用来监听fork新进程的请求。</p>
-<ul>
-<li>Dalvik Heap</li>
-</ul>
-<h3 id="参考">参考</h3><p><a href="https://developer.android.com/studio/profile/investigate-ram.html" target="_blank" rel="external"></a></p>
-<p><a href="https://developer.android.com/studio/profile/am-hprof.html#why" target="_blank" rel="external">HPROF Viewer and Analyzer</a></p>
-<p><a href="http://www.jianshu.com/p/d061fa36a0d9" target="_blank" rel="external">Manage Your App’s Memory</a></p>
-<p><a href="http://wiki.jikexueyuan.com/project/deep-android-v1/zygote.html" target="_blank" rel="external">深入理解 Zygote</a></p>
-<p><a href="http://blog.csdn.net/laisse/article/details/51612975?locationNum=1&amp;fps=1" target="_blank" rel="external"></a></p>
-]]></content>
+<h3 id="关于BitmapAnalyzer的那些发现">关于BitmapAnalyzer的那些发现</h3>]]></content>
     
     <summary type="html">
     
-      &lt;h3 id=&quot;如何使用ddmlib_dump出堆文件&quot;&gt;如何使用ddmlib dump出堆文件&lt;/h3&gt;&lt;p&gt;一般情况下如果我想要较详细的分析内存状况，会使用android monitor(下简称monitor)和Memory Analyzer工具(下简称MAT)，但步骤有些麻烦。&lt;/p&gt;
+      &lt;p&gt;一般情况下如果我想要较详细的分析内存状况，会使用android monitor(下简称monitor)和Memory Analyzer工具(下简称MAT)，但步骤有些麻烦。&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;使用monitor dump堆文件&lt;/li&gt;
 &lt;li&gt;使用hprof-conv工具，将hprof转换成MAT能够识别的格式&lt;/li&gt;
