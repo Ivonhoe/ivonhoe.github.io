@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://ivonhoe.github.io/"/>
-  <updated>2017-04-27T09:00:20.000Z</updated>
+  <updated>2017-05-09T08:08:12.000Z</updated>
   <id>https://ivonhoe.github.io/</id>
   
   <author>
@@ -20,9 +20,9 @@
     <link href="https://ivonhoe.github.io/2017/04/26/Zygote-2/"/>
     <id>https://ivonhoe.github.io/2017/04/26/Zygote-2/</id>
     <published>2017-04-25T16:49:27.000Z</published>
-    <updated>2017-04-27T09:00:20.000Z</updated>
+    <updated>2017-05-09T08:08:12.000Z</updated>
     
-    <content type="html"><![CDATA[<h3 id="BitmapAnalyer看Hello_World">BitmapAnalyer看Hello World</h3><p>当使用BitmapAnalyzer分析一个Android5.0+的Hello World App时你会dump出400+张图片，分析仔细看一下可以发现，这些都是Android系统的主题资源图片，为什么会有这么多主题资源被加载？是不是选择其他的theme这些资源是会改变？不需要的无用资源能否避免被加载？How？毕竟单单Resources中sPreloadedDrawables所引用的Drawable就会占用10M以上的内存空间。</p>
+    <content type="html"><![CDATA[<h3 id="BitmapAnalyer看Hello_World">BitmapAnalyer看Hello World</h3><p>当使用BitmapAnalyzer(什么是BitmapAnalyzer？请看<a href="https://ivonhoe.github.io/2017/03/22/Bitmap&amp;Memory/">Android Bitmap的内存大小是如何计算的？</a>这篇文章的介绍)分析一个Android5.0+的Hello World App时你会dump出400+张图片，分析仔细看一下可以发现，这些都是Android系统的主题资源图片，为什么会有这么多主题资源被加载？是不是选择其他的theme这些资源是会改变？不需要的无用资源能否避免被加载？How？毕竟单单Resources中sPreloadedDrawables所引用的Drawable就会占用10M以上的内存空间。</p>
 <p><img src="/res/hprof/hprof-3.png" alt=""></p>
 <p>使用Android Studio的monitor工具dump内存如上图所示，AS将hprof中的内存信息分为三类，分别是App heap，Image heap，Zygote heap。App heap很好理解，就是应用进程独占的内存空间，在应用中创建的对象都会在App heap上。而在使用Dalvik虚拟机的手机上，并没有Image heap，只有App heap和Zygote heap。<a href="https://developer.android.com/studio/profile/am-hprof.html#why" target="_blank" rel="external">Android官网文档</a>的三者的解释是：</p>
 <a id="more"></a>
@@ -59,7 +59,7 @@
     
     <summary type="html">
     
-      &lt;h3 id=&quot;BitmapAnalyer看Hello_World&quot;&gt;BitmapAnalyer看Hello World&lt;/h3&gt;&lt;p&gt;当使用BitmapAnalyzer分析一个Android5.0+的Hello World App时你会dump出400+张图片，分析仔细看一下可以发现，这些都是Android系统的主题资源图片，为什么会有这么多主题资源被加载？是不是选择其他的theme这些资源是会改变？不需要的无用资源能否避免被加载？How？毕竟单单Resources中sPreloadedDrawables所引用的Drawable就会占用10M以上的内存空间。&lt;/p&gt;
+      &lt;h3 id=&quot;BitmapAnalyer看Hello_World&quot;&gt;BitmapAnalyer看Hello World&lt;/h3&gt;&lt;p&gt;当使用BitmapAnalyzer(什么是BitmapAnalyzer？请看&lt;a href=&quot;https://ivonhoe.github.io/2017/03/22/Bitmap&amp;amp;Memory/&quot;&gt;Android Bitmap的内存大小是如何计算的？&lt;/a&gt;这篇文章的介绍)分析一个Android5.0+的Hello World App时你会dump出400+张图片，分析仔细看一下可以发现，这些都是Android系统的主题资源图片，为什么会有这么多主题资源被加载？是不是选择其他的theme这些资源是会改变？不需要的无用资源能否避免被加载？How？毕竟单单Resources中sPreloadedDrawables所引用的Drawable就会占用10M以上的内存空间。&lt;/p&gt;
 &lt;p&gt;&lt;img src=&quot;/res/hprof/hprof-3.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
 &lt;p&gt;使用Android Studio的monitor工具dump内存如上图所示，AS将hprof中的内存信息分为三类，分别是App heap，Image heap，Zygote heap。App heap很好理解，就是应用进程独占的内存空间，在应用中创建的对象都会在App heap上。而在使用Dalvik虚拟机的手机上，并没有Image heap，只有App heap和Zygote heap。&lt;a href=&quot;https://developer.android.com/studio/profile/am-hprof.html#why&quot;&gt;Android官网文档&lt;/a&gt;的三者的解释是：&lt;/p&gt;
     
