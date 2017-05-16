@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://ivonhoe.github.io/"/>
-  <updated>2017-05-09T08:10:45.000Z</updated>
+  <updated>2017-05-16T09:21:28.000Z</updated>
   <id>https://ivonhoe.github.io/</id>
   
   <author>
@@ -14,6 +14,80 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>捕获线程池任务异常引发的血案</title>
+    <link href="https://ivonhoe.github.io/2017/05/12/executor-eat-exception/"/>
+    <id>https://ivonhoe.github.io/2017/05/12/executor-eat-exception/</id>
+    <published>2017-05-12T08:41:53.000Z</published>
+    <updated>2017-05-16T09:21:28.000Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="一、前言">一、前言</h3><p>今天遇到一个很诡异的问题，在多款Android 4.2.2版本的手机上发现处理后台任务的服务对前台请求毫无响应。这里的后台服务是一个RemoteService，目的为了处理更新&amp;上传等任务。本来以为是跨进程组件间通讯出现兼容性问题，后来根据分析发现问题没有那么简单，这里记录下问题原因。</p>
+<a id="more"></a>
+<h4 id="二、第一个错误">二、第一个错误</h4><p>在后台服务处理任务请求时使用自定义线程池处理异步更新任务，而Java 线程池java.util.concurrent.ThreadPoolExecutor会抓住所有的运行时异常，即便是你运行例如下面的代码也不会抛出异常。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Runnable runnable = new Runnable() &#123;&#10;    @Override&#10;    public void run() &#123;&#10;        Test test = null;&#10;        System.out.println(test.toString());&#10;    &#125;&#10;&#125;;&#10;&#10;mExecutor.submit(runnable);</span><br></pre></td></tr></table></figure>
+<p>在处理线程池异常捕获的问题时，犯下了第一个错误，使用了下面的submit方法完成多线程任务时会阻塞当前线程以拿到任务执行结果，可能阻塞的方法<code>future.get()</code>获取异常让线程池变得没有意义。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public Future&#60;?&#62; submit(Runnable task) &#123;&#10;    Future&#60;?&#62; future = mExecutor.submit(task);&#10;    try &#123;&#10;        future.get();&#10;    &#125; catch (InterruptedException e) &#123;&#10;        Thread.currentThread().interrupt(); // Reset interrupted status&#10;    &#125; catch (ExecutionException e) &#123;&#10;        Throwable exception = e.getCause();&#10;        // Forward to exception reporter&#10;        if (exception instanceof UncatchException) &#123;&#10;            throw (UncatchException) exception;&#10;        &#125;&#10;    &#125;&#10;&#10;    return future;&#10;&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="三、第二个错误">三、第二个错误</h3><p>在错误一的基础上，使用了一个开源并发库<a href="https://github.com/litesuits/android-lite-go" target="_blank" rel="external">android-lite-go</a>，先看它的异步任务是如何调度的。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">int coreSize = CPU_CORE;&#10;int queueSize = coreSize * 32;&#10;&#10;synchronized (lock) &#123;&#10;    if (runningList.size() &#60; coreSize) &#123;&#10;        runningList.add(scheduler);&#10;        threadPool.execute(scheduler);&#10;    &#125; else if (waitingList.size() &#60; queueSize) &#123;&#10;        waitingList.addLast(scheduler);&#10;    &#125; else &#123;&#10;       //...&#10;    &#125;&#10;&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>当正在运行的任务数小于设定的coreSize时，submit的任务会提交到线程池。</li>
+<li>coreSize由系统核心数确定。</li>
+<li>当正在运行的任务数小于queueSize时，submit的任务会提交到等待队列中。</li>
+<li>当一个任务执行完后，会从等待队列中获取一个任务提交给线程池执行。</li>
+</ul>
+<p>在一个异步任务中使用阻塞当前线程的方法，把另一个任务提交给了executor。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">private void runTaskOne() &#123;&#10;    Runnable runnable = new Runnable() &#123;&#10;        @Override&#10;        public void run() &#123;&#10;            // do something&#10;            runTaskTwo();&#10;        &#125;&#10;    &#125;;&#10;&#10;    mTaskController.submit(runnable);&#10;&#125;&#10;&#10;private void runTaskTwo() &#123;&#10;    Runnable runnable = new Runnable() &#123;&#10;        @Override&#10;        public void run() &#123;&#10;            // do task2&#10;            // ......&#10;        &#125;&#10;    &#125;;&#10;&#10;    mTaskController.submit(runnable);&#10;&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="三、问题原因及解决方案">三、问题原因及解决方案</h3><p>当正在运行的任务使用阻塞当前进程的submit方法提交另一个异步任务时，后提交的任务被放入等待队列等待线程池执行，但在Running list中的任务又在等待后任务执行的结果，这样就造成了死锁！！这个问题跟Android系统版本并没有关系，但因为Android 4.2.2版本的手机低端较多核心数较少，所以runningList的大小就比较小，Running List很容易就被填满。</p>
+<p><img src="/res/deadlock/deadlock.png" alt=""></p>
+<h4 id="解决方案">解决方案</h4><ol>
+<li>使用非阻塞的方法提交异步任务</li>
+<li>自定义线程池，重写<code>afterExecute()</code>方法，在该中获取线程池运行的异步任务运行时异常。</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(11, 100, 1, TimeUnit.MINUTES, //&#10;        new ArrayBlockingQueue&#60;Runnable&#62;(10000),//&#10;        new DefaultThreadFactory()) &#123;&#10;&#10;    protected void afterExecute(Runnable r, Throwable t) &#123;&#10;        super.afterExecute(r, t);&#10;        printException(r, t);&#10;    &#125;&#10;&#125;;&#10;&#10;private static void printException(Runnable r, Throwable t) &#123;&#10;    if (t == null &#38;&#38; r instanceof Future&#60;?&#62;) &#123;&#10;        try &#123;&#10;            Future&#60;?&#62; future = (Future&#60;?&#62;) r;&#10;            if (future.isDone())&#10;                future.get();&#10;        &#125; catch (CancellationException ce) &#123;&#10;            t = ce;&#10;        &#125; catch (ExecutionException ee) &#123;&#10;            t = ee.getCause();&#10;        &#125; catch (InterruptedException ie) &#123;&#10;            Thread.currentThread().interrupt(); // ignore/reset&#10;        &#125;&#10;    &#125;&#10;    if (t != null)&#10;        log.error(t.getMessage(), t);&#10;&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="四、参考文档">四、参考文档</h3><ol>
+<li><a href="http://imxylz.com/blog/2013/08/02/handling-the-uncaught-exception-of-java-thread-pool/" target="_blank" rel="external">捕获Java线程池执行任务抛出的异常
+</a></li>
+</ol>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h3 id=&quot;一、前言&quot;&gt;一、前言&lt;/h3&gt;&lt;p&gt;今天遇到一个很诡异的问题，在多款Android 4.2.2版本的手机上发现处理后台任务的服务对前台请求毫无响应。这里的后台服务是一个RemoteService，目的为了处理更新&amp;amp;上传等任务。本来以为是跨进程组件间通讯出现兼容性问题，后来根据分析发现问题没有那么简单，这里记录下问题原因。&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="多线程" scheme="https://ivonhoe.github.io/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/"/>
+    
+      <category term="死锁" scheme="https://ivonhoe.github.io/tags/%E6%AD%BB%E9%94%81/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Android常规性能优化方案[持续更新]</title>
+    <link href="https://ivonhoe.github.io/2017/05/05/android-performance-tips/"/>
+    <id>https://ivonhoe.github.io/2017/05/05/android-performance-tips/</id>
+    <published>2017-05-05T14:59:14.000Z</published>
+    <updated>2017-05-16T09:16:23.000Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="使用windowBackground实现应用秒开">使用windowBackground实现应用秒开</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#60;style name=&#34;SplashTheme&#34; parent=&#34;@android:style/Theme.Black.NoTitleBar.Fullscreen&#34;&#62;&#10;    &#60;item name=&#34;android:windowBackground&#34;&#62;@drawable/bg_splash_activity&#60;/item&#62;&#10;    &#60;item name=&#34;@android:windowAnimationStyle&#34;&#62;@style/myact&#60;/item&#62;&#10;&#60;/style&#62;</span><br></pre></td></tr></table></figure>
+<h3 id="使用windowBackground减少过度绘制">使用windowBackground减少过度绘制</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#60;style name=&#34;AppMainTheme&#34; parent=&#34;@android:style/Theme.Holo.Light&#34;&#62;&#10;    &#60;item name=&#34;android:windowBackground&#34;&#62;@color/white&#60;/item&#62;&#10;    &#60;item name=&#34;android:windowNoTitle&#34;&#62;true&#60;/item&#62;&#10;    &#60;item name=&#34;@android:windowAnimationStyle&#34;&#62;@style/myact&#60;/item&#62;&#10;&#60;/style&#62;</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<p><img src="/res/performance-tips/overdraw.png" alt="使用windowBackground前后对比"></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h3 id=&quot;使用windowBackground实现应用秒开&quot;&gt;使用windowBackground实现应用秒开&lt;/h3&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&amp;#60;style name=&amp;#34;SplashTheme&amp;#34; parent=&amp;#34;@android:style/Theme.Black.NoTitleBar.Fullscreen&amp;#34;&amp;#62;&amp;#10;    &amp;#60;item name=&amp;#34;android:windowBackground&amp;#34;&amp;#62;@drawable/bg_splash_activity&amp;#60;/item&amp;#62;&amp;#10;    &amp;#60;item name=&amp;#34;@android:windowAnimationStyle&amp;#34;&amp;#62;@style/myact&amp;#60;/item&amp;#62;&amp;#10;&amp;#60;/style&amp;#62;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;h3 id=&quot;使用windowBackground减少过度绘制&quot;&gt;使用windowBackground减少过度绘制&lt;/h3&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&amp;#60;style name=&amp;#34;AppMainTheme&amp;#34; parent=&amp;#34;@android:style/Theme.Holo.Light&amp;#34;&amp;#62;&amp;#10;    &amp;#60;item name=&amp;#34;android:windowBackground&amp;#34;&amp;#62;@color/white&amp;#60;/item&amp;#62;&amp;#10;    &amp;#60;item name=&amp;#34;android:windowNoTitle&amp;#34;&amp;#62;true&amp;#60;/item&amp;#62;&amp;#10;    &amp;#60;item name=&amp;#34;@android:windowAnimationStyle&amp;#34;&amp;#62;@style/myact&amp;#60;/item&amp;#62;&amp;#10;&amp;#60;/style&amp;#62;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+    
+    </summary>
+    
+    
+      <category term="性能优化" scheme="https://ivonhoe.github.io/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/"/>
+    
+  </entry>
   
   <entry>
     <title>Zygote与内存</title>
@@ -77,7 +151,7 @@
     <link href="https://ivonhoe.github.io/2017/04/15/Zygote/"/>
     <id>https://ivonhoe.github.io/2017/04/15/Zygote/</id>
     <published>2017-04-15T15:32:51.000Z</published>
-    <updated>2017-04-27T08:13:27.000Z</updated>
+    <updated>2017-05-16T09:22:46.000Z</updated>
     
     <content type="html"><![CDATA[<h2 id="[译]Zygote">[译]Zygote</h2><p>原文地址：<a href="https://anatomyofandroid.com/2013/10/15/zygote/" target="_blank" rel="external">Zygote https://anatomyofandroid.com/2013/10/15/zygote/</a></p>
 <p>Zygote（受精卵）是一个启动应用的守护进程，在Server Manager之后被init.rc触发，但其实他是真正被app_process启动的，下面是启动这个特殊进程的流程。</p>
@@ -105,6 +179,8 @@
     
     
       <category term="Zygote" scheme="https://ivonhoe.github.io/tags/Zygote/"/>
+    
+      <category term="翻译" scheme="https://ivonhoe.github.io/tags/%E7%BF%BB%E8%AF%91/"/>
     
   </entry>
   
