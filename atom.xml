@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://ivonhoe.github.io/"/>
-  <updated>2017-05-16T13:54:27.000Z</updated>
+  <updated>2018-01-18T09:56:35.000Z</updated>
   <id>https://ivonhoe.github.io/</id>
   
   <author>
@@ -14,6 +14,189 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Small框架原理</title>
+    <link href="https://ivonhoe.github.io/2018/01/18/Small%E6%A1%86%E6%9E%B6%E5%8E%9F%E7%90%86/"/>
+    <id>https://ivonhoe.github.io/2018/01/18/Small框架原理/</id>
+    <published>2018-01-18T09:54:19.000Z</published>
+    <updated>2018-01-18T09:56:35.000Z</updated>
+    
+    <content type="html"><![CDATA[<h4 id="0x01_Small如何打包module代码?">0x01 Small如何打包module代码?</h4><p>small插件化中的三种组件角色，分别是<code>app.*</code>，<code>lib.*</code>，<code>宿主</code>。small在打包过程中会根据不同module的类型针对不同组件使用不同编译插件做处理，分别是:</p>
+<ol>
+<li><code>AppPlugin</code> –&gt; <code>app.*</code></li>
+<li><code>LibraryPlugin</code> –&gt; <code>lib.*</code></li>
+<li><code>HostPlugin</code> –&gt; <code>app</code></li>
+<li><code>AssetPlugin</code> –&gt; <code>其他</code> </li>
+</ol>
+<p>在处理模块依赖上，首先区分gradle的两种依赖方式:</p>
+<ol>
+<li>Compile: compile是对所有的build type以及flavors都会参与编译并且打包到最终的apk文件中。</li>
+<li>Provided: Provided是对所有的build type以及flavors只在编译时使用，只参与编译，不打包到最终apk。</li>
+</ol>
+<p>在打包<code>app.*</code>插件时，将<code>app.*</code>对其他module的依赖转换成<code>provided</code>依赖。当执行插件打包时可以看做是插件模块执行<code>assembleRelease</code>。</p>
+<p>在打包<code>lib.*</code>插件时，<code>LibraryPlugin</code>会修改插件模块的<code>build.gradle</code>文件，<code>apply plugin:</code>从<code>&#39;com.android.library&#39;</code>修改成<code>&#39;com.android.application&#39;</code>，将对lib的方式转换成app的打包，再执行<code>assembleRelease</code>任务。</p>
+<p>👍👍👍</p>
+<a id="more"></a>
+<h4 id="0x02_Small如何解决资源id冲突?">0x02 Small如何解决资源id冲突?</h4><p>Android App资源id的格式是0xPPTTNNNN，其中：</p>
+<ul>
+<li>PP 资源的package id</li>
+<li>TT 资源类型的id，类型是attr、layout、string等等</li>
+<li>NNNN 资源的entry id</li>
+</ul>
+<p>Android App资源的默认packageId是0x7f，当同时加载多个插件apk时。必然会有插件间资源id冲突的情况。业界解决资源id冲突主要通过package id的分段，实现方式一般有两种方式，第一种方式是修改aapt工具源码，让aapt针对插件打包时每个插件的packageId都不相同，重新编译出aapt，而达到解决资源id冲突的问题。small框架使用的是另外一种方式，那就是读取并重写resources.arsc文件。大致的处理流程如下（出自small原作者在github issues的回答）：</p>
+<ol>
+<li>编译完整的资源包，利用symbol/R.txt搜集完整包entries的资源信息</li>
+<li>搜集当前插件包res目录的entry信息</li>
+<li>根据(2)，通过重新排序分配各个entry的资源id，并结合(1),形成旧id到新id的映射</li>
+<li>解析(1)生成的resources.arsc文件，利用(3)进行过滤输出</li>
+</ol>
+<h4 id="0x03_Small如何加载插件代码？">0x03 Small如何加载插件代码？</h4><p>Small的加载插件代码的方式基于android dex分包方案的，简单的说small通过将多个dex文件塞入到app的classloader中，达到加载插件代码的目的。Small并不会更换系统的classloader，所以这样在面对多种不同机型时可能就不会遇到的兼容性问题。</p>
+<p>怎样把多个dex文件塞入系统classloader中，可以看下<a href="https://mp.weixin.qq.com/s?__biz=MzI1MTA1MzM2Nw==&amp;mid=400118620&amp;idx=1&amp;sn=b4fdd5055731290eef12ad0d17f39d4a&amp;scene=0" target="_blank" rel="external">QQ空间的热修复方案</a></p>
+<h4 id="0x04_Small如何加载插件资源?">0x04 Small如何加载插件资源?</h4><p>Android资源是由 <a href="https://github.com/aosp-mirror/platform_frameworks_base/blob/master/core/java/android/content/res/AssetManager.java" target="_blank" rel="external">AssetManager</a> 加载的。应用启动时系统创建一个AssetManager实例，并通过<code>addAssetPath</code>方法添加资源路径，默认添加:</p>
+<ul>
+<li>“/framework/base.apk” - Android base resources (base)</li>
+<li>“/data/app/*.apk” - The launching apk resources (host)</li>
+</ul>
+<p>那么如何让插件的资源能够被系统加载？Small的方式是自己创建的AssetManager，调用AssetManger的<code>addAssetPath</code>方法添加插件资源路径，再将系统创建的AssetManager替换掉。</p>
+<p>Hook AssetManager路径如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ActivityThread&#10;|&#10;|---ResourcesManager mResourcesManager&#10;    |&#10;    |--- ArrayList&#60;WeakReference&#60;Resources&#62;&#62; mResourceReferences&#10;         |&#10;         |--- ResourcesImpl mResourcesImpl&#10;              |&#10;              |--- AssetManager mAssets&#10;         &#10;    |--- ArrayMap&#60;ResourcesKey, WeakReference&#60;ResourcesImpl&#62;&#62; mResourceImpls&#10;         |&#10;         |--- ResourcesImpl mResourcesImpl&#10;              |&#10;              |--- AssetManager mAssets</span><br></pre></td></tr></table></figure>
+<h4 id="0x05_Small如何代理插件Activity的生命周期?">0x05 Small如何代理插件Activity的生命周期?</h4><p>先看Andriod中Activity是如何启动的。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">MyActivity.startActivity()&#10;|&#10;|--&#62;Activity.startActivity() &#10;    |&#10;    |--&#62;Activity.startActivityForResult()&#10;        |&#10;        |--&#62;Instrumentation.execStartActivty()&#10;            |&#10;            |--&#62;ActivityManagerNative.getDefault().startActivityAsUser()</span><br></pre></td></tr></table></figure>
+<p>通过 Activity 的启动流程可以发现，Activity是由 <a href="https://android.googlesource.com/platform/frameworks/base/+/master/core/java/android/app/ActivityThread.java" target="_blank" rel="external">ActivityThread</a> 和 <a href="https://android.googlesource.com/platform/frameworks/base/+/master/core/java/android/app/Instrumentation.java" target="_blank" rel="external">Instrumentation</a> 启动的，Instrumentation有关Activity启动相关的方法大概有：execStartActivity、newActivity等等。Small是这样操作的: </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">MyActivity.startActivity()&#10;|&#10;|--&#62;Activity.startActivity() &#10;    |&#10;    |--&#62;Activity.startActivityForResult()&#10;        |&#10;        |--&#62;InstrumentationWrapper.execStartActivty()&#10;            |&#10;            |--&#62; InstrumentationWrapper.wrapIntent() &#23558; Intent &#123; cmp=net.wequick.example.small/.app.main.MainActivity &#125;&#10;            |--&#62; &#36716;&#25442;&#25104; Intent &#123; cat=[&#62;net.wequick.example.small.app.main.MainActivity] cmp=net.wequick.example.small/net.wequick.small.A &#125;&#10;                |&#10;                |--&#62;Instrumentation.execStartActivty()&#10;                    |&#10;                    |--&#62;ActivityManagerNative.getDefault().startActivityAsUser()</span><br></pre></td></tr></table></figure>
+<p>Small首先在宿主manifest中注册一个命名特殊的占坑activity来欺骗系统获取生命周期，在封装一个Instrumentation替换掉宿主的，系统启动的是A这个activity，但classloader实际加载的代码却是 MainActivity.class 这个类。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#60;!-- Stub Activities --&#62;&#10;&#60;activity android:name=&#34;.A&#34; android:launchMode=&#34;standard&#34;/&#62;</span><br></pre></td></tr></table></figure>
+<p>伪代码如下: </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ActivityThread thread = currentActivityThread();&#10;Instrumentation base = thread.@mInstrumentation;&#10;Instrumentation wrapper = new InstrumentationWrapper(base);&#10;thread.@mInstrumentation = wrapper;&#10;&#10;class InstrumentationWrapper extends Instrumentation &#123;&#10;    public ActivityResult execStartActivity(..., Intent intent, ...) &#123;&#10;        fakeToStub(intent);&#10;        base.execStartActivity(args);&#10;    &#125;&#10;&#10;    @Override&#10;    public Activity newActivity(ClassLoader cl, String className, Intent intent) &#123;&#10;        className = restoreToReal(intent, className);&#10;        return base.newActivity(cl, className, intent);&#10;    &#125;&#10;&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="0x06_Small如何动态更新插件模块?">0x06 Small如何动态更新插件模块?</h4><p><a href="https://github.com/wequick/Small/blob/master/Android/Sample/app.home/src/main/java/net/wequick/example/small/app/home/MainFragment.java" target="_blank" rel="external">查看github sample实现方式</a></p>
+<h4 id="0x07_参考文档">0x07 参考文档</h4><p><a href="https://github.com/wequick/Small/wiki" target="_blank" rel="external">Small 官方 wiki</a></p>
+<p><a href="https://mp.weixin.qq.com/s?__biz=MzI1MTA1MzM2Nw==&amp;mid=400118620&amp;idx=1&amp;sn=b4fdd5055731290eef12ad0d17f39d4a&amp;scene=0" target="_blank" rel="external">QQ空间热补丁动态修复技术介绍</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h4 id=&quot;0x01_Small如何打包module代码?&quot;&gt;0x01 Small如何打包module代码?&lt;/h4&gt;&lt;p&gt;small插件化中的三种组件角色，分别是&lt;code&gt;app.*&lt;/code&gt;，&lt;code&gt;lib.*&lt;/code&gt;，&lt;code&gt;宿主&lt;/code&gt;。small在打包过程中会根据不同module的类型针对不同组件使用不同编译插件做处理，分别是:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;code&gt;AppPlugin&lt;/code&gt; –&amp;gt; &lt;code&gt;app.*&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;LibraryPlugin&lt;/code&gt; –&amp;gt; &lt;code&gt;lib.*&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;HostPlugin&lt;/code&gt; –&amp;gt; &lt;code&gt;app&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;AssetPlugin&lt;/code&gt; –&amp;gt; &lt;code&gt;其他&lt;/code&gt; &lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;在处理模块依赖上，首先区分gradle的两种依赖方式:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Compile: compile是对所有的build type以及flavors都会参与编译并且打包到最终的apk文件中。&lt;/li&gt;
+&lt;li&gt;Provided: Provided是对所有的build type以及flavors只在编译时使用，只参与编译，不打包到最终apk。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;在打包&lt;code&gt;app.*&lt;/code&gt;插件时，将&lt;code&gt;app.*&lt;/code&gt;对其他module的依赖转换成&lt;code&gt;provided&lt;/code&gt;依赖。当执行插件打包时可以看做是插件模块执行&lt;code&gt;assembleRelease&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;在打包&lt;code&gt;lib.*&lt;/code&gt;插件时，&lt;code&gt;LibraryPlugin&lt;/code&gt;会修改插件模块的&lt;code&gt;build.gradle&lt;/code&gt;文件，&lt;code&gt;apply plugin:&lt;/code&gt;从&lt;code&gt;&amp;#39;com.android.library&amp;#39;&lt;/code&gt;修改成&lt;code&gt;&amp;#39;com.android.application&amp;#39;&lt;/code&gt;，将对lib的方式转换成app的打包，再执行&lt;code&gt;assembleRelease&lt;/code&gt;任务。&lt;/p&gt;
+&lt;p&gt;👍👍👍&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="Android" scheme="https://ivonhoe.github.io/tags/Android/"/>
+    
+      <category term="插件化" scheme="https://ivonhoe.github.io/tags/%E6%8F%92%E4%BB%B6%E5%8C%96/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Small框架实践总结</title>
+    <link href="https://ivonhoe.github.io/2018/01/18/Small%E6%A1%86%E6%9E%B6%E5%AE%9E%E8%B7%B5%E6%80%BB%E7%BB%93/"/>
+    <id>https://ivonhoe.github.io/2018/01/18/Small框架实践总结/</id>
+    <published>2018-01-18T09:42:57.000Z</published>
+    <updated>2018-01-18T09:49:14.000Z</updated>
+    
+    <content type="html"><![CDATA[<h4 id="0x01_前言">0x01 前言</h4><p>什么是Small？ Small是一个轻量级的插件化框架。同时Small也是一个dex分包方案，Small也是一个业务解耦方案，Small也是一个动态加载和更新方案。不废话去看官网文档~~</p>
+<p><a href="http://code.wequick.net/Small/cn/quickstart" target="_blank" rel="external">Small官网文档</a></p>
+<p><a href="https://github.com/wequick/Small" target="_blank" rel="external">Small github主页</a></p>
+<p><a href="http://code.wequick.net/small/docs/ppt/gmtc-galen-small.ppsx" target="_blank" rel="external">GMTC演讲PPT</a></p>
+<h4 id="0x02_选择small框架的原因">0x02 选择small框架的原因</h4><ol>
+<li>集成简单</li>
+<li>开发方式非常接近Android app的原生开发方式</li>
+<li>不需要更换编译工具，已有项目中针对业务需求开发的编译工具依然可以继续使用</li>
+<li>优雅，特别是对资源id冲突的处理方式</li>
+<li>轻量化，尽可能少的hook系统变量，兼容性问题较少</li>
+</ol>
+<a id="more"></a>
+<h4 id="0x03_不选择small框架的原因">0x03 不选择small框架的原因</h4><ol>
+<li>插件的加载并不是按需加载</li>
+<li>插件的更新实现较简单，且没有回滚方案</li>
+<li>有些隐藏bug还未解决，但可以绕过</li>
+<li>功能相对其他插件化框架(比如atlas)来说还不够完善，但足够解决项目插件化目标中遇到的80%问题</li>
+</ol>
+<h4 id="0x04_Small必知必会">0x04 Small必知必会</h4><ol>
+<li>Small如何编译? <ul>
+<li>gradle cleanLib</li>
+<li>gradle buildLib</li>
+<li>gradle cleanBundle</li>
+<li>gradle buildBundle</li>
+<li>gradle :app:assembleDaily  注意：这里不是assembleDaily 而是:app:assembleDaily!! 因为你是要编译app模块</li>
+</ul>
+</li>
+<li>Small框架将module分为这几个角色，宿主，宿主分身，app插件，公共lib插件</li>
+<li>应用插件的module name必须是app.<em> , 公共库lib插件的module name必须是lib.</em></li>
+<li>宿主和宿主分身的差别是什么？宿主不依赖任何lib，宿主分身被所有app和lib依赖，但是宿主和宿主分身都被打包在壳应用的主dex中</li>
+<li>在bundle.json文件中声明插件的包名类型和路由等信息。当app插件的package name为 <code>**.app.* 或 **.app*</code>时, small框架会默认type == app</li>
+<li>App插件和app插件之间不能相互依赖，app插件之间通过uri传参，或者LocalBroadcast、Eventbus这种消息机制实现通信</li>
+<li><p>Small中插件的packageId是自动根据模块名称hash计算生成，有可能会遇到插件模块packageId冲突的情况，在这种情况下需要在发生冲突模块的build.gradle重新声明packageId, 如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ext &#123;&#10;  packageId = 0x33&#10;&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>生成插件到 x86 架构下./gradlew buildLib -q -Dbundle.arch=x86，<strong>需要注意</strong> 宿主的ndk abiFilters 要和<code>bundle.arch</code>一致哦。</p>
+</li>
+<li>如何启动其他插件模块的页面？通过<code>Small.openUri()</code>方法打开页面的路由地址。</li>
+<li>动态更新插件时，需要升级插件的versionCode才会生效</li>
+</ol>
+<h4 id="0x05_Small框架原理">0x05 Small框架原理</h4><h4 id="0x06_Small插件化实践规范">0x06 Small插件化实践规范</h4><ol>
+<li>不要在宿主中添加业务代码</li>
+<li>非Activity组件需要声明在宿主或者宿主分身的manifest中</li>
+<li>native module so放在宿主中</li>
+<li>不同插件模块中依赖相同第三方aar或jar的版本号要相同，建议将aar或jar的版本号统一声明在gradle.properties中，将共同依赖的第三方sdk声明在宿主分身中</li>
+</ol>
+<h4 id="0x07_Small插件化实践踩过的那些坑">0x07 Small插件化实践踩过的那些坑</h4><p>遇到问题怎么办？到github issues里查询你遇到的问题，一般都可以找到答案。这里大致总结了我们团队在small框架使用过程中遇到的常见问题。</p>
+<ol>
+<li>lib插件中增加或减少资源时，需要删除模块目录下public.xml再重新编译。public.xml是为了锁定lib中资源id</li>
+<li>增加或修改插件中ndk module覆盖安装不生效，需要将native module编译生成的so文件放在宿主中才能实现更新</li>
+<li>遇到ClassNotFoundException异常或者无法启动某些activity companentInfo，排查问题的方法:<ul>
+<li>查看Fatal Runtime Exception日志，查看日志中已经加载的so是否包含你的插件so</li>
+<li>如果插件so被加载，再确定相应代码已经被编译进插件so中，查看方法很简单，将插件so重命名为apk直接在Android Studio中打开 </li>
+<li>确认是否将插件so正确声明在bundle.json文件中</li>
+<li>确认该异常类继承的父类或者接口满足上述几个条件</li>
+</ul>
+</li>
+<li>Class ref in pre-verified class resolved to unexpected implementation ，使用gradle smallLint命令查看是否有class重复了 <a href="https://github.com/wequick/Small/issues/423" target="_blank" rel="external">https://github.com/wequick/Small/issues/423</a></li>
+<li>Activity launch mode为singletop时在activity style中设置透明背景无效 <a href="https://github.com/wequick/Small/issues/94" target="_blank" rel="external">https://github.com/wequick/Small/issues/94</a></li>
+<li>无法通过Small.openUri()方法启动页面怎么办？一定是你用法不对，debug找原因。</li>
+</ol>
+<h4 id="0x07_Small项目的完全体">0x07 Small项目的完全体</h4><p><img src="/res/small/1.png" alt=""></p>
+<h4 id="0x09_参考">0x09 参考</h4><p>Small官网文档 <a href="http://code.wequick.net/Small/cn/quickstart" target="_blank" rel="external">http://code.wequick.net/Small/cn/quickstart</a></p>
+<p>Small github主页 <a href="https://github.com/wequick/Small" target="_blank" rel="external">https://github.com/wequick/Small</a></p>
+<p><a href="http://code.wequick.net/small/docs/ppt/gmtc-galen-small.ppsx" target="_blank" rel="external">GMTC演讲PPT</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h4 id=&quot;0x01_前言&quot;&gt;0x01 前言&lt;/h4&gt;&lt;p&gt;什么是Small？ Small是一个轻量级的插件化框架。同时Small也是一个dex分包方案，Small也是一个业务解耦方案，Small也是一个动态加载和更新方案。不废话去看官网文档~~&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://code.wequick.net/Small/cn/quickstart&quot;&gt;Small官网文档&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://github.com/wequick/Small&quot;&gt;Small github主页&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://code.wequick.net/small/docs/ppt/gmtc-galen-small.ppsx&quot;&gt;GMTC演讲PPT&lt;/a&gt;&lt;/p&gt;
+&lt;h4 id=&quot;0x02_选择small框架的原因&quot;&gt;0x02 选择small框架的原因&lt;/h4&gt;&lt;ol&gt;
+&lt;li&gt;集成简单&lt;/li&gt;
+&lt;li&gt;开发方式非常接近Android app的原生开发方式&lt;/li&gt;
+&lt;li&gt;不需要更换编译工具，已有项目中针对业务需求开发的编译工具依然可以继续使用&lt;/li&gt;
+&lt;li&gt;优雅，特别是对资源id冲突的处理方式&lt;/li&gt;
+&lt;li&gt;轻量化，尽可能少的hook系统变量，兼容性问题较少&lt;/li&gt;
+&lt;/ol&gt;
+    
+    </summary>
+    
+    
+      <category term="Android" scheme="https://ivonhoe.github.io/tags/Android/"/>
+    
+      <category term="插件化" scheme="https://ivonhoe.github.io/tags/%E6%8F%92%E4%BB%B6%E5%8C%96/"/>
+    
+  </entry>
   
   <entry>
     <title>捕获线程池任务异常引发的血案</title>
@@ -94,29 +277,29 @@
     <link href="https://ivonhoe.github.io/2017/04/26/Zygote-2/"/>
     <id>https://ivonhoe.github.io/2017/04/26/Zygote-2/</id>
     <published>2017-04-25T16:49:27.000Z</published>
-    <updated>2017-05-09T08:10:45.000Z</updated>
+    <updated>2017-12-27T14:39:04.000Z</updated>
     
-    <content type="html"><![CDATA[<h3 id="BitmapAnalyer看Hello_World">BitmapAnalyer看Hello World</h3><p>当使用BitmapAnalyzer分析一个Android5.0+的Hello World App时你会dump出400+张图片，什么是BitmapAnalyzer？请看<a href="https://ivonhoe.github.io/2017/03/22/Bitmap&amp;Memory/">Android Bitmap的内存大小是如何计算的？</a>这篇文章的介绍。分析仔细看一下可以发现，这些都是Android系统的主题资源图片，为什么会有这么多主题资源被加载？是不是选择其他的theme这些资源是会改变？不需要的无用资源能否避免被加载？How？毕竟单单Resources中sPreloadedDrawables所引用的Drawable就会占用10M以上的内存空间。</p>
-<p><img src="/res/hprof/hprof-3.png" alt=""></p>
-<p>使用Android Studio的monitor工具dump内存如上图所示，AS将hprof中的内存信息分为三类，分别是App heap，Image heap，Zygote heap。App heap很好理解，就是应用进程独占的内存空间，在应用中创建的对象都会在App heap上。而在使用Dalvik虚拟机的手机上，并没有Image heap，只有App heap和Zygote heap。<a href="https://developer.android.com/studio/profile/am-hprof.html#why" target="_blank" rel="external">Android官网文档</a>的三者的解释是：</p>
+    <content type="html"><![CDATA[<h3 id="一、分析一个Hello_World_App中bitmap对象的分布">一、分析一个Hello World App中bitmap对象的分布</h3><p>使用BitmapAnalyzer分析一个Android Hello World App时你会dump出400+张图片，什么是BitmapAnalyzer？BitmapAnalyzer是一个自动分析Android dump heap中bitmap对象的工具，详细请看<a href="https://ivonhoe.github.io/2017/03/22/Bitmap&amp;Memory/">《Android Bitmap的内存大小是如何计算的？》</a>这篇文章的介绍。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/695750-211010ed47103e96.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="hprof-3.png"></p>
+<p>分析仔细看一下可以发现，上图中sPreloadedDrawables数组所引用的预加载Drawable就会占用10M以上的内存空间。这些都是Android系统的主题资源图片，为什么会有这么多主题资源被加载？不需要的无用的系统资源能否避免被加载？那么要如何做到？</p>
 <a id="more"></a>
+<h3 id="二、为什么有这么多系统资源被加载？">二、为什么有这么多系统资源被加载？</h3><p>使用Android Studio(简称AS)的monitor工具dump内存如上图所示，hprof中的内存信息分为三类，分别是App heap，Image heap，Zygote heap。App heap很好理解，就是应用进程独占的内存空间，在应用中创建的对象都会在App heap上。而在Dalvik虚拟机上运行的app，只有App heap和Zygote heap，并没有Image heap。<a href="https://developer.android.com/studio/profile/am-hprof.html#why" target="_blank" rel="external">Android官网文档</a>的三者的解释是：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">App heap - The heap used by the current app.&#10;&#10;Image heap - The memory mapped copy of the current app on disk.&#10;&#10;Zygote heap - The common set of libraries and runtime classes and data that all apps are forked from. The zygote space is created during device startup and is never allocated into.</span><br></pre></td></tr></table></figure>
-<p>较详细的Zygote机制可以看我翻译的<a href="https://ivonhoe.github.io/2017/04/25/Zygote/">Zygote https://ivonhoe.github.io/2017/04/25/Zygote/</a>这篇文章,总的来说是<code>app_process</code>启动Zygote并创建第一个虚拟机进程，Zygote启动时会预加载所有需要的Java classes和”必要的”资源文件，这些资源文件就包括我们在hprof文件中看到的被sPreloadedDrawables所直接引用的Bitmap资源。应用进程都是从Zygote中fork出来的，所以所有的应用进程都会包含上面提到的资源文件。这些资源的拷贝可以看成浅拷贝，并不是真正的内存copy，而是作为进程间的共享内存使用。</p>
-<p><img src="/res/hprof/hprof-2.png" alt=""></p>
-<p>当通过反射手动清除sPreloadDrawable对这些资源的强引用，通过Android Studio的monitor工具发现，gc以后App heap发生了断崖式的内存回收，<code>adb shell dumpsys meminfo</code>发现Heap Alloc和Heap Size都发生了显著的减小，但Pss total并没有显著变化。这里的理解是PSS = Private RAM + 按比例计算的Shared RAM，这两部分都没有发生显著变化，所以PSS Total没有变化。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">private void clearPreloadedDrawables() &#123;&#10;    try &#123;&#10;        Field mFieldPreloadedDrawables = getField(Resources.class, &#34;sPreloadedDrawables&#34;);&#10;        if (mFieldPreloadedDrawables != null) &#123;&#10;            mFieldPreloadedDrawables.setAccessible(true);&#10;&#10;            boolean access = mFieldPreloadedDrawables.isAccessible();&#10;            if (!access) &#123;&#10;                mFieldPreloadedDrawables.setAccessible(true);&#10;            &#125;&#10;&#10;            if (Build.VERSION.SDK_INT &#60;= 17) &#123;&#10;                LongSparseArray&#60;Drawable.ConstantState&#62; dArray = (LongSparseArray&#60;Drawable.ConstantState&#62;) mFieldPreloadedDrawables.get(getResources());&#10;                if (dArray != null) &#123;&#10;                    dArray.clear();&#10;                &#125;&#10;&#10;                // dArray.put(1, createDrawableConstant());&#10;            &#125; else if (Build.VERSION.SDK_INT &#62;= 18) &#123;&#10;                LongSparseArray&#60;Drawable.ConstantState&#62;[] dArray = (LongSparseArray&#60;Drawable.ConstantState&#62;[]) mFieldPreloadedDrawables.get(getResources());&#10;                if (dArray != null) &#123;&#10;                    for (int i = 0; i &#60; dArray.length; i++) &#123;&#10;                        if (dArray[i] != null) &#123;&#10;                            dArray[i].clear();&#10;                            // dArray[i].put(1, createDrawableConstant());&#10;                        &#125;&#10;                    &#125;&#10;                &#125;&#10;            &#125;&#10;&#10;            mFieldPreloadedDrawables.setAccessible(true);&#10;        &#125;&#10;    &#125; catch (Exception e) &#123;&#10;        e.printStackTrace();&#10;    &#125;&#10;&#125;</span><br></pre></td></tr></table></figure>
-<p><img src="/res/hprof/hprof-7.png" alt=""></p>
-<p><img src="/res/hprof/hprof-5.png" alt=""></p>
+<p>Zygote机制总的来说是<code>app_process</code>启动Zygote并创建第一个虚拟机进程，Zygote启动时会预加载所有需要的Java classes和”必要的”资源文件，这些资源文件就包括我们在hprof文件中看到的被sPreloadedDrawables所直接引用的Bitmap资源。应用进程都是从Zygote中fork出来的，所以所有的应用进程都会包含上面提到的资源文件。这些资源的拷贝可以看成浅拷贝，并不是真正的内存copy，而是作为进程间的共享内存使用。详细的可以查看<a href="https://ivonhoe.github.io/2017/04/25/Zygote/">《Zygote》</a>这篇文章。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/695750-8d0e4feb9a25e8b4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="hprof-2.png"></p>
+<h3 id="三、强制清除未使用的系统资源图片会怎样？">三、强制清除未使用的系统资源图片会怎样？</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">private void clearPreloadedDrawables() &#123;&#10;    try &#123;&#10;        Field mFieldPreloadedDrawables = getField(Resources.class, &#34;sPreloadedDrawables&#34;);&#10;        if (mFieldPreloadedDrawables != null) &#123;&#10;            mFieldPreloadedDrawables.setAccessible(true);&#10;&#10;            boolean access = mFieldPreloadedDrawables.isAccessible();&#10;            if (!access) &#123;&#10;                mFieldPreloadedDrawables.setAccessible(true);&#10;            &#125;&#10;&#10;            if (Build.VERSION.SDK_INT &#60;= 17) &#123;&#10;                LongSparseArray&#60;Drawable.ConstantState&#62; dArray = (LongSparseArray&#60;Drawable.ConstantState&#62;) mFieldPreloadedDrawables.get(getResources());&#10;                if (dArray != null) &#123;&#10;                    dArray.clear();&#10;                &#125;&#10;&#10;                // dArray.put(1, createDrawableConstant());&#10;            &#125; else if (Build.VERSION.SDK_INT &#62;= 18) &#123;&#10;                LongSparseArray&#60;Drawable.ConstantState&#62;[] dArray = (LongSparseArray&#60;Drawable.ConstantState&#62;[]) mFieldPreloadedDrawables.get(getResources());&#10;                if (dArray != null) &#123;&#10;                    for (int i = 0; i &#60; dArray.length; i++) &#123;&#10;                        if (dArray[i] != null) &#123;&#10;                            dArray[i].clear();&#10;                            // dArray[i].put(1, createDrawableConstant());&#10;                        &#125;&#10;                    &#125;&#10;                &#125;&#10;            &#125;&#10;&#10;            mFieldPreloadedDrawables.setAccessible(true);&#10;        &#125;&#10;    &#125; catch (Exception e) &#123;&#10;        e.printStackTrace();&#10;    &#125;&#10;&#125;</span><br></pre></td></tr></table></figure>
+<p>当通过上述clearPreloadedDrawables函数清除sPreloadDrawable对这些资源的强引用，然后使用Android Studio的monitor工具发现，gc以后App heap发生了断崖式的内存回收，并且使用<code>adb shell dumpsys meminfo</code>命令可以发现Heap Alloc和Heap Size都发生了显著的减小，但Pss total并没有显著变化。这里的理解是PSS = Private RAM + 按比例计算的Shared RAM，这两部分都没有发生显著变化，所以PSS Total没有变化。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/695750-04d96b82a7dbce97.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="hprof-7.png"></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/695750-4eebdbaf6e95eff4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="hprof-5.png"></p>
 <p>那请问，上面👆的内存清理有意义吗？Heap allocated较少了10M，但PSS并没有明显的变化，给我的感觉就像大家在吃大锅饭，我只吃了1碗，别人吃了10碗，付钱的时候却是AA，甚至可能我付的还更多一些。你说你是不是萨？</p>
-<h3 id="Copy-On-Write(COW)">Copy-On-Write(COW)</h3><p>Zygote heap是系统共享内存heap，这里我尝试修改<code>sPreloadDrawable</code>对应数据时，如下图所示，系统默认预加载399张资源图片，当手动插入一张新的图片到缓存后，缓存大小变成了400。但让我觉得诡异的是，不是说Android系统使用COW机制吗？为啥插入前后sPreloadDrawable相关的内存地址根本没有变化？难道我把共享内存的数据也改掉了？其实并没有。</p>
-<p><img src="/res/hprof/hprof-4.png" alt=""></p>
-<p><img src="/res/hprof/hprof-8.jpg" alt=""></p>
-<p>linux没有那么傻，在fork子进程的时候并不会真正拷贝父进程内存数据，而是子进程的虚拟内存空间指向父进程的物理内存空间。子进程和父进程的虚拟空间不同，但物理空间是同一个。当子进程需要重写共享内存数据时，系统才会为子进程分配响应的物理内存。这里的虚拟内存空间对应用程序来说就是逻辑地址，对于CPU来说就是线性地址。</p>
-<h3 id="总结">总结</h3><p>回到之前思考的几个问题：</p>
+<h3 id="四、Copy-On-Write(COW)">四、Copy-On-Write(COW)</h3><p>Zygote heap是系统共享内存heap，这里我尝试修改<code>sPreloadDrawable</code>对应数据时，如下图所示，系统默认预加载399张资源图片，当手动插入一张新的图片到缓存后，缓存大小变成了400。但让我觉得诡异的是，不是说Android系统使用COW机制吗？为啥插入前后sPreloadDrawable相关的内存地址根本没有变化？<br><img src="http://upload-images.jianshu.io/upload_images/695750-14ca03d88be43c61.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="hprof-4.png"></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/695750-5f0921dc8e336f51.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="hprof-8.jpg"></p>
+<p>我的理解是在fork子进程的时候并不会真正拷贝父进程内存数据，而是子进程的虚拟内存空间指向父进程的物理内存空间。子进程和父进程的虚拟空间不同，但物理空间是同一个。当子进程需要重写共享内存数据时，系统才会为子进程分配响应的物理内存。这里的虚拟内存空间对应用程序来说就是逻辑地址，对于CPU来说就是线性地址。</p>
+<h3 id="五、总结">五、总结</h3><p>回到之前思考的几个问题：</p>
 <ul>
-<li><p>为什么会有这么多主题资源被加载？是不是选择其他的theme这些资源是会改变？<br>这些主题资源是系统启动时Zygote预加载的系统资源，Zygote认为这些资源每个App都会用到，特别是5.0+的系统会达到400+的默认theme图片，占用10M+的内存空间，不过这些内存是系统共享的你用或不用他们都在那里。改变应用的主题样式并不会改变sPreloadDrawable的加载内容。</p>
+<li><p>为什么会有这么多主题资源被加载？<br>这些主题资源是系统启动时Zygote预加载的系统资源，Zygote认为这些资源每个App都会用到，特别是5.0+的系统会达到400+的默认theme图片，占用10M+的内存空间，不过这些内存是系统共享的你用或不用他们都在那里。改变应用的主题样式并不会改变sPreloadDrawable的加载内容。</p>
 </li>
-<li><p>不需要的无用资源能否避免被加载？<br>这些默认系统资源无法避免被系统预加载，但是不同ROM厂商针对这些资源的看法差别还是很大的，根据测试的情况看，三星的预加载资源比源码的还要多，并且清空sPreloadDrawable也不能减少Heap allocte的大小。相反锤子手机对这些预加载资源的作用倒是不太看好，在锤子坚果上看到的预加载资源就很少，几乎可以忽略不计。而在Android 5.0以下的系统版本，这块预加载的资源也不是很夸张。</p>
+<li><p>不需要的无用资源能否避免被加载？<br>这些默认系统资源无法避免被系统预加载，但是不同ROM厂商针对这些资源的看法差别还是很大的，根据测试的情况看，三星的预加载资源比源码的还要多，清空sPreloadDrawable也不能减少Heap allocte的大小。相反锤子手机对这些预加载资源的作用倒是不太看好，在锤子坚果上看到的预加载资源就很少，几乎可以忽略不计。而在Android 5.0以下的系统版本，这块预加载的资源也不是很夸张。</p>
 </li>
 <li><p>清空预加载资源对应用内存有无优化作用？<br>说下个人看法，如果你的应用分为UI进程和后台服务进程。在UI进程清除系统预加载资源可能并不是明智的选择，为啥？因为这是一件吃力未必讨好的事情，虽然这10M空间你并没有使用，但系统并没有领情，反而当你想要在使用系统资源的时候，那这些资源就会完全算到你的头上。那样反而会造成应用进程内存的上升。为啥？清除系统的共享内存后，再加载系统资源时分配的就是应用的私有内存了。<br>如果是后台服务进程，打死也不会用到系统主题资源的情况下，清除预加载资源为什么不是对自己有利的事情呢？因为这样做确实让Heap变小了呀！</p>
 <p>当然以上都是个人的理解，如有理解错误，恳请能够指出。对于如何获取Java对象的物理地址，我还没有找到更好的办法，所以暂时还没有实践验证COW。</p>
@@ -133,9 +316,9 @@
     
     <summary type="html">
     
-      &lt;h3 id=&quot;BitmapAnalyer看Hello_World&quot;&gt;BitmapAnalyer看Hello World&lt;/h3&gt;&lt;p&gt;当使用BitmapAnalyzer分析一个Android5.0+的Hello World App时你会dump出400+张图片，什么是BitmapAnalyzer？请看&lt;a href=&quot;https://ivonhoe.github.io/2017/03/22/Bitmap&amp;amp;Memory/&quot;&gt;Android Bitmap的内存大小是如何计算的？&lt;/a&gt;这篇文章的介绍。分析仔细看一下可以发现，这些都是Android系统的主题资源图片，为什么会有这么多主题资源被加载？是不是选择其他的theme这些资源是会改变？不需要的无用资源能否避免被加载？How？毕竟单单Resources中sPreloadedDrawables所引用的Drawable就会占用10M以上的内存空间。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/res/hprof/hprof-3.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
-&lt;p&gt;使用Android Studio的monitor工具dump内存如上图所示，AS将hprof中的内存信息分为三类，分别是App heap，Image heap，Zygote heap。App heap很好理解，就是应用进程独占的内存空间，在应用中创建的对象都会在App heap上。而在使用Dalvik虚拟机的手机上，并没有Image heap，只有App heap和Zygote heap。&lt;a href=&quot;https://developer.android.com/studio/profile/am-hprof.html#why&quot;&gt;Android官网文档&lt;/a&gt;的三者的解释是：&lt;/p&gt;
+      &lt;h3 id=&quot;一、分析一个Hello_World_App中bitmap对象的分布&quot;&gt;一、分析一个Hello World App中bitmap对象的分布&lt;/h3&gt;&lt;p&gt;使用BitmapAnalyzer分析一个Android Hello World App时你会dump出400+张图片，什么是BitmapAnalyzer？BitmapAnalyzer是一个自动分析Android dump heap中bitmap对象的工具，详细请看&lt;a href=&quot;https://ivonhoe.github.io/2017/03/22/Bitmap&amp;amp;Memory/&quot;&gt;《Android Bitmap的内存大小是如何计算的？》&lt;/a&gt;这篇文章的介绍。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://upload-images.jianshu.io/upload_images/695750-211010ed47103e96.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240&quot; alt=&quot;hprof-3.png&quot;&gt;&lt;/p&gt;
+&lt;p&gt;分析仔细看一下可以发现，上图中sPreloadedDrawables数组所引用的预加载Drawable就会占用10M以上的内存空间。这些都是Android系统的主题资源图片，为什么会有这么多主题资源被加载？不需要的无用的系统资源能否避免被加载？那么要如何做到？&lt;/p&gt;
     
     </summary>
     
@@ -151,9 +334,9 @@
     <link href="https://ivonhoe.github.io/2017/04/15/Zygote/"/>
     <id>https://ivonhoe.github.io/2017/04/15/Zygote/</id>
     <published>2017-04-15T15:32:51.000Z</published>
-    <updated>2017-05-16T09:22:46.000Z</updated>
+    <updated>2018-01-18T09:52:59.000Z</updated>
     
-    <content type="html"><![CDATA[<h2 id="[译]Zygote">[译]Zygote</h2><p>原文地址：<a href="https://anatomyofandroid.com/2013/10/15/zygote/" target="_blank" rel="external">Zygote https://anatomyofandroid.com/2013/10/15/zygote/</a></p>
+    <content type="html"><![CDATA[<p>原文地址：<a href="https://anatomyofandroid.com/2013/10/15/zygote/" target="_blank" rel="external">Zygote https://anatomyofandroid.com/2013/10/15/zygote/</a></p>
 <p>Zygote（受精卵）是一个启动应用的守护进程，在Server Manager之后被init.rc触发，但其实他是真正被app_process启动的，下面是启动这个特殊进程的流程。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">service zygote /system/bin/app_process -Xzygote /system/bin --zygote --start-system-server&#10;class main&#10;socket zygote stream 660 root system&#10;onrestart write /sys/android_power/request_state wake&#10;onrestart write /sys/power/state on&#10;onrestart restart media&#10;onrestart restart netd</span><br></pre></td></tr></table></figure>
 <p>你可以发现Zygote是如何当做系统服务启动的，你也可以看到app_process为什么说app_process是启动Zygote的真正命令。就像之前说的，Zygote是一个以专门启动应用为的守护进程。这意味着Zygote是所有App进程的父进程。当app_process启动Zygote时，它通过调用Zygote的main()方法创建了第一个Dalvik虚拟机。当Zygote启动后，zygote会预加载所有必须的Java类和资源，启动System Server并打开一个名为/dev/socket/zygote的socket服务，去监听所有启动应用的请求。 想之前的文章所说，System Server 是一个和它的父进程完全分离的进程。一旦System Server创建完成，它会初始化一系列不同的System Services并启动Activity Manager。那Zygote是如何启动新的应用的呢？</p>
@@ -170,7 +353,7 @@
     
     <summary type="html">
     
-      &lt;h2 id=&quot;[译]Zygote&quot;&gt;[译]Zygote&lt;/h2&gt;&lt;p&gt;原文地址：&lt;a href=&quot;https://anatomyofandroid.com/2013/10/15/zygote/&quot;&gt;Zygote https://anatomyofandroid.com/2013/10/15/zygote/&lt;/a&gt;&lt;/p&gt;
+      &lt;p&gt;原文地址：&lt;a href=&quot;https://anatomyofandroid.com/2013/10/15/zygote/&quot;&gt;Zygote https://anatomyofandroid.com/2013/10/15/zygote/&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;Zygote（受精卵）是一个启动应用的守护进程，在Server Manager之后被init.rc触发，但其实他是真正被app_process启动的，下面是启动这个特殊进程的流程。&lt;/p&gt;
 &lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;service zygote /system/bin/app_process -Xzygote /system/bin --zygote --start-system-server&amp;#10;class main&amp;#10;socket zygote stream 660 root system&amp;#10;onrestart write /sys/android_power/request_state wake&amp;#10;onrestart write /sys/power/state on&amp;#10;onrestart restart media&amp;#10;onrestart restart netd&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
 &lt;p&gt;你可以发现Zygote是如何当做系统服务启动的，你也可以看到app_process为什么说app_process是启动Zygote的真正命令。就像之前说的，Zygote是一个以专门启动应用为的守护进程。这意味着Zygote是所有App进程的父进程。当app_process启动Zygote时，它通过调用Zygote的main()方法创建了第一个Dalvik虚拟机。当Zygote启动后，zygote会预加载所有必须的Java类和资源，启动System Server并打开一个名为/dev/socket/zygote的socket服务，去监听所有启动应用的请求。 想之前的文章所说，System Server 是一个和它的父进程完全分离的进程。一旦System Server创建完成，它会初始化一系列不同的System Services并启动Activity Manager。那Zygote是如何启动新的应用的呢？&lt;/p&gt;

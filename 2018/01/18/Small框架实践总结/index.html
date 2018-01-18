@@ -1,0 +1,966 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Android,插件化," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="别辜负自己" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="0x01 前言什么是Small？ Small是一个轻量级的插件化框架。同时Small也是一个dex分包方案，Small也是一个业务解耦方案，Small也是一个动态加载和更新方案。不废话去看官网文档~~
+Small官网文档
+Small github主页
+GMTC演讲PPT
+0x02 选择small框架的原因
+集成简单
+开发方式非常接近Android app的原生开发方式
+不需要更换编译工具，已有项目">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Small框架实践总结">
+<meta property="og:url" content="https://ivonhoe.github.io/2018/01/18/Small框架实践总结/index.html">
+<meta property="og:site_name" content="别辜负自己">
+<meta property="og:description" content="0x01 前言什么是Small？ Small是一个轻量级的插件化框架。同时Small也是一个dex分包方案，Small也是一个业务解耦方案，Small也是一个动态加载和更新方案。不废话去看官网文档~~
+Small官网文档
+Small github主页
+GMTC演讲PPT
+0x02 选择small框架的原因
+集成简单
+开发方式非常接近Android app的原生开发方式
+不需要更换编译工具，已有项目">
+<meta property="og:image" content="https://ivonhoe.github.io/res/small/1.png">
+<meta property="og:updated_time" content="2018-01-18T09:49:14.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Small框架实践总结">
+<meta name="twitter:description" content="0x01 前言什么是Small？ Small是一个轻量级的插件化框架。同时Small也是一个dex分包方案，Small也是一个业务解耦方案，Small也是一个动态加载和更新方案。不废话去看官网文档~~
+Small官网文档
+Small github主页
+GMTC演讲PPT
+0x02 选择small框架的原因
+集成简单
+开发方式非常接近Android app的原生开发方式
+不需要更换编译工具，已有项目">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"right","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 'undefined',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://ivonhoe.github.io/2018/01/18/Small框架实践总结/"/>
+
+
+
+
+
+  <title> Small框架实践总结 | 别辜负自己 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-97550712-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">别辜负自己</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Read The Fucking Source Code</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://ivonhoe.github.io/2018/01/18/Small框架实践总结/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="病已">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/5706813?v=3&s=460">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="别辜负自己">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Small框架实践总结
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-18T17:42:57+08:00">
+                Jan 18 2018
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/01/18/Small框架实践总结/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2018/01/18/Small框架实践总结/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2018/01/18/Small框架实践总结/" class="leancloud_visitors" data-flag-title="Small框架实践总结">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h4 id="0x01_前言">0x01 前言</h4><p>什么是Small？ Small是一个轻量级的插件化框架。同时Small也是一个dex分包方案，Small也是一个业务解耦方案，Small也是一个动态加载和更新方案。不废话去看官网文档~~</p>
+<p><a href="http://code.wequick.net/Small/cn/quickstart" target="_blank" rel="external">Small官网文档</a></p>
+<p><a href="https://github.com/wequick/Small" target="_blank" rel="external">Small github主页</a></p>
+<p><a href="http://code.wequick.net/small/docs/ppt/gmtc-galen-small.ppsx" target="_blank" rel="external">GMTC演讲PPT</a></p>
+<h4 id="0x02_选择small框架的原因">0x02 选择small框架的原因</h4><ol>
+<li>集成简单</li>
+<li>开发方式非常接近Android app的原生开发方式</li>
+<li>不需要更换编译工具，已有项目中针对业务需求开发的编译工具依然可以继续使用</li>
+<li>优雅，特别是对资源id冲突的处理方式</li>
+<li>轻量化，尽可能少的hook系统变量，兼容性问题较少</li>
+</ol>
+<a id="more"></a>
+<h4 id="0x03_不选择small框架的原因">0x03 不选择small框架的原因</h4><ol>
+<li>插件的加载并不是按需加载</li>
+<li>插件的更新实现较简单，且没有回滚方案</li>
+<li>有些隐藏bug还未解决，但可以绕过</li>
+<li>功能相对其他插件化框架(比如atlas)来说还不够完善，但足够解决项目插件化目标中遇到的80%问题</li>
+</ol>
+<h4 id="0x04_Small必知必会">0x04 Small必知必会</h4><ol>
+<li>Small如何编译? <ul>
+<li>gradle cleanLib</li>
+<li>gradle buildLib</li>
+<li>gradle cleanBundle</li>
+<li>gradle buildBundle</li>
+<li>gradle :app:assembleDaily  注意：这里不是assembleDaily 而是:app:assembleDaily!! 因为你是要编译app模块</li>
+</ul>
+</li>
+<li>Small框架将module分为这几个角色，宿主，宿主分身，app插件，公共lib插件</li>
+<li>应用插件的module name必须是app.<em> , 公共库lib插件的module name必须是lib.</em></li>
+<li>宿主和宿主分身的差别是什么？宿主不依赖任何lib，宿主分身被所有app和lib依赖，但是宿主和宿主分身都被打包在壳应用的主dex中</li>
+<li>在bundle.json文件中声明插件的包名类型和路由等信息。当app插件的package name为 <code>**.app.* 或 **.app*</code>时, small框架会默认type == app</li>
+<li>App插件和app插件之间不能相互依赖，app插件之间通过uri传参，或者LocalBroadcast、Eventbus这种消息机制实现通信</li>
+<li><p>Small中插件的packageId是自动根据模块名称hash计算生成，有可能会遇到插件模块packageId冲突的情况，在这种情况下需要在发生冲突模块的build.gradle重新声明packageId, 如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ext &#123;&#10;  packageId = 0x33&#10;&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>生成插件到 x86 架构下./gradlew buildLib -q -Dbundle.arch=x86，<strong>需要注意</strong> 宿主的ndk abiFilters 要和<code>bundle.arch</code>一致哦。</p>
+</li>
+<li>如何启动其他插件模块的页面？通过<code>Small.openUri()</code>方法打开页面的路由地址。</li>
+<li>动态更新插件时，需要升级插件的versionCode才会生效</li>
+</ol>
+<h4 id="0x05_Small框架原理">0x05 Small框架原理</h4><h4 id="0x06_Small插件化实践规范">0x06 Small插件化实践规范</h4><ol>
+<li>不要在宿主中添加业务代码</li>
+<li>非Activity组件需要声明在宿主或者宿主分身的manifest中</li>
+<li>native module so放在宿主中</li>
+<li>不同插件模块中依赖相同第三方aar或jar的版本号要相同，建议将aar或jar的版本号统一声明在gradle.properties中，将共同依赖的第三方sdk声明在宿主分身中</li>
+</ol>
+<h4 id="0x07_Small插件化实践踩过的那些坑">0x07 Small插件化实践踩过的那些坑</h4><p>遇到问题怎么办？到github issues里查询你遇到的问题，一般都可以找到答案。这里大致总结了我们团队在small框架使用过程中遇到的常见问题。</p>
+<ol>
+<li>lib插件中增加或减少资源时，需要删除模块目录下public.xml再重新编译。public.xml是为了锁定lib中资源id</li>
+<li>增加或修改插件中ndk module覆盖安装不生效，需要将native module编译生成的so文件放在宿主中才能实现更新</li>
+<li>遇到ClassNotFoundException异常或者无法启动某些activity companentInfo，排查问题的方法:<ul>
+<li>查看Fatal Runtime Exception日志，查看日志中已经加载的so是否包含你的插件so</li>
+<li>如果插件so被加载，再确定相应代码已经被编译进插件so中，查看方法很简单，将插件so重命名为apk直接在Android Studio中打开 </li>
+<li>确认是否将插件so正确声明在bundle.json文件中</li>
+<li>确认该异常类继承的父类或者接口满足上述几个条件</li>
+</ul>
+</li>
+<li>Class ref in pre-verified class resolved to unexpected implementation ，使用gradle smallLint命令查看是否有class重复了 <a href="https://github.com/wequick/Small/issues/423" target="_blank" rel="external">https://github.com/wequick/Small/issues/423</a></li>
+<li>Activity launch mode为singletop时在activity style中设置透明背景无效 <a href="https://github.com/wequick/Small/issues/94" target="_blank" rel="external">https://github.com/wequick/Small/issues/94</a></li>
+<li>无法通过Small.openUri()方法启动页面怎么办？一定是你用法不对，debug找原因。</li>
+</ol>
+<h4 id="0x07_Small项目的完全体">0x07 Small项目的完全体</h4><p><img src="/res/small/1.png" alt=""></p>
+<h4 id="0x09_参考">0x09 参考</h4><p>Small官网文档 <a href="http://code.wequick.net/Small/cn/quickstart" target="_blank" rel="external">http://code.wequick.net/Small/cn/quickstart</a></p>
+<p>Small github主页 <a href="https://github.com/wequick/Small" target="_blank" rel="external">https://github.com/wequick/Small</a></p>
+<p><a href="http://code.wequick.net/small/docs/ppt/gmtc-galen-small.ppsx" target="_blank" rel="external">GMTC演讲PPT</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+    <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+      <span>赏</span>
+    </button>
+    <div id="QR" style="display: none;">
+      
+        <div id="wechat" style="display: inline-block">
+          <img id="wechat_qr" src="https://ivonhoe.github.io/res/dex2jar_error/WechatIMG56.png" alt="病已 WeChat Pay"/>
+          <p>微信打赏</p>
+        </div>
+      
+      
+        <div id="alipay" style="display: inline-block">
+          <img id="alipay_qr" src="https://ivonhoe.github.io/res/dex2jar_error/WechatIMG57.jpeg" alt="病已 Alipay"/>
+          <p>支付宝打赏</p>
+        </div>
+      
+    </div>
+  </div>
+
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android/" rel="tag"># Android</a>
+          
+            <a href="/tags/插件化/" rel="tag"># 插件化</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/05/12/executor-eat-exception/" rel="next" title="捕获线程池任务异常引发的血案">
+                <i class="fa fa-chevron-left"></i> 捕获线程池任务异常引发的血案
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/01/18/Small框架原理/" rel="prev" title="Small框架原理">
+                Small框架原理 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2018/01/18/Small框架实践总结/"
+           data-title="Small框架实践总结" data-url="https://ivonhoe.github.io/2018/01/18/Small框架实践总结/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://avatars1.githubusercontent.com/u/5706813?v=3&s=460"
+               alt="病已" />
+          <p class="site-author-name" itemprop="name">病已</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">20</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">28</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/Ivonhoe" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#0x01_前言"><span class="nav-number">1.</span> <span class="nav-text">0x01 前言</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x02_选择small框架的原因"><span class="nav-number">2.</span> <span class="nav-text">0x02 选择small框架的原因</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x03_不选择small框架的原因"><span class="nav-number">3.</span> <span class="nav-text">0x03 不选择small框架的原因</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x04_Small必知必会"><span class="nav-number">4.</span> <span class="nav-text">0x04 Small必知必会</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x05_Small框架原理"><span class="nav-number">5.</span> <span class="nav-text">0x05 Small框架原理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x06_Small插件化实践规范"><span class="nav-number">6.</span> <span class="nav-text">0x06 Small插件化实践规范</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x07_Small插件化实践踩过的那些坑"><span class="nav-number">7.</span> <span class="nav-text">0x07 Small插件化实践踩过的那些坑</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x07_Small项目的完全体"><span class="nav-number">8.</span> <span class="nav-text">0x07 Small项目的完全体</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x09_参考"><span class="nav-number">9.</span> <span class="nav-text">0x09 参考</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">病已</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"ivonhoe"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("JdLpddsaWqwfJtXPdDK8woaF-gzGzoHsz", "CEmtHXH8f0PtvF0zYtVE0EeY");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

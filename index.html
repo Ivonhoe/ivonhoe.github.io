@@ -271,6 +271,322 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://ivonhoe.github.io/2018/01/18/Small框架原理/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="病已">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/5706813?v=3&s=460">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="别辜负自己">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2018/01/18/Small框架原理/" itemprop="url">
+                  Small框架原理
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-18T17:54:19+08:00">
+                Jan 18 2018
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/01/18/Small框架原理/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2018/01/18/Small框架原理/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2018/01/18/Small框架原理/" class="leancloud_visitors" data-flag-title="Small框架原理">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h4 id="0x01_Small如何打包module代码?">0x01 Small如何打包module代码?</h4><p>small插件化中的三种组件角色，分别是<code>app.*</code>，<code>lib.*</code>，<code>宿主</code>。small在打包过程中会根据不同module的类型针对不同组件使用不同编译插件做处理，分别是:</p>
+<ol>
+<li><code>AppPlugin</code> –&gt; <code>app.*</code></li>
+<li><code>LibraryPlugin</code> –&gt; <code>lib.*</code></li>
+<li><code>HostPlugin</code> –&gt; <code>app</code></li>
+<li><code>AssetPlugin</code> –&gt; <code>其他</code> </li>
+</ol>
+<p>在处理模块依赖上，首先区分gradle的两种依赖方式:</p>
+<ol>
+<li>Compile: compile是对所有的build type以及flavors都会参与编译并且打包到最终的apk文件中。</li>
+<li>Provided: Provided是对所有的build type以及flavors只在编译时使用，只参与编译，不打包到最终apk。</li>
+</ol>
+<p>在打包<code>app.*</code>插件时，将<code>app.*</code>对其他module的依赖转换成<code>provided</code>依赖。当执行插件打包时可以看做是插件模块执行<code>assembleRelease</code>。</p>
+<p>在打包<code>lib.*</code>插件时，<code>LibraryPlugin</code>会修改插件模块的<code>build.gradle</code>文件，<code>apply plugin:</code>从<code>&#39;com.android.library&#39;</code>修改成<code>&#39;com.android.application&#39;</code>，将对lib的方式转换成app的打包，再执行<code>assembleRelease</code>任务。</p>
+<p>👍👍👍</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/01/18/Small框架原理/#далее" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://ivonhoe.github.io/2018/01/18/Small框架实践总结/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="病已">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/5706813?v=3&s=460">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="别辜负自己">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2018/01/18/Small框架实践总结/" itemprop="url">
+                  Small框架实践总结
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-18T17:42:57+08:00">
+                Jan 18 2018
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/01/18/Small框架实践总结/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2018/01/18/Small框架实践总结/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2018/01/18/Small框架实践总结/" class="leancloud_visitors" data-flag-title="Small框架实践总结">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h4 id="0x01_前言">0x01 前言</h4><p>什么是Small？ Small是一个轻量级的插件化框架。同时Small也是一个dex分包方案，Small也是一个业务解耦方案，Small也是一个动态加载和更新方案。不废话去看官网文档~~</p>
+<p><a href="http://code.wequick.net/Small/cn/quickstart">Small官网文档</a></p>
+<p><a href="https://github.com/wequick/Small">Small github主页</a></p>
+<p><a href="http://code.wequick.net/small/docs/ppt/gmtc-galen-small.ppsx">GMTC演讲PPT</a></p>
+<h4 id="0x02_选择small框架的原因">0x02 选择small框架的原因</h4><ol>
+<li>集成简单</li>
+<li>开发方式非常接近Android app的原生开发方式</li>
+<li>不需要更换编译工具，已有项目中针对业务需求开发的编译工具依然可以继续使用</li>
+<li>优雅，特别是对资源id冲突的处理方式</li>
+<li>轻量化，尽可能少的hook系统变量，兼容性问题较少</li>
+</ol>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/01/18/Small框架实践总结/#далее" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="https://ivonhoe.github.io/2017/05/12/executor-eat-exception/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -661,9 +977,9 @@
 
       
         
-          <h3 id="BitmapAnalyer看Hello_World">BitmapAnalyer看Hello World</h3><p>当使用BitmapAnalyzer分析一个Android5.0+的Hello World App时你会dump出400+张图片，什么是BitmapAnalyzer？请看<a href="https://ivonhoe.github.io/2017/03/22/Bitmap&amp;Memory/">Android Bitmap的内存大小是如何计算的？</a>这篇文章的介绍。分析仔细看一下可以发现，这些都是Android系统的主题资源图片，为什么会有这么多主题资源被加载？是不是选择其他的theme这些资源是会改变？不需要的无用资源能否避免被加载？How？毕竟单单Resources中sPreloadedDrawables所引用的Drawable就会占用10M以上的内存空间。</p>
-<p><img src="/res/hprof/hprof-3.png" alt=""></p>
-<p>使用Android Studio的monitor工具dump内存如上图所示，AS将hprof中的内存信息分为三类，分别是App heap，Image heap，Zygote heap。App heap很好理解，就是应用进程独占的内存空间，在应用中创建的对象都会在App heap上。而在使用Dalvik虚拟机的手机上，并没有Image heap，只有App heap和Zygote heap。<a href="https://developer.android.com/studio/profile/am-hprof.html#why">Android官网文档</a>的三者的解释是：</p>
+          <h3 id="一、分析一个Hello_World_App中bitmap对象的分布">一、分析一个Hello World App中bitmap对象的分布</h3><p>使用BitmapAnalyzer分析一个Android Hello World App时你会dump出400+张图片，什么是BitmapAnalyzer？BitmapAnalyzer是一个自动分析Android dump heap中bitmap对象的工具，详细请看<a href="https://ivonhoe.github.io/2017/03/22/Bitmap&amp;Memory/">《Android Bitmap的内存大小是如何计算的？》</a>这篇文章的介绍。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/695750-211010ed47103e96.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="hprof-3.png"></p>
+<p>分析仔细看一下可以发现，上图中sPreloadedDrawables数组所引用的预加载Drawable就会占用10M以上的内存空间。这些都是Android系统的主题资源图片，为什么会有这么多主题资源被加载？不需要的无用的系统资源能否避免被加载？那么要如何做到？</p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2017/04/26/Zygote-2/#далее" rel="contents">
@@ -809,7 +1125,7 @@
 
       
         
-          <h2 id="[译]Zygote">[译]Zygote</h2><p>原文地址：<a href="https://anatomyofandroid.com/2013/10/15/zygote/">Zygote https://anatomyofandroid.com/2013/10/15/zygote/</a></p>
+          <p>原文地址：<a href="https://anatomyofandroid.com/2013/10/15/zygote/">Zygote https://anatomyofandroid.com/2013/10/15/zygote/</a></p>
 <p>Zygote（受精卵）是一个启动应用的守护进程，在Server Manager之后被init.rc触发，但其实他是真正被app_process启动的，下面是启动这个特殊进程的流程。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">service zygote /system/bin/app_process -Xzygote /system/bin --zygote --start-system-server&#10;class main&#10;socket zygote stream 660 root system&#10;onrestart write /sys/android_power/request_state wake&#10;onrestart write /sys/power/state on&#10;onrestart restart media&#10;onrestart restart netd</span><br></pre></td></tr></table></figure>
 <p>你可以发现Zygote是如何当做系统服务启动的，你也可以看到app_process为什么说app_process是启动Zygote的真正命令。就像之前说的，Zygote是一个以专门启动应用为的守护进程。这意味着Zygote是所有App进程的父进程。当app_process启动Zygote时，它通过调用Zygote的main()方法创建了第一个Dalvik虚拟机。当Zygote启动后，zygote会预加载所有必须的Java类和资源，启动System Server并打开一个名为/dev/socket/zygote的socket服务，去监听所有启动应用的请求。 想之前的文章所说，System Server 是一个和它的父进程完全分离的进程。一旦System Server创建完成，它会初始化一系列不同的System Services并启动Activity Manager。那Zygote是如何启动新的应用的呢？</p>
@@ -1462,308 +1778,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="https://ivonhoe.github.io/2017/01/20/MacOS上编译Android源码/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="病已">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/5706813?v=3&s=460">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="别辜负自己">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/01/20/MacOS上编译Android源码/" itemprop="url">
-                  Mac OS上编译Android源码
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-01-20T22:16:46+08:00">
-                Jan 20 2017
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2017/01/20/MacOS上编译Android源码/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/01/20/MacOS上编译Android源码/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-             <span id="/2017/01/20/MacOS上编译Android源码/" class="leancloud_visitors" data-flag-title="Mac OS上编译Android源码">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数 </span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h3 id="一、制作一个大小写敏感的磁盘分区">一、制作一个大小写敏感的磁盘分区</h3><h4 id="1-1-Mac_OS磁盘工具">1.1.Mac OS磁盘工具</h4><p>这里我使用一块移动硬盘，将移动硬盘的一个分区使用Mac OS的硬盘工具，抹掉数据，选择MacOS扩展(区分大小写，日志式)，创建成大小写敏感的分区。</p>
-<p><img src="/res/compile_android_source/android-source-disk1.jpeg" alt=""></p>
-<p>这里会遇到一个问题，抹掉分区数据的时候，<code>会报错：“Mac OSX 抹盘发生错误:Mediakit 报告设备上空间不足以执行此操作”</code>，这里的原因是磁盘没有大于200M的UEFI分区。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2017/01/20/MacOS上编译Android源码/#далее" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="https://ivonhoe.github.io/2016/12/16/Mac-Linux下gcc编译动态链接库-so文件/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="病已">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/5706813?v=3&s=460">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="别辜负自己">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/12/16/Mac-Linux下gcc编译动态链接库-so文件/" itemprop="url">
-                  Mac/Linux下gcc编译动态链接库[.so文件]
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-12-16T13:47:55+08:00">
-                Dec 16 2016
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2016/12/16/Mac-Linux下gcc编译动态链接库-so文件/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/12/16/Mac-Linux下gcc编译动态链接库-so文件/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-             <span id="/2016/12/16/Mac-Linux下gcc编译动态链接库-so文件/" class="leancloud_visitors" data-flag-title="Mac/Linux下gcc编译动态链接库[.so文件]">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数 </span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="一、以bsdiff-c和bspatch-c为例编译bsdiff-so">一、以bsdiff.c和bspatch.c为例编译bsdiff.so</h2><p>bsdiff.c和bspatch.c分别依赖bzip2</p>
-<h3 id="项目结构">项目结构</h3><h3 id="步骤">步骤</h3><ul>
-<li><p>使用BsDiff.java生成BsDiff.class文件</p>
-<p><strong>javac</strong> ivonhoe/spring/wrcenter/jni/BsDiff.java</p>
-</li>
-<li><p>生成BsDiff.h文件</p>
-<p><strong>javah</strong> ivonhoe.spring.wrcenter.jni.BsDiff </p>
-</li>
-<li><p>生成bspatch.o</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2016/12/16/Mac-Linux下gcc编译动态链接库-so文件/#далее" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1813,7 +1827,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">18</span>
+                <span class="site-state-item-count">20</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -1826,7 +1840,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">27</span>
+                <span class="site-state-item-count">28</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -1886,7 +1900,7 @@
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2017</span>
+  <span itemprop="copyrightYear">2018</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
@@ -1995,6 +2009,8 @@
 
   
 
+
+
   
     
   
@@ -2013,8 +2029,6 @@
   </script>
 
   
-
-
 
 
 

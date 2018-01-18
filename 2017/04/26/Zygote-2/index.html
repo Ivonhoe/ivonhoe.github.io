@@ -89,22 +89,22 @@
 
 
 
-<meta name="description" content="BitmapAnalyer看Hello World当使用BitmapAnalyzer分析一个Android5.0+的Hello World App时你会dump出400+张图片，什么是BitmapAnalyzer？请看Android Bitmap的内存大小是如何计算的？这篇文章的介绍。分析仔细看一下可以发现，这些都是Android系统的主题资源图片，为什么会有这么多主题资源被加载？是不是选择其他的">
+<meta name="description" content="一、分析一个Hello World App中bitmap对象的分布使用BitmapAnalyzer分析一个Android Hello World App时你会dump出400+张图片，什么是BitmapAnalyzer？BitmapAnalyzer是一个自动分析Android dump heap中bitmap对象的工具，详细请看《Android Bitmap的内存大小是如何计算的？》这篇文章的介绍">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Zygote与内存">
 <meta property="og:url" content="https://ivonhoe.github.io/2017/04/26/Zygote-2/index.html">
 <meta property="og:site_name" content="别辜负自己">
-<meta property="og:description" content="BitmapAnalyer看Hello World当使用BitmapAnalyzer分析一个Android5.0+的Hello World App时你会dump出400+张图片，什么是BitmapAnalyzer？请看Android Bitmap的内存大小是如何计算的？这篇文章的介绍。分析仔细看一下可以发现，这些都是Android系统的主题资源图片，为什么会有这么多主题资源被加载？是不是选择其他的">
-<meta property="og:image" content="https://ivonhoe.github.io/res/hprof/hprof-3.png">
-<meta property="og:image" content="https://ivonhoe.github.io/res/hprof/hprof-2.png">
-<meta property="og:image" content="https://ivonhoe.github.io/res/hprof/hprof-7.png">
-<meta property="og:image" content="https://ivonhoe.github.io/res/hprof/hprof-5.png">
-<meta property="og:image" content="https://ivonhoe.github.io/res/hprof/hprof-4.png">
-<meta property="og:image" content="https://ivonhoe.github.io/res/hprof/hprof-8.jpg">
-<meta property="og:updated_time" content="2017-05-09T08:10:45.000Z">
+<meta property="og:description" content="一、分析一个Hello World App中bitmap对象的分布使用BitmapAnalyzer分析一个Android Hello World App时你会dump出400+张图片，什么是BitmapAnalyzer？BitmapAnalyzer是一个自动分析Android dump heap中bitmap对象的工具，详细请看《Android Bitmap的内存大小是如何计算的？》这篇文章的介绍">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/695750-211010ed47103e96.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/695750-8d0e4feb9a25e8b4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/695750-04d96b82a7dbce97.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/695750-4eebdbaf6e95eff4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/695750-14ca03d88be43c61.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/695750-5f0921dc8e336f51.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2017-12-27T14:39:04.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Zygote与内存">
-<meta name="twitter:description" content="BitmapAnalyer看Hello World当使用BitmapAnalyzer分析一个Android5.0+的Hello World App时你会dump出400+张图片，什么是BitmapAnalyzer？请看Android Bitmap的内存大小是如何计算的？这篇文章的介绍。分析仔细看一下可以发现，这些都是Android系统的主题资源图片，为什么会有这么多主题资源被加载？是不是选择其他的">
+<meta name="twitter:description" content="一、分析一个Hello World App中bitmap对象的分布使用BitmapAnalyzer分析一个Android Hello World App时你会dump出400+张图片，什么是BitmapAnalyzer？BitmapAnalyzer是一个自动分析Android dump heap中bitmap对象的工具，详细请看《Android Bitmap的内存大小是如何计算的？》这篇文章的介绍">
 
 
 
@@ -369,27 +369,27 @@
       
 
       
-        <h3 id="BitmapAnalyer看Hello_World">BitmapAnalyer看Hello World</h3><p>当使用BitmapAnalyzer分析一个Android5.0+的Hello World App时你会dump出400+张图片，什么是BitmapAnalyzer？请看<a href="https://ivonhoe.github.io/2017/03/22/Bitmap&amp;Memory/">Android Bitmap的内存大小是如何计算的？</a>这篇文章的介绍。分析仔细看一下可以发现，这些都是Android系统的主题资源图片，为什么会有这么多主题资源被加载？是不是选择其他的theme这些资源是会改变？不需要的无用资源能否避免被加载？How？毕竟单单Resources中sPreloadedDrawables所引用的Drawable就会占用10M以上的内存空间。</p>
-<p><img src="/res/hprof/hprof-3.png" alt=""></p>
-<p>使用Android Studio的monitor工具dump内存如上图所示，AS将hprof中的内存信息分为三类，分别是App heap，Image heap，Zygote heap。App heap很好理解，就是应用进程独占的内存空间，在应用中创建的对象都会在App heap上。而在使用Dalvik虚拟机的手机上，并没有Image heap，只有App heap和Zygote heap。<a href="https://developer.android.com/studio/profile/am-hprof.html#why" target="_blank" rel="external">Android官网文档</a>的三者的解释是：</p>
+        <h3 id="一、分析一个Hello_World_App中bitmap对象的分布">一、分析一个Hello World App中bitmap对象的分布</h3><p>使用BitmapAnalyzer分析一个Android Hello World App时你会dump出400+张图片，什么是BitmapAnalyzer？BitmapAnalyzer是一个自动分析Android dump heap中bitmap对象的工具，详细请看<a href="https://ivonhoe.github.io/2017/03/22/Bitmap&amp;Memory/">《Android Bitmap的内存大小是如何计算的？》</a>这篇文章的介绍。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/695750-211010ed47103e96.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="hprof-3.png"></p>
+<p>分析仔细看一下可以发现，上图中sPreloadedDrawables数组所引用的预加载Drawable就会占用10M以上的内存空间。这些都是Android系统的主题资源图片，为什么会有这么多主题资源被加载？不需要的无用的系统资源能否避免被加载？那么要如何做到？</p>
 <a id="more"></a>
+<h3 id="二、为什么有这么多系统资源被加载？">二、为什么有这么多系统资源被加载？</h3><p>使用Android Studio(简称AS)的monitor工具dump内存如上图所示，hprof中的内存信息分为三类，分别是App heap，Image heap，Zygote heap。App heap很好理解，就是应用进程独占的内存空间，在应用中创建的对象都会在App heap上。而在Dalvik虚拟机上运行的app，只有App heap和Zygote heap，并没有Image heap。<a href="https://developer.android.com/studio/profile/am-hprof.html#why" target="_blank" rel="external">Android官网文档</a>的三者的解释是：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">App heap - The heap used by the current app.&#10;&#10;Image heap - The memory mapped copy of the current app on disk.&#10;&#10;Zygote heap - The common set of libraries and runtime classes and data that all apps are forked from. The zygote space is created during device startup and is never allocated into.</span><br></pre></td></tr></table></figure>
-<p>较详细的Zygote机制可以看我翻译的<a href="https://ivonhoe.github.io/2017/04/25/Zygote/">Zygote https://ivonhoe.github.io/2017/04/25/Zygote/</a>这篇文章,总的来说是<code>app_process</code>启动Zygote并创建第一个虚拟机进程，Zygote启动时会预加载所有需要的Java classes和”必要的”资源文件，这些资源文件就包括我们在hprof文件中看到的被sPreloadedDrawables所直接引用的Bitmap资源。应用进程都是从Zygote中fork出来的，所以所有的应用进程都会包含上面提到的资源文件。这些资源的拷贝可以看成浅拷贝，并不是真正的内存copy，而是作为进程间的共享内存使用。</p>
-<p><img src="/res/hprof/hprof-2.png" alt=""></p>
-<p>当通过反射手动清除sPreloadDrawable对这些资源的强引用，通过Android Studio的monitor工具发现，gc以后App heap发生了断崖式的内存回收，<code>adb shell dumpsys meminfo</code>发现Heap Alloc和Heap Size都发生了显著的减小，但Pss total并没有显著变化。这里的理解是PSS = Private RAM + 按比例计算的Shared RAM，这两部分都没有发生显著变化，所以PSS Total没有变化。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">private void clearPreloadedDrawables() &#123;&#10;    try &#123;&#10;        Field mFieldPreloadedDrawables = getField(Resources.class, &#34;sPreloadedDrawables&#34;);&#10;        if (mFieldPreloadedDrawables != null) &#123;&#10;            mFieldPreloadedDrawables.setAccessible(true);&#10;&#10;            boolean access = mFieldPreloadedDrawables.isAccessible();&#10;            if (!access) &#123;&#10;                mFieldPreloadedDrawables.setAccessible(true);&#10;            &#125;&#10;&#10;            if (Build.VERSION.SDK_INT &#60;= 17) &#123;&#10;                LongSparseArray&#60;Drawable.ConstantState&#62; dArray = (LongSparseArray&#60;Drawable.ConstantState&#62;) mFieldPreloadedDrawables.get(getResources());&#10;                if (dArray != null) &#123;&#10;                    dArray.clear();&#10;                &#125;&#10;&#10;                // dArray.put(1, createDrawableConstant());&#10;            &#125; else if (Build.VERSION.SDK_INT &#62;= 18) &#123;&#10;                LongSparseArray&#60;Drawable.ConstantState&#62;[] dArray = (LongSparseArray&#60;Drawable.ConstantState&#62;[]) mFieldPreloadedDrawables.get(getResources());&#10;                if (dArray != null) &#123;&#10;                    for (int i = 0; i &#60; dArray.length; i++) &#123;&#10;                        if (dArray[i] != null) &#123;&#10;                            dArray[i].clear();&#10;                            // dArray[i].put(1, createDrawableConstant());&#10;                        &#125;&#10;                    &#125;&#10;                &#125;&#10;            &#125;&#10;&#10;            mFieldPreloadedDrawables.setAccessible(true);&#10;        &#125;&#10;    &#125; catch (Exception e) &#123;&#10;        e.printStackTrace();&#10;    &#125;&#10;&#125;</span><br></pre></td></tr></table></figure>
-<p><img src="/res/hprof/hprof-7.png" alt=""></p>
-<p><img src="/res/hprof/hprof-5.png" alt=""></p>
+<p>Zygote机制总的来说是<code>app_process</code>启动Zygote并创建第一个虚拟机进程，Zygote启动时会预加载所有需要的Java classes和”必要的”资源文件，这些资源文件就包括我们在hprof文件中看到的被sPreloadedDrawables所直接引用的Bitmap资源。应用进程都是从Zygote中fork出来的，所以所有的应用进程都会包含上面提到的资源文件。这些资源的拷贝可以看成浅拷贝，并不是真正的内存copy，而是作为进程间的共享内存使用。详细的可以查看<a href="https://ivonhoe.github.io/2017/04/25/Zygote/">《Zygote》</a>这篇文章。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/695750-8d0e4feb9a25e8b4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="hprof-2.png"></p>
+<h3 id="三、强制清除未使用的系统资源图片会怎样？">三、强制清除未使用的系统资源图片会怎样？</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">private void clearPreloadedDrawables() &#123;&#10;    try &#123;&#10;        Field mFieldPreloadedDrawables = getField(Resources.class, &#34;sPreloadedDrawables&#34;);&#10;        if (mFieldPreloadedDrawables != null) &#123;&#10;            mFieldPreloadedDrawables.setAccessible(true);&#10;&#10;            boolean access = mFieldPreloadedDrawables.isAccessible();&#10;            if (!access) &#123;&#10;                mFieldPreloadedDrawables.setAccessible(true);&#10;            &#125;&#10;&#10;            if (Build.VERSION.SDK_INT &#60;= 17) &#123;&#10;                LongSparseArray&#60;Drawable.ConstantState&#62; dArray = (LongSparseArray&#60;Drawable.ConstantState&#62;) mFieldPreloadedDrawables.get(getResources());&#10;                if (dArray != null) &#123;&#10;                    dArray.clear();&#10;                &#125;&#10;&#10;                // dArray.put(1, createDrawableConstant());&#10;            &#125; else if (Build.VERSION.SDK_INT &#62;= 18) &#123;&#10;                LongSparseArray&#60;Drawable.ConstantState&#62;[] dArray = (LongSparseArray&#60;Drawable.ConstantState&#62;[]) mFieldPreloadedDrawables.get(getResources());&#10;                if (dArray != null) &#123;&#10;                    for (int i = 0; i &#60; dArray.length; i++) &#123;&#10;                        if (dArray[i] != null) &#123;&#10;                            dArray[i].clear();&#10;                            // dArray[i].put(1, createDrawableConstant());&#10;                        &#125;&#10;                    &#125;&#10;                &#125;&#10;            &#125;&#10;&#10;            mFieldPreloadedDrawables.setAccessible(true);&#10;        &#125;&#10;    &#125; catch (Exception e) &#123;&#10;        e.printStackTrace();&#10;    &#125;&#10;&#125;</span><br></pre></td></tr></table></figure>
+<p>当通过上述clearPreloadedDrawables函数清除sPreloadDrawable对这些资源的强引用，然后使用Android Studio的monitor工具发现，gc以后App heap发生了断崖式的内存回收，并且使用<code>adb shell dumpsys meminfo</code>命令可以发现Heap Alloc和Heap Size都发生了显著的减小，但Pss total并没有显著变化。这里的理解是PSS = Private RAM + 按比例计算的Shared RAM，这两部分都没有发生显著变化，所以PSS Total没有变化。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/695750-04d96b82a7dbce97.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="hprof-7.png"></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/695750-4eebdbaf6e95eff4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="hprof-5.png"></p>
 <p>那请问，上面👆的内存清理有意义吗？Heap allocated较少了10M，但PSS并没有明显的变化，给我的感觉就像大家在吃大锅饭，我只吃了1碗，别人吃了10碗，付钱的时候却是AA，甚至可能我付的还更多一些。你说你是不是萨？</p>
-<h3 id="Copy-On-Write(COW)">Copy-On-Write(COW)</h3><p>Zygote heap是系统共享内存heap，这里我尝试修改<code>sPreloadDrawable</code>对应数据时，如下图所示，系统默认预加载399张资源图片，当手动插入一张新的图片到缓存后，缓存大小变成了400。但让我觉得诡异的是，不是说Android系统使用COW机制吗？为啥插入前后sPreloadDrawable相关的内存地址根本没有变化？难道我把共享内存的数据也改掉了？其实并没有。</p>
-<p><img src="/res/hprof/hprof-4.png" alt=""></p>
-<p><img src="/res/hprof/hprof-8.jpg" alt=""></p>
-<p>linux没有那么傻，在fork子进程的时候并不会真正拷贝父进程内存数据，而是子进程的虚拟内存空间指向父进程的物理内存空间。子进程和父进程的虚拟空间不同，但物理空间是同一个。当子进程需要重写共享内存数据时，系统才会为子进程分配响应的物理内存。这里的虚拟内存空间对应用程序来说就是逻辑地址，对于CPU来说就是线性地址。</p>
-<h3 id="总结">总结</h3><p>回到之前思考的几个问题：</p>
+<h3 id="四、Copy-On-Write(COW)">四、Copy-On-Write(COW)</h3><p>Zygote heap是系统共享内存heap，这里我尝试修改<code>sPreloadDrawable</code>对应数据时，如下图所示，系统默认预加载399张资源图片，当手动插入一张新的图片到缓存后，缓存大小变成了400。但让我觉得诡异的是，不是说Android系统使用COW机制吗？为啥插入前后sPreloadDrawable相关的内存地址根本没有变化？<br><img src="http://upload-images.jianshu.io/upload_images/695750-14ca03d88be43c61.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="hprof-4.png"></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/695750-5f0921dc8e336f51.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="hprof-8.jpg"></p>
+<p>我的理解是在fork子进程的时候并不会真正拷贝父进程内存数据，而是子进程的虚拟内存空间指向父进程的物理内存空间。子进程和父进程的虚拟空间不同，但物理空间是同一个。当子进程需要重写共享内存数据时，系统才会为子进程分配响应的物理内存。这里的虚拟内存空间对应用程序来说就是逻辑地址，对于CPU来说就是线性地址。</p>
+<h3 id="五、总结">五、总结</h3><p>回到之前思考的几个问题：</p>
 <ul>
-<li><p>为什么会有这么多主题资源被加载？是不是选择其他的theme这些资源是会改变？<br>这些主题资源是系统启动时Zygote预加载的系统资源，Zygote认为这些资源每个App都会用到，特别是5.0+的系统会达到400+的默认theme图片，占用10M+的内存空间，不过这些内存是系统共享的你用或不用他们都在那里。改变应用的主题样式并不会改变sPreloadDrawable的加载内容。</p>
+<li><p>为什么会有这么多主题资源被加载？<br>这些主题资源是系统启动时Zygote预加载的系统资源，Zygote认为这些资源每个App都会用到，特别是5.0+的系统会达到400+的默认theme图片，占用10M+的内存空间，不过这些内存是系统共享的你用或不用他们都在那里。改变应用的主题样式并不会改变sPreloadDrawable的加载内容。</p>
 </li>
-<li><p>不需要的无用资源能否避免被加载？<br>这些默认系统资源无法避免被系统预加载，但是不同ROM厂商针对这些资源的看法差别还是很大的，根据测试的情况看，三星的预加载资源比源码的还要多，并且清空sPreloadDrawable也不能减少Heap allocte的大小。相反锤子手机对这些预加载资源的作用倒是不太看好，在锤子坚果上看到的预加载资源就很少，几乎可以忽略不计。而在Android 5.0以下的系统版本，这块预加载的资源也不是很夸张。</p>
+<li><p>不需要的无用资源能否避免被加载？<br>这些默认系统资源无法避免被系统预加载，但是不同ROM厂商针对这些资源的看法差别还是很大的，根据测试的情况看，三星的预加载资源比源码的还要多，清空sPreloadDrawable也不能减少Heap allocte的大小。相反锤子手机对这些预加载资源的作用倒是不太看好，在锤子坚果上看到的预加载资源就很少，几乎可以忽略不计。而在Android 5.0以下的系统版本，这块预加载的资源也不是很夸张。</p>
 </li>
 <li><p>清空预加载资源对应用内存有无优化作用？<br>说下个人看法，如果你的应用分为UI进程和后台服务进程。在UI进程清除系统预加载资源可能并不是明智的选择，为啥？因为这是一件吃力未必讨好的事情，虽然这10M空间你并没有使用，但系统并没有领情，反而当你想要在使用系统资源的时候，那这些资源就会完全算到你的头上。那样反而会造成应用进程内存的上升。为啥？清除系统的共享内存后，再加载系统资源时分配的就是应用的私有内存了。<br>如果是后台服务进程，打死也不会用到系统主题资源的情况下，清除预加载资源为什么不是对自己有利的事情呢？因为这样做确实让Heap变小了呀！</p>
 <p>当然以上都是个人的理解，如有理解错误，恳请能够指出。对于如何获取Java对象的物理地址，我还没有找到更好的办法，所以暂时还没有实践验证COW。</p>
@@ -555,7 +555,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">18</span>
+                <span class="site-state-item-count">20</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -568,7 +568,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">27</span>
+                <span class="site-state-item-count">28</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -621,7 +621,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#BitmapAnalyer看Hello_World"><span class="nav-number">1.</span> <span class="nav-text">BitmapAnalyer看Hello World</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Copy-On-Write(COW)"><span class="nav-number">2.</span> <span class="nav-text">Copy-On-Write(COW)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">3.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考"><span class="nav-number">4.</span> <span class="nav-text">参考</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#一、分析一个Hello_World_App中bitmap对象的分布"><span class="nav-number">1.</span> <span class="nav-text">一、分析一个Hello World App中bitmap对象的分布</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二、为什么有这么多系统资源被加载？"><span class="nav-number">2.</span> <span class="nav-text">二、为什么有这么多系统资源被加载？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#三、强制清除未使用的系统资源图片会怎样？"><span class="nav-number">3.</span> <span class="nav-text">三、强制清除未使用的系统资源图片会怎样？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#四、Copy-On-Write(COW)"><span class="nav-number">4.</span> <span class="nav-text">四、Copy-On-Write(COW)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#五、总结"><span class="nav-number">5.</span> <span class="nav-text">五、总结</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考"><span class="nav-number">6.</span> <span class="nav-text">参考</span></a></li></ol></div>
             
 
           </div>
@@ -644,7 +644,7 @@
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2017</span>
+  <span itemprop="copyrightYear">2018</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
@@ -757,6 +757,8 @@
 
   
 
+
+
   
     
   
@@ -775,8 +777,6 @@
   </script>
 
   
-
-
 
 
 
