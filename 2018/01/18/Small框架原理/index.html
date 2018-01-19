@@ -89,37 +89,34 @@
 
 
 
-<meta name="description" content="0x01 Small如何打包module代码?small插件化中的三种组件角色，分别是app.*，lib.*，宿主。small在打包过程中会根据不同module的类型针对不同组件使用不同编译插件做处理，分别是:
+<meta name="description" content="0x00 前言Small是一个轻量化的插件化框架，Small的使用介绍可以查看官网文档了解，Small项目接入总结可以查看博客的另一篇《Small框架实践总结》。这篇文章主要从以下几个角度来看Small框架的实现原理。
 
-AppPlugin –&amp;gt; app.*
-LibraryPlugin –&amp;gt; lib.*
-HostPlugin –&amp;gt; app
-AssetPlugin –&amp;gt; 其他 
+Small如何实现插件代码打包和资源打包
+Small加载插件代码和资源的原理
+Small代理插件activity生命周期的原理
 
-在">
+0x01 Small如何打包module代码?s">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Small框架原理">
 <meta property="og:url" content="https://ivonhoe.github.io/2018/01/18/Small框架原理/index.html">
 <meta property="og:site_name" content="别辜负自己">
-<meta property="og:description" content="0x01 Small如何打包module代码?small插件化中的三种组件角色，分别是app.*，lib.*，宿主。small在打包过程中会根据不同module的类型针对不同组件使用不同编译插件做处理，分别是:
+<meta property="og:description" content="0x00 前言Small是一个轻量化的插件化框架，Small的使用介绍可以查看官网文档了解，Small项目接入总结可以查看博客的另一篇《Small框架实践总结》。这篇文章主要从以下几个角度来看Small框架的实现原理。
 
-AppPlugin –&amp;gt; app.*
-LibraryPlugin –&amp;gt; lib.*
-HostPlugin –&amp;gt; app
-AssetPlugin –&amp;gt; 其他 
+Small如何实现插件代码打包和资源打包
+Small加载插件代码和资源的原理
+Small代理插件activity生命周期的原理
 
-在">
-<meta property="og:updated_time" content="2018-01-18T09:56:35.000Z">
+0x01 Small如何打包module代码?s">
+<meta property="og:updated_time" content="2018-01-19T02:53:05.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Small框架原理">
-<meta name="twitter:description" content="0x01 Small如何打包module代码?small插件化中的三种组件角色，分别是app.*，lib.*，宿主。small在打包过程中会根据不同module的类型针对不同组件使用不同编译插件做处理，分别是:
+<meta name="twitter:description" content="0x00 前言Small是一个轻量化的插件化框架，Small的使用介绍可以查看官网文档了解，Small项目接入总结可以查看博客的另一篇《Small框架实践总结》。这篇文章主要从以下几个角度来看Small框架的实现原理。
 
-AppPlugin –&amp;gt; app.*
-LibraryPlugin –&amp;gt; lib.*
-HostPlugin –&amp;gt; app
-AssetPlugin –&amp;gt; 其他 
+Small如何实现插件代码打包和资源打包
+Small加载插件代码和资源的原理
+Small代理插件activity生命周期的原理
 
-在">
+0x01 Small如何打包module代码?s">
 
 
 
@@ -384,7 +381,13 @@ AssetPlugin –&amp;gt; 其他
       
 
       
-        <h4 id="0x01_Small如何打包module代码?">0x01 Small如何打包module代码?</h4><p>small插件化中的三种组件角色，分别是<code>app.*</code>，<code>lib.*</code>，<code>宿主</code>。small在打包过程中会根据不同module的类型针对不同组件使用不同编译插件做处理，分别是:</p>
+        <h4 id="0x00_前言">0x00 前言</h4><p>Small是一个轻量化的插件化框架，Small的使用介绍可以查看<a href="http://code.wequick.net/Small/cn/quickstart" target="_blank" rel="external">官网文档</a>了解，Small项目接入总结可以查看博客的另一篇<a href="https://ivonhoe.github.io/2018/01/18/Small%E6%A1%86%E6%9E%B6%E5%AE%9E%E8%B7%B5%E6%80%BB%E7%BB%93/">《Small框架实践总结》</a>。这篇文章主要从以下几个角度来看Small框架的实现原理。</p>
+<ol>
+<li>Small如何实现插件代码打包和资源打包</li>
+<li>Small加载插件代码和资源的原理</li>
+<li>Small代理插件activity生命周期的原理</li>
+</ol>
+<h4 id="0x01_Small如何打包module代码?">0x01 Small如何打包module代码?</h4><p>small插件化中的三种组件角色，分别是<code>app.*</code>，<code>lib.*</code>，<code>宿主</code>。small在打包过程中会根据不同module的类型针对不同组件使用不同编译插件做处理，分别是:</p>
 <ol>
 <li><code>AppPlugin</code> –&gt; <code>app.*</code></li>
 <li><code>LibraryPlugin</code> –&gt; <code>lib.*</code></li>
@@ -583,7 +586,7 @@ AssetPlugin –&amp;gt; 其他
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">20</span>
+                <span class="site-state-item-count">21</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -649,7 +652,7 @@ AssetPlugin –&amp;gt; 其他
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#0x01_Small如何打包module代码?"><span class="nav-number">1.</span> <span class="nav-text">0x01 Small如何打包module代码?</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x02_Small如何解决资源id冲突?"><span class="nav-number">2.</span> <span class="nav-text">0x02 Small如何解决资源id冲突?</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x03_Small如何加载插件代码？"><span class="nav-number">3.</span> <span class="nav-text">0x03 Small如何加载插件代码？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x04_Small如何加载插件资源?"><span class="nav-number">4.</span> <span class="nav-text">0x04 Small如何加载插件资源?</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x05_Small如何代理插件Activity的生命周期?"><span class="nav-number">5.</span> <span class="nav-text">0x05 Small如何代理插件Activity的生命周期?</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x06_Small如何动态更新插件模块?"><span class="nav-number">6.</span> <span class="nav-text">0x06 Small如何动态更新插件模块?</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x07_参考文档"><span class="nav-number">7.</span> <span class="nav-text">0x07 参考文档</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#0x00_前言"><span class="nav-number">1.</span> <span class="nav-text">0x00 前言</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x01_Small如何打包module代码?"><span class="nav-number">2.</span> <span class="nav-text">0x01 Small如何打包module代码?</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x02_Small如何解决资源id冲突?"><span class="nav-number">3.</span> <span class="nav-text">0x02 Small如何解决资源id冲突?</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x03_Small如何加载插件代码？"><span class="nav-number">4.</span> <span class="nav-text">0x03 Small如何加载插件代码？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x04_Small如何加载插件资源?"><span class="nav-number">5.</span> <span class="nav-text">0x04 Small如何加载插件资源?</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x05_Small如何代理插件Activity的生命周期?"><span class="nav-number">6.</span> <span class="nav-text">0x05 Small如何代理插件Activity的生命周期?</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x06_Small如何动态更新插件模块?"><span class="nav-number">7.</span> <span class="nav-text">0x06 Small如何动态更新插件模块?</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x07_参考文档"><span class="nav-number">8.</span> <span class="nav-text">0x07 参考文档</span></a></li></ol></div>
             
 
           </div>
