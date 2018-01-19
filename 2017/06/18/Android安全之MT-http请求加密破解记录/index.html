@@ -90,34 +90,37 @@
 
 
 <meta name="description" content="0x00 破解目标
-破解某外卖App http请求参数加密机制，目标是能够自由调用其服务接口并获取数据。通过抓包和反编译的代码大致梳理了上图请求参数的含义和生成方法，如下所示:
+破解某外卖App http请求参数加密机制，目标是能够自由调用其服务接口并获取数据。
+通过抓包和反编译的代码大致梳理了上图请求参数的含义和生成方法，如下所示:
 
 __skck:Java层面常量，6a375bce8c66a0dc293860dfa83833ef
 __skts:系统时间值，通过Sytem.currentTime()获取，例如：1487054997740
-__skua:">
+__skua">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Android安全之某外卖请求加密破解记录">
 <meta property="og:url" content="https://ivonhoe.github.io/2017/06/18/Android安全之MT-http请求加密破解记录/index.html">
 <meta property="og:site_name" content="别辜负自己">
 <meta property="og:description" content="0x00 破解目标
-破解某外卖App http请求参数加密机制，目标是能够自由调用其服务接口并获取数据。通过抓包和反编译的代码大致梳理了上图请求参数的含义和生成方法，如下所示:
+破解某外卖App http请求参数加密机制，目标是能够自由调用其服务接口并获取数据。
+通过抓包和反编译的代码大致梳理了上图请求参数的含义和生成方法，如下所示:
 
 __skck:Java层面常量，6a375bce8c66a0dc293860dfa83833ef
 __skts:系统时间值，通过Sytem.currentTime()获取，例如：1487054997740
-__skua:">
+__skua">
 <meta property="og:image" content="https://ivonhoe.github.io/res/meituan_hack/meituan-1.png">
 <meta property="og:image" content="https://ivonhoe.github.io/res/meituan_hack/meituan_smali1.png">
 <meta property="og:image" content="https://ivonhoe.github.io/res/meituan_hack/meituan_ida.jpeg">
 <meta property="og:image" content="https://ivonhoe.github.io/res/meituan_hack/meituan_hook.png">
-<meta property="og:updated_time" content="2018-01-19T09:26:19.000Z">
+<meta property="og:updated_time" content="2018-01-19T09:34:47.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android安全之某外卖请求加密破解记录">
 <meta name="twitter:description" content="0x00 破解目标
-破解某外卖App http请求参数加密机制，目标是能够自由调用其服务接口并获取数据。通过抓包和反编译的代码大致梳理了上图请求参数的含义和生成方法，如下所示:
+破解某外卖App http请求参数加密机制，目标是能够自由调用其服务接口并获取数据。
+通过抓包和反编译的代码大致梳理了上图请求参数的含义和生成方法，如下所示:
 
 __skck:Java层面常量，6a375bce8c66a0dc293860dfa83833ef
 __skts:系统时间值，通过Sytem.currentTime()获取，例如：1487054997740
-__skua:">
+__skua">
 
 
 
@@ -383,7 +386,8 @@ __skua:">
 
       
         <h3 id="0x00_破解目标">0x00 破解目标</h3><p><img src="/res/meituan_hack/meituan-1.png" alt=""></p>
-<p>破解某外卖App http请求参数加密机制，目标是能够自由调用其服务接口并获取数据。通过抓包和反编译的代码大致梳理了上图请求参数的含义和生成方法，如下所示:</p>
+<p>破解某外卖App http请求参数加密机制，目标是能够自由调用其服务接口并获取数据。</p>
+<p>通过抓包和反编译的代码大致梳理了上图请求参数的含义和生成方法，如下所示:</p>
 <ul>
 <li><strong>__skck:</strong>Java层面<strong>常量</strong>，6a375bce8c66a0dc293860dfa83833ef</li>
 <li><strong>__skts:</strong>系统时间值，通过Sytem.currentTime()获取，例如：1487054997740</li>
@@ -441,7 +445,7 @@ String getParametersSignature(Uri.Builder paramBuilder, Context paramContext) {
     localArrayList.add(new CandyPreprocessor.MyEntry(<span class="string">"__sksc"</span>, this.candyOriginalMaterial.getScheme()));
     // 将post content放入数组中
     if (formURLEncoded()) {
-        // /?dVersion=<span class="number">23_6.0</span>&amp;utm_medium=android&amp;password=Sdg123&amp;utm_content=<span class="number">867689027084732</span>&amp;appCode=<span class="number">388</span>&amp;acctId=&amp;wmPoiId=&amp;token=&amp;uuid=<span class="number">03</span>EB35F2C93419DC64AFFBC9EF6BB6BADE4DD72DC1E2F4733198E91C91AEAF93&amp;logType=C&amp;appName=<span class="decorator">%E7</span><span class="decorator">%BE</span><span class="decorator">%8E</span><span class="decorator">%E5</span><span class="decorator">%9B</span><span class="decorator">%A2</span><span class="decorator">%E5</span><span class="decorator">%A4</span><span class="decorator">%96</span><span class="decorator">%E5</span><span class="decorator">%8D</span><span class="decorator">%96</span><span class="decorator">%E5</span><span class="decorator">%95</span><span class="decorator">%86</span><span class="decorator">%E5</span><span class="decorator">%AE</span><span class="decorator">%B6</span><span class="decorator">%E7</span><span class="decorator">%89</span><span class="decorator">%88</span>&amp;appType=<span class="number">4</span>&amp;dType=PLK-TL01H&amp;userName=waimaitong&amp;utm_term=<span class="number">4.2</span>.<span class="number">0</span>.<span class="number">388</span>&amp;utm_source=&amp;utm_campaign=&amp;wm_appversion=<span class="number">4.2</span>.<span class="number">0</span>.<span class="number">388</span>&amp;
+        // /?dVersion=<span class="number">23_6.0</span>&amp;utm_medium=android&amp;password=<span class="number">2222</span>&amp;utm_content=<span class="number">867689027084732</span>&amp;appCode=<span class="number">388</span>&amp;acctId=&amp;wmPoiId=&amp;token=&amp;uuid=<span class="number">03</span>EB35F2C93419DC64AFFBC9EF6BB6BADE4DD72DC1E2F4733198E91C91AEAF93&amp;logType=C&amp;appName=<span class="decorator">%E7</span><span class="decorator">%BE</span><span class="decorator">%8E</span><span class="decorator">%E5</span><span class="decorator">%9B</span><span class="decorator">%A2</span><span class="decorator">%E5</span><span class="decorator">%A4</span><span class="decorator">%96</span><span class="decorator">%E5</span><span class="decorator">%8D</span><span class="decorator">%96</span><span class="decorator">%E5</span><span class="decorator">%95</span><span class="decorator">%86</span><span class="decorator">%E5</span><span class="decorator">%AE</span><span class="decorator">%B6</span><span class="decorator">%E7</span><span class="decorator">%89</span><span class="decorator">%88</span>&amp;appType=<span class="number">4</span>&amp;dType=PLK-TL01H&amp;userName=<span class="number">1111</span>&amp;utm_term=<span class="number">4.2</span>.<span class="number">0</span>.<span class="number">388</span>&amp;utm_source=&amp;utm_campaign=&amp;wm_appversion=<span class="number">4.2</span>.<span class="number">0</span>.<span class="number">388</span>&amp;
         // post 的内容入参
         /**
          * <span class="number">5</span> = {CandyPreprocessor<span class="variable">$MyEntry</span>@<span class="number">5071</span>} <span class="string">"dVersion"</span> -&gt; <span class="string">"23_6.0"</span>
@@ -469,10 +473,10 @@ String getParametersSignature(Uri.Builder paramBuilder, Context paramContext) {
     List percentParamList = getPercentList(localArrayList);
     // 分别对Value和Key做升序排列
     dictionarySort(percentParamList);
-    // 将排序后的数组，拼接成字符串__skck=<span class="number">6</span>a375bce8c66a0dc293860dfa83833ef&amp;__skno=<span class="number">5</span>ed4629c-098c-<span class="number">489</span>c-b598-<span class="number">81841</span>e0479e<span class="number">0</span>&amp;__sksc=https&amp;__skts=<span class="number">1486970558719</span>&amp;__skua=d41d8cd98f00b204e9800998ecf8427e&amp;acctId=&amp;appCode=<span class="number">388</span>&amp;appName=<span class="decorator">%E7</span><span class="decorator">%BE</span><span class="decorator">%8E</span><span class="decorator">%E5</span><span class="decorator">%9B</span><span class="decorator">%A2</span><span class="decorator">%E5</span><span class="decorator">%A4</span><span class="decorator">%96</span><span class="decorator">%E5</span><span class="decorator">%8D</span><span class="decorator">%96</span><span class="decorator">%E5</span><span class="decorator">%95</span><span class="decorator">%86</span><span class="decorator">%E5</span><span class="decorator">%AE</span><span class="decorator">%B6</span><span class="decorator">%E7</span><span class="decorator">%89</span><span class="decorator">%88</span>&amp;appType=<span class="number">4</span>&amp;dType=PLK-TL01H&amp;dVersion=<span class="number">23_6.0</span>&amp;logType=C&amp;password=Sdg123&amp;token=&amp;userName=waimaitong&amp;utm_campaign=&amp;utm_content=<span class="number">867689027084732</span>&amp;utm_medium=android&amp;utm_source=&amp;utm_term=<span class="number">4.2</span>.<span class="number">0</span>.<span class="number">388</span>&amp;uuid=<span class="number">03</span>EB35F2C93419DC64AFFBC9EF6BB6BADE4DD72DC1E2F4733198E91C91AEAF93&amp;wmPoiId=&amp;wm_appversion=<span class="number">4.2</span>.<span class="number">0</span>.<span class="number">388</span>
+    // 将排序后的数组，拼接成字符串__skck=<span class="number">6</span>a375bce8c66a0dc293860dfa83833ef&amp;__skno=<span class="number">5</span>ed4629c-098c-<span class="number">489</span>c-b598-<span class="number">81841</span>e0479e<span class="number">0</span>&amp;__sksc=https&amp;__skts=<span class="number">1486970558719</span>&amp;__skua=d41d8cd98f00b204e9800998ecf8427e&amp;acctId=&amp;appCode=<span class="number">388</span>&amp;appName=<span class="decorator">%E7</span><span class="decorator">%BE</span><span class="decorator">%8E</span><span class="decorator">%E5</span><span class="decorator">%9B</span><span class="decorator">%A2</span><span class="decorator">%E5</span><span class="decorator">%A4</span><span class="decorator">%96</span><span class="decorator">%E5</span><span class="decorator">%8D</span><span class="decorator">%96</span><span class="decorator">%E5</span><span class="decorator">%95</span><span class="decorator">%86</span><span class="decorator">%E5</span><span class="decorator">%AE</span><span class="decorator">%B6</span><span class="decorator">%E7</span><span class="decorator">%89</span><span class="decorator">%88</span>&amp;appType=<span class="number">4</span>&amp;dType=PLK-TL01H&amp;dVersion=<span class="number">23_6.0</span>&amp;logType=C&amp;password=<span class="number">2222</span>&amp;token=&amp;userName=<span class="number">1111</span>&amp;utm_campaign=&amp;utm_content=<span class="number">867689027084732</span>&amp;utm_medium=android&amp;utm_source=&amp;utm_term=<span class="number">4.2</span>.<span class="number">0</span>.<span class="number">388</span>&amp;uuid=<span class="number">03</span>EB35F2C93419DC64AFFBC9EF6BB6BADE4DD72DC1E2F4733198E91C91AEAF93&amp;wmPoiId=&amp;wm_appversion=<span class="number">4.2</span>.<span class="number">0</span>.<span class="number">388</span>
     String paramBuilderString = getNormalizedParameters(percentParamList);
     // POST+空格+<span class="string">"接口名称"</span>+空格+<span class="string">"参数内容"</span>
-    // POST http://eapi.waimai.meituan.com/api/poi/logon/acctdevice __skck=<span class="number">6</span>a375bce8c66a0dc293860dfa83833ef&amp;__skno=<span class="number">57749130</span>-<span class="number">26</span>d4-<span class="number">4239</span>-<span class="number">8</span>abd-b99c16584908&amp;__sksc=http&amp;__skts=<span class="number">1486995346041</span>&amp;__skua=d41d8cd98f00b204e9800998ecf8427e&amp;acctId=&amp;appCode=<span class="number">388</span>&amp;appName=<span class="decorator">%E7</span><span class="decorator">%BE</span><span class="decorator">%8E</span><span class="decorator">%E5</span><span class="decorator">%9B</span><span class="decorator">%A2</span><span class="decorator">%E5</span><span class="decorator">%A4</span><span class="decorator">%96</span><span class="decorator">%E5</span><span class="decorator">%8D</span><span class="decorator">%96</span><span class="decorator">%E5</span><span class="decorator">%95</span><span class="decorator">%86</span><span class="decorator">%E5</span><span class="decorator">%AE</span><span class="decorator">%B6</span><span class="decorator">%E7</span><span class="decorator">%89</span><span class="decorator">%88</span>&amp;appType=<span class="number">4</span>&amp;dType=PLK-TL01H&amp;dVersion=<span class="number">23_6.0</span>&amp;logType=C&amp;password=Sdg123&amp;token=&amp;userName=waimaitong&amp;utm_campaign=&amp;utm_content=<span class="number">867689027084732</span>&amp;utm_medium=android&amp;utm_source=&amp;utm_term=<span class="number">4.2</span>.<span class="number">0</span>.<span class="number">388</span>&amp;uuid=<span class="number">03</span>EB35F2C93419DC64AFFBC9EF6BB6BADE4DD72DC1E2F4733198E91C91AEAF93&amp;wmPoiId=&amp;wm_appversion=<span class="number">4.2</span>.<span class="number">0</span>.<span class="number">388</span>
+    // POST http://eapi.waimai.meituan.com/api/poi/logon/acctdevice __skck=<span class="number">6</span>a375bce8c66a0dc293860dfa83833ef&amp;__skno=<span class="number">57749130</span>-<span class="number">26</span>d4-<span class="number">4239</span>-<span class="number">8</span>abd-b99c16584908&amp;__sksc=http&amp;__skts=<span class="number">1486995346041</span>&amp;__skua=d41d8cd98f00b204e9800998ecf8427e&amp;acctId=&amp;appCode=<span class="number">388</span>&amp;appName=<span class="decorator">%E7</span><span class="decorator">%BE</span><span class="decorator">%8E</span><span class="decorator">%E5</span><span class="decorator">%9B</span><span class="decorator">%A2</span><span class="decorator">%E5</span><span class="decorator">%A4</span><span class="decorator">%96</span><span class="decorator">%E5</span><span class="decorator">%8D</span><span class="decorator">%96</span><span class="decorator">%E5</span><span class="decorator">%95</span><span class="decorator">%86</span><span class="decorator">%E5</span><span class="decorator">%AE</span><span class="decorator">%B6</span><span class="decorator">%E7</span><span class="decorator">%89</span><span class="decorator">%88</span>&amp;appType=<span class="number">4</span>&amp;dType=PLK-TL01H&amp;dVersion=<span class="number">23_6.0</span>&amp;logType=C&amp;password=<span class="number">2222</span>&amp;token=&amp;userName=<span class="number">1111</span>&amp;utm_campaign=&amp;utm_content=<span class="number">867689027084732</span>&amp;utm_medium=android&amp;utm_source=&amp;utm_term=<span class="number">4.2</span>.<span class="number">0</span>.<span class="number">388</span>&amp;uuid=<span class="number">03</span>EB35F2C93419DC64AFFBC9EF6BB6BADE4DD72DC1E2F4733198E91C91AEAF93&amp;wmPoiId=&amp;wm_appversion=<span class="number">4.2</span>.<span class="number">0</span>.<span class="number">388</span>
     paramBuilderString = this.candyOriginalMaterial.getHttpMethod() + <span class="string">" "</span> + (String) localObject + <span class="string">" "</span> + paramBuilderString;
     // JV1EOT1VZGN8USskB3jZYnVGyyQ=
     // 调用jni获取加密后的参数值__skcy
