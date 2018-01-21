@@ -89,38 +89,41 @@
 
 
 
-<meta name="description" content="0x00 破解目标
-破解某外卖App http请求参数加密机制，目标是能够自由调用其服务接口并获取数据。
-通过抓包和反编译的代码大致梳理了上图请求参数的含义和生成方法，如下所示:
+<meta name="description" content="0x00 破解目标本文记录了破解某外卖App http请求参数加密过程中遇到的问题和解决思路，实现的目标是希望是能够通过一些手段实现自由调用其服务接口。
+这篇文章主要讲述什么？
 
-__skck:Java层面常量，6a375bce8c66a0dc293860dfa83833ef
-__skts:系统时间值，通过Sytem.currentTime()获取，例如：1487054997740
-__skua">
+静态分析和动态调试的基本方法和遇到的问题
+如何修改android源码实现全局hook
+
+
+可以看到每次请求都会自动生成相应的请求参数，并计算出一个加密后的参数__skcy，服务端根据这些参数信息和请求内容做校验，校验通过">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Android安全之某外卖请求加密破解记录">
+<meta property="og:title" content="Android安全之某团请求加密破解记录">
 <meta property="og:url" content="https://ivonhoe.github.io/2017/06/18/Android安全之MT-http请求加密破解记录/index.html">
 <meta property="og:site_name" content="别辜负自己">
-<meta property="og:description" content="0x00 破解目标
-破解某外卖App http请求参数加密机制，目标是能够自由调用其服务接口并获取数据。
-通过抓包和反编译的代码大致梳理了上图请求参数的含义和生成方法，如下所示:
+<meta property="og:description" content="0x00 破解目标本文记录了破解某外卖App http请求参数加密过程中遇到的问题和解决思路，实现的目标是希望是能够通过一些手段实现自由调用其服务接口。
+这篇文章主要讲述什么？
 
-__skck:Java层面常量，6a375bce8c66a0dc293860dfa83833ef
-__skts:系统时间值，通过Sytem.currentTime()获取，例如：1487054997740
-__skua">
+静态分析和动态调试的基本方法和遇到的问题
+如何修改android源码实现全局hook
+
+
+可以看到每次请求都会自动生成相应的请求参数，并计算出一个加密后的参数__skcy，服务端根据这些参数信息和请求内容做校验，校验通过">
 <meta property="og:image" content="https://ivonhoe.github.io/res/meituan_hack/meituan-1.png">
 <meta property="og:image" content="https://ivonhoe.github.io/res/meituan_hack/meituan_smali1.png">
 <meta property="og:image" content="https://ivonhoe.github.io/res/meituan_hack/meituan_ida.jpeg">
 <meta property="og:image" content="https://ivonhoe.github.io/res/meituan_hack/meituan_hook.png">
-<meta property="og:updated_time" content="2018-01-19T09:34:47.000Z">
+<meta property="og:updated_time" content="2018-01-21T13:12:03.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Android安全之某外卖请求加密破解记录">
-<meta name="twitter:description" content="0x00 破解目标
-破解某外卖App http请求参数加密机制，目标是能够自由调用其服务接口并获取数据。
-通过抓包和反编译的代码大致梳理了上图请求参数的含义和生成方法，如下所示:
+<meta name="twitter:title" content="Android安全之某团请求加密破解记录">
+<meta name="twitter:description" content="0x00 破解目标本文记录了破解某外卖App http请求参数加密过程中遇到的问题和解决思路，实现的目标是希望是能够通过一些手段实现自由调用其服务接口。
+这篇文章主要讲述什么？
 
-__skck:Java层面常量，6a375bce8c66a0dc293860dfa83833ef
-__skts:系统时间值，通过Sytem.currentTime()获取，例如：1487054997740
-__skua">
+静态分析和动态调试的基本方法和遇到的问题
+如何修改android源码实现全局hook
+
+
+可以看到每次请求都会自动生成相应的请求参数，并计算出一个加密后的参数__skcy，服务端根据这些参数信息和请求内容做校验，校验通过">
 
 
 
@@ -154,7 +157,7 @@ __skua">
 
 
 
-  <title> Android安全之某外卖请求加密破解记录 | 别辜负自己 </title>
+  <title> Android安全之某团请求加密破解记录 | 别辜负自己 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -313,7 +316,7 @@ __skua">
             
             
               
-                Android安全之某外卖请求加密破解记录
+                Android安全之某团请求加密破解记录
               
             
           </h1>
@@ -356,7 +359,7 @@ __skua">
 
           
           
-             <span id="/2017/06/18/Android安全之MT-http请求加密破解记录/" class="leancloud_visitors" data-flag-title="Android安全之某外卖请求加密破解记录">
+             <span id="/2017/06/18/Android安全之MT-http请求加密破解记录/" class="leancloud_visitors" data-flag-title="Android安全之某团请求加密破解记录">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -385,9 +388,14 @@ __skua">
       
 
       
-        <h3 id="0x00_破解目标">0x00 破解目标</h3><p><img src="/res/meituan_hack/meituan-1.png" alt=""></p>
-<p>破解某外卖App http请求参数加密机制，目标是能够自由调用其服务接口并获取数据。</p>
-<p>通过抓包和反编译的代码大致梳理了上图请求参数的含义和生成方法，如下所示:</p>
+        <h3 id="0x00_破解目标">0x00 破解目标</h3><p>本文记录了破解某外卖App http请求参数加密过程中遇到的问题和解决思路，实现的目标是希望是能够通过一些手段实现自由调用其服务接口。</p>
+<p>这篇文章主要讲述什么？</p>
+<ol>
+<li>静态分析和动态调试的基本方法和遇到的问题</li>
+<li>如何修改android源码实现全局hook</li>
+</ol>
+<p><img src="/res/meituan_hack/meituan-1.png" alt=""></p>
+<p>可以看到每次请求都会自动生成相应的请求参数，并计算出一个加密后的参数<code>__skcy</code>，服务端根据这些参数信息和请求内容做校验，校验通过服务端才会返回正确的结果。通过抓包和反编译后的代码大致梳理了上图请求参数的含义和生成方法，具体参数如下所示:</p>
 <ul>
 <li><strong>__skck:</strong>Java层面<strong>常量</strong>，6a375bce8c66a0dc293860dfa83833ef</li>
 <li><strong>__skts:</strong>系统时间值，通过Sytem.currentTime()获取，例如：1487054997740</li>
@@ -397,7 +405,7 @@ __skua">
 </ul>
 <a id="more"></a>
 <h3 id="0x01_尝试静态分析">0x01 尝试静态分析</h3><p>首先使用常用的静态分析工具，如apkTools、dex2jar做apk的反编译和转Jar。虽然该App安装包没有加壳，但在反编译过程中依然遇到一些问题。</p>
-<h4 id="1-1、遇到问题">1.1、遇到问题</h4><p>该App针对dex2jar工具，做了防范. 原理分析请看<a href="https://ivonhoe.github.io/2017/02/09/%E7%BE%8E%E5%9B%A2%E5%A6%82%E4%BD%95%E9%98%B2dex2jar/">Android安全之应用防dex2jar原理及实现</a></p>
+<h4 id="1-1、遇到问题">1.1、遇到问题</h4><p>该App针对dex2jar工具做了防范. 原理分析请看<a href="https://ivonhoe.github.io/2017/02/09/%E7%BE%8E%E5%9B%A2%E5%A6%82%E4%BD%95%E9%98%B2dex2jar/">Android安全之应用防dex2jar原理及实现</a></p>
 <h4 id="1-2、解决方案">1.2、解决方案</h4><ul>
 <li>将插入的Exist代码删除，再做smali–&gt;dex–&gt;jar处理。</li>
 <li>或者，直接阅读smali代码。</li>
@@ -416,82 +424,17 @@ __skua">
 <li>如果monitor启动时提示8700端口已经被占用，可以通过 <code>lsof -n -i4TCP:8700 | grep LISTEN</code> 命令查看8700端口目前对应的进程名</li>
 <li>attach前一定要先在monitor里选中想要调试的进程，再debug</li>
 </ul>
-<h4 id="2-2、重写Java代码，直接调用so">2.2、重写Java代码，直接调用so</h4><p>动态调试可以比较清楚的看到Java层的内部调用逻辑，通过debug watch功能可以清楚的看到寄存器值，结合反编译和静态分析可以知道调用native方法的入参格式。</p>
+<h4 id="2-2、重写Java代码，直接调用加密so">2.2、重写Java代码，直接调用加密so</h4><p>动态调试可以比较清楚的看到Java层的内部调用逻辑，通过debug watch功能可以清楚的看到寄存器值，结合反编译和静态分析可以知道调用native方法的入参格式。</p>
 <p>现在的思路是解压出源apk包中的so文件，编写java代码直接调用so文件中的native方法获取计算__skcy参数。但测试的结果是一直返回<code>null</code>。这里猜测在native层中对运行环境做了监测，所以一直返回空值。</p>
 <p>这里该app的参数签名详细过程是，通过<code>__skck、__skts、__skno、__skua(详细规则见上)</code>，调用<code>CandyPreprocessor.java</code>的<code>getParametersSignature()</code>方法获取<code>__skcy</code>参数。Java层核心方法<code>getParametersSignature()</code>如下：</p>
-<pre><code>/**
- * @param paramBuilder https://eapi.waimai.meituan.com/api/poi/logon/acctdevice?__skck=<span class="number">6</span>a375bce8c66a0dc293860dfa83833ef&amp;__skts=<span class="number">1486970558719</span>&amp;__skua=d41d8cd98f00b204e9800998ecf8427e&amp;__skno=<span class="number">5</span>ed4629c-098c-<span class="number">489</span>c-b598-<span class="number">81841</span>e0479e<span class="number">0</span>
- */
-String getParametersSignature(Uri.Builder paramBuilder, Context paramContext) {
-    if (paramBuilder == null) {
-        throw new RuntimeException(<span class="string">"CandyPreprocessor getParametersSignature builder is null"</span>);
-    }
-    // 获取网络接口名称 https://eapi.waimai.meituan.com/api/poi/logon/acctdevice
-    Object localObject = baseString();
-    if (TextUtils.isEmpty((CharSequence) localObject)) {
-        throw new RuntimeException(<span class="string">"CandyPreprocessor getParametersSignature normalizedURI is null"</span>);
-    }
-    ArrayList localArrayList = new ArrayList();
-    /**
-     * <span class="number">0</span> = {CandyPreprocessor<span class="variable">$MyEntry</span>@<span class="number">5016</span>} <span class="string">"__skck"</span> -&gt; <span class="string">"6a375bce8c66a0dc293860dfa83833ef"</span>
-     <span class="number">1</span> = {CandyPreprocessor<span class="variable">$MyEntry</span>@<span class="number">5017</span>} <span class="string">"__skts"</span> -&gt; <span class="string">"1486970558719"</span>
-     <span class="number">2</span> = {CandyPreprocessor<span class="variable">$MyEntry</span>@<span class="number">5018</span>} <span class="string">"__skua"</span> -&gt; <span class="string">"d41d8cd98f00b204e9800998ecf8427e"</span>
-     <span class="number">3</span> = {CandyPreprocessor<span class="variable">$MyEntry</span>@<span class="number">5019</span>} <span class="string">"__skno"</span> -&gt; <span class="string">"5ed4629c-098c-489c-b598-81841e0479e0"</span>
-     */
-    // 获取参数key和参数value放到数组中
-    appendList(localArrayList, paramBuilder, false);
-    // add <span class="string">"__sksc"</span> -&gt; <span class="string">"https"</span>
-    // 获取scheme放入数组中
-    localArrayList.add(new CandyPreprocessor.MyEntry(<span class="string">"__sksc"</span>, this.candyOriginalMaterial.getScheme()));
-    // 将post content放入数组中
-    if (formURLEncoded()) {
-        // /?dVersion=<span class="number">23_6.0</span>&amp;utm_medium=android&amp;password=<span class="number">2222</span>&amp;utm_content=<span class="number">867689027084732</span>&amp;appCode=<span class="number">388</span>&amp;acctId=&amp;wmPoiId=&amp;token=&amp;uuid=<span class="number">03</span>EB35F2C93419DC64AFFBC9EF6BB6BADE4DD72DC1E2F4733198E91C91AEAF93&amp;logType=C&amp;appName=<span class="decorator">%E7</span><span class="decorator">%BE</span><span class="decorator">%8E</span><span class="decorator">%E5</span><span class="decorator">%9B</span><span class="decorator">%A2</span><span class="decorator">%E5</span><span class="decorator">%A4</span><span class="decorator">%96</span><span class="decorator">%E5</span><span class="decorator">%8D</span><span class="decorator">%96</span><span class="decorator">%E5</span><span class="decorator">%95</span><span class="decorator">%86</span><span class="decorator">%E5</span><span class="decorator">%AE</span><span class="decorator">%B6</span><span class="decorator">%E7</span><span class="decorator">%89</span><span class="decorator">%88</span>&amp;appType=<span class="number">4</span>&amp;dType=PLK-TL01H&amp;userName=<span class="number">1111</span>&amp;utm_term=<span class="number">4.2</span>.<span class="number">0</span>.<span class="number">388</span>&amp;utm_source=&amp;utm_campaign=&amp;wm_appversion=<span class="number">4.2</span>.<span class="number">0</span>.<span class="number">388</span>&amp;
-        // post 的内容入参
-        /**
-         * <span class="number">5</span> = {CandyPreprocessor<span class="variable">$MyEntry</span>@<span class="number">5071</span>} <span class="string">"dVersion"</span> -&gt; <span class="string">"23_6.0"</span>
-         <span class="number">6</span> = {CandyPreprocessor<span class="variable">$MyEntry</span>@<span class="number">5072</span>} <span class="string">"utm_medium"</span> -&gt; <span class="string">"android"</span>
-         <span class="number">7</span> = {CandyPreprocessor<span class="variable">$MyEntry</span>@<span class="number">5073</span>} <span class="string">"password"</span> -&gt; <span class="string">"123"</span>
-         <span class="number">8</span> = {CandyPreprocessor<span class="variable">$MyEntry</span>@<span class="number">5074</span>} <span class="string">"utm_content"</span> -&gt; <span class="string">"867689027084732"</span>
-         <span class="number">9</span> = {CandyPreprocessor<span class="variable">$MyEntry</span>@<span class="number">5075</span>} <span class="string">"appCode"</span> -&gt; <span class="string">"388"</span>
-         <span class="number">10</span> = {CandyPreprocessor<span class="variable">$MyEntry</span>@<span class="number">5076</span>} <span class="string">"acctId"</span> -&gt;
-         <span class="number">11</span> = {CandyPreprocessor<span class="variable">$MyEntry</span>@<span class="number">5077</span>} <span class="string">"wmPoiId"</span> -&gt;
-         <span class="number">12</span> = {CandyPreprocessor<span class="variable">$MyEntry</span>@<span class="number">5078</span>} <span class="string">"token"</span> -&gt;
-         <span class="number">13</span> = {CandyPreprocessor<span class="variable">$MyEntry</span>@<span class="number">5079</span>} <span class="string">"uuid"</span> -&gt; <span class="string">"03EB35F2C93419DC64AFFBC9EF6BB6BADE4DD72DC1E2F4733198E91C91AEAF93"</span>
-         <span class="number">14</span> = {CandyPreprocessor<span class="variable">$MyEntry</span>@<span class="number">5080</span>} <span class="string">"logType"</span> -&gt; <span class="string">"C"</span>
-         <span class="number">15</span> = {CandyPreprocessor<span class="variable">$MyEntry</span>@<span class="number">5081</span>} <span class="string">"appName"</span> -&gt; <span class="string">"****"</span>
-         <span class="number">16</span> = {CandyPreprocessor<span class="variable">$MyEntry</span>@<span class="number">5082</span>} <span class="string">"appType"</span> -&gt; <span class="string">"4"</span>
-         <span class="number">17</span> = {CandyPreprocessor<span class="variable">$MyEntry</span>@<span class="number">5083</span>} <span class="string">"dType"</span> -&gt; <span class="string">"PLK-TL01H"</span>
-         <span class="number">18</span> = {CandyPreprocessor<span class="variable">$MyEntry</span>@<span class="number">5084</span>} <span class="string">"userName"</span> -&gt; <span class="string">"***"</span>
-         <span class="number">19</span> = {CandyPreprocessor<span class="variable">$MyEntry</span>@<span class="number">5085</span>} <span class="string">"utm_term"</span> -&gt; <span class="string">"4.2.0.388"</span>
-         <span class="number">20</span> = {CandyPreprocessor<span class="variable">$MyEntry</span>@<span class="number">5086</span>} <span class="string">"utm_source"</span> -&gt;
-         <span class="number">21</span> = {CandyPreprocessor<span class="variable">$MyEntry</span>@<span class="number">5087</span>} <span class="string">"utm_campaign"</span> -&gt;
-         <span class="number">22</span> = {CandyPreprocessor<span class="variable">$MyEntry</span>@<span class="number">5088</span>} <span class="string">"wm_appversion"</span> -&gt; <span class="string">"4.2.0.388"</span>
-         */
-        appendList(localArrayList, Uri.parse(<span class="string">"/?"</span> + new String(this.candyOriginalMaterial.getPostContent())).buildUpon(), true);
-    }
-    // 特殊字符转码
-    List percentParamList = getPercentList(localArrayList);
-    // 分别对Value和Key做升序排列
-    dictionarySort(percentParamList);
-    // 将排序后的数组，拼接成字符串__skck=<span class="number">6</span>a375bce8c66a0dc293860dfa83833ef&amp;__skno=<span class="number">5</span>ed4629c-098c-<span class="number">489</span>c-b598-<span class="number">81841</span>e0479e<span class="number">0</span>&amp;__sksc=https&amp;__skts=<span class="number">1486970558719</span>&amp;__skua=d41d8cd98f00b204e9800998ecf8427e&amp;acctId=&amp;appCode=<span class="number">388</span>&amp;appName=<span class="decorator">%E7</span><span class="decorator">%BE</span><span class="decorator">%8E</span><span class="decorator">%E5</span><span class="decorator">%9B</span><span class="decorator">%A2</span><span class="decorator">%E5</span><span class="decorator">%A4</span><span class="decorator">%96</span><span class="decorator">%E5</span><span class="decorator">%8D</span><span class="decorator">%96</span><span class="decorator">%E5</span><span class="decorator">%95</span><span class="decorator">%86</span><span class="decorator">%E5</span><span class="decorator">%AE</span><span class="decorator">%B6</span><span class="decorator">%E7</span><span class="decorator">%89</span><span class="decorator">%88</span>&amp;appType=<span class="number">4</span>&amp;dType=PLK-TL01H&amp;dVersion=<span class="number">23_6.0</span>&amp;logType=C&amp;password=<span class="number">2222</span>&amp;token=&amp;userName=<span class="number">1111</span>&amp;utm_campaign=&amp;utm_content=<span class="number">867689027084732</span>&amp;utm_medium=android&amp;utm_source=&amp;utm_term=<span class="number">4.2</span>.<span class="number">0</span>.<span class="number">388</span>&amp;uuid=<span class="number">03</span>EB35F2C93419DC64AFFBC9EF6BB6BADE4DD72DC1E2F4733198E91C91AEAF93&amp;wmPoiId=&amp;wm_appversion=<span class="number">4.2</span>.<span class="number">0</span>.<span class="number">388</span>
-    String paramBuilderString = getNormalizedParameters(percentParamList);
-    // POST+空格+<span class="string">"接口名称"</span>+空格+<span class="string">"参数内容"</span>
-    // POST http://eapi.waimai.meituan.com/api/poi/logon/acctdevice __skck=<span class="number">6</span>a375bce8c66a0dc293860dfa83833ef&amp;__skno=<span class="number">57749130</span>-<span class="number">26</span>d4-<span class="number">4239</span>-<span class="number">8</span>abd-b99c16584908&amp;__sksc=http&amp;__skts=<span class="number">1486995346041</span>&amp;__skua=d41d8cd98f00b204e9800998ecf8427e&amp;acctId=&amp;appCode=<span class="number">388</span>&amp;appName=<span class="decorator">%E7</span><span class="decorator">%BE</span><span class="decorator">%8E</span><span class="decorator">%E5</span><span class="decorator">%9B</span><span class="decorator">%A2</span><span class="decorator">%E5</span><span class="decorator">%A4</span><span class="decorator">%96</span><span class="decorator">%E5</span><span class="decorator">%8D</span><span class="decorator">%96</span><span class="decorator">%E5</span><span class="decorator">%95</span><span class="decorator">%86</span><span class="decorator">%E5</span><span class="decorator">%AE</span><span class="decorator">%B6</span><span class="decorator">%E7</span><span class="decorator">%89</span><span class="decorator">%88</span>&amp;appType=<span class="number">4</span>&amp;dType=PLK-TL01H&amp;dVersion=<span class="number">23_6.0</span>&amp;logType=C&amp;password=<span class="number">2222</span>&amp;token=&amp;userName=<span class="number">1111</span>&amp;utm_campaign=&amp;utm_content=<span class="number">867689027084732</span>&amp;utm_medium=android&amp;utm_source=&amp;utm_term=<span class="number">4.2</span>.<span class="number">0</span>.<span class="number">388</span>&amp;uuid=<span class="number">03</span>EB35F2C93419DC64AFFBC9EF6BB6BADE4DD72DC1E2F4733198E91C91AEAF93&amp;wmPoiId=&amp;wm_appversion=<span class="number">4.2</span>.<span class="number">0</span>.<span class="number">388</span>
-    paramBuilderString = this.candyOriginalMaterial.getHttpMethod() + <span class="string">" "</span> + (String) localObject + <span class="string">" "</span> + paramBuilderString;
-    // JV1EOT1VZGN8USskB3jZYnVGyyQ=
-    // 调用jni获取加密后的参数值__skcy
-    localObject = CandyJni.getCandyDataWithKey(paramContext, paramBuilderString.getBytes(), <span class="string">"candyKey"</span>);
-
-    // TODO for test
-    return (String) localObject;
- }
-</code></pre><h4 id="2-3、修改反编译出的源代码，重打包调用so">2.3、修改反编译出的源代码，重打包调用so</h4><p>在自建项目中直接中调用so的方法失败了，现在尝试反编译APK后，加入包含自己逻辑的smali代码，达到调用CandyJni的目的。具体的步骤是：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/**&#10; * @param paramBuilder https://eapi.*****/api/poi/logon/acctdevice?__skck=6a375bce8c66a0dc293860dfa83833ef&#38;__skts=1486970558719&#38;__skua=d41d8cd98f00b204e9800998ecf8427e&#38;__skno=5ed4629c-098c-489c-b598-81841e0479e0&#10; */&#10;String getParametersSignature(Uri.Builder paramBuilder, Context paramContext) &#123;&#10;    if (paramBuilder == null) &#123;&#10;        throw new RuntimeException(&#34;CandyPreprocessor getParametersSignature builder is null&#34;);&#10;    &#125;&#10;    // &#33719;&#21462;&#32593;&#32476;&#25509;&#21475;&#21517;&#31216; https://eapi.waimai.meituan.com/api/poi/logon/acctdevice&#10;    Object localObject = baseString();&#10;    if (TextUtils.isEmpty((CharSequence) localObject)) &#123;&#10;        throw new RuntimeException(&#34;CandyPreprocessor getParametersSignature normalizedURI is null&#34;);&#10;    &#125;&#10;    ArrayList localArrayList = new ArrayList();&#10;    /**&#10;     * 0 = &#123;CandyPreprocessor$MyEntry@5016&#125; &#34;__skck&#34; -&#62; &#34;6a375bce8c66a0dc293860dfa83833ef&#34;&#10;     1 = &#123;CandyPreprocessor$MyEntry@5017&#125; &#34;__skts&#34; -&#62; &#34;1486970558719&#34;&#10;     2 = &#123;CandyPreprocessor$MyEntry@5018&#125; &#34;__skua&#34; -&#62; &#34;d41d8cd98f00b204e9800998ecf8427e&#34;&#10;     3 = &#123;CandyPreprocessor$MyEntry@5019&#125; &#34;__skno&#34; -&#62; &#34;5ed4629c-098c-489c-b598-81841e0479e0&#34;&#10;     */&#10;    // &#33719;&#21462;&#21442;&#25968;key&#21644;&#21442;&#25968;value&#25918;&#21040;&#25968;&#32452;&#20013;&#10;    appendList(localArrayList, paramBuilder, false);&#10;    // add &#34;__sksc&#34; -&#62; &#34;https&#34;&#10;    // &#33719;&#21462;scheme&#25918;&#20837;&#25968;&#32452;&#20013;&#10;    localArrayList.add(new CandyPreprocessor.MyEntry(&#34;__sksc&#34;, this.candyOriginalMaterial.getScheme()));&#10;    // &#23558;post content&#25918;&#20837;&#25968;&#32452;&#20013;&#10;    if (formURLEncoded()) &#123;&#10;        // /?dVersion=23_6.0&#38;utm_medium=android&#38;password=2222&#38;utm_content=867689027084732&#38;appCode=388&#38;acctId=&#38;wmPoiId=&#38;token=&#38;uuid=03EB35F2C93419DC64AFFBC9EF6BB6BADE4DD72DC1E2F4733198E91C91AEAF93&#38;logType=C&#38;appName=%E7%BE%8E%E5%9B%A2%E5%A4%96%E5%8D%96%E5%95%86%E5%AE%B6%E7%89%88&#38;appType=4&#38;dType=PLK-TL01H&#38;userName=1111&#38;utm_term=4.2.0.388&#38;utm_source=&#38;utm_campaign=&#38;wm_appversion=4.2.0.388&#38;&#10;        // post &#30340;&#20869;&#23481;&#20837;&#21442;&#10;        /**&#10;         * 5 = &#123;CandyPreprocessor$MyEntry@5071&#125; &#34;dVersion&#34; -&#62; &#34;23_6.0&#34;&#10;         6 = &#123;CandyPreprocessor$MyEntry@5072&#125; &#34;utm_medium&#34; -&#62; &#34;android&#34;&#10;         7 = &#123;CandyPreprocessor$MyEntry@5073&#125; &#34;password&#34; -&#62; &#34;123&#34;&#10;         8 = &#123;CandyPreprocessor$MyEntry@5074&#125; &#34;utm_content&#34; -&#62; &#34;867689027084732&#34;&#10;         9 = &#123;CandyPreprocessor$MyEntry@5075&#125; &#34;appCode&#34; -&#62; &#34;388&#34;&#10;         10 = &#123;CandyPreprocessor$MyEntry@5076&#125; &#34;acctId&#34; -&#62;&#10;         11 = &#123;CandyPreprocessor$MyEntry@5077&#125; &#34;wmPoiId&#34; -&#62;&#10;         12 = &#123;CandyPreprocessor$MyEntry@5078&#125; &#34;token&#34; -&#62;&#10;         13 = &#123;CandyPreprocessor$MyEntry@5079&#125; &#34;uuid&#34; -&#62; &#34;03EB35F2C93419DC64AFFBC9EF6BB6BADE4DD72DC1E2F4733198E91C91AEAF93&#34;&#10;         14 = &#123;CandyPreprocessor$MyEntry@5080&#125; &#34;logType&#34; -&#62; &#34;C&#34;&#10;         15 = &#123;CandyPreprocessor$MyEntry@5081&#125; &#34;appName&#34; -&#62; &#34;****&#34;&#10;         16 = &#123;CandyPreprocessor$MyEntry@5082&#125; &#34;appType&#34; -&#62; &#34;4&#34;&#10;         17 = &#123;CandyPreprocessor$MyEntry@5083&#125; &#34;dType&#34; -&#62; &#34;PLK-TL01H&#34;&#10;         18 = &#123;CandyPreprocessor$MyEntry@5084&#125; &#34;userName&#34; -&#62; &#34;***&#34;&#10;         19 = &#123;CandyPreprocessor$MyEntry@5085&#125; &#34;utm_term&#34; -&#62; &#34;4.2.0.388&#34;&#10;         20 = &#123;CandyPreprocessor$MyEntry@5086&#125; &#34;utm_source&#34; -&#62;&#10;         21 = &#123;CandyPreprocessor$MyEntry@5087&#125; &#34;utm_campaign&#34; -&#62;&#10;         22 = &#123;CandyPreprocessor$MyEntry@5088&#125; &#34;wm_appversion&#34; -&#62; &#34;4.2.0.388&#34;&#10;         */&#10;        appendList(localArrayList, Uri.parse(&#34;/?&#34; + new String(this.candyOriginalMaterial.getPostContent())).buildUpon(), true);&#10;    &#125;&#10;    // &#29305;&#27530;&#23383;&#31526;&#36716;&#30721;&#10;    List percentParamList = getPercentList(localArrayList);&#10;    // &#20998;&#21035;&#23545;Value&#21644;Key&#20570;&#21319;&#24207;&#25490;&#21015;&#10;    dictionarySort(percentParamList);&#10;    // &#23558;&#25490;&#24207;&#21518;&#30340;&#25968;&#32452;&#65292;&#25340;&#25509;&#25104;&#23383;&#31526;&#20018;__skck=6a375bce8c66a0dc293860dfa83833ef&#38;__skno=5ed4629c-098c-489c-b598-81841e0479e0&#38;__sksc=https&#38;__skts=1486970558719&#38;__skua=d41d8cd98f00b204e9800998ecf8427e&#38;acctId=&#38;appCode=388&#38;appName=%E7%BE%8E%E5%9B%A2%E5%A4%96%E5%8D%96%E5%95%86%E5%AE%B6%E7%89%88&#38;appType=4&#38;dType=PLK-TL01H&#38;dVersion=23_6.0&#38;logType=C&#38;password=2222&#38;token=&#38;userName=1111&#38;utm_campaign=&#38;utm_content=867689027084732&#38;utm_medium=android&#38;utm_source=&#38;utm_term=4.2.0.388&#38;uuid=03EB35F2C93419DC64AFFBC9EF6BB6BADE4DD72DC1E2F4733198E91C91AEAF93&#38;wmPoiId=&#38;wm_appversion=4.2.0.388&#10;    String paramBuilderString = getNormalizedParameters(percentParamList);&#10;    // POST+&#31354;&#26684;+&#34;&#25509;&#21475;&#21517;&#31216;&#34;+&#31354;&#26684;+&#34;&#21442;&#25968;&#20869;&#23481;&#34;&#10;    // POST http://eapi.waimai.meituan.com/api/poi/logon/acctdevice __skck=6a375bce8c66a0dc293860dfa83833ef&#38;__skno=57749130-26d4-4239-8abd-b99c16584908&#38;__sksc=http&#38;__skts=1486995346041&#38;__skua=d41d8cd98f00b204e9800998ecf8427e&#38;acctId=&#38;appCode=388&#38;appName=%E7%BE%8E%E5%9B%A2%E5%A4%96%E5%8D%96%E5%95%86%E5%AE%B6%E7%89%88&#38;appType=4&#38;dType=PLK-TL01H&#38;dVersion=23_6.0&#38;logType=C&#38;password=2222&#38;token=&#38;userName=1111&#38;utm_campaign=&#38;utm_content=867689027084732&#38;utm_medium=android&#38;utm_source=&#38;utm_term=4.2.0.388&#38;uuid=03EB35F2C93419DC64AFFBC9EF6BB6BADE4DD72DC1E2F4733198E91C91AEAF93&#38;wmPoiId=&#38;wm_appversion=4.2.0.388&#10;    paramBuilderString = this.candyOriginalMaterial.getHttpMethod() + &#34; &#34; + (String) localObject + &#34; &#34; + paramBuilderString;&#10;    // JV1EOT1VZGN8USskB3jZYnVGyyQ=&#10;    // &#35843;&#29992;jni&#33719;&#21462;&#21152;&#23494;&#21518;&#30340;&#21442;&#25968;&#20540;__skcy&#10;    localObject = CandyJni.getCandyDataWithKey(paramContext, paramBuilderString.getBytes(), &#34;candyKey&#34;);&#10;&#10;    // TODO for test&#10;    return (String) localObject;&#10; &#125;</span><br></pre></td></tr></table></figure>
+<h4 id="2-3、修改app代码，重打包调用so">2.3、修改app代码，重打包调用so</h4><p>直接调用so的方法失败了，现在尝试反编译APK后，加入包含自己逻辑的smali代码，调用CandyJni的目的。具体的步骤是：</p>
 <ul>
 <li>利用上2.2的项目，拷贝和该App CandyJni完全相同的类名，方法名。</li>
 <li>编写CandyHackActivity.Java和CandyHack.java，去调用新项目中的CandyJni，并打包。</li>
 <li>apktools反编译新项目包，获取CandyHack.smali 和CandyHackActivity.smali。</li>
 <li>修改反编译后项目的AndroidManifest.xml文件，将CandyHackActivity注册到manifest中进去。</li>
-<li>重打包，并签名，安装。</li>
+<li>重打包，签名，安装。</li>
 <li>通过adb命令启动CandyHackActivity。</li>
 </ul>
 <p><img src="/res/meituan_hack/meituan_smali1.png" alt=""></p>
@@ -503,7 +446,12 @@ String getParametersSignature(Uri.Builder paramBuilder, Context paramContext) {
 <li>想要通过重打包动态调试dex，重打包必须重新签名，重新签名会导致加密算法计算结果出错。</li>
 <li>想要反编译so，需要阅读加密后的C语言和汇编语言。汗！我是菜鸟汇编阅读不来</li>
 </ul>
-<h3 id="三、万金流">三、万金流</h3><p>根据之前分析的过程发现，不管是更改代码重打包，借用so，静态分析，或者动态调试等破解方式，该app都做了相应的防护措施，但总的思路都是破坏了app原有的Runtime环境的基础上达到的。在一次逛安全论坛的过程中，想到了一条类似xposed的破解思路。那就是通过编译Android原生代码，通过更改framework代码，在特定应用启动的时候，通过其DexClassLoader动态加载指定的dex的方式。预先编译hook代码成dex文件，让app在启动的时候也加载我的代码。这样就达到了不破坏app runtime的情况下，安全的放入钩子，通过钩子调用app内部任意方法，达到参数加密的目的。</p>
+<h3 id="三、万金流破解思路">三、万金流破解思路</h3><p>根据以上分析的过程，发现不管是重打包、借用so、静态分析、动态调试等基础的破解方式，该app都做了相应的防护措施，总的破解思路都是破坏了app原有环境。在一次逛安全论坛的过程中，看到通过修改Android原生代码加载特定so的思路，其实这种破解思路也适用于app的破解。如果在app启动时，让app进程的DexClassLoader能够加载你自己的代码，那么不管在任何的app运行环境中，诸如修改内存变量、调用方法或者是改变原有app系统的处理流程等目的都能够轻松达到。当然前提是运行在自己编译的Android源码或者是已经root的机器上。下面就以这个思路针对该外卖app做具体的破解实操，目标是在pc上能够自由调用该app服务端的http接口。</p>
+<h4 id="3-1-_下载并修改源码">3.1. 下载并修改源码</h4><p>如何下载编译源码这里不废话，没有尝试过的可以参考这篇<a href="http://ivonhoe.github.io/2017/01/20/MacOS%E4%B8%8A%E7%BC%96%E8%AF%91Android%E6%BA%90%E7%A0%81/">《Mac OS上编译Android源码》</a>。<br>在<code>ActivityThread.java</code>的<code>handleBindApplication()</code>方法中增加dex注入的逻辑。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">private void handleBindApplication(AppBindData data) &#123;&#10;    // &#30465;&#30053;&#28304;&#30721;...&#10;    &#10;    //=================&#20840;&#23616;&#27880;&#20837;&#20043;&#20462;&#25913;java&#23618;===================================================&#10;    checkFrameworkInject(data.processName);&#10;    //=============================================================================&#10;&#125;&#10;&#10;private void checkFrameworkInject(String processName) &#123;&#10;    //=================&#20840;&#23616;&#27880;&#20837;&#20043;&#20462;&#25913;java&#23618;===================================================&#10;    Log.e(&#34;frameworkInjector&#34;, &#34;--processName=&#34; + processName);&#10;    invokeJarLoader(processName);&#10;    //=============================================================================&#10;&#125;</span><br></pre></td></tr></table></figure>
+<p>从指定路径加载配置文件，配置信息包括要dex注入的进程名，dex路径，dex中main函数信息。<br>当相应的进程启动时，加载指定路径的dex，并运用其中的main函数。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/**&#10;     * &#26681;&#25454;&#37197;&#32622;&#21152;&#36733;jar&#65292;&#25191;&#34892;&#25351;&#23450;&#31867;&#30340;main&#26041;&#27861;&#10;     */&#10;    public void invokeJarLoader(String processName) &#123;&#10;        List&#60;String&#62; config = readHookConfig(&#34;/data/local/jarHookConfig.txt&#34;);&#10;&#10;        if (config == null || config.size() &#60; 3) &#123;&#10;            return;&#10;        &#125;&#10;&#10;        String configProcessName = config.get(0);&#10;        String configJarPath = config.get(1);&#10;        String configClassName = config.get(2);&#10;&#10;        if (processName.equals(configProcessName) &#38;&#38; !TextUtils.isEmpty(configJarPath)&#10;                &#38;&#38; !TextUtils.isEmpty(configClassName)) &#123;&#10;            Log.e(&#34;frameworkInjector&#34;, &#34;targetPackage:&#34; + configProcessName +&#10;                    &#34;,start-load-jarPath&#34; + configJarPath + &#34;, class name:&#34; + configClassName);&#10;            jarInvokeTest(configJarPath, configClassName);&#10;        &#125;&#10;    &#125;&#10;&#10;    public void jarInvokeTest(String jarPath, String className) &#123;&#10;        final File optimizedDexOutputPath = new File(jarPath);&#10;        Context context = getApplication();&#10;        File dexOutputDir = context.getDir(&#34;dex&#34;, 0);&#10;        DexClassLoader cl = new DexClassLoader(&#10;                optimizedDexOutputPath.getAbsolutePath(),&#10;                dexOutputDir.getAbsolutePath(), null, context.getClassLoader());&#10;        Class libProviderClazz = null;&#10;&#10;        try &#123;&#10;            libProviderClazz = cl.loadClass(className);&#10;            Method method = libProviderClazz.getMethod(&#34;main&#34;);&#10;            method.invoke(null, (Object[]) null);&#10;        &#125; catch (ClassNotFoundException e) &#123;&#10;            e.printStackTrace();&#10;        &#125; catch (IllegalAccessException e) &#123;&#10;            e.printStackTrace();&#10;        &#125; catch (NoSuchMethodException e) &#123;&#10;            e.printStackTrace();&#10;        &#125; catch (InvocationTargetException e) &#123;&#10;            e.printStackTrace();&#10;        &#125;&#10;    &#125;</span><br></pre></td></tr></table></figure>
+<h4 id="3-2_生成注入的dex">3.2 生成注入的dex</h4><p>在这里具体的注入代码就不啰嗦了，总的来说你可以针对任何app中的任何方法变量任意操作。如果你想在pc上实现请求的自由收发要稍微复杂些，你需要实现一个简单的Hook socket server（简称HSS），将HSS打包成dex做注入，将参与参数加密的数据发送给HSS，HSS调用app中的加密方法获取加密结果，并将最终的加密结果发送出来就可以啦。具体的实现如下图所示:</p>
 <p><img src="/res/meituan_hack/meituan_hook.png" alt="hook结构图"></p>
 <h3 id="四、严重声明">四、严重声明</h3><p><strong>本文的意图只有一个，就是通过分析app学习更多的逆向技术，如果有人利用本文知识和技术进行非法操作进行牟利，带来的任何法律责任都将由操作者本人承担，和本文作者无任何关系，最终还是希望大家能够秉着学习的心态阅读此文。</strong></p>
 <h3 id="五、参考文档">五、参考文档</h3><ul>
@@ -617,7 +565,7 @@ String getParametersSignature(Uri.Builder paramBuilder, Context paramContext) {
   <div class="comments" id="comments">
     
       <div class="ds-thread" data-thread-key="2017/06/18/Android安全之MT-http请求加密破解记录/"
-           data-title="Android安全之某外卖请求加密破解记录" data-url="https://ivonhoe.github.io/2017/06/18/Android安全之MT-http请求加密破解记录/">
+           data-title="Android安全之某团请求加密破解记录" data-url="https://ivonhoe.github.io/2017/06/18/Android安全之MT-http请求加密破解记录/">
       </div>
     
   </div>
@@ -732,7 +680,7 @@ String getParametersSignature(Uri.Builder paramBuilder, Context paramContext) {
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#0x00_破解目标"><span class="nav-number">1.</span> <span class="nav-text">0x00 破解目标</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x01_尝试静态分析"><span class="nav-number">2.</span> <span class="nav-text">0x01 尝试静态分析</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1、遇到问题"><span class="nav-number">2.1.</span> <span class="nav-text">1.1、遇到问题</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-2、解决方案"><span class="nav-number">2.2.</span> <span class="nav-text">1.2、解决方案</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-3、分析结果"><span class="nav-number">2.3.</span> <span class="nav-text">1.3、分析结果</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x02_尝试动态调试smali"><span class="nav-number">3.</span> <span class="nav-text">0x02 尝试动态调试smali</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1、如何使用AS动态调试"><span class="nav-number">3.1.</span> <span class="nav-text">2.1、如何使用AS动态调试</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2、重写Java代码，直接调用so"><span class="nav-number">3.2.</span> <span class="nav-text">2.2、重写Java代码，直接调用so</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3、修改反编译出的源代码，重打包调用so"><span class="nav-number">3.3.</span> <span class="nav-text">2.3、修改反编译出的源代码，重打包调用so</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-4、尝试IDA_pro反编译so"><span class="nav-number">3.4.</span> <span class="nav-text">2.4、尝试IDA pro反编译so</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-5、总结问题"><span class="nav-number">3.5.</span> <span class="nav-text">2.5、总结问题</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#三、万金流"><span class="nav-number">4.</span> <span class="nav-text">三、万金流</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#四、严重声明"><span class="nav-number">5.</span> <span class="nav-text">四、严重声明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#五、参考文档"><span class="nav-number">6.</span> <span class="nav-text">五、参考文档</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#0x00_破解目标"><span class="nav-number">1.</span> <span class="nav-text">0x00 破解目标</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x01_尝试静态分析"><span class="nav-number">2.</span> <span class="nav-text">0x01 尝试静态分析</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1、遇到问题"><span class="nav-number">2.1.</span> <span class="nav-text">1.1、遇到问题</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-2、解决方案"><span class="nav-number">2.2.</span> <span class="nav-text">1.2、解决方案</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-3、分析结果"><span class="nav-number">2.3.</span> <span class="nav-text">1.3、分析结果</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x02_尝试动态调试smali"><span class="nav-number">3.</span> <span class="nav-text">0x02 尝试动态调试smali</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1、如何使用AS动态调试"><span class="nav-number">3.1.</span> <span class="nav-text">2.1、如何使用AS动态调试</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2、重写Java代码，直接调用加密so"><span class="nav-number">3.2.</span> <span class="nav-text">2.2、重写Java代码，直接调用加密so</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3、修改app代码，重打包调用so"><span class="nav-number">3.3.</span> <span class="nav-text">2.3、修改app代码，重打包调用so</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-4、尝试IDA_pro反编译so"><span class="nav-number">3.4.</span> <span class="nav-text">2.4、尝试IDA pro反编译so</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-5、总结问题"><span class="nav-number">3.5.</span> <span class="nav-text">2.5、总结问题</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#三、万金流破解思路"><span class="nav-number">4.</span> <span class="nav-text">三、万金流破解思路</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-_下载并修改源码"><span class="nav-number">4.1.</span> <span class="nav-text">3.1. 下载并修改源码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2_生成注入的dex"><span class="nav-number">4.2.</span> <span class="nav-text">3.2 生成注入的dex</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#四、严重声明"><span class="nav-number">5.</span> <span class="nav-text">四、严重声明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#五、参考文档"><span class="nav-number">6.</span> <span class="nav-text">五、参考文档</span></a></li></ol></div>
             
 
           </div>
