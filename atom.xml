@@ -211,10 +211,9 @@
     <link href="https://ivonhoe.github.io/2017/06/18/Android%E5%AE%89%E5%85%A8%E4%B9%8BMT-http%E8%AF%B7%E6%B1%82%E5%8A%A0%E5%AF%86%E7%A0%B4%E8%A7%A3%E8%AE%B0%E5%BD%95/"/>
     <id>https://ivonhoe.github.io/2017/06/18/Android安全之MT-http请求加密破解记录/</id>
     <published>2017-06-18T10:13:19.000Z</published>
-    <updated>2018-01-21T13:16:29.000Z</updated>
+    <updated>2018-01-21T13:20:21.000Z</updated>
     
-    <content type="html"><![CDATA[<h3 id="0x00_破解目标">0x00 破解目标</h3><p>本文记录了破解某外卖App http请求参数加密过程中遇到的问题和解决思路，实现的目标是希望是能够通过一些手段实现自由调用其服务接口。</p>
-<p>这篇文章主要讲述什么？</p>
+    <content type="html"><![CDATA[<h3 id="0x00_前言">0x00 前言</h3><p>本文记录了破解某外卖App http请求参数加密过程中遇到的问题和解决思路，实现的目标是希望是能够通过一些手段实现自由调用其服务接口。<br>这篇文章主要讲述什么？</p>
 <ol>
 <li>静态分析和动态调试的基本方法和遇到的问题</li>
 <li>如何修改android源码实现全局hook</li>
@@ -290,8 +289,7 @@
     
     <summary type="html">
     
-      &lt;h3 id=&quot;0x00_破解目标&quot;&gt;0x00 破解目标&lt;/h3&gt;&lt;p&gt;本文记录了破解某外卖App http请求参数加密过程中遇到的问题和解决思路，实现的目标是希望是能够通过一些手段实现自由调用其服务接口。&lt;/p&gt;
-&lt;p&gt;这篇文章主要讲述什么？&lt;/p&gt;
+      &lt;h3 id=&quot;0x00_前言&quot;&gt;0x00 前言&lt;/h3&gt;&lt;p&gt;本文记录了破解某外卖App http请求参数加密过程中遇到的问题和解决思路，实现的目标是希望是能够通过一些手段实现自由调用其服务接口。&lt;br&gt;这篇文章主要讲述什么？&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;静态分析和动态调试的基本方法和遇到的问题&lt;/li&gt;
 &lt;li&gt;如何修改android源码实现全局hook&lt;/li&gt;
