@@ -207,11 +207,11 @@
   </entry>
   
   <entry>
-    <title>Android安全之某团请求加密破解记录</title>
-    <link href="https://ivonhoe.github.io/2017/06/18/Android-app-hack-gold-flow/"/>
-    <id>https://ivonhoe.github.io/2017/06/18/Android-app-hack-gold-flow/</id>
+    <title>Android安全之某团请求加密破解</title>
+    <link href="https://ivonhoe.github.io/2017/06/18/android-app-gold-flow-hack/"/>
+    <id>https://ivonhoe.github.io/2017/06/18/android-app-gold-flow-hack/</id>
     <published>2017-06-18T10:13:19.000Z</published>
-    <updated>2018-01-21T13:20:21.000Z</updated>
+    <updated>2018-01-22T04:11:44.000Z</updated>
     
     <content type="html"><![CDATA[<h3 id="0x00_前言">0x00 前言</h3><p>本文记录了破解某外卖App http请求参数加密过程中遇到的问题和解决思路，实现的目标是希望是能够通过一些手段实现自由调用其服务接口。<br>这篇文章主要讲述什么？</p>
 <ol>
