@@ -294,7 +294,7 @@
               
                 
                 <a class="post-title-link" href="/2018/01/18/Small框架原理/" itemprop="url">
-                  Small框架原理
+                  Android插件化之Small框架原理
                 </a>
               
             
@@ -338,7 +338,7 @@
 
           
           
-             <span id="/2018/01/18/Small框架原理/" class="leancloud_visitors" data-flag-title="Small框架原理">
+             <span id="/2018/01/18/Small框架原理/" class="leancloud_visitors" data-flag-title="Android插件化之Small框架原理">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -374,21 +374,7 @@
 <li>Small加载插件代码和资源的原理</li>
 <li>Small代理插件activity生命周期的原理</li>
 </ol>
-<h4 id="0x01_Small如何打包module代码?">0x01 Small如何打包module代码?</h4><p>small插件化中的三种组件角色，分别是<code>app.*</code>，<code>lib.*</code>，<code>宿主</code>。small在打包过程中会根据不同module的类型针对不同组件使用不同编译插件做处理，分别是:</p>
-<ol>
-<li><code>AppPlugin</code> –&gt; <code>app.*</code></li>
-<li><code>LibraryPlugin</code> –&gt; <code>lib.*</code></li>
-<li><code>HostPlugin</code> –&gt; <code>app</code></li>
-<li><code>AssetPlugin</code> –&gt; <code>其他</code> </li>
-</ol>
-<p>在处理模块依赖上，首先区分gradle的两种依赖方式:</p>
-<ol>
-<li>Compile: compile是对所有的build type以及flavors都会参与编译并且打包到最终的apk文件中。</li>
-<li>Provided: Provided是对所有的build type以及flavors只在编译时使用，只参与编译，不打包到最终apk。</li>
-</ol>
-<p>在打包<code>app.*</code>插件时，将<code>app.*</code>对其他module的依赖转换成<code>provided</code>依赖。当执行插件打包时可以看做是插件模块执行<code>assembleRelease</code>。</p>
-<p>在打包<code>lib.*</code>插件时，<code>LibraryPlugin</code>会修改插件模块的<code>build.gradle</code>文件，<code>apply plugin:</code>从<code>&#39;com.android.library&#39;</code>修改成<code>&#39;com.android.application&#39;</code>，将对lib的方式转换成app的打包，再执行<code>assembleRelease</code>任务。</p>
-<p>👍👍👍</p>
+<h4 id="0x01_Small如何打包module代码?">0x01 Small如何打包module代码?</h4>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2018/01/18/Small框架原理/#далее" rel="contents">
@@ -460,7 +446,7 @@
               
                 
                 <a class="post-title-link" href="/2018/01/18/Small框架实践总结/" itemprop="url">
-                  Small框架实践总结
+                  Android插件化之Small框架实践总结
                 </a>
               
             
@@ -504,7 +490,7 @@
 
           
           
-             <span id="/2018/01/18/Small框架实践总结/" class="leancloud_visitors" data-flag-title="Small框架实践总结">
+             <span id="/2018/01/18/Small框架实践总结/" class="leancloud_visitors" data-flag-title="Android插件化之Small框架实践总结">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>

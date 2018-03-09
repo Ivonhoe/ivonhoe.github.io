@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://ivonhoe.github.io/"/>
-  <updated>2018-01-19T03:09:30.000Z</updated>
+  <updated>2018-03-09T16:07:23.000Z</updated>
   <id>https://ivonhoe.github.io/</id>
   
   <author>
@@ -16,11 +16,11 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>Small框架原理</title>
+    <title>Android插件化之Small框架原理</title>
     <link href="https://ivonhoe.github.io/2018/01/18/Small%E6%A1%86%E6%9E%B6%E5%8E%9F%E7%90%86/"/>
     <id>https://ivonhoe.github.io/2018/01/18/Small框架原理/</id>
     <published>2018-01-18T09:54:19.000Z</published>
-    <updated>2018-01-19T03:09:30.000Z</updated>
+    <updated>2018-03-09T16:07:23.000Z</updated>
     
     <content type="html"><![CDATA[<h4 id="0x00_前言">0x00 前言</h4><p>Small是一个轻量化的插件化框架，Small的使用介绍可以查看<a href="http://code.wequick.net/Small/cn/quickstart" target="_blank" rel="external">官网文档</a>了解，Small项目接入总结可以查看博客的另一篇<a href="https://ivonhoe.github.io/2018/01/18/Small%E6%A1%86%E6%9E%B6%E5%AE%9E%E8%B7%B5%E6%80%BB%E7%BB%93/">《Small框架实践总结》</a>。这篇文章主要从以下几个角度来看Small框架的实现原理。</p>
 <ol>
@@ -28,7 +28,8 @@
 <li>Small加载插件代码和资源的原理</li>
 <li>Small代理插件activity生命周期的原理</li>
 </ol>
-<h4 id="0x01_Small如何打包module代码?">0x01 Small如何打包module代码?</h4><p>small插件化中的三种组件角色，分别是<code>app.*</code>，<code>lib.*</code>，<code>宿主</code>。small在打包过程中会根据不同module的类型针对不同组件使用不同编译插件做处理，分别是:</p>
+<h4 id="0x01_Small如何打包module代码?">0x01 Small如何打包module代码?</h4><a id="more"></a>
+<p>small插件化中的三种组件角色，分别是<code>app.*</code>，<code>lib.*</code>，<code>宿主</code>。small在打包过程中会根据不同module的类型针对不同组件使用不同编译插件做处理，分别是:</p>
 <ol>
 <li><code>AppPlugin</code> –&gt; <code>app.*</code></li>
 <li><code>LibraryPlugin</code> –&gt; <code>lib.*</code></li>
@@ -43,7 +44,6 @@
 <p>在打包<code>app.*</code>插件时，将<code>app.*</code>对其他module的依赖转换成<code>provided</code>依赖。当执行插件打包时可以看做是插件模块执行<code>assembleRelease</code>。</p>
 <p>在打包<code>lib.*</code>插件时，<code>LibraryPlugin</code>会修改插件模块的<code>build.gradle</code>文件，<code>apply plugin:</code>从<code>&#39;com.android.library&#39;</code>修改成<code>&#39;com.android.application&#39;</code>，将对lib的方式转换成app的打包，再执行<code>assembleRelease</code>任务。</p>
 <p>👍👍👍</p>
-<a id="more"></a>
 <h4 id="0x02_Small如何解决资源id冲突?">0x02 Small如何解决资源id冲突?</h4><p>Android App资源id的格式是0xPPTTNNNN，其中：</p>
 <ul>
 <li>PP 资源的package id</li>
@@ -88,21 +88,7 @@
 &lt;li&gt;Small加载插件代码和资源的原理&lt;/li&gt;
 &lt;li&gt;Small代理插件activity生命周期的原理&lt;/li&gt;
 &lt;/ol&gt;
-&lt;h4 id=&quot;0x01_Small如何打包module代码?&quot;&gt;0x01 Small如何打包module代码?&lt;/h4&gt;&lt;p&gt;small插件化中的三种组件角色，分别是&lt;code&gt;app.*&lt;/code&gt;，&lt;code&gt;lib.*&lt;/code&gt;，&lt;code&gt;宿主&lt;/code&gt;。small在打包过程中会根据不同module的类型针对不同组件使用不同编译插件做处理，分别是:&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;&lt;code&gt;AppPlugin&lt;/code&gt; –&amp;gt; &lt;code&gt;app.*&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;LibraryPlugin&lt;/code&gt; –&amp;gt; &lt;code&gt;lib.*&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;HostPlugin&lt;/code&gt; –&amp;gt; &lt;code&gt;app&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;AssetPlugin&lt;/code&gt; –&amp;gt; &lt;code&gt;其他&lt;/code&gt; &lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;在处理模块依赖上，首先区分gradle的两种依赖方式:&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;Compile: compile是对所有的build type以及flavors都会参与编译并且打包到最终的apk文件中。&lt;/li&gt;
-&lt;li&gt;Provided: Provided是对所有的build type以及flavors只在编译时使用，只参与编译，不打包到最终apk。&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;在打包&lt;code&gt;app.*&lt;/code&gt;插件时，将&lt;code&gt;app.*&lt;/code&gt;对其他module的依赖转换成&lt;code&gt;provided&lt;/code&gt;依赖。当执行插件打包时可以看做是插件模块执行&lt;code&gt;assembleRelease&lt;/code&gt;。&lt;/p&gt;
-&lt;p&gt;在打包&lt;code&gt;lib.*&lt;/code&gt;插件时，&lt;code&gt;LibraryPlugin&lt;/code&gt;会修改插件模块的&lt;code&gt;build.gradle&lt;/code&gt;文件，&lt;code&gt;apply plugin:&lt;/code&gt;从&lt;code&gt;&amp;#39;com.android.library&amp;#39;&lt;/code&gt;修改成&lt;code&gt;&amp;#39;com.android.application&amp;#39;&lt;/code&gt;，将对lib的方式转换成app的打包，再执行&lt;code&gt;assembleRelease&lt;/code&gt;任务。&lt;/p&gt;
-&lt;p&gt;👍👍👍&lt;/p&gt;
+&lt;h4 id=&quot;0x01_Small如何打包module代码?&quot;&gt;0x01 Small如何打包module代码?&lt;/h4&gt;
     
     </summary>
     
@@ -114,11 +100,11 @@
   </entry>
   
   <entry>
-    <title>Small框架实践总结</title>
+    <title>Android插件化之Small框架实践总结</title>
     <link href="https://ivonhoe.github.io/2018/01/18/Small%E6%A1%86%E6%9E%B6%E5%AE%9E%E8%B7%B5%E6%80%BB%E7%BB%93/"/>
     <id>https://ivonhoe.github.io/2018/01/18/Small框架实践总结/</id>
     <published>2018-01-18T09:42:57.000Z</published>
-    <updated>2018-01-19T03:09:24.000Z</updated>
+    <updated>2018-03-09T16:11:26.000Z</updated>
     
     <content type="html"><![CDATA[<h4 id="0x00_前言">0x00 前言</h4><p>这篇文章主要总结了在使用Small框架改造老项目的过程中遇到的问题和响应解决方案，也总结了使用Small框架的基础知识点，并从一个使用者的角度来分析Small框架的优缺点。如果你的项目也面临业务模块耦合，边界不清晰，没有动态化等等需要插件化方案来解决的问题，不妨看下这篇文章再试一试Small框架，Small的功能未必全面但绝对聚焦了插件化框架需要解决的的核心问题。</p>
 <p>什么是Small？ Small是一个轻量级的插件化框架。同时Small也是一个dex分包方案，Small也是一个业务解耦方案，Small也是一个动态加载和更新方案。不废话先去看官网文档~~</p>
@@ -183,7 +169,8 @@
 <li>Activity launch mode为singletop时在activity style中设置透明背景无效 <a href="https://github.com/wequick/Small/issues/94" target="_blank" rel="external">https://github.com/wequick/Small/issues/94</a></li>
 <li>无法通过Small.openUri()方法启动页面怎么办？一定是你用法不对，debug找原因。</li>
 </ol>
-<h4 id="0x07_Small项目的完全体">0x07 Small项目的完全体</h4><p><img src="/res/small/1.png" alt=""></p>
+<h4 id="0x07_Small项目的完全体">0x07 Small项目的完全体</h4><p><img src="/res/small/small-1.png" alt=""></p>
+<p><img src="/res/small/small-2.png" alt=""></p>
 <h4 id="0x08_参考">0x08 参考</h4><p>Small官网文档 <a href="http://code.wequick.net/Small/cn/quickstart" target="_blank" rel="external">http://code.wequick.net/Small/cn/quickstart</a></p>
 <p>Small github主页 <a href="https://github.com/wequick/Small" target="_blank" rel="external">https://github.com/wequick/Small</a></p>
 <p><a href="http://code.wequick.net/small/docs/ppt/gmtc-galen-small.ppsx" target="_blank" rel="external">GMTC演讲PPT</a></p>

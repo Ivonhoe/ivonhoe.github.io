@@ -95,9 +95,9 @@ Small如何实现插件代码打包和资源打包
 Small加载插件代码和资源的原理
 Small代理插件activity生命周期的原理
 
-0x01 Small如何打包module代码?s">
+0x01 Small如何打包module代码?">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Small框架原理">
+<meta property="og:title" content="Android插件化之Small框架原理">
 <meta property="og:url" content="https://ivonhoe.github.io/2018/01/18/Small框架原理/index.html">
 <meta property="og:site_name" content="别辜负自己">
 <meta property="og:description" content="0x00 前言Small是一个轻量化的插件化框架，Small的使用介绍可以查看官网文档了解，Small项目接入总结可以查看博客的另一篇《Small框架实践总结》。这篇文章主要从以下几个角度来看Small框架的实现原理。
@@ -106,17 +106,17 @@ Small如何实现插件代码打包和资源打包
 Small加载插件代码和资源的原理
 Small代理插件activity生命周期的原理
 
-0x01 Small如何打包module代码?s">
-<meta property="og:updated_time" content="2018-01-19T03:09:30.000Z">
+0x01 Small如何打包module代码?">
+<meta property="og:updated_time" content="2018-03-09T16:07:23.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Small框架原理">
+<meta name="twitter:title" content="Android插件化之Small框架原理">
 <meta name="twitter:description" content="0x00 前言Small是一个轻量化的插件化框架，Small的使用介绍可以查看官网文档了解，Small项目接入总结可以查看博客的另一篇《Small框架实践总结》。这篇文章主要从以下几个角度来看Small框架的实现原理。
 
 Small如何实现插件代码打包和资源打包
 Small加载插件代码和资源的原理
 Small代理插件activity生命周期的原理
 
-0x01 Small如何打包module代码?s">
+0x01 Small如何打包module代码?">
 
 
 
@@ -150,7 +150,7 @@ Small代理插件activity生命周期的原理
 
 
 
-  <title> Small框架原理 | 别辜负自己 </title>
+  <title> Android插件化之Small框架原理 | 别辜负自己 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -309,7 +309,7 @@ Small代理插件activity生命周期的原理
             
             
               
-                Small框架原理
+                Android插件化之Small框架原理
               
             
           </h1>
@@ -352,7 +352,7 @@ Small代理插件activity生命周期的原理
 
           
           
-             <span id="/2018/01/18/Small框架原理/" class="leancloud_visitors" data-flag-title="Small框架原理">
+             <span id="/2018/01/18/Small框架原理/" class="leancloud_visitors" data-flag-title="Android插件化之Small框架原理">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -387,7 +387,8 @@ Small代理插件activity生命周期的原理
 <li>Small加载插件代码和资源的原理</li>
 <li>Small代理插件activity生命周期的原理</li>
 </ol>
-<h4 id="0x01_Small如何打包module代码?">0x01 Small如何打包module代码?</h4><p>small插件化中的三种组件角色，分别是<code>app.*</code>，<code>lib.*</code>，<code>宿主</code>。small在打包过程中会根据不同module的类型针对不同组件使用不同编译插件做处理，分别是:</p>
+<h4 id="0x01_Small如何打包module代码?">0x01 Small如何打包module代码?</h4><a id="more"></a>
+<p>small插件化中的三种组件角色，分别是<code>app.*</code>，<code>lib.*</code>，<code>宿主</code>。small在打包过程中会根据不同module的类型针对不同组件使用不同编译插件做处理，分别是:</p>
 <ol>
 <li><code>AppPlugin</code> –&gt; <code>app.*</code></li>
 <li><code>LibraryPlugin</code> –&gt; <code>lib.*</code></li>
@@ -402,7 +403,6 @@ Small代理插件activity生命周期的原理
 <p>在打包<code>app.*</code>插件时，将<code>app.*</code>对其他module的依赖转换成<code>provided</code>依赖。当执行插件打包时可以看做是插件模块执行<code>assembleRelease</code>。</p>
 <p>在打包<code>lib.*</code>插件时，<code>LibraryPlugin</code>会修改插件模块的<code>build.gradle</code>文件，<code>apply plugin:</code>从<code>&#39;com.android.library&#39;</code>修改成<code>&#39;com.android.application&#39;</code>，将对lib的方式转换成app的打包，再执行<code>assembleRelease</code>任务。</p>
 <p>👍👍👍</p>
-<a id="more"></a>
 <h4 id="0x02_Small如何解决资源id冲突?">0x02 Small如何解决资源id冲突?</h4><p>Android App资源id的格式是0xPPTTNNNN，其中：</p>
 <ul>
 <li>PP 资源的package id</li>
@@ -502,8 +502,8 @@ Small代理插件activity生命周期的原理
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/01/18/Small框架实践总结/" rel="next" title="Small框架实践总结">
-                <i class="fa fa-chevron-left"></i> Small框架实践总结
+              <a href="/2018/01/18/Small框架实践总结/" rel="next" title="Android插件化之Small框架实践总结">
+                <i class="fa fa-chevron-left"></i> Android插件化之Small框架实践总结
               </a>
             
           </div>
@@ -537,7 +537,7 @@ Small代理插件activity生命周期的原理
   <div class="comments" id="comments">
     
       <div class="ds-thread" data-thread-key="2018/01/18/Small框架原理/"
-           data-title="Small框架原理" data-url="https://ivonhoe.github.io/2018/01/18/Small框架原理/">
+           data-title="Android插件化之Small框架原理" data-url="https://ivonhoe.github.io/2018/01/18/Small框架原理/">
       </div>
     
   </div>
