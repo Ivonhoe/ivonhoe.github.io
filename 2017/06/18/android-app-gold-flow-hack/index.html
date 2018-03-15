@@ -92,10 +92,7 @@
 <meta name="description" content="0x00 前言本文记录了破解某外卖App http请求参数加密过程中遇到的问题和解决思路，实现的目标是希望是能够通过一些手段实现自由调用其服务接口。这篇文章主要讲述什么？
 
 静态分析和动态调试的基本方法和遇到的问题
-如何修改android源码实现全局hook
-
-
-可以看到每次请求都会自动生成相应的请求参数，并计算出一个加密后的参数__skcy，服务端根据这些参数信息和请求内容做校验，校验通过服务端">
+如何听过修改android源码实现全局hook">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Android安全之某团请求加密破解">
 <meta property="og:url" content="https://ivonhoe.github.io/2017/06/18/android-app-gold-flow-hack/index.html">
@@ -103,24 +100,18 @@
 <meta property="og:description" content="0x00 前言本文记录了破解某外卖App http请求参数加密过程中遇到的问题和解决思路，实现的目标是希望是能够通过一些手段实现自由调用其服务接口。这篇文章主要讲述什么？
 
 静态分析和动态调试的基本方法和遇到的问题
-如何修改android源码实现全局hook
-
-
-可以看到每次请求都会自动生成相应的请求参数，并计算出一个加密后的参数__skcy，服务端根据这些参数信息和请求内容做校验，校验通过服务端">
+如何听过修改android源码实现全局hook">
 <meta property="og:image" content="https://ivonhoe.github.io/res/meituan_hack/meituan-1.png">
 <meta property="og:image" content="https://ivonhoe.github.io/res/meituan_hack/meituan_smali1.png">
 <meta property="og:image" content="https://ivonhoe.github.io/res/meituan_hack/meituan_ida.jpeg">
 <meta property="og:image" content="https://ivonhoe.github.io/res/meituan_hack/meituan_hook.png">
-<meta property="og:updated_time" content="2018-01-22T04:11:44.000Z">
+<meta property="og:updated_time" content="2018-03-15T02:31:19.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android安全之某团请求加密破解">
 <meta name="twitter:description" content="0x00 前言本文记录了破解某外卖App http请求参数加密过程中遇到的问题和解决思路，实现的目标是希望是能够通过一些手段实现自由调用其服务接口。这篇文章主要讲述什么？
 
 静态分析和动态调试的基本方法和遇到的问题
-如何修改android源码实现全局hook
-
-
-可以看到每次请求都会自动生成相应的请求参数，并计算出一个加密后的参数__skcy，服务端根据这些参数信息和请求内容做校验，校验通过服务端">
+如何听过修改android源码实现全局hook">
 
 
 
@@ -388,9 +379,10 @@
         <h3 id="0x00_前言">0x00 前言</h3><p>本文记录了破解某外卖App http请求参数加密过程中遇到的问题和解决思路，实现的目标是希望是能够通过一些手段实现自由调用其服务接口。<br>这篇文章主要讲述什么？</p>
 <ol>
 <li>静态分析和动态调试的基本方法和遇到的问题</li>
-<li>如何修改android源码实现全局hook</li>
+<li>如何听过修改android源码实现全局hook</li>
 </ol>
-<p><img src="/res/meituan_hack/meituan-1.png" alt=""></p>
+<p><img src="/res/meituan_hack/meituan-1.png" alt="想要破解的网络请求"></p>
+<a id="more"></a>
 <p>可以看到每次请求都会自动生成相应的请求参数，并计算出一个加密后的参数<code>__skcy</code>，服务端根据这些参数信息和请求内容做校验，校验通过服务端才会返回正确的结果。通过抓包和反编译后的代码大致梳理了上图请求参数的含义和生成方法，具体参数如下所示:</p>
 <ul>
 <li><strong>__skck:</strong>Java层面<strong>常量</strong>，6a375bce8c66a0dc293860dfa83833ef</li>
@@ -399,7 +391,7 @@
 <li><strong>__skno:</strong>通过Java randomUUID获取随机数，例如：eccb0210-c86f-43bb-b12d-04927547b9ea</li>
 <li><strong>__skcy:</strong>以上四个参数加上PostContent，调用native方法获取加密后得到该值</li>
 </ul>
-<a id="more"></a>
+<!-- more -->
 <h3 id="0x01_尝试静态分析">0x01 尝试静态分析</h3><p>首先使用常用的静态分析工具，如apkTools、dex2jar做apk的反编译和转Jar。虽然该App安装包没有加壳，但在反编译过程中依然遇到一些问题。</p>
 <h4 id="1-1、遇到问题">1.1、遇到问题</h4><p>该App针对dex2jar工具做了防范. 原理分析请看<a href="https://ivonhoe.github.io/2017/02/09/%E7%BE%8E%E5%9B%A2%E5%A6%82%E4%BD%95%E9%98%B2dex2jar/">Android安全之应用防dex2jar原理及实现</a></p>
 <h4 id="1-2、解决方案">1.2、解决方案</h4><ul>
@@ -610,7 +602,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">21</span>
+                <span class="site-state-item-count">22</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -623,7 +615,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">28</span>
+                <span class="site-state-item-count">29</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

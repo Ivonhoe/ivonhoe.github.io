@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://ivonhoe.github.io/"/>
-  <updated>2018-03-09T16:07:23.000Z</updated>
+  <updated>2018-03-15T14:50:02.000Z</updated>
   <id>https://ivonhoe.github.io/</id>
   
   <author>
@@ -14,6 +14,61 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Android插件化之资源加载</title>
+    <link href="https://ivonhoe.github.io/2018/03/14/small-bug-555-fix/"/>
+    <id>https://ivonhoe.github.io/2018/03/14/small-bug-555-fix/</id>
+    <published>2018-03-14T09:23:27.000Z</published>
+    <updated>2018-03-15T14:50:02.000Z</updated>
+    
+    <content type="html"><![CDATA[<h4 id="0x00_前言">0x00 前言</h4><p>这篇文章主要记录了在使用Small插件化框架中遇到的资源加载问题及相应解决方案，并梳理出Android的资源加载流程和插件化框架中常见的资源加载方案。在前两篇Small插件化技术介绍的基础上会更多技术细节，希望能有所收获！</p>
+<h4 id="0x01_Small框架的资源加载异常">0x01 Small框架的资源加载异常</h4><p>最近收到一个客户反馈，在他们的中兴V0840手机上打开我们的app会持续崩溃。第一时间在百度移动质量平台上短时租用了该机型，抓取了log。发现是资源查找失败异常。并在Small github issue中搜索<code>android.content.res.Resources$NotFoundException</code> 可以发现很多类似的问题，详细日志可查看下图。</p>
+<a id="more"></a>
+<p><a href="https://github.com/wequick/Small/issues/555" target="_blank" rel="external">#555 Small Sample项目打包后在ZTE上闪退</a></p>
+<p><strong>项目崩溃日志：</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">03-06 17:48:31.685 E/AndroidRuntime( 8189): FATAL EXCEPTION: main&#10;03-06 17:48:31.685 E/AndroidRuntime( 8189): Process: com.shandiangou.kaguanjia, PID: 8189&#10;03-06 17:48:31.685 E/AndroidRuntime( 8189): java.lang.RuntimeException: Unable to start activity ComponentInfo&#123;com.shandiangou.kaguanjia/com.shandiangou.kaguanjia.app.main.activity.GuideActivity&#125;: android.content.res.Resources$NotFoundException: Resource ID #0x2a030010&#10;03-06 17:48:31.685 E/AndroidRuntime( 8189): &#9;at android.app.ActivityThread.performLaunchActivity(ActivityThread.java:2669)&#10;03-06 17:48:31.685 E/AndroidRuntime( 8189): &#9;at android.app.ActivityThread.handleLaunchActivity(ActivityThread.java:2730)&#10;03-06 17:48:31.685 E/AndroidRuntime( 8189): &#9;at android.app.ActivityThread.-wrap12(ActivityThread.java)&#10;03-06 17:48:31.685 E/AndroidRuntime( 8189): &#9;at android.app.ActivityThread$H.handleMessage(ActivityThread.java:1481)&#10;03-06 17:48:31.685 E/AndroidRuntime( 8189): &#9;at android.os.Handler.dispatchMessage(Handler.java:102)&#10;03-06 17:48:31.685 E/AndroidRuntime( 8189): &#9;at android.os.Looper.loop(Looper.java:154)&#10;03-06 17:48:31.685 E/AndroidRuntime( 8189): &#9;at android.app.ActivityThread.main(ActivityThread.java:6144)&#10;03-06 17:48:31.685 E/AndroidRuntime( 8189): &#9;at java.lang.reflect.Method.invoke(Native Method)&#10;03-06 17:48:31.685 E/AndroidRuntime( 8189): &#9;at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:886)&#10;03-06 17:48:31.685 E/AndroidRuntime( 8189): &#9;at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:776)&#10;03-06 17:48:31.685 E/AndroidRuntime( 8189): Caused by: android.content.res.Resources$NotFoundException: Resource ID #0x2a030010&#10;03-06 17:48:31.685 E/AndroidRuntime( 8189): &#9;at android.content.res.ResourcesImpl.getValue(ResourcesImpl.java:196)&#10;03-06 17:48:31.685 E/AndroidRuntime( 8189): &#9;at android.content.res.Resources.loadXmlResourceParser(Resources.java:2101)&#10;03-06 17:48:31.685 E/AndroidRuntime( 8189): &#9;at android.content.res.Resources.getLayout(Resources.java:1115)&#10;03-06 17:48:31.685 E/AndroidRuntime( 8189): &#9;at android.view.LayoutInflater.inflate(LayoutInflater.java:424)&#10;03-06 17:48:31.685 E/AndroidRuntime( 8189): &#9;at android.view.LayoutInflater.inflate(LayoutInflater.java:377)&#10;03-06 17:48:31.685 E/AndroidRuntime( 8189): &#9;at com.shandiangou.kaguanjia.common.base.CustomProgressDialog.init(CustomProgressDialog.java:38)&#10;03-06 17:48:31.685 E/AndroidRuntime( 8189): &#9;at com.shandiangou.kaguanjia.common.base.CustomProgressDialog.&#60;init&#62;(CustomProgressDialog.java:26)&#10;03-06 17:48:31.685 E/AndroidRuntime( 8189): &#9;at com.shandiangou.kaguanjia.common.base.BaseActivity.initProgressDialog(BaseActivity.java:27)&#10;03-06 17:48:31.685 E/AndroidRuntime( 8189): &#9;at com.shandiangou.kaguanjia.common.base.BaseActivity.onCreate(BaseActivity.java:22)&#10;03-06 17:48:31.685 E/AndroidRuntime( 8189): &#9;at com.shandiangou.kaguanjia.app.main.activity.GuideActivity.onCreate(GuideActivity.java:45)&#10;03-06 17:48:31.685 E/AndroidRuntime( 8189): &#9;at android.app.Activity.performCreate(Activity.java:6722)&#10;03-06 17:48:31.685 E/AndroidRuntime( 8189): &#9;at android.app.Instrumentation.callActivityOnCreate(Instrumentation.java:1119)&#10;03-06 17:48:31.685 E/AndroidRuntime( 8189): &#9;at net.wequick.small.ApkBundleLauncher$InstrumentationWrapper.callActivityOnCreate(ApkBundleLauncher.java:334)&#10;03-06 17:48:31.685 E/AndroidRuntime( 8189): &#9;at android.app.ActivityThread.performLaunchActivity(ActivityThread.java:2622)&#10;03-06 17:48:31.685 E/AndroidRuntime( 8189): &#9;... 9 more&#10;03-06 17:48:31.688 W/ActivityManager( 1384):   Force finishing activity com.shandiangou.kaguanjia/net.wequick.small.A</span><br></pre></td></tr></table></figure>
+<p><strong>Small框架官方Sample崩溃日志</strong></p>
+<p><img src="/res/small/small-error.png" alt=""></p>
+<h4 id="0x02_Android资源加载流程">0x02 Android资源加载流程</h4><p><strong>Android源码Resources创建流程图：</strong></p>
+<p><img src="/res/small/android-resources1.png" alt=""></p>
+<p>ActivityThread在接收到LAUNCH_ACTIVITY消息以后，在 <code>performLaunchActivity</code>方法中，使用Instrumentation通过反射的方式创建Activity实例，再创建Activity的Base Context, 并在创建Context过程中实例化AssetManger和Resources。<br>ActivityThread在LAUNCH_ACTIVITY消息中，完成了Activity生命周期中的三个回调，分别是<code>onCreate</code> <code>onStart</code> <code>onRestoreInstanceState</code>。</p>
+<p>Android中资源管理类在不同sdk版本中的关系如下图所示。</p>
+<p><img src="/res/small/android-resources2.png" alt="Android源码资源类图"></p>
+<h4 id="0x03_Small框架插件资源加载方案">0x03 Small框架插件资源加载方案</h4><p>Small框架的资源加载流程在ApkBundleLauncher中完成，<code>setup</code>流程获取到所有插件so的信息，在<code>postSetUp</code>中获取所有插件包的资源路径，通过反射调用AssetManager的<code>addAssetPaths</code>方法，构造一个包含宿主包资源、系统资源和插件包资源的AssetManger。最后还是通过反射，使用包含所有资源的AssetManager替换掉ResourcesManager中Resources的AssetManger，最终达到加载插件中资源的目的。</p>
+<p><strong>Small框架资源加载流程:</strong></p>
+<p><img src="/res/small/android-resources4.png" alt="Android源码资源类图"></p>
+<h4 id="0x04_bug修复方案">0x04 bug修复方案</h4><p>看完Small插件资源加载流程，你是否有疑问？Small只在框架加载时对ResourcesManager进行了hook，好像在创建新的Resources并没有进行hook操作？那么当系统新创建Resources实例时，新的Resources中包含的资源路径并没有插件资源，这好像说不通吧。其实关注Small的源码中<code>ReflectAccelerator.ensureCacheResources</code>，这个方法想要的达到的作用是当每次启动Activity时遍历系统缓存的ResourceImpl，将它的AssetManager替换成包含插件资源的AssetManager。当然这个机制只在SDK&gt;=24时生效。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public static void ensureCacheResources() &#123;&#10;    if (Build.VERSION.SDK_INT &#60; 24) return;&#10;    if (sResourceImpls == null || sMergedResourcesImpl == null) return;&#10;&#10;    Set&#60;?&#62; resourceKeys = sResourceImpls.keySet();&#10;    for (Object resourceKey : resourceKeys) &#123;&#10;        WeakReference resourceImpl = (WeakReference)sResourceImpls.get(resourceKey);&#10;        if (resourceImpl != null &#38;&#38; resourceImpl.get() != sMergedResourcesImpl) &#123;&#10;            // Sometimes? the weak reference for the key was released by what&#10;            // we can not find the cache resources we had merged before.&#10;            // And the system will recreate a new one which only build with host resources.&#10;            // So we needs to restore the cache. Fix #429.&#10;            // FIXME: we&#39;d better to find the way to KEEP the weak reference.&#10;            sResourceImpls.put(resourceKey, new WeakReference&#60;Object&#62;(sMergedResourcesImpl));&#10;        &#125;&#10;    &#125;&#10;&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>这里有两个问题:</strong></p>
+<ol>
+<li>SDK&lt;24时，在原生的Android系统中并不是每启动一个Activity都会创建一个新的Resources实例，ResourcesManager会使用缓存的Resources实例，所以只需要Hook一次资源加载。但是一旦创建多个Resources实例时，是不是意味着新创建的Resources并会包含插件的资源路径。个人理解是这样的。这应该也能解释为啥Small框架会在某些手机的<strong>分屏模式</strong>和某些<strong>横竖屏切换</strong>的时候会发生Crash，详情请查看<a href="https://github.com/wequick/Small/issues/356" target="_blank" rel="external">#356</a>和<a href="https://github.com/wequick/Small/issues/548" target="_blank" rel="external">#548</a></li>
+<li>SDK&gt;24时，Small会执行<code>ensureCacheResources</code>希望将新创建的ResourcesImpl的AssetsManger替换掉。但是看到源码中的实现方式是，通过反射为ActivityThread的<code>mH</code>Handler注入一个<code>Handler.Callback</code>。当HandlerCallback handleMessage LAUNCH_ACTIVITY消息时，执行<code>ensureCacheResources</code>方法。查看Handler的<code>dispatchMessage</code>发现<code>mCallback.handleMessage</code>是先于<code>mHandler.handleMessage</code>的。</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/**&#10; * Handle system messages here.&#10; */&#10;public void dispatchMessage(Message msg) &#123;&#10;    if (msg.callback != null) &#123;&#10;        handleCallback(msg);&#10;    &#125; else &#123;&#10;        if (mCallback != null) &#123;&#10;            if (mCallback.handleMessage(msg)) &#123;&#10;                return;&#10;            &#125;&#10;        &#125;&#10;        handleMessage(msg);&#10;    &#125;&#10;&#125;</span><br></pre></td></tr></table></figure>
+<p>查看 <strong>0x02 Android资源加载流程</strong> 的资源流程，你会发现Resources对象的实例化并将ResourcesImpl添加到ResourcesManger的缓存列表中是在<code>Handler.handleMessage</code>之后的。所以<code>ensureCacheResources</code>并不能保证后创建的ResourcesImpl是正确的！！</p>
+<p>综上所述，这就是文章开头中兴手机Android7.1系统的手机上使用Small框架会发生Crash问题的原因，因为中兴系统每次打开新的Activity都会创建一个新的Resources和ResourcesImpl实例，而这些都是没有被hook的，不包含插件资源路径，自然就会发生资源查找失败的异常。解决方法也比较简单，因为是SDK&gt;24的机器，只需要在Small框架的<code>InstrumentationWrapper.callActivityOnCreate</code>方法中执行<code>ReflectAccelerator.ensureCacheResources()</code>就可以解决上面的问题了。</p>
+<p>当然这还有一个更诡异的问题，我还没有找到根本原因，在这里就不再说了。</p>
+<h4 id="0x05_完">0x05 完</h4><p>以上分析只是个人对Android源码和Small框架源码的个人理解，如有不正确的地方还望支出，个人微信号:tykYang，邮箱:yangfan3687@163.com。🙏🙏🙏</p>
+<p><a href="https://ivonhoe.github.io/2018/01/18/Small%E6%A1%86%E6%9E%B6%E5%AE%9E%E8%B7%B5%E6%80%BB%E7%BB%93/">Android插件化之Small框架实践总结</a></p>
+<p><a href="https://ivonhoe.github.io/2018/01/18/Small%E6%A1%86%E6%9E%B6%E5%8E%9F%E7%90%86/">Android插件化之Small框架原理</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h4 id=&quot;0x00_前言&quot;&gt;0x00 前言&lt;/h4&gt;&lt;p&gt;这篇文章主要记录了在使用Small插件化框架中遇到的资源加载问题及相应解决方案，并梳理出Android的资源加载流程和插件化框架中常见的资源加载方案。在前两篇Small插件化技术介绍的基础上会更多技术细节，希望能有所收获！&lt;/p&gt;
+&lt;h4 id=&quot;0x01_Small框架的资源加载异常&quot;&gt;0x01 Small框架的资源加载异常&lt;/h4&gt;&lt;p&gt;最近收到一个客户反馈，在他们的中兴V0840手机上打开我们的app会持续崩溃。第一时间在百度移动质量平台上短时租用了该机型，抓取了log。发现是资源查找失败异常。并在Small github issue中搜索&lt;code&gt;android.content.res.Resources$NotFoundException&lt;/code&gt; 可以发现很多类似的问题，详细日志可查看下图。&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="Android" scheme="https://ivonhoe.github.io/tags/Android/"/>
+    
+      <category term="Android源码" scheme="https://ivonhoe.github.io/tags/Android%E6%BA%90%E7%A0%81/"/>
+    
+      <category term="插件化" scheme="https://ivonhoe.github.io/tags/%E6%8F%92%E4%BB%B6%E5%8C%96/"/>
+    
+  </entry>
   
   <entry>
     <title>Android插件化之Small框架原理</title>
@@ -198,14 +253,15 @@
     <link href="https://ivonhoe.github.io/2017/06/18/android-app-gold-flow-hack/"/>
     <id>https://ivonhoe.github.io/2017/06/18/android-app-gold-flow-hack/</id>
     <published>2017-06-18T10:13:19.000Z</published>
-    <updated>2018-01-22T04:11:44.000Z</updated>
+    <updated>2018-03-15T02:31:19.000Z</updated>
     
     <content type="html"><![CDATA[<h3 id="0x00_前言">0x00 前言</h3><p>本文记录了破解某外卖App http请求参数加密过程中遇到的问题和解决思路，实现的目标是希望是能够通过一些手段实现自由调用其服务接口。<br>这篇文章主要讲述什么？</p>
 <ol>
 <li>静态分析和动态调试的基本方法和遇到的问题</li>
-<li>如何修改android源码实现全局hook</li>
+<li>如何听过修改android源码实现全局hook</li>
 </ol>
-<p><img src="/res/meituan_hack/meituan-1.png" alt=""></p>
+<p><img src="/res/meituan_hack/meituan-1.png" alt="想要破解的网络请求"></p>
+<a id="more"></a>
 <p>可以看到每次请求都会自动生成相应的请求参数，并计算出一个加密后的参数<code>__skcy</code>，服务端根据这些参数信息和请求内容做校验，校验通过服务端才会返回正确的结果。通过抓包和反编译后的代码大致梳理了上图请求参数的含义和生成方法，具体参数如下所示:</p>
 <ul>
 <li><strong>__skck:</strong>Java层面<strong>常量</strong>，6a375bce8c66a0dc293860dfa83833ef</li>
@@ -214,7 +270,7 @@
 <li><strong>__skno:</strong>通过Java randomUUID获取随机数，例如：eccb0210-c86f-43bb-b12d-04927547b9ea</li>
 <li><strong>__skcy:</strong>以上四个参数加上PostContent，调用native方法获取加密后得到该值</li>
 </ul>
-<a id="more"></a>
+<!-- more -->
 <h3 id="0x01_尝试静态分析">0x01 尝试静态分析</h3><p>首先使用常用的静态分析工具，如apkTools、dex2jar做apk的反编译和转Jar。虽然该App安装包没有加壳，但在反编译过程中依然遇到一些问题。</p>
 <h4 id="1-1、遇到问题">1.1、遇到问题</h4><p>该App针对dex2jar工具做了防范. 原理分析请看<a href="https://ivonhoe.github.io/2017/02/09/%E7%BE%8E%E5%9B%A2%E5%A6%82%E4%BD%95%E9%98%B2dex2jar/">Android安全之应用防dex2jar原理及实现</a></p>
 <h4 id="1-2、解决方案">1.2、解决方案</h4><ul>
@@ -279,17 +335,9 @@
       &lt;h3 id=&quot;0x00_前言&quot;&gt;0x00 前言&lt;/h3&gt;&lt;p&gt;本文记录了破解某外卖App http请求参数加密过程中遇到的问题和解决思路，实现的目标是希望是能够通过一些手段实现自由调用其服务接口。&lt;br&gt;这篇文章主要讲述什么？&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;静态分析和动态调试的基本方法和遇到的问题&lt;/li&gt;
-&lt;li&gt;如何修改android源码实现全局hook&lt;/li&gt;
+&lt;li&gt;如何听过修改android源码实现全局hook&lt;/li&gt;
 &lt;/ol&gt;
-&lt;p&gt;&lt;img src=&quot;/res/meituan_hack/meituan-1.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
-&lt;p&gt;可以看到每次请求都会自动生成相应的请求参数，并计算出一个加密后的参数&lt;code&gt;__skcy&lt;/code&gt;，服务端根据这些参数信息和请求内容做校验，校验通过服务端才会返回正确的结果。通过抓包和反编译后的代码大致梳理了上图请求参数的含义和生成方法，具体参数如下所示:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;__skck:&lt;/strong&gt;Java层面&lt;strong&gt;常量&lt;/strong&gt;，6a375bce8c66a0dc293860dfa83833ef&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;__skts:&lt;/strong&gt;系统时间值，通过Sytem.currentTime()获取，例如：1487054997740&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;__skua:&lt;/strong&gt;通过UserAgent方法，获取ua，并计算出md5，通过动态调试发现该UserAgent方法返回为空，所以该值也为&lt;strong&gt;常量&lt;/strong&gt;，d41d8cd98f00b204e9800998ecf8427e&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;__skno:&lt;/strong&gt;通过Java randomUUID获取随机数，例如：eccb0210-c86f-43bb-b12d-04927547b9ea&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;__skcy:&lt;/strong&gt;以上四个参数加上PostContent，调用native方法获取加密后得到该值&lt;/li&gt;
-&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&quot;/res/meituan_hack/meituan-1.png&quot; alt=&quot;想要破解的网络请求&quot;&gt;&lt;/p&gt;
     
     </summary>
     
@@ -1353,162 +1401,6 @@
       <category term="动画" scheme="https://ivonhoe.github.io/tags/%E5%8A%A8%E7%94%BB/"/>
     
       <category term="贝塞尔曲线" scheme="https://ivonhoe.github.io/tags/%E8%B4%9D%E5%A1%9E%E5%B0%94%E6%9B%B2%E7%BA%BF/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>[译]Context?什么是Context？</title>
-    <link href="https://ivonhoe.github.io/2015/04/08/-%E7%BF%BB%E8%AF%91-Context-%E4%BB%80%E4%B9%88%E6%98%AFContext%EF%BC%9F/"/>
-    <id>https://ivonhoe.github.io/2015/04/08/-翻译-Context-什么是Context？/</id>
-    <published>2015-04-08T03:06:31.000Z</published>
-    <updated>2016-03-06T13:33:29.000Z</updated>
-    
-    <content type="html"><![CDATA[<p>原文地址：<a href="http://possiblemobile.com/2013/06/context/" target="_blank" rel="external">http://possiblemobile.com/2013/06/context/</a></p>
-<h2 id="Context可能是Android应用中最常用的元素也是最容易误用的元素">Context可能是Android应用中最常用的元素也是最容易误用的元素</h2><p>Context是经常被传递的对象，它可以很容易的构造一个你意想不到的情景，如加载资源，启动一个新的Activity，得到一个系统服务，得到内部文件路径和创建视图都需要一个Context去完成这个工作，我接下来为你在Context到底是如何工作的和为你能在你的应用中更好的运用Context提供建议。<br><a id="more"></a></p>
-<h2 id="Context类型">Context类型</h2><p>并不是所有的Context实例都是相同的，对于不同的Android应用组件，Context会有一些差别。</p>
-<h3 id="Application">Application</h3><p>Application 是应用进程中的一个单例，它可以通过Activity或者Service的getApplication()方法或者从Context派生出的其他对象调用getApplicationContext()方法得到，在同一个进程里任意时刻你得到的都是相同的Application实例。</p>
-<h3 id="Activity和Service">Activity和Service</h3><p>Activity和Sevice继承ContextWrapper，而ContxtWrapper同样实现了Context的接口，但是ContextWrapper的所有的方法都是通过包装一个内部context对象实现的，也就是它的base context（注：看ContextWrapper源码，ContextWrapper顾名思义就是Context的包装，ContextWrapper的实际功能都是成员变量mBase完成的，ContextThemeWrapper集成ContextWrapper，增加了Theme和Configuration作为成员变量，Activity继承ContextThemeWrapper，所以说Activity才是唯一包含主题信息的context。详细见下文）。当framework创建一个新的Activity或者Service的实例时，也会创造一个新的ContextImpl实例去真正完成context的实际功能，每一个Activity或者服务，和他们相应的base context，都是不同的context实例。</p>
-<h3 id="BroadcastReceiver">BroadcastReceiver</h3><p>BroadcastReceiver本身并不是Context，但是当广播事件传递的时候，framework都会在onReceive()方法中传递一个Context。这个Context是一个ReceiverRestrictedContext实例（注：看ContextImpl的getReceiverRestrictedContext()方法），它的registerReceiver()和bindService()方法是失效的，这两个功能是不允许通过onReceive()方法传递的Context调用的，（每次receiver处理一个广播，都会创建一个新的context实例。)</p>
-<h3 id="ContentProvider">ContentProvider</h3><p>ContentProvider同样也不是Context，但是已被创建就可以活取getContext方法，如果ContentProvider和调用者在同一个进程，那会返回相同的Application实例，如果在两个单独的进程里，getContext()会返回一个新创建的Context，代表这个provider进程的Context。（注：可以阅读ActivityThread.java中的installProvider()和ContentProvider的attachInfo()方法，installProvider方法会根据provider的包名和当前进程名进行比较，如果是同一个进程那就使用当前的application context，如果在不同的进程中，就会调用createPackageContext创建一个provider相关的Context，并通过attachInfo绑定provider）。</p>
-<h2 id="保存引用">保存引用</h2><p>我们首先关注的问题是，当我们在一个对象或者类里面保存一个context的引用，但是这个对象或者类的生命周期超过了你保存的context实例的生命周期。例如，创建需要一个Context对象去加载资源或者去调用CotentProvider，保存当前Activity或者Service的引用在这个单例中。</p>
-<p>失败的单例：</p>
-<pre><code><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">CustomManager</span> {
-    <span class="keyword">private</span> <span class="keyword">static</span> CustomManager sInstance;
-
-    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> CustomManager <span class="title">getInstance</span>(<span class="params">Context context</span>) </span>{
-        <span class="keyword">if</span> (sInstance == <span class="keyword">null</span>) {
-            sInstance = <span class="keyword">new</span> CustomManager(context);
-        }
-
-        <span class="keyword">return</span> sInstance;
-    }
-
-    <span class="keyword">private</span> Context mContext;
-
-    <span class="function"><span class="keyword">private</span> <span class="title">CustomManager</span>(<span class="params">Context context</span>) </span>{
-        mContext = context;
-    }
-}
-</code></pre><p>这里的问题是我们并不知道这个Context从哪里来，当持有一个结束的Activity或者Service是不安全的，这是因为在这个类里的单例是一个静态引用。这意味着我们引用的对象包括所有被这个对象引用的对象都不会被垃圾回收。如果这个Context是一个Activity，那么就会造成这个Activity引用的所有视图和其他可能跟它关联的对象持续占有内存，造成内存泄露。</p>
-<p>为了防止这种情况，我们把这个单例修改成引用appliction context。</p>
-<p>修改后的单例：</p>
-<pre><code><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">CustomManager</span> {
-    <span class="keyword">private</span> <span class="keyword">static</span> CustomManager sInstance;
-
-    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> CustomManager <span class="title">getInstance</span>(<span class="params">Context context</span>) </span>{
-        <span class="keyword">if</span> (sInstance == <span class="keyword">null</span>) {
-            <span class="comment">//Always pass in the Application Context</span>
-            sInstance = <span class="keyword">new</span> CustomManager(context.getApplicationContext());
-        }
-
-        <span class="keyword">return</span> sInstance;
-    }
-
-    <span class="keyword">private</span> Context mContext;
-
-    <span class="function"><span class="keyword">private</span> <span class="title">CustomManager</span>(<span class="params">Context context</span>) </span>{
-        mContext = context;
-    }
-}
-</code></pre><p>现在不用关心这个Context是什么，因为现在持有的引用是安全的。Application context本身就是一个单例，我们只是创建另一个静态引用并不会造成内存泄露。另一个类似例子就是在一个后台的线程或者等待的Handler里持有一个Context引用。<br>既然这样那我们为什么总是引用一个application context呢？我们就永远不用担心内存泄露的问题。答案当然是不可以，就想我在前面提到的那样，每种类型的Context类型都不相同。</p>
-<h2 id="Context的功能">Context的功能</h2><p>我们安全的调用Context的方法取决于这个Context是如何创建的，下面的表是Context功能的使用情况：</p>
-<table>
-<thead>
-<tr>
-<th></th>
-<th style="text-align:center">Application</th>
-<th style="text-align:center">Activity</th>
-<th style="text-align:center">Service</th>
-<th style="text-align:center">ContentProvider</th>
-<th style="text-align:center">BroadcastReceiver</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Show a Dialog</td>
-<td style="text-align:center">NO</td>
-<td style="text-align:center">YES</td>
-<td style="text-align:center">NO</td>
-<td style="text-align:center">NO</td>
-<td style="text-align:center">NO</td>
-</tr>
-<tr>
-<td>Start an Activity</td>
-<td style="text-align:center">NO1</td>
-<td style="text-align:center">YES</td>
-<td style="text-align:center">NO1</td>
-<td style="text-align:center">NO1</td>
-<td style="text-align:center">NO1</td>
-</tr>
-<tr>
-<td>Layout Inflation</td>
-<td style="text-align:center">NO2</td>
-<td style="text-align:center">YES</td>
-<td style="text-align:center">NO2</td>
-<td style="text-align:center">NO2</td>
-<td style="text-align:center">NO2</td>
-</tr>
-<tr>
-<td>Start a Service</td>
-<td style="text-align:center">YES</td>
-<td style="text-align:center">YES</td>
-<td style="text-align:center">YES</td>
-<td style="text-align:center">YES</td>
-<td style="text-align:center">YES</td>
-</tr>
-<tr>
-<td>Bind to a Service</td>
-<td style="text-align:center">YES</td>
-<td style="text-align:center">YES</td>
-<td style="text-align:center">YES</td>
-<td style="text-align:center">YES</td>
-<td style="text-align:center">NO</td>
-</tr>
-<tr>
-<td>Send a Broadcast</td>
-<td style="text-align:center">YES</td>
-<td style="text-align:center">YES</td>
-<td style="text-align:center">YES</td>
-<td style="text-align:center">YES</td>
-<td style="text-align:center">YES</td>
-</tr>
-<tr>
-<td>Register BroadcastReceiver</td>
-<td style="text-align:center">YES</td>
-<td style="text-align:center">YES</td>
-<td style="text-align:center">YES</td>
-<td style="text-align:center">YES</td>
-<td style="text-align:center">NO3</td>
-</tr>
-<tr>
-<td>Load Resource Values</td>
-<td style="text-align:center">YES</td>
-<td style="text-align:center">YES</td>
-<td style="text-align:center">YES</td>
-<td style="text-align:center">YES</td>
-<td style="text-align:center">YES</td>
-</tr>
-</tbody>
-</table>
-<p>注：<br>1.一个application可以启动一个Activity，但是需要创建一个新的任务。这样做可能满足一些特定的需求，但是在应用中创建一个非标准的回退栈并不是一种经过深思熟虑的推荐做法。<br>2.这样是合法的，但是这样是加载出来的系统默认的主题布局，而并不是你在应用里定义的主题样式。<br>3.在receiver是null的情况下是允许的（注：看ContextImpl的内部类ReceiverRestrictedContext，ReceiverRestrictedContext进程ContentWrapper但是重写了注册广播和绑定服务的方法，会在这两个方法里抛出异常。为什么要这么做？），在4.2以上版本用来获取粘性广播。</p>
-<h2 id="用户接口">用户接口</h2><p>从上个表格你可以看出，有很多和UI处理相关的Context的功能并不适合用application context去处理。事实上，实现了所有和所有UI相关的操作接口的是Activity，而其他的类别的功能都几乎相同。<br>幸运的是这三个操作（注：指Application context不具备的三个Context功能）是application在Activity范围之外根本不需要去做的，这好像就是framework故意设计如此，如果你尝试通过一个application context去创建一个对话框或者启动一个Activity会抛出异常并造成应用程序终止，会有明显的指示告诉你这样出错了。<br>另一个值得注意的问题是加载布局，如果你阅读过我的文章<a href="http://www.doubleencore.com/2013/05/layout-inflation-as-intended" target="_blank" rel="external">layout inflation</a>,你会觉得这个过程会是稍微难理解的过程，使用正确的context就算一个。当你使用通过application context构造的LayoutInflater去加载视图，当然framework同样会返回一个正确的视图树，但是你在应用中设置的主题和样式是被忽略的，这是因为Activity才是真正关联你在manifest中设置的主题的Context。其他类型的Context实例会使用系统默认的主题样式去构建视图。所以这样构建出的视图可能并不是像你预期的那样。</p>
-<h2 id="交集">交集</h2><p>一定会有人得到这样的冲突的结论，在应用设计中会有一种情况，可能必须长期持有一个Activity Context引用，因为我想完成的任务包含UI的操作。如果是这样的话，那我只能强烈建议你重新考虑你的设计，因为那样的设计将是和Android应用架构背道而驰的过程。</p>
-<h1 id="总结">总结</h1><p>在大多数情况下，使用你当前封闭的组件中直接使用Context就是可以了，只有你持有引用不超过这个组件的生命周期就不会有问题，只要你需要保存一个Context的引用超出Activity或者Service的生命周期，哪怕是暂时的引用，那就请转换成保存application context的引用。</p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;原文地址：&lt;a href=&quot;http://possiblemobile.com/2013/06/context/&quot;&gt;http://possiblemobile.com/2013/06/context/&lt;/a&gt;&lt;/p&gt;
-&lt;h2 id=&quot;Context可能是Android应用中最常用的元素也是最容易误用的元素&quot;&gt;Context可能是Android应用中最常用的元素也是最容易误用的元素&lt;/h2&gt;&lt;p&gt;Context是经常被传递的对象，它可以很容易的构造一个你意想不到的情景，如加载资源，启动一个新的Activity，得到一个系统服务，得到内部文件路径和创建视图都需要一个Context去完成这个工作，我接下来为你在Context到底是如何工作的和为你能在你的应用中更好的运用Context提供建议。&lt;br&gt;
-    
-    </summary>
-    
-    
-      <category term="Android" scheme="https://ivonhoe.github.io/tags/Android/"/>
-    
-      <category term="Context" scheme="https://ivonhoe.github.io/tags/Context/"/>
-    
-      <category term="翻译" scheme="https://ivonhoe.github.io/tags/%E7%BF%BB%E8%AF%91/"/>
     
   </entry>
   
