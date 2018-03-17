@@ -92,16 +92,16 @@
 <meta name="description" content="0x00 前言这篇文章主要总结了在使用Small框架改造老项目的过程中遇到的问题和响应解决方案，也总结了使用Small框架的基础知识点，并从一个使用者的角度来分析Small框架的优缺点。如果你的项目也面临业务模块耦合，边界不清晰，没有动态化等等需要插件化方案来解决的问题，不妨看下这篇文章再试一试Small框架，Small的功能未必全面但绝对聚焦了插件化框架需要解决的的核心问题。
 什么是Small？">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Android插件化之Small框架实践总结">
+<meta property="og:title" content="Android插件化之Small框架项目实践总结">
 <meta property="og:url" content="https://ivonhoe.github.io/2018/01/18/Small框架实践总结/index.html">
 <meta property="og:site_name" content="别辜负自己">
 <meta property="og:description" content="0x00 前言这篇文章主要总结了在使用Small框架改造老项目的过程中遇到的问题和响应解决方案，也总结了使用Small框架的基础知识点，并从一个使用者的角度来分析Small框架的优缺点。如果你的项目也面临业务模块耦合，边界不清晰，没有动态化等等需要插件化方案来解决的问题，不妨看下这篇文章再试一试Small框架，Small的功能未必全面但绝对聚焦了插件化框架需要解决的的核心问题。
 什么是Small？">
 <meta property="og:image" content="https://ivonhoe.github.io/res/small/small-1.png">
 <meta property="og:image" content="https://ivonhoe.github.io/res/small/small-2.png">
-<meta property="og:updated_time" content="2018-03-09T16:11:26.000Z">
+<meta property="og:updated_time" content="2018-03-17T11:04:37.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Android插件化之Small框架实践总结">
+<meta name="twitter:title" content="Android插件化之Small框架项目实践总结">
 <meta name="twitter:description" content="0x00 前言这篇文章主要总结了在使用Small框架改造老项目的过程中遇到的问题和响应解决方案，也总结了使用Small框架的基础知识点，并从一个使用者的角度来分析Small框架的优缺点。如果你的项目也面临业务模块耦合，边界不清晰，没有动态化等等需要插件化方案来解决的问题，不妨看下这篇文章再试一试Small框架，Small的功能未必全面但绝对聚焦了插件化框架需要解决的的核心问题。
 什么是Small？">
 
@@ -137,7 +137,7 @@
 
 
 
-  <title> Android插件化之Small框架实践总结 | 别辜负自己 </title>
+  <title> Android插件化之Small框架项目实践总结 | 别辜负自己 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -296,7 +296,7 @@
             
             
               
-                Android插件化之Small框架实践总结
+                Android插件化之Small框架项目实践总结
               
             
           </h1>
@@ -329,7 +329,7 @@
 
           
           
-             <span id="/2018/01/18/Small框架实践总结/" class="leancloud_visitors" data-flag-title="Android插件化之Small框架实践总结">
+             <span id="/2018/01/18/Small框架实践总结/" class="leancloud_visitors" data-flag-title="Android插件化之Small框架项目实践总结">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -403,8 +403,9 @@
 <h4 id="0x05_Small插件化实践规范">0x05 Small插件化实践规范</h4><ol>
 <li>不要在宿主中添加业务代码</li>
 <li>非Activity组件需要声明在宿主或者宿主分身的manifest中</li>
-<li>native module so放在宿主中</li>
+<li>native module so放在宿主中, 原因关注Github issue: <a href="https://github.com/wequick/Small/issues/560" target="_blank" rel="external">增加或修改插件中ndk module覆盖安装不生效 </a></li>
 <li>不同插件模块中依赖相同第三方aar或jar的版本号要相同，建议将aar或jar的版本号统一声明在gradle.properties中，将共同依赖的第三方sdk声明在宿主分身中</li>
+<li>所有Theme的定义都放在宿主和宿主分身中，具体原因看我的另一篇问题总结：<a href="https://ivonhoe.github.io/2018/03/14/small-bug-555-fix/">Android插件化之资源加载</a></li>
 </ol>
 <h4 id="0x06_Small插件化实践踩过的那些坑">0x06 Small插件化实践踩过的那些坑</h4><p>遇到问题怎么办？到github issues里查询你遇到的问题，一般都可以找到答案。这里大致总结了我们团队在small框架使用过程中遇到的常见问题。</p>
 <ol>
