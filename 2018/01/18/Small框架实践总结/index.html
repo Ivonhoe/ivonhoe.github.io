@@ -89,21 +89,21 @@
 
 
 
-<meta name="description" content="0x00 前言这篇文章主要总结了在使用Small框架改造老项目的过程中遇到的问题和相应的解决方案，也总结了使用Small框架的基础知识点，并从一个使用者的角度来分析Small框架的优缺点。如果你的项目也面临业务模块耦合，边界不清晰，没有动态部署方案等等需要插件化方案来解决的问题，不妨先看下这篇文章再试一试Small框架，Small的功能未必全面但绝对聚焦了插件化框架需要解决的的核心问题。
-什么是S">
+<meta name="description" content="0x00 前言这篇文章主要总结了在使用Small框架改造老项目过程中遇到的问题和相应的解决方案，也总结了使用Small框架的基础知识点，并从一个使用者的角度来分析Small框架的优缺点。如果你的项目也面临业务模块耦合，边界不清晰，没有动态部署方案等等需要插件化方案来解决的问题，不妨先看下这篇文章再试一试Small框架，Small的功能未必全面但绝对聚焦了插件化框架需要解决的的核心问题。
+什么是Sm">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Android插件化之Small框架实践总结">
 <meta property="og:url" content="https://ivonhoe.github.io/2018/01/18/Small框架实践总结/index.html">
 <meta property="og:site_name" content="别辜负自己">
-<meta property="og:description" content="0x00 前言这篇文章主要总结了在使用Small框架改造老项目的过程中遇到的问题和相应的解决方案，也总结了使用Small框架的基础知识点，并从一个使用者的角度来分析Small框架的优缺点。如果你的项目也面临业务模块耦合，边界不清晰，没有动态部署方案等等需要插件化方案来解决的问题，不妨先看下这篇文章再试一试Small框架，Small的功能未必全面但绝对聚焦了插件化框架需要解决的的核心问题。
-什么是S">
+<meta property="og:description" content="0x00 前言这篇文章主要总结了在使用Small框架改造老项目过程中遇到的问题和相应的解决方案，也总结了使用Small框架的基础知识点，并从一个使用者的角度来分析Small框架的优缺点。如果你的项目也面临业务模块耦合，边界不清晰，没有动态部署方案等等需要插件化方案来解决的问题，不妨先看下这篇文章再试一试Small框架，Small的功能未必全面但绝对聚焦了插件化框架需要解决的的核心问题。
+什么是Sm">
 <meta property="og:image" content="https://ivonhoe.github.io/res/small/small-1.png">
 <meta property="og:image" content="https://ivonhoe.github.io/res/small/small-2.png">
-<meta property="og:updated_time" content="2018-03-25T14:51:56.000Z">
+<meta property="og:updated_time" content="2018-03-25T14:56:40.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android插件化之Small框架实践总结">
-<meta name="twitter:description" content="0x00 前言这篇文章主要总结了在使用Small框架改造老项目的过程中遇到的问题和相应的解决方案，也总结了使用Small框架的基础知识点，并从一个使用者的角度来分析Small框架的优缺点。如果你的项目也面临业务模块耦合，边界不清晰，没有动态部署方案等等需要插件化方案来解决的问题，不妨先看下这篇文章再试一试Small框架，Small的功能未必全面但绝对聚焦了插件化框架需要解决的的核心问题。
-什么是S">
+<meta name="twitter:description" content="0x00 前言这篇文章主要总结了在使用Small框架改造老项目过程中遇到的问题和相应的解决方案，也总结了使用Small框架的基础知识点，并从一个使用者的角度来分析Small框架的优缺点。如果你的项目也面临业务模块耦合，边界不清晰，没有动态部署方案等等需要插件化方案来解决的问题，不妨先看下这篇文章再试一试Small框架，Small的功能未必全面但绝对聚焦了插件化框架需要解决的的核心问题。
+什么是Sm">
 
 
 
@@ -368,16 +368,14 @@
       
 
       
-        <h4 id="0x00_前言">0x00 前言</h4><p>这篇文章主要总结了在使用Small框架改造老项目的过程中遇到的问题和相应的解决方案，也总结了使用Small框架的基础知识点，并从一个使用者的角度来分析Small框架的优缺点。如果你的项目也面临业务模块耦合，边界不清晰，没有动态部署方案等等需要插件化方案来解决的问题，不妨先看下这篇文章再试一试Small框架，Small的功能未必全面但绝对聚焦了插件化框架需要解决的的核心问题。</p>
-<p>什么是Small？ Small是一个轻量级的插件化框架，Small也是一个dex分包方案，Small也是一个业务模块解耦方案，同时Small也是一个动态化加载和更新方案。先去看官网文档了解Small的基础知识~~</p>
+        <h4 id="0x00_前言">0x00 前言</h4><p>这篇文章主要总结了在使用Small框架改造老项目过程中遇到的问题和相应的解决方案，也总结了使用Small框架的基础知识点，并从一个使用者的角度来分析Small框架的优缺点。如果你的项目也面临业务模块耦合，边界不清晰，没有动态部署方案等等需要插件化方案来解决的问题，不妨先看下这篇文章再试一试Small框架，Small的功能未必全面但绝对聚焦了插件化框架需要解决的的核心问题。</p>
+<p>什么是Small框架？ Small是一个轻量级的插件化框架，Small也是一个dex分包方案，Small也是一个业务模块解耦方案，同时Small也是一个动态化加载和更新方案。先去看官网文档了解Small的基础知识~~</p>
 <p><a href="http://code.wequick.net/Small/cn/quickstart" target="_blank" rel="external">Small官网文档</a></p>
 <a id="more"></a>
-<h4 id="0x01_Small必知必会">0x01 Small必知必会</h4><ol>
-<li>Small框架将module分为这几个角色，宿主，宿主分身，app插件，公共lib插件</li>
-<li>宿主不依赖任何模块，宿主分身被所有app和lib依赖，但是宿主和宿主分身都被打包在壳应用的主dex中，app插件和公共lib插件被单独打包在自己的插件so中</li>
-</ol>
-<p><img src="/res/small/small-1.png" alt="Small插件化完全体"></p>
+<h4 id="0x01_Small必知必会">0x01 Small必知必会</h4><p><img src="/res/small/small-1.png" alt="Small角色关系"></p>
 <ol>
+<li>Small框架将工程模块分为这几个角色，宿主，宿主分身，app插件，公共lib插件</li>
+<li>宿主不依赖任何模块，宿主分身被所有app和lib依赖，但是宿主和宿主分身都被打包在主应用的主dex中，app插件和公共lib插件被单独打包在自己的插件so中</li>
 <li>Small如何编译? <ul>
 <li>./gradlew cleanLib </li>
 <li><strong>编译公共库:</strong> ./gradlew buildLib </li>

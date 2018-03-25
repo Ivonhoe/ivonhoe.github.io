@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://ivonhoe.github.io/"/>
-  <updated>2018-03-17T10:05:25.000Z</updated>
+  <updated>2018-03-25T15:08:05.000Z</updated>
   <id>https://ivonhoe.github.io/</id>
   
   <author>
@@ -20,9 +20,9 @@
     <link href="https://ivonhoe.github.io/2018/03/14/small-bug-555-fix/"/>
     <id>https://ivonhoe.github.io/2018/03/14/small-bug-555-fix/</id>
     <published>2018-03-14T09:23:27.000Z</published>
-    <updated>2018-03-17T10:05:25.000Z</updated>
+    <updated>2018-03-25T15:08:05.000Z</updated>
     
-    <content type="html"><![CDATA[<h4 id="0x00_前言">0x00 前言</h4><p>这篇文章主要记录了在使用Small插件化框架中遇到的资源加载问题及相应解决方案，并梳理出Android的资源加载流程和插件化框架中常见的资源加载方案。在前两篇插件化技术介绍的基础上会关注更多技术细节，希望能有所收获！</p>
+    <content type="html"><![CDATA[<h4 id="0x00_前言">0x00 前言</h4><p>这篇文章主要记录了在使用Small插件化框架中遇到的资源加载问题及相应解决方案，并梳理出Android的资源加载流程和插件化框架的资源加载原理。在前两篇插件化技术介绍的基础上会关注更多技术细节，希望能有所收获！</p>
 <h4 id="0x01_Small框架的资源加载异常">0x01 Small框架的资源加载异常</h4><p>最近收到一个客户反馈，在他们的中兴V0840手机上打开我们的app会持续崩溃。第一时间在百度移动质量平台上短时租用了该机型，抓取了log。发现是资源查找失败异常。并在Small github issues中搜索<code>android.content.res.Resources$NotFoundException</code> 可以发现很多类似的问题，详细日志可查看下图。</p>
 <a id="more"></a>
 <p>Github issus链接：<a href="https://github.com/wequick/Small/issues/555" target="_blank" rel="external">#555 Small Sample项目打包后在ZTE上闪退</a></p>
@@ -48,10 +48,9 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/**&#10; * Handle system messages here.&#10; */&#10;public void dispatchMessage(Message msg) &#123;&#10;    if (msg.callback != null) &#123;&#10;        handleCallback(msg);&#10;    &#125; else &#123;&#10;        if (mCallback != null) &#123;&#10;            if (mCallback.handleMessage(msg)) &#123;&#10;                return;&#10;            &#125;&#10;        &#125;&#10;        handleMessage(msg);&#10;    &#125;&#10;&#125;</span><br></pre></td></tr></table></figure>
 <p>查看 <strong>0x02 Android资源加载流程</strong> 的资源流程，你会发现Resources对象的实例化并将ResourcesImpl添加到ResourcesManger的缓存列表中是在<code>Handler.handleMessage</code>之后的。所以<code>ensureCacheResources</code>并不能保证启动Activity时<strong>新创建的</strong>ResourcesImpl实例能够被正常hook的！！</p>
 <p>综上所述，这就是文章开头中兴手机Android7.1系统的手机上使用Small框架会发生Crash问题的原因，因为<strong>中兴系统每次打开新的Activity都会创建一个新的Resources和ResourcesImpl实例，而这些都是没有被hook的，不包含插件资源路径</strong>，自然就会发生资源查找失败的异常。解决方法也比较简单，因为是SDK&gt;24的机器，只需要在Small框架的<code>InstrumentationWrapper.callActivityOnCreate</code>方法中执行<code>ReflectAccelerator.ensureCacheResources()</code>就可以解决上面的问题了。</p>
-<p>这里其实还会有一个问题，你可以查看ActivityThread的源码，在启动Activity流程的<code>performLaunchActivity</code>方法中，<code>mInstrumentation.callActivityOnCreate</code>之前系统为Activity设置主题。这时如果你需要的主题资源恰好在插件中，那依然会发生Crash。</p>
+<p>同时你需要注意另一个问题，查看ActivityThread的源码，在启动Activity流程的<code>performLaunchActivity</code>方法中，在<code>mInstrumentation.callActivityOnCreate</code>之前系统会为Activity设置主题。如果你选择在<code>mInstrumentation.callActivityOnCreate</code>中执行Resources的hook，并且此时需要的主题资源恰好在插件中，那依然会发生Crash。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">private Activity performLaunchActivity(ActivityClientRecord r, Intent customIntent) &#123;&#10;    ....&#10;    ....&#30465;&#30053;&#20854;&#20182;&#20195;&#30721;&#10;    int theme = r.activityInfo.getThemeResource();&#10;    if (theme != 0) &#123;&#10;        activity.setTheme(theme);&#10;    &#125;&#10;&#10;    activity.mCalled = false;&#10;    if (r.isPersistable()) &#123;&#10;        mInstrumentation.callActivityOnCreate(activity, r.state, r.persistentState);&#10;    &#125; else &#123;&#10;        mInstrumentation.callActivityOnCreate(activity, r.state);&#10;    &#125;&#10;    ....&#30465;&#30053;&#20854;&#20182;&#20195;&#30721;&#10;    ....&#10;&#125;</span><br></pre></td></tr></table></figure>
-<p>这里我的建议是把你项目中所有的主题定义都放在宿主中，并且修改下Small的框架代码在<code>InstrumentationWrapper.callActivityOnCreate</code>方法中执行<code>ReflectAccelerator.ensureCacheResources()</code>就可以解决Small框架在中兴手机上崩溃的问题。</p>
-<p>在中兴手机上还有一个更诡异的bug，我只找到修复方法但还没有找到根本原因，在这里就先不再说了。</p>
+<p>这里我的建议是把你项目中所有的主题定义都放在宿主中，并且修改Small的框架代码在<code>InstrumentationWrapper.callActivityOnCreate</code>方法中执行<code>ReflectAccelerator.ensureCacheResources()</code>方法，这样就可以解决Small框架在某些场景下发生<code>Resources$NotFoundException</code>异常的问题。</p>
 <h4 id="0x05_完">0x05 完</h4><p>Small插件化框架是我在项目中使用的框架，他的设计和实现思路上都非常优雅，是首选的轻量级插件化框架。以上分析只是对Android源码和Small框架的个人理解，如有理解有误的地方还望指出，个人微信号:tykYang，邮箱:yangfan3687@163.com。🙏🙏🙏</p>
 <p><a href="https://ivonhoe.github.io/2018/01/18/Small%E6%A1%86%E6%9E%B6%E5%AE%9E%E8%B7%B5%E6%80%BB%E7%BB%93/">Android插件化之Small框架实践总结</a></p>
 <p><a href="https://ivonhoe.github.io/2018/01/18/Small%E6%A1%86%E6%9E%B6%E5%8E%9F%E7%90%86/">Android插件化之Small框架原理</a></p>
@@ -59,7 +58,7 @@
     
     <summary type="html">
     
-      &lt;h4 id=&quot;0x00_前言&quot;&gt;0x00 前言&lt;/h4&gt;&lt;p&gt;这篇文章主要记录了在使用Small插件化框架中遇到的资源加载问题及相应解决方案，并梳理出Android的资源加载流程和插件化框架中常见的资源加载方案。在前两篇插件化技术介绍的基础上会关注更多技术细节，希望能有所收获！&lt;/p&gt;
+      &lt;h4 id=&quot;0x00_前言&quot;&gt;0x00 前言&lt;/h4&gt;&lt;p&gt;这篇文章主要记录了在使用Small插件化框架中遇到的资源加载问题及相应解决方案，并梳理出Android的资源加载流程和插件化框架的资源加载原理。在前两篇插件化技术介绍的基础上会关注更多技术细节，希望能有所收获！&lt;/p&gt;
 &lt;h4 id=&quot;0x01_Small框架的资源加载异常&quot;&gt;0x01 Small框架的资源加载异常&lt;/h4&gt;&lt;p&gt;最近收到一个客户反馈，在他们的中兴V0840手机上打开我们的app会持续崩溃。第一时间在百度移动质量平台上短时租用了该机型，抓取了log。发现是资源查找失败异常。并在Small github issues中搜索&lt;code&gt;android.content.res.Resources$NotFoundException&lt;/code&gt; 可以发现很多类似的问题，详细日志可查看下图。&lt;/p&gt;
     
     </summary>
@@ -162,18 +161,16 @@
     <link href="https://ivonhoe.github.io/2018/01/18/Small%E6%A1%86%E6%9E%B6%E5%AE%9E%E8%B7%B5%E6%80%BB%E7%BB%93/"/>
     <id>https://ivonhoe.github.io/2018/01/18/Small框架实践总结/</id>
     <published>2018-01-18T09:42:57.000Z</published>
-    <updated>2018-03-25T14:51:56.000Z</updated>
+    <updated>2018-03-25T14:56:40.000Z</updated>
     
-    <content type="html"><![CDATA[<h4 id="0x00_前言">0x00 前言</h4><p>这篇文章主要总结了在使用Small框架改造老项目的过程中遇到的问题和相应的解决方案，也总结了使用Small框架的基础知识点，并从一个使用者的角度来分析Small框架的优缺点。如果你的项目也面临业务模块耦合，边界不清晰，没有动态部署方案等等需要插件化方案来解决的问题，不妨先看下这篇文章再试一试Small框架，Small的功能未必全面但绝对聚焦了插件化框架需要解决的的核心问题。</p>
-<p>什么是Small？ Small是一个轻量级的插件化框架，Small也是一个dex分包方案，Small也是一个业务模块解耦方案，同时Small也是一个动态化加载和更新方案。先去看官网文档了解Small的基础知识~~</p>
+    <content type="html"><![CDATA[<h4 id="0x00_前言">0x00 前言</h4><p>这篇文章主要总结了在使用Small框架改造老项目过程中遇到的问题和相应的解决方案，也总结了使用Small框架的基础知识点，并从一个使用者的角度来分析Small框架的优缺点。如果你的项目也面临业务模块耦合，边界不清晰，没有动态部署方案等等需要插件化方案来解决的问题，不妨先看下这篇文章再试一试Small框架，Small的功能未必全面但绝对聚焦了插件化框架需要解决的的核心问题。</p>
+<p>什么是Small框架？ Small是一个轻量级的插件化框架，Small也是一个dex分包方案，Small也是一个业务模块解耦方案，同时Small也是一个动态化加载和更新方案。先去看官网文档了解Small的基础知识~~</p>
 <p><a href="http://code.wequick.net/Small/cn/quickstart" target="_blank" rel="external">Small官网文档</a></p>
 <a id="more"></a>
-<h4 id="0x01_Small必知必会">0x01 Small必知必会</h4><ol>
-<li>Small框架将module分为这几个角色，宿主，宿主分身，app插件，公共lib插件</li>
-<li>宿主不依赖任何模块，宿主分身被所有app和lib依赖，但是宿主和宿主分身都被打包在壳应用的主dex中，app插件和公共lib插件被单独打包在自己的插件so中</li>
-</ol>
-<p><img src="/res/small/small-1.png" alt="Small插件化完全体"></p>
+<h4 id="0x01_Small必知必会">0x01 Small必知必会</h4><p><img src="/res/small/small-1.png" alt="Small角色关系"></p>
 <ol>
+<li>Small框架将工程模块分为这几个角色，宿主，宿主分身，app插件，公共lib插件</li>
+<li>宿主不依赖任何模块，宿主分身被所有app和lib依赖，但是宿主和宿主分身都被打包在主应用的主dex中，app插件和公共lib插件被单独打包在自己的插件so中</li>
 <li>Small如何编译? <ul>
 <li>./gradlew cleanLib </li>
 <li><strong>编译公共库:</strong> ./gradlew buildLib </li>
@@ -242,8 +239,8 @@
     
     <summary type="html">
     
-      &lt;h4 id=&quot;0x00_前言&quot;&gt;0x00 前言&lt;/h4&gt;&lt;p&gt;这篇文章主要总结了在使用Small框架改造老项目的过程中遇到的问题和相应的解决方案，也总结了使用Small框架的基础知识点，并从一个使用者的角度来分析Small框架的优缺点。如果你的项目也面临业务模块耦合，边界不清晰，没有动态部署方案等等需要插件化方案来解决的问题，不妨先看下这篇文章再试一试Small框架，Small的功能未必全面但绝对聚焦了插件化框架需要解决的的核心问题。&lt;/p&gt;
-&lt;p&gt;什么是Small？ Small是一个轻量级的插件化框架，Small也是一个dex分包方案，Small也是一个业务模块解耦方案，同时Small也是一个动态化加载和更新方案。先去看官网文档了解Small的基础知识~~&lt;/p&gt;
+      &lt;h4 id=&quot;0x00_前言&quot;&gt;0x00 前言&lt;/h4&gt;&lt;p&gt;这篇文章主要总结了在使用Small框架改造老项目过程中遇到的问题和相应的解决方案，也总结了使用Small框架的基础知识点，并从一个使用者的角度来分析Small框架的优缺点。如果你的项目也面临业务模块耦合，边界不清晰，没有动态部署方案等等需要插件化方案来解决的问题，不妨先看下这篇文章再试一试Small框架，Small的功能未必全面但绝对聚焦了插件化框架需要解决的的核心问题。&lt;/p&gt;
+&lt;p&gt;什么是Small框架？ Small是一个轻量级的插件化框架，Small也是一个dex分包方案，Small也是一个业务模块解耦方案，同时Small也是一个动态化加载和更新方案。先去看官网文档了解Small的基础知识~~&lt;/p&gt;
 &lt;p&gt;&lt;a href=&quot;http://code.wequick.net/Small/cn/quickstart&quot;&gt;Small官网文档&lt;/a&gt;&lt;/p&gt;
     
     </summary>
