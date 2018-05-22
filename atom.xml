@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://ivonhoe.github.io/"/>
-  <updated>2018-03-25T15:10:16.000Z</updated>
+  <updated>2018-05-22T03:01:49.000Z</updated>
   <id>https://ivonhoe.github.io/</id>
   
   <author>
@@ -14,6 +14,77 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>HTTP漫谈之https为什么安全</title>
+    <link href="https://ivonhoe.github.io/2018/05/21/https/"/>
+    <id>https://ivonhoe.github.io/2018/05/21/https/</id>
+    <published>2018-05-21T13:55:38.000Z</published>
+    <updated>2018-05-22T03:01:49.000Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="0x00_前言">0x00 前言</h3><p>https为什么安全？因为相对http的明文传输，https引入了数据加密和身份认证。服务器和客户端的消息只有服务器和客户端能够读懂，保证了数据的保密性。同时在交换数据之前，验证了对方的合法身份，保证了通信双方的安全。这篇总结主要记录了在理解https安全性的过程中遇到的问题。</p>
+<h3 id="0x01_什么是对称加密和非对称加密">0x01 什么是对称加密和非对称加密</h3><p>在https的协议中如何实现数据加密和身份认证呢？简单来说是客户端先获取非对称加密的公钥，通过公钥和服务器协商生成对称加密的对称密钥，并使用对称密钥加密传输数据。</p>
+<a id="more"></a>
+<p><img src="/res/https/https-1.png" alt=""></p>
+<h4 id="1-1_对称加密">1.1 对称加密</h4><p><strong>什么是对称加密：</strong>加密和解密使用相同密钥的算法。它要求发送方和接收方在安全通信之前，商定一个对称密钥。对称算法的安全性完全依赖于密钥，密钥泄漏就意味着任何人都可以对他们发送或接收的消息解密，所以密钥的保密性对通信至关重要。</p>
+<p><strong>特点：</strong>计算量小、加密速度快、加密效率高。交易双方都使用同样密钥，安全性得不到保证。每次使用对称加密算法时，都需要使用其他人不知道的惟一密钥，这会使得发收信息双方所拥有的钥匙数量呈几何级数增长，密钥管理成为负担。</p>
+<p><strong>代表算法：</strong> DES、AES</p>
+<h4 id="1-2_非对称加密">1.2 非对称加密</h4><p><strong>什么是非对称加密：</strong> 需要两个密钥来进行加密和解密。分别是公开密钥和私有密钥。如果用公开密钥对数据进行加密，只有用对应的私有密钥才能解密；如果用私有密钥对数据进行加密，那么只有用对应的公开密钥才能解密。因为加密和解密使用的是两个不同的密钥，所以这种算法叫作非对称加密算法。 </p>
+<p><strong>特点：</strong> CPU计算资源消耗非常大，效率较低。非对称加密算法对加密内容的长度有限制，不能超过公钥长度。比如现在常用的公钥长度是2048位，意味着待加密内容不能超过256个字节。</p>
+<p><strong>代表算法：</strong> RSA</p>
+<h3 id="0x02_中间人劫持">0x02 中间人劫持</h3><p>如果在通信过程中，客户端的请求被中间人劫持，那么中间人可以就可伪装成“冒牌客户端”和服务器通信，同时伪装成“冒牌服务器”与客户端通信。从而达到获取客户端服务端通信内容的目的！主要过程如下：</p>
+<ol>
+<li>中间人在服务器发送公钥之前劫持客户端请求，伪造客户端向服务端发起SSL握手</li>
+<li>中间人获取服务端加密公钥，伪造出一个自己的公钥发送给客户端</li>
+<li>客户端接受到伪造的公钥，使用伪造的公钥发送对称密钥</li>
+<li>中间人劫持到对称密钥，并利用自己的私钥解密出对称密钥</li>
+<li>利用步骤2中的正确服务器加密公钥，加密客户端对称密钥发送给服务</li>
+<li>客户端和服务器使用被中间人破解的对称密钥传输数据，中间人可以获取所有传输信息</li>
+</ol>
+<p><img src="/res/https/https-2.jpeg" alt=""></p>
+<h4 id="2-1_数字签名">2.1 数字签名</h4><p>数字签名过程：</p>
+<ol>
+<li>服务端把一个报文经过HASH处理生成消息摘要信息Digest，使用私钥加密摘要信息生成签名信息。</li>
+<li>将报文、签名发生给客户端</li>
+<li>客户端使用相同的HASH算法对报文做相同的HASH处理，获取摘要Digest1</li>
+<li>客户端使用公钥解密签名生成摘要Digest2，并且对比Digest1和Digest2是否一致</li>
+<li>如果Digest1和Digest2一致说明报文没有被篡改过，这份报文和签名是对应的，具有不可抵赖性。</li>
+</ol>
+<h4 id="2-2_数字证书">2.2 数字证书</h4><p>解决中间人劫持问题的关键在于，客户端如何能够分辨出接收到的公钥确实是服务端的呢？这时候就需要数字证书了。</p>
+<p>数字证书是公司向一个证书发布机构”SecureTrust CA”申请的。这个证书发布机构”SecureTrust CA”是一个大家公认并被一些权威机构接受的证书发布机构，<strong>并且我们的操作系统里面已经安装了”SecureTrust CA”的证书</strong>。”SecureTrust CA”在给我们发布证书时，把Issuer,Public key,Subject,Valid from,Valid to等信息以明文的形式写到证书里面，然后用一个摘要算法计算出这些数字证书内容的一个Digest，并使用CA自己的私钥对Digest进行加密，生成证书的数字签名。</p>
+<p>验证公钥过程：</p>
+<ol>
+<li>服务端将证书发送给客户端，<strong>这里不是公钥</strong></li>
+<li>客户端提取证书中的发布机构(Issuer)为”SecureTrust CA”，在操作系统中受信任的发布机构的证书中去找”SecureTrust CA”的证书，如果查不到说明证书有问题。</li>
+<li>如果找到了”SecureTrust CA”的证书，客户端从系统的证书中提取”SecureTrust CA”的公钥，</li>
+<li>使用CA公钥对步骤1中获取到证书中的签名信息的进行解密获取解密摘要，并使用摘要算法计算证书的摘要</li>
+<li>对比解密摘要和计算出的摘要信息是否一致。如果一致说明认证成功，当前证书中包含的公钥信息是可以信认的。</li>
+</ol>
+<p><img src="/res/https/https-3.jpeg" alt=""></p>
+<p>数字证书中包含公钥和证书所有者信息，并且保证数字证书里的公钥确实是这个证书的所有者的，我们拿到一个数字证书，我们可以判断出这个数字证书到底是谁的。</p>
+<h3 id="0x03_总结">0x03 总结</h3><p><strong>数字签名：</strong>为了说明谁编写的报文，同时证明报文未被篡改过。</p>
+<p><strong>数字证书：</strong>由权威的认证机构证明公钥的正确性。</p>
+<h3 id="0x04_参考文档">0x04 参考文档</h3><p><a href="http://wetest.qq.com/lab/view/110.html" target="_blank" rel="external">HTTPS为什么安全 &amp;分析 HTTPS 连接建立全过程</a></p>
+<p><a href="https://www.cnblogs.com/franson-2016/p/5530671.html" target="_blank" rel="external">一个故事教你看懂什么是数字证书，它的原理是什么?它的作用是什么？</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h3 id=&quot;0x00_前言&quot;&gt;0x00 前言&lt;/h3&gt;&lt;p&gt;https为什么安全？因为相对http的明文传输，https引入了数据加密和身份认证。服务器和客户端的消息只有服务器和客户端能够读懂，保证了数据的保密性。同时在交换数据之前，验证了对方的合法身份，保证了通信双方的安全。这篇总结主要记录了在理解https安全性的过程中遇到的问题。&lt;/p&gt;
+&lt;h3 id=&quot;0x01_什么是对称加密和非对称加密&quot;&gt;0x01 什么是对称加密和非对称加密&lt;/h3&gt;&lt;p&gt;在https的协议中如何实现数据加密和身份认证呢？简单来说是客户端先获取非对称加密的公钥，通过公钥和服务器协商生成对称加密的对称密钥，并使用对称密钥加密传输数据。&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="https" scheme="https://ivonhoe.github.io/tags/https/"/>
+    
+      <category term="对称加密" scheme="https://ivonhoe.github.io/tags/%E5%AF%B9%E7%A7%B0%E5%8A%A0%E5%AF%86/"/>
+    
+      <category term="数字签名，数字证书" scheme="https://ivonhoe.github.io/tags/%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D%EF%BC%8C%E6%95%B0%E5%AD%97%E8%AF%81%E4%B9%A6/"/>
+    
+      <category term="非对称加密" scheme="https://ivonhoe.github.io/tags/%E9%9D%9E%E5%AF%B9%E7%A7%B0%E5%8A%A0%E5%AF%86/"/>
+    
+  </entry>
   
   <entry>
     <title>Android插件化之资源加载</title>
@@ -1337,74 +1408,6 @@
     
     
       <category term="产品分析" scheme="https://ivonhoe.github.io/tags/%E4%BA%A7%E5%93%81%E5%88%86%E6%9E%90/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>基于贝塞尔曲线的Android动画差值器</title>
-    <link href="https://ivonhoe.github.io/2015/04/17/%E5%9F%BA%E4%BA%8E%E8%B4%9D%E5%A1%9E%E5%B0%94%E6%9B%B2%E7%BA%BF%E7%9A%84Android%E5%8A%A8%E7%94%BB%E5%B7%AE%E5%80%BC%E5%99%A8/"/>
-    <id>https://ivonhoe.github.io/2015/04/17/基于贝塞尔曲线的Android动画差值器/</id>
-    <published>2015-04-17T02:35:05.000Z</published>
-    <updated>2016-12-16T05:25:42.000Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="一、简介">一、简介</h2><p>贝塞尔曲线于1962，由法国工程师皮埃尔·贝塞尔（Pierre Bézier）所广泛发表，他运用贝塞尔曲线来为汽车的主体进行设计。贝塞尔曲线最初由Paul de Casteljau于1959年运用de Casteljau算法开发，以稳定数值的方法求出贝兹曲线。贝塞尔曲线不仅仅可以应用到工业设计中，在计算机动画开发中同样占有一席之地，通过构造贝塞尔曲线模拟物体运动的轨迹、速度甚至加速度，来达到想要的动画效果。在CSS开发中使用‘cubic-bezier’方法，传递三次贝赛尔曲线的两个控制点P1和P2来生成一条平滑的曲线。甚至也有很多javaScript动画库使用贝赛尔曲线来实现完美的动画效果。</p>
-<p><img src="/res/bezier/TimingFunction.png" alt="通过P1和P2控制曲线"></p>
-<a id="more"></a>
-<p>而我要做的通过贝塞尔曲线的原理生成Android动画插值器，在Android平台上实现基于贝赛尔曲线的动画效果。想要了解Android动画原理请先阅读<a href="https://ivonhoe.github.io/2015/02/09/Android%E5%8A%A8%E7%94%BB%E6%80%BB%E7%BB%93/">这篇文章</a>。了解贝塞尔曲线绘制过程可以先阅读<a href="http://www.html-js.com/article/1628" target="_blank" rel="external">贝塞尔曲线扫盲</a>，写的很好。</p>
-<h2 id="二、De_Casteljau算法">二、De Casteljau算法</h2><p><img src="/res/bezier/decu.png" alt="二次贝塞尔曲线"></p>
-<p>贝塞尔曲线常见的算法是可以通过多项式、De Casteljau算法和递归算法来进行计算。针对De算法，设P0,P1,P2确定了一条二次贝塞尔曲线q，引入参数t，令<img src="/res/bezier/1.gif" alt="">即有：</p>
-<p><img src="/res/bezier/2.gif" alt=" "></p>
-<p>当t从0变到1，第一、二式是两条一次Bezier曲线。将一、二式代入第三式得到：</p>
-<p><img src="/res/bezier/5.gif" alt=" "></p>
-<p>当t从0变到1时，它表示了由P0、P1、P2三个控制点形成一条二次Bezier曲线。并且这个二次Bezier曲线可以分别由前两个顶点(P0,P1)和后两个顶点(P1,P2)决定的一次Bezier曲线的线性组合。以此类推，由四个控制点定义的三次Bezier曲线可被定义为分别由(P0,P1,P2)和(P1,P2,P3)确定的两条二次Bezier曲线的线性组合，由(n+1)个控制点定义的n次Bezier曲线可被定义为分别由前后n个控制点定义的两条(n-1)次Bezier曲线的线性组合：</p>
-<p><img src="/res/bezier/3.gif" alt=" "></p>
-<p>由此得到Bezier曲线的递推计算公式:</p>
-<p><img src="/res/bezier/4.gif" alt=" "></p>
-<p>这就是De Casteljau算法。使用这个递推公式，在给定参数下，求Bezier曲线上一点P(t)非常有效。</p>
-<h2 id="三、Bezier动画插值器实现">三、Bezier动画插值器实现</h2><p>基于De Casteljau算法的递推公式求曲线上点的坐标：</p>
-<pre><code><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Point <span class="title">deCasteljau</span><span class="params">(Point[] points, <span class="keyword">float</span> t)</span> </span>{
-    final <span class="keyword">int</span> n = points.length;
-    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++)
-        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; n - i; j++) {
-            points[j].x = (<span class="number">1</span> - t) * points[j].x + t * points[j + <span class="number">1</span>].x;
-            points[j].y = (<span class="number">1</span> - t) * points[j].y + t * points[j + <span class="number">1</span>].y;
-        }
-
-    <span class="keyword">return</span> points[<span class="number">0</span>];
-}
-</code></pre><p>De Casteljau算法目的是求得曲线上的每一个点，如何用这些采样点描述一条曲线插值器还需要进一步的处理。主要就是处理精度的问题，用距离很近的两个点连线的线段近似描述曲线，理论上采样点越密集描述的越准确，但是很明显在实际项目中不能选择太多的采样点，因为要考虑内存和效率的问题。所以用尽可能少的点尽可能精细的用直线段描述一条曲线，一个不错的做法就是在采样点的在横坐标方向上不要等距分布，而是在曲线变化较快的地方（即斜率较大）采样点尽可能的密集，而在曲线变化平缓的地方采样点选择稀疏。所以需要在通过De Casteljau算法获取初步的采样点后，再进一步获取非均匀分布的采样点，更加处理后的采样点再进行计算。</p>
-<p>考虑到针对不同动画的编辑，可能不仅仅是动画进度的插值，还需要动画速度的插值和动画变化率的插值，针对不同曲线类型的变化，通过下面的方式进行扩展。详细代码可以查看<a href="https://github.com/Ivonhoe/BezierInterpolator" target="_blank" rel="external">这里</a></p>
-<h2 id="四、使用范例">四、使用范例</h2><p>通过控制点构造贝塞尔曲线插值器，例如，可以通过构造一个特殊的插值器，控制drawable的重绘和每个小球的动画并重绘drawable就可以实现类似window phone上经典的Balls Line进度条效果，详细实现可以参考<a href="https://ivonhoe.github.io/2015/04/28/Drawable-%E4%BB%8E%E7%AE%80%E5%8C%96%E5%B8%83%E5%B1%80%E8%B0%88%E8%B5%B7/">这里</a>。</p>
-<p><img src="/res/bezier/windows_balls_line.GIF" alt="window 进度条"></p>
-<p>通过两个控制点构造三次贝赛尔插值器(默认会增加(0,0)和(1,1)作为控制点)。</p>
-<pre><code><span class="keyword">if</span> (mBezierInterpolator == null) {
-    <span class="comment">// 贝塞尔插值器</span>
-    mBezierInterpolator = <span class="keyword">new</span> BezierInterpolator(<span class="number">0.03f</span>, <span class="number">0.615f</span>, <span class="number">0.995f</span>, <span class="number">0.415f</span>);
-}
-<span class="keyword">if</span> (mLinearInterpolator == null){
-    <span class="comment">// 普通线性插值器</span>
-    mLinearInterpolator = <span class="keyword">new</span> LinearInterpolator();
-}
-</code></pre><p>同样可以传递包含所有控制点的List构造插值器。</p>
-<pre><code>mBezierInterpolator = new BezierInterpolator<span class="list">(<span class="keyword">new</span> ArrayList&lt;Point&gt;<span class="list">()</span>)</span><span class="comment">;</span>
-</code></pre><p>针对BezierInterpolator的构造会有一定的耗时，所以并不建议在需要用到的时候才去构造，也不建议频繁的构造相同的插值器实例。</p>
-<h2 id="五、参考文档">五、参考文档</h2><p><a href="http://baike.baidu.com/view/10167166.htm" target="_blank" rel="external">3D计算机图形学 Samuel R.Buss</a><br><a href="http://wenku.baidu.com/view/2beaa4bc960590c69ec376cd.html" target="_blank" rel="external">Bezier曲线的算法描述及其程序实现</a><br><a href="http://cubic-bezier.com/" target="_blank" rel="external">在线贝塞尔曲线编辑器</a><br><a href="http://thecodeplayer.com/walkthrough/windows-phone-loading-animation" target="_blank" rel="external">window phone loading animation</a></p>
-<h2 id="六、Github">六、Github</h2><p><a href="https://github.com/Ivonhoe/BezierInterpolator" target="_blank" rel="external">https://github.com/Ivonhoe/BezierInterpolator</a></p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;h2 id=&quot;一、简介&quot;&gt;一、简介&lt;/h2&gt;&lt;p&gt;贝塞尔曲线于1962，由法国工程师皮埃尔·贝塞尔（Pierre Bézier）所广泛发表，他运用贝塞尔曲线来为汽车的主体进行设计。贝塞尔曲线最初由Paul de Casteljau于1959年运用de Casteljau算法开发，以稳定数值的方法求出贝兹曲线。贝塞尔曲线不仅仅可以应用到工业设计中，在计算机动画开发中同样占有一席之地，通过构造贝塞尔曲线模拟物体运动的轨迹、速度甚至加速度，来达到想要的动画效果。在CSS开发中使用‘cubic-bezier’方法，传递三次贝赛尔曲线的两个控制点P1和P2来生成一条平滑的曲线。甚至也有很多javaScript动画库使用贝赛尔曲线来实现完美的动画效果。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/res/bezier/TimingFunction.png&quot; alt=&quot;通过P1和P2控制曲线&quot;&gt;&lt;/p&gt;
-    
-    </summary>
-    
-    
-      <category term="Android" scheme="https://ivonhoe.github.io/tags/Android/"/>
-    
-      <category term="动画" scheme="https://ivonhoe.github.io/tags/%E5%8A%A8%E7%94%BB/"/>
-    
-      <category term="贝塞尔曲线" scheme="https://ivonhoe.github.io/tags/%E8%B4%9D%E5%A1%9E%E5%B0%94%E6%9B%B2%E7%BA%BF/"/>
     
   </entry>
   
