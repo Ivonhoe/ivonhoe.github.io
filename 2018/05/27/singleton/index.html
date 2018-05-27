@@ -71,7 +71,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="设计模式," />
 
 
 
@@ -89,15 +89,20 @@
 
 
 
-<meta name="description">
-<meta property="og:type" content="website">
-<meta property="og:title" content="病已的博客">
-<meta property="og:url" content="https://ivonhoe.github.io/page/3/index.html">
+<meta name="description" content="0x00前言相信很多同学在学习设计模式的过程中，最先了解的就是单例模式，至少我是这样。单例模式看似简单容易理解，也成为了很多公司面试必考的面试题，但在实际使用单例模式时，难免会遇到滥用的情况，了解单例也要拒绝单例。
+0x01单例模式的基础知识1. 单例的几种写法?">
+<meta property="og:type" content="article">
+<meta property="og:title" content="拒绝单例模式">
+<meta property="og:url" content="https://ivonhoe.github.io/2018/05/27/singleton/index.html">
 <meta property="og:site_name" content="病已的博客">
-<meta property="og:description">
+<meta property="og:description" content="0x00前言相信很多同学在学习设计模式的过程中，最先了解的就是单例模式，至少我是这样。单例模式看似简单容易理解，也成为了很多公司面试必考的面试题，但在实际使用单例模式时，难免会遇到滥用的情况，了解单例也要拒绝单例。
+0x01单例模式的基础知识1. 单例的几种写法?">
+<meta property="og:image" content="https://ivonhoe.github.io/res/singleton/singleton.png">
+<meta property="og:updated_time" content="2018-05-27T15:15:14.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="病已的博客">
-<meta name="twitter:description">
+<meta name="twitter:title" content="拒绝单例模式">
+<meta name="twitter:description" content="0x00前言相信很多同学在学习设计模式的过程中，最先了解的就是单例模式，至少我是这样。单例模式看似简单容易理解，也成为了很多公司面试必考的面试题，但在实际使用单例模式时，难免会遇到滥用的情况，了解单例也要拒绝单例。
+0x01单例模式的基础知识1. 单例的几种写法?">
 
 
 
@@ -125,13 +130,13 @@
 
 
 
-  <link rel="canonical" href="https://ivonhoe.github.io/page/3/"/>
+  <link rel="canonical" href="https://ivonhoe.github.io/2018/05/27/singleton/"/>
 
 
 
 
 
-  <title> 病已的博客 </title>
+  <title> 拒绝单例模式 | 病已的博客 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -175,9 +180,7 @@
     
   
 
-  <div class="container sidebar-position-right 
-   page-home 
- ">
+  <div class="container sidebar-position-right page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -270,9 +273,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
 
   
 
@@ -281,7 +284,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="https://ivonhoe.github.io/2015/04/23/ColorOS和APEX桌面产品分析/">
+    <link itemprop="mainEntityOfPage" href="https://ivonhoe.github.io/2018/05/27/singleton/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="病已">
@@ -302,10 +305,7 @@
             
             
               
-                
-                <a class="post-title-link" href="/2015/04/23/ColorOS和APEX桌面产品分析/" itemprop="url">
-                  ColorOS和APEX桌面产品分析
-                </a>
+                拒绝单例模式
               
             
           </h1>
@@ -320,8 +320,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-04-23T21:30:35+08:00">
-                Apr 23 2015
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-27T22:23:37+08:00">
+                May 27 2018
               </time>
             
 
@@ -343,8 +343,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/其他/" itemprop="url" rel="index">
-                    <span itemprop="name">其他</span>
+                  <a href="/categories/思考/" itemprop="url" rel="index">
+                    <span itemprop="name">思考</span>
                   </a>
                 </span>
 
@@ -360,7 +360,7 @@
 
           
           
-             <span id="/2015/04/23/ColorOS和APEX桌面产品分析/" class="leancloud_visitors" data-flag-title="ColorOS和APEX桌面产品分析">
+             <span id="/2018/05/27/singleton/" class="leancloud_visitors" data-flag-title="拒绝单例模式">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -389,536 +389,137 @@
       
 
       
-        
-          <h2 id="一、桌面基本操作">一、桌面基本操作</h2><h3 id="1-1_安装初体验">1.1 安装初体验</h3><ul>
-<li><p><strong>安装包大小</strong><br>ColorOS桌面含有两个安装包，OppoLauncher.apk(2.8M)和OppoLauncherSystem.apk(8.5KB)<br>APEX桌面安装包大小4.36M，并且进行了代码混淆</p>
-</li>
-<li><p><strong>默认桌面</strong><br>ColorOS桌面，前两个屏幕是系统应用，包含一个小工具的文件夹，其他所有应用平铺桌面，用户自己安装的应用从第三屏开始平铺。<br>APEX桌面，默认的应用排列就很随意，在不同的手机上的表现有差别，应该是不同手机的系统应用的包名不同，造成APEX的预制桌面并不是顺序紧密在桌面显示应用图标。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2015/04/23/ColorOS和APEX桌面产品分析/#далее" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
+        <h3 id="0x00前言">0x00前言</h3><p>相信很多同学在学习设计模式的过程中，最先了解的就是单例模式，至少我是这样。单例模式看似简单容易理解，也成为了很多公司面试必考的面试题，但在实际使用单例模式时，难免会遇到滥用的情况，了解单例也要拒绝单例。</p>
+<h3 id="0x01单例模式的基础知识">0x01单例模式的基础知识</h3><h4 id="1-_单例的几种写法?">1. 单例的几种写法?</h4><a id="more"></a>
+<ul>
+<li>懒汉式: 懒加载模式，需要的时候才创建实例。当有多个线程并行调用 getInstance() 的时候，就会创建多个实例。需要考虑线程安全问题。</li>
+<li>饿汉式：单例的实例被声明成 static 和 final 变量了，在第一次加载类到内存中时就会初始化，所以创建实例本身是线程安全的。</li>
+<li>静态内部类：JVM本身机制保证了线程安全问题，由于 SingletonHolder 是私有的，除了 getInstance() 之外没有办法访问它，因此它是懒汉式的；同时读取实例的时候不会进行同步，没有性能缺陷；也不依赖 JDK 版本。</li>
+</ul>
+<h4 id="2-_为什么要双重检验锁?">2. 为什么要双重检验锁?</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public static Singleton getSingleton() &#123;&#10;    if (instance == null) &#123;                         //Single Checked&#10;        synchronized (Singleton.class) &#123;&#10;            if (instance == null) &#123;                 //Double Checked&#10;                instance = new Singleton();&#10;            &#125;&#10;        &#125;&#10;    &#125;&#10;    return instance ;&#10;&#125;</span><br></pre></td></tr></table></figure>
+<ol>
+<li>第一个条件是说，如果实例创建了，那就不需要同步了，直接返回就好了。</li>
+<li>不然，我们就开始同步线程。</li>
+<li>第二个条件是说，如果被同步的线程中，有一个线程创建了对象，那么别的线程就不用再创建了。</li>
+</ol>
+<h4 id="3-_重排序问题">3. 重排序问题</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">instance = new Singleton()</span><br></pre></td></tr></table></figure>
+<p>这并不是一个原子操作，事实上在 JVM 中这句话大概做了下面 3 件事情。</p>
+<ol>
+<li>给 instance 分配内存</li>
+<li>调用 Singleton 的构造函数来初始化成员变量</li>
+<li>将instance对象指向分配的内存空间（执行完这步 instance 就为非 null 了）</li>
+</ol>
+<p>但是在 JVM 的即时编译器中存在指令重排序的优化。也就是说上面的第二步和第三步的顺序是不能保证的，最终的执行顺序可能是 1-2-3 也可能是 1-3-2。如果是后者，则在 3 执行完毕、2 未执行之前，被线程二抢占了，这时 instance 已经是非 null 了（但却没有初始化），所以线程二会直接返回 instance，然后使用，然后顺理成章地报错。<br>对此，我们只需要把singleton声明成 volatile 就可以了。</p>
+<h3 id="0x02_滥用单例带来哪些问题？">0x02 滥用单例带来哪些问题？</h3><p>你的项目中可能会有一堆的Manager或者Controller，最简单获取方法是把他们设计成一个个单例，只需要通过一个getInstance的方法获取到他的唯一实例对象，在任何代码中的任何地方，甚至不需要上下文。是否思考过下面的这些问题？</p>
+<blockquote>
+<p>1.你的单例会有应用的生命周期吗？</p>
+</blockquote>
+<p>按照单例的定义，无法构建除该单例以外的实例，并且这个单例有一个静态引用，单例不会被虚拟机垃圾回收。单例对象一旦创建，对象的引用是保存在静态区，<strong>单例对象在堆上分配的内存空间只有在程序终止后才会释放</strong>，过多的单例必然增大内存的消耗，<strong>并且如果你的单例中的上下文引用了不当，可能会造成严重的内存泄露问题</strong>。单例的设计应该只用来保存全局的状态，并且不能和任何作用域绑定。如果这些状态的作用域比一个完整的应用程序的生命周期要短，那么这个状态就不应该用单例来管理。</p>
+<blockquote>
+<p>2.如何尽可能的减少依赖【耦合】？</p>
+</blockquote>
+<p>有依赖就有耦合，如果你的单例提供的是某一个特定功能的公共方法或状态。那调用方和被调用方就会因为单例的设计建立了强耦合关系。甚至更极端的情况中，包含了多个单例之间的相互依赖甚至循环依赖关系。那你永远不可能将各种角色模块化拆分出来。</p>
+<blockquote>
+<p>3.如果你想针对你的单例做扩展或升级怎么办?</p>
+</blockquote>
+<p>对单例的实现升级其实并不是单例模式要解决的问题，但是<strong>单例模式缺少抽象</strong>，在使用过程中必然会遇到这样的问题。在业务的发展过程中，一定会遇到需要对已有单例进行实现升级的情况，比如你需要对相同功能换一种方式实现？或者需要增加删除一个方法或接口？甚至可能变成一个完全不一样的功能。这时候的单例就会遇到一些问题，你不单单需要修改单例，你还需要修改依赖单例的上层业务代码。</p>
+<h3 id="0x03如何尽可能少的使用单例模式？">0x03如何尽可能少的使用单例模式？</h3><p>单例的好处是简单易用，单例模式在系统设置了全局的访问点，优化和共享资源的访问。但是滥用单例也带来的上述的三个方面的危害，无法统一管理对象的生命周期、增加耦合、针对实现编程而不是针对接口编程。如何享受单例模式带来的好处并且解决她带来的危害在于，如何通过一种解耦的方式全局获取一个单例对象，并且这个单例对象的生命周期是可管理的，并且这个单例对象是针对接口的抽象实现。</p>
+<ul>
+<li>针对接口实现：单例不再提供getInstance方法，并且根据不同的抽象接口实现</li>
+<li>提供全局的访问点: 调用方可以通过全局的SingleManager获取实现接口的具体实例</li>
+<li>可管理的对象生命周期: 所有的单例的唯一对象都由SingleManager管理</li>
+<li>低耦合的：为了避免循环引用问题，<strong>SingletonManager在运行时根据配置文件通过反射的方式实例化每个接口的具体实现类</strong>，调用方只依赖SingletonManager，并且通过SingletonManager获取接口的实现实例</li>
+</ul>
+<p><img src="/res/singleton/singleton.png" alt=""></p>
+<h3 id="0x04_参考文档">0x04 参考文档</h3><p><a href="https://coolshell.cn/articles/265.html" target="_blank" rel="external">深入浅出单实例SINGLETON设计模式</a></p>
+
       
     </div>
 
     <div>
       
+        
+
+      
     </div>
 
     <div>
       
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="https://ivonhoe.github.io/2015/04/17/基于贝塞尔曲线的Android动画差值器/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="病已">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/5706813?v=3&s=460">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="病已的博客">
-    </span>
-
-    
-      <header class="post-header">
-
         
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2015/04/17/基于贝塞尔曲线的Android动画差值器/" itemprop="url">
-                  基于贝塞尔曲线的Android动画差值器
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-04-17T10:35:05+08:00">
-                Apr 17 2015
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/其他/" itemprop="url" rel="index">
-                    <span itemprop="name">其他</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-             <span id="/2015/04/17/基于贝塞尔曲线的Android动画差值器/" class="leancloud_visitors" data-flag-title="基于贝塞尔曲线的Android动画差值器">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数 </span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-
-          
-
+  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+    <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+      <span>赏</span>
+    </button>
+    <div id="QR" style="display: none;">
+      
+        <div id="wechat" style="display: inline-block">
+          <img id="wechat_qr" src="https://ivonhoe.github.io/res/dex2jar_error/WechatIMG56.png" alt="病已 WeChat Pay"/>
+          <p>微信打赏</p>
         </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
       
       
-
-      
-        
-          <h2 id="一、简介">一、简介</h2><p>贝塞尔曲线于1962，由法国工程师皮埃尔·贝塞尔（Pierre Bézier）所广泛发表，他运用贝塞尔曲线来为汽车的主体进行设计。贝塞尔曲线最初由Paul de Casteljau于1959年运用de Casteljau算法开发，以稳定数值的方法求出贝兹曲线。贝塞尔曲线不仅仅可以应用到工业设计中，在计算机动画开发中同样占有一席之地，通过构造贝塞尔曲线模拟物体运动的轨迹、速度甚至加速度，来达到想要的动画效果。在CSS开发中使用‘cubic-bezier’方法，传递三次贝赛尔曲线的两个控制点P1和P2来生成一条平滑的曲线。甚至也有很多javaScript动画库使用贝赛尔曲线来实现完美的动画效果。</p>
-<p><img src="/res/bezier/TimingFunction.png" alt="通过P1和P2控制曲线"></p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2015/04/17/基于贝塞尔曲线的Android动画差值器/#далее" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="https://ivonhoe.github.io/2015/04/08/-翻译-Context-什么是Context？/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="病已">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/5706813?v=3&s=460">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="病已的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2015/04/08/-翻译-Context-什么是Context？/" itemprop="url">
-                  [译]Context?什么是Context？
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-04-08T11:06:31+08:00">
-                Apr 8 2015
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/翻译/" itemprop="url" rel="index">
-                    <span itemprop="name">翻译</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-             <span id="/2015/04/08/-翻译-Context-什么是Context？/" class="leancloud_visitors" data-flag-title="[译]Context?什么是Context？">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数 </span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-
-          
-
+        <div id="alipay" style="display: inline-block">
+          <img id="alipay_qr" src="https://ivonhoe.github.io/res/dex2jar_error/WechatIMG57.jpeg" alt="病已 Alipay"/>
+          <p>支付宝打赏</p>
         </div>
-      </header>
-    
+      
+    </div>
+  </div>
 
-
-    <div class="post-body" itemprop="articleBody">
 
       
-      
+    </div>
 
+    <div>
       
         
-          <p>原文地址：<a href="http://possiblemobile.com/2013/06/context/">http://possiblemobile.com/2013/06/context/</a></p>
-<h2 id="Context可能是Android应用中最常用的元素也是最容易误用的元素">Context可能是Android应用中最常用的元素也是最容易误用的元素</h2><p>Context是经常被传递的对象，它可以很容易的构造一个你意想不到的情景，如加载资源，启动一个新的Activity，得到一个系统服务，得到内部文件路径和创建视图都需要一个Context去完成这个工作，我接下来为你在Context到底是如何工作的和为你能在你的应用中更好的运用Context提供建议。<br>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2015/04/08/-翻译-Context-什么是Context？/#далее" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
 
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
       
     </div>
 
     <footer class="post-footer">
       
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="https://ivonhoe.github.io/2015/02/09/Android动画总结/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="病已">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/5706813?v=3&s=460">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="病已的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2015/02/09/Android动画总结/" itemprop="url">
-                  Android动画总结
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-02-09T19:40:53+08:00">
-                Feb 9 2015
-              </time>
-            
-
-            
-
-            
-          </span>
-
+        <div class="post-tags">
           
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/其他/" itemprop="url" rel="index">
-                    <span itemprop="name">其他</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
+            <a href="/tags/设计模式/" rel="tag"># 设计模式</a>
           
-
-          
-            
-          
-
-          
-          
-             <span id="/2015/02/09/Android动画总结/" class="leancloud_visitors" data-flag-title="Android动画总结">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数 </span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-
-          
-
         </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
       
 
       
         
-          <h3 id="说在开始">说在开始</h3><p>这篇文档记录了一下自己在实际工作中实现的一些Android动画效果时的开发思路，总结了我自己如何看待Android动画问题，希望能给大家的动画开发提供一些思路和帮助。</p>
-<h3 id="一、Android动画基础">一、Android动画基础</h3><h4 id="1-1_动画类型">1.1 动画类型</h4><ul>
-<li><strong>Frame Animation：</strong><br>帧动画，顺序播放事先做好的图像，是一种画面转换动画</li>
-<li><strong>Tween Animation:</strong><br>补间动画（或者叫渐变动画），通过对场景里的对象不断做图像变换(平移、缩放、旋转)产生动画效果
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2015/02/09/Android动画总结/#далее" rel="contents">
-              阅读全文 &raquo;
-            </a>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/05/21/https/" rel="next" title="HTTPS">
+                <i class="fa fa-chevron-left"></i> HTTPS
+              </a>
+            
           </div>
-          <!--/noindex-->
-        
-      
-    </div>
 
-    <div>
-      
-    </div>
+          <span class="post-nav-divider"></span>
 
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
       
 
       
-
-      
-
-      
-      
-        <div class="post-eof"></div>
       
     </footer>
   </article>
 
 
-    
-  </section>
 
-  
-  <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span>
-  </nav>
-
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -926,6 +527,12 @@
 
 
           
+  <div class="comments" id="comments">
+    
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zNDkyNS8xMTQ2Mg=="></div>
+    
+  </div>
+
 
         </div>
         
@@ -945,8 +552,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="https://avatars1.githubusercontent.com/u/5706813?v=3&s=460"
@@ -1026,6 +642,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#0x00前言"><span class="nav-number">1.</span> <span class="nav-text">0x00前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x01单例模式的基础知识"><span class="nav-number">2.</span> <span class="nav-text">0x01单例模式的基础知识</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-_单例的几种写法?"><span class="nav-number">2.1.</span> <span class="nav-text">1. 单例的几种写法?</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-_为什么要双重检验锁?"><span class="nav-number">2.2.</span> <span class="nav-text">2. 为什么要双重检验锁?</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-_重排序问题"><span class="nav-number">2.3.</span> <span class="nav-text">3. 重排序问题</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x02_滥用单例带来哪些问题？"><span class="nav-number">3.</span> <span class="nav-text">0x02 滥用单例带来哪些问题？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x03如何尽可能少的使用单例模式？"><span class="nav-number">4.</span> <span class="nav-text">0x03如何尽可能少的使用单例模式？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x04_参考文档"><span class="nav-number">5.</span> <span class="nav-text">0x04 参考文档</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -1135,6 +767,10 @@
   
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
 
   
 
