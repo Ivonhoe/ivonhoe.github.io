@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://ivonhoe.github.io/"/>
-  <updated>2018-05-22T03:01:49.000Z</updated>
+  <updated>2018-05-27T07:35:57.000Z</updated>
   <id>https://ivonhoe.github.io/</id>
   
   <author>
@@ -16,11 +16,11 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>HTTP漫谈之https为什么安全</title>
+    <title>HTTP漫谈之HTTPS</title>
     <link href="https://ivonhoe.github.io/2018/05/21/https/"/>
     <id>https://ivonhoe.github.io/2018/05/21/https/</id>
     <published>2018-05-21T13:55:38.000Z</published>
-    <updated>2018-05-22T03:01:49.000Z</updated>
+    <updated>2018-05-27T07:35:57.000Z</updated>
     
     <content type="html"><![CDATA[<h3 id="0x00_前言">0x00 前言</h3><p>https为什么安全？因为相对http的明文传输，https引入了数据加密和身份认证。服务器和客户端的消息只有服务器和客户端能够读懂，保证了数据的保密性。同时在交换数据之前，验证了对方的合法身份，保证了通信双方的安全。这篇总结主要记录了在理解https安全性的过程中遇到的问题。</p>
 <h3 id="0x01_什么是对称加密和非对称加密">0x01 什么是对称加密和非对称加密</h3><p>在https的协议中如何实现数据加密和身份认证呢？简单来说是客户端先获取非对称加密的公钥，通过公钥和服务器协商生成对称加密的对称密钥，并使用对称密钥加密传输数据。</p>
@@ -502,7 +502,7 @@
     <link href="https://ivonhoe.github.io/2017/04/26/Zygote-2/"/>
     <id>https://ivonhoe.github.io/2017/04/26/Zygote-2/</id>
     <published>2017-04-25T16:49:27.000Z</published>
-    <updated>2018-04-26T08:09:21.000Z</updated>
+    <updated>2018-05-27T07:40:47.000Z</updated>
     
     <content type="html"><![CDATA[<h3 id="一、分析一个Hello_World_App中bitmap对象的分布">一、分析一个Hello World App中bitmap对象的分布</h3><p>使用BitmapAnalyzer分析一个Android Hello World App时你会dump出400+张图片，什么是BitmapAnalyzer？BitmapAnalyzer是一个自动分析Android dump heap中bitmap对象的工具，详细请看<a href="https://ivonhoe.github.io/2017/03/22/Bitmap&amp;Memory/">《Android Bitmap的内存大小是如何计算的？》</a>这篇文章的介绍。</p>
 <p><img src="http://upload-images.jianshu.io/upload_images/695750-211010ed47103e96.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="hprof-3.png"></p>
@@ -551,6 +551,111 @@
       <category term="Copy-on-write" scheme="https://ivonhoe.github.io/tags/Copy-on-write/"/>
     
       <category term="Zygote" scheme="https://ivonhoe.github.io/tags/Zygote/"/>
+    
+      <category term="性能优化" scheme="https://ivonhoe.github.io/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Android性能优化之如何写出GC友好的Android应用</title>
+    <link href="https://ivonhoe.github.io/2017/04/25/%E5%A6%82%E4%BD%95%E5%86%99%E5%87%BAGC%E5%8F%8B%E5%A5%BD%E7%9A%84Android%E5%BA%94%E7%94%A8/"/>
+    <id>https://ivonhoe.github.io/2017/04/25/如何写出GC友好的Android应用/</id>
+    <published>2017-04-25T13:21:23.000Z</published>
+    <updated>2018-05-27T07:38:53.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>作者：乐蛙科技高级研发经理 易宁</p>
+<p>Android应用普遍没有iOS应用流畅，这与Android应用是运行在Java虚拟机上有很大的关系，而关系最大的恐怕就是Java虚拟机上的Garbage Collection（GC）了。Java语言提供了自动内存管理，垃圾对象会在GC过程中自动被释放。这提供了开发效率，使开发者能集中精力在业务逻辑上；但天下没有免费的午餐，你写的Android应用的某些性能上的问题很可能就是GC导致的。</p>
+<p>下面是一段非常简单的Java语句：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">byte</span>[] data = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">512</span> * <span class="number">512</span> * <span class="number">4</span>];</span><br></pre></td></tr></table></figure></p>
+<p>这条语句申请了一块大小相等于512*512大小图片的内存。执行这条语句会消耗多少时间呢？0+ms吗？基本没有性能影响吗？</p>
+<a id="more"></a>
+<p>实际的情况是：0~200ms，甚至更多！这取决于应用当前Heap使用情况。在一个类似Hello World的测试程序里，执行这条语句有时候只需要0+ms就完成了，但一般情况是16+ms，甚至有时候需要30+ms。我们知道一段流畅的动画每帧绘图消耗的时间应该小于16ms，因为这样才能保证动画有60FPS的帧率。但如果执行上面那句简单的语句就要错过1~2帧，那就难怪动画不流畅了。</p>
+<p>不过，有人可能要说了：“没人会傻到在每帧绘图的时候去申请一块这么大的内存，实际情况不会有这个问题”。实际的工程中的确不会这么写，但造成执行这条语句耗时比较长的原因不是因为申请的内存太大，而是申请过程中产生了GC，就算是一个Byte的内存申请也可能消耗比这更长的时间。</p>
+<h3 id="Dalvik中GC的原理">Dalvik中GC的原理</h3><p>在Dalvik虚拟机中定义了四种触发GC的条件（参看<a href="http://androidxref.com/4.2.2_r1/xref/dalvik/vm/alloc/Heap.h" target="_blank" rel="external">Heap.h</a>）：</p>
+<blockquote>
+<ul>
+<li><code>GC_CONCURRENT</code>，当Heap的使用率达到某一阈值时自动触发。</li>
+<li><code>GC_FOR_MALLOC</code>，当Heap没有足够的空间用于容下新创建的对象时。</li>
+<li><code>GC_EXPLICIT</code>，用户主动调用GC时。</li>
+<li><code>GC_BEFORE_OOM</code>，当要发生OOM时系统尝试进行最后GC的努力。</li>
+</ul>
+</blockquote>
+<p><code>GC_CONCURRENT</code>和<code>GC_EXPLICIT</code>是并行的，GC过程中应用不会被暂停，只在GC开始和结束时会暂停应用，每次暂停的时间比较短，一般只有3~4ms。<code>GC_FOR_MALLOC</code>是非并行的，GC过程中应用被暂停，耗时比较长，可能几十毫秒也可能几百毫秒。在应用向Dalvik申请内存时，Dalvik先检查当前Heap中有无足够的空余空间用来安排对象，当发现没有足够的空间的时候会先进行<code>GC_FOR_MALLOC</code>以试图释放垃圾对象来获取新的空间，如果发现空间还不够则进行Heap的增长。在每次成功分配完新的空间后，Dalvik会检查当前Heap的使用情况，如果使用空间超过一定的阈值的时候，<code>GC_CONCURRENT</code>就会触发。</p>
+<p>每次GC的时候会打印如下的Log信息：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">D/dalvikvm(10497): GC_CONCURRENT freed 2940K, 54% free 2885K/6204K, paused 1ms+4ms&#65292; total 38ms</span><br></pre></td></tr></table></figure>
+<p>上面的Log信息表明：这次<code>GC_CONCURRENT</code>释放了2940K的空间，当前Heap使用率为54%，总的Heap大小是6204K，空余2885K，GC开始时暂停了1ms，GC结束时暂停了4ms，GC总共花了38ms。</p>
+<p>Dalvik虚拟机通过下面几个个属性值来控制Heap的空间配置：</p>
+<blockquote>
+<ul>
+<li><code>targetUtilization</code>，理想的Heap利用率，每当Heap增长时Dalvik会使增长后的Heap维持在这个利用率附近。</li>
+<li><code>minFree</code>，空余空间最小值。</li>
+<li><code>maxFree</code>，空余空间最大值。</li>
+<li><code>startSize</code>，虚拟机启动时初始的Heap大小。</li>
+<li><code>growthLimit</code>，用户设置的允许的最大Heap大小。</li>
+<li><code>maximumSize</code>， Heap空间最大极限值。</li>
+</ul>
+</blockquote>
+<p>这些属性值都可以通过<code>system/build.prop</code>来配置，zygote启动dalvik虚拟机时会从该文件中读取这些参数。通常来说，Heap空余空间越大应用越流畅，消耗的内存也更多。</p>
+<p>下图为一次“顺利”的4M内存申请:<br><img src="/res/dalvik_gc/1.png" alt="Alt text"><br>可以看到在申请之前，空余的空间达到8M，申请4M的内存很顺利没有任何GC发生。</p>
+<p>下图为一次“不顺利”的8M内存申请：<br><img src="/res/dalvik_gc/2.png" alt="Alt text"><br>虽然空余的空间已经有8M，但是为了保证正常的Heap利用率，Heap空间还是增长了，并且增长Heap之前进行了一次<code>GC_FOR_MALLOC</code>。</p>
+<p>下图为继续申请8M的内存：<br><img src="/res/dalvik_gc/3.png" alt="Alt text"><br>相应的输出Log：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">D/dalvikvm&#65109; GC_FOR_ALLOC freed 8195K, 34% free 16726K/24972K, paused 23ms, total 23ms</span><br></pre></td></tr></table></figure></p>
+<p>上图和Log更加清晰的表明Heap空间不够时会先进行一次GC，GC的类型就是<code>GC_FOR_MALLOC</code>。</p>
+<h3 id="Android流畅的关键：GC_FOR_MALLOC">Android流畅的关键：<code>GC_FOR_MALLOC</code></h3><p><code>GC_CONCURRENT</code>和<code>GC_FOR_MALLOC</code>虽然都是系统自动调用的，都暂停了应用，但它们花费的时间不在一个数量级。通过上面的分析我们知道每次申请内存空间不够时就会产生<code>GC_FOR_MALLOC</code>，我们不可能不申请内存，所以也不可能完全避免<code>GC_FOR_MALLOC</code>，但还是有些策略能降低<code>GC_FOR_MALLOC</code>的影响：</p>
+<ol>
+<li><p>避免不必要的<code>GC_FOR_MALLOC</code></p>
+<blockquote>
+<ul>
+<li>Heap空间都有其理想的利用率，在理想的利用空间内，申请内存是不会发生<code>GC_FOR_MALLOC</code>。</li>
+<li>应用应该避免内存开销的波动，将内存的波动维持在<code>maxFree</code>和<code>mixFree</code>之间。</li>
+<li>避免大的内存需求。比如，不要轻易去用<code>WallpaperManager</code>，因为壁纸占用巨大的内存。</li>
+<li>应该尽量复用对象。比如，使用<code>BitmapFactory</code>加载图片时使用<code>BitmapFactory.Option.inBitmap</code>复用Bitmap，避免申请内存。</li>
+<li>对于已知有垃圾对象的情况下，先进行手动的<code>System.gc()</code>来释放空间，而不是等到系统自动调用<code>GC_FOR_MALLOC</code>。因为<code>GC_EXPLICIT</code>是异步的，暂停应用的时间远小于<code>GC_FOR_MALLOC</code>。</li>
+<li>不要在循环中申请创建对象。循环中申请的对象会不断累积，直到空间不够发生<code>GC_FOR_MALLOC</code>。</li>
+</ul>
+</blockquote>
+</li>
+<li><p>减少<code>GC_FOR_MALLOC</code>的影响</p>
+<blockquote>
+<ul>
+<li>不要在Android应用运行的关键阶段申请内存。比如，不要在<code>onDraw</code>, <code>onLayout</code>, <code>onXXX</code>中创建对象。在关键阶段创建对象可能使应用出现随机性卡顿。</li>
+<li>尽量在<code>onCreate</code>和<code>onStart</code>阶段创建对象，同时在<code>onStop</code>和<code>onDestroy</code>阶段释放对象。</li>
+<li>尽量复用<code>ListView</code>中Item，在<code>ListView</code>滑动时不要创建对象。</li>
+</ul>
+</blockquote>
+</li>
+<li><p>降低每次<code>GC_FOR_MALLOC</code>的时间消耗</p>
+<blockquote>
+<ul>
+<li>避免大量的，细小的对象。这些对象会增加Heap空间的复杂度，在GC时会严重影响GC的耗时。</li>
+<li>对于不用的对象近早将其引用消除，减少Heap空间占用和复杂度。</li>
+<li>尽量用数据结构，数组来组织对象。</li>
+<li>明确对象之间的关系，使对象之间的依赖关系简单明了。</li>
+<li>减少View的数量。每个View包含大量属性，对于没有交互的View，大多数的属性都是没有用的，可以用Drawable替代。</li>
+</ul>
+</blockquote>
+</li>
+</ol>
+<p><em>需要注意的是</em>：本文讨论的只限于Dalvik虚拟机。对于Art虚拟机，<a href="https://developer.android.com/guide/practices/verifying-apps-art.html#GC_Migration" target="_blank" rel="external">官方文档</a>已经表明Art虚拟机有极大的改进，其中就特别提到<strong>不用</strong>主动调用<code>System.gc()</code>来避免产生<code>GC_FOR_MALLOC</code>。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;作者：乐蛙科技高级研发经理 易宁&lt;/p&gt;
+&lt;p&gt;Android应用普遍没有iOS应用流畅，这与Android应用是运行在Java虚拟机上有很大的关系，而关系最大的恐怕就是Java虚拟机上的Garbage Collection（GC）了。Java语言提供了自动内存管理，垃圾对象会在GC过程中自动被释放。这提供了开发效率，使开发者能集中精力在业务逻辑上；但天下没有免费的午餐，你写的Android应用的某些性能上的问题很可能就是GC导致的。&lt;/p&gt;
+&lt;p&gt;下面是一段非常简单的Java语句：&lt;br&gt;&lt;figure class=&quot;highlight java&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;byte&lt;/span&gt;[] data = &lt;span class=&quot;keyword&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;byte&lt;/span&gt;[&lt;span class=&quot;number&quot;&gt;512&lt;/span&gt; * &lt;span class=&quot;number&quot;&gt;512&lt;/span&gt; * &lt;span class=&quot;number&quot;&gt;4&lt;/span&gt;];&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;这条语句申请了一块大小相等于512*512大小图片的内存。执行这条语句会消耗多少时间呢？0+ms吗？基本没有性能影响吗？&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="Android" scheme="https://ivonhoe.github.io/tags/Android/"/>
+    
+      <category term="Delvik" scheme="https://ivonhoe.github.io/tags/Delvik/"/>
+    
+      <category term="GC" scheme="https://ivonhoe.github.io/tags/GC/"/>
+    
+      <category term="性能优化" scheme="https://ivonhoe.github.io/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/"/>
+    
+      <category term="转载" scheme="https://ivonhoe.github.io/tags/%E8%BD%AC%E8%BD%BD/"/>
     
   </entry>
   
@@ -1001,107 +1106,6 @@
     
     
       <category term="动态链接库" scheme="https://ivonhoe.github.io/tags/%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5%E5%BA%93/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>[转载]如何写出GC友好的Android应用</title>
-    <link href="https://ivonhoe.github.io/2015/10/25/%E5%A6%82%E4%BD%95%E5%86%99%E5%87%BAGC%E5%8F%8B%E5%A5%BD%E7%9A%84Android%E5%BA%94%E7%94%A8/"/>
-    <id>https://ivonhoe.github.io/2015/10/25/如何写出GC友好的Android应用/</id>
-    <published>2015-10-25T13:21:23.000Z</published>
-    <updated>2015-11-08T04:03:28.000Z</updated>
-    
-    <content type="html"><![CDATA[<p>作者：乐蛙科技高级研发经理 易宁</p>
-<p>Android应用普遍没有iOS应用流畅，这与Android应用是运行在Java虚拟机上有很大的关系，而关系最大的恐怕就是Java虚拟机上的Garbage Collection（GC）了。Java语言提供了自动内存管理，垃圾对象会在GC过程中自动被释放。这提供了开发效率，使开发者能集中精力在业务逻辑上；但天下没有免费的午餐，你写的Android应用的某些性能上的问题很可能就是GC导致的。</p>
-<p>下面是一段非常简单的Java语句：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">byte</span>[] data = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">512</span> * <span class="number">512</span> * <span class="number">4</span>];</span><br></pre></td></tr></table></figure></p>
-<p>这条语句申请了一块大小相等于512*512大小图片的内存。执行这条语句会消耗多少时间呢？0+ms吗？基本没有性能影响吗？</p>
-<a id="more"></a>
-<p>实际的情况是：0~200ms，甚至更多！这取决于应用当前Heap使用情况。在一个类似Hello World的测试程序里，执行这条语句有时候只需要0+ms就完成了，但一般情况是16+ms，甚至有时候需要30+ms。我们知道一段流畅的动画每帧绘图消耗的时间应该小于16ms，因为这样才能保证动画有60FPS的帧率。但如果执行上面那句简单的语句就要错过1~2帧，那就难怪动画不流畅了。</p>
-<p>不过，有人可能要说了：“没人会傻到在每帧绘图的时候去申请一块这么大的内存，实际情况不会有这个问题”。实际的工程中的确不会这么写，但造成执行这条语句耗时比较长的原因不是因为申请的内存太大，而是申请过程中产生了GC，就算是一个Byte的内存申请也可能消耗比这更长的时间。</p>
-<h3 id="Dalvik中GC的原理">Dalvik中GC的原理</h3><p>在Dalvik虚拟机中定义了四种触发GC的条件（参看<a href="http://androidxref.com/4.2.2_r1/xref/dalvik/vm/alloc/Heap.h" target="_blank" rel="external">Heap.h</a>）：</p>
-<blockquote>
-<ul>
-<li><code>GC_CONCURRENT</code>，当Heap的使用率达到某一阈值时自动触发。</li>
-<li><code>GC_FOR_MALLOC</code>，当Heap没有足够的空间用于容下新创建的对象时。</li>
-<li><code>GC_EXPLICIT</code>，用户主动调用GC时。</li>
-<li><code>GC_BEFORE_OOM</code>，当要发生OOM时系统尝试进行最后GC的努力。</li>
-</ul>
-</blockquote>
-<p><code>GC_CONCURRENT</code>和<code>GC_EXPLICIT</code>是并行的，GC过程中应用不会被暂停，只在GC开始和结束时会暂停应用，每次暂停的时间比较短，一般只有3~4ms。<code>GC_FOR_MALLOC</code>是非并行的，GC过程中应用被暂停，耗时比较长，可能几十毫秒也可能几百毫秒。在应用向Dalvik申请内存时，Dalvik先检查当前Heap中有无足够的空余空间用来安排对象，当发现没有足够的空间的时候会先进行<code>GC_FOR_MALLOC</code>以试图释放垃圾对象来获取新的空间，如果发现空间还不够则进行Heap的增长。在每次成功分配完新的空间后，Dalvik会检查当前Heap的使用情况，如果使用空间超过一定的阈值的时候，<code>GC_CONCURRENT</code>就会触发。</p>
-<p>每次GC的时候会打印如下的Log信息：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">D/dalvikvm(10497): GC_CONCURRENT freed 2940K, 54% free 2885K/6204K, paused 1ms+4ms&#65292; total 38ms</span><br></pre></td></tr></table></figure>
-<p>上面的Log信息表明：这次<code>GC_CONCURRENT</code>释放了2940K的空间，当前Heap使用率为54%，总的Heap大小是6204K，空余2885K，GC开始时暂停了1ms，GC结束时暂停了4ms，GC总共花了38ms。</p>
-<p>Dalvik虚拟机通过下面几个个属性值来控制Heap的空间配置：</p>
-<blockquote>
-<ul>
-<li><code>targetUtilization</code>，理想的Heap利用率，每当Heap增长时Dalvik会使增长后的Heap维持在这个利用率附近。</li>
-<li><code>minFree</code>，空余空间最小值。</li>
-<li><code>maxFree</code>，空余空间最大值。</li>
-<li><code>startSize</code>，虚拟机启动时初始的Heap大小。</li>
-<li><code>growthLimit</code>，用户设置的允许的最大Heap大小。</li>
-<li><code>maximumSize</code>， Heap空间最大极限值。</li>
-</ul>
-</blockquote>
-<p>这些属性值都可以通过<code>system/build.prop</code>来配置，zygote启动dalvik虚拟机时会从该文件中读取这些参数。通常来说，Heap空余空间越大应用越流畅，消耗的内存也更多。</p>
-<p>下图为一次“顺利”的4M内存申请:<br><img src="/res/dalvik_gc/1.png" alt="Alt text"><br>可以看到在申请之前，空余的空间达到8M，申请4M的内存很顺利没有任何GC发生。</p>
-<p>下图为一次“不顺利”的8M内存申请：<br><img src="/res/dalvik_gc/2.png" alt="Alt text"><br>虽然空余的空间已经有8M，但是为了保证正常的Heap利用率，Heap空间还是增长了，并且增长Heap之前进行了一次<code>GC_FOR_MALLOC</code>。</p>
-<p>下图为继续申请8M的内存：<br><img src="/res/dalvik_gc/3.png" alt="Alt text"><br>相应的输出Log：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">D/dalvikvm&#65109; GC_FOR_ALLOC freed 8195K, 34% free 16726K/24972K, paused 23ms, total 23ms</span><br></pre></td></tr></table></figure></p>
-<p>上图和Log更加清晰的表明Heap空间不够时会先进行一次GC，GC的类型就是<code>GC_FOR_MALLOC</code>。</p>
-<h3 id="Android流畅的关键：GC_FOR_MALLOC">Android流畅的关键：<code>GC_FOR_MALLOC</code></h3><p><code>GC_CONCURRENT</code>和<code>GC_FOR_MALLOC</code>虽然都是系统自动调用的，都暂停了应用，但它们花费的时间不在一个数量级。通过上面的分析我们知道每次申请内存空间不够时就会产生<code>GC_FOR_MALLOC</code>，我们不可能不申请内存，所以也不可能完全避免<code>GC_FOR_MALLOC</code>，但还是有些策略能降低<code>GC_FOR_MALLOC</code>的影响：</p>
-<ol>
-<li><p>避免不必要的<code>GC_FOR_MALLOC</code></p>
-<blockquote>
-<ul>
-<li>Heap空间都有其理想的利用率，在理想的利用空间内，申请内存是不会发生<code>GC_FOR_MALLOC</code>。</li>
-<li>应用应该避免内存开销的波动，将内存的波动维持在<code>maxFree</code>和<code>mixFree</code>之间。</li>
-<li>避免大的内存需求。比如，不要轻易去用<code>WallpaperManager</code>，因为壁纸占用巨大的内存。</li>
-<li>应该尽量复用对象。比如，使用<code>BitmapFactory</code>加载图片时使用<code>BitmapFactory.Option.inBitmap</code>复用Bitmap，避免申请内存。</li>
-<li>对于已知有垃圾对象的情况下，先进行手动的<code>System.gc()</code>来释放空间，而不是等到系统自动调用<code>GC_FOR_MALLOC</code>。因为<code>GC_EXPLICIT</code>是异步的，暂停应用的时间远小于<code>GC_FOR_MALLOC</code>。</li>
-<li>不要在循环中申请创建对象。循环中申请的对象会不断累积，直到空间不够发生<code>GC_FOR_MALLOC</code>。</li>
-</ul>
-</blockquote>
-</li>
-<li><p>减少<code>GC_FOR_MALLOC</code>的影响</p>
-<blockquote>
-<ul>
-<li>不要在Android应用运行的关键阶段申请内存。比如，不要在<code>onDraw</code>, <code>onLayout</code>, <code>onXXX</code>中创建对象。在关键阶段创建对象可能使应用出现随机性卡顿。</li>
-<li>尽量在<code>onCreate</code>和<code>onStart</code>阶段创建对象，同时在<code>onStop</code>和<code>onDestroy</code>阶段释放对象。</li>
-<li>尽量复用<code>ListView</code>中Item，在<code>ListView</code>滑动时不要创建对象。</li>
-</ul>
-</blockquote>
-</li>
-<li><p>降低每次<code>GC_FOR_MALLOC</code>的时间消耗</p>
-<blockquote>
-<ul>
-<li>避免大量的，细小的对象。这些对象会增加Heap空间的复杂度，在GC时会严重影响GC的耗时。</li>
-<li>对于不用的对象近早将其引用消除，减少Heap空间占用和复杂度。</li>
-<li>尽量用数据结构，数组来组织对象。</li>
-<li>明确对象之间的关系，使对象之间的依赖关系简单明了。</li>
-<li>减少View的数量。每个View包含大量属性，对于没有交互的View，大多数的属性都是没有用的，可以用Drawable替代。</li>
-</ul>
-</blockquote>
-</li>
-</ol>
-<p><em>需要注意的是</em>：本文讨论的只限于Dalvik虚拟机。对于Art虚拟机，<a href="https://developer.android.com/guide/practices/verifying-apps-art.html#GC_Migration" target="_blank" rel="external">官方文档</a>已经表明Art虚拟机有极大的改进，其中就特别提到<strong>不用</strong>主动调用<code>System.gc()</code>来避免产生<code>GC_FOR_MALLOC</code>。</p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;作者：乐蛙科技高级研发经理 易宁&lt;/p&gt;
-&lt;p&gt;Android应用普遍没有iOS应用流畅，这与Android应用是运行在Java虚拟机上有很大的关系，而关系最大的恐怕就是Java虚拟机上的Garbage Collection（GC）了。Java语言提供了自动内存管理，垃圾对象会在GC过程中自动被释放。这提供了开发效率，使开发者能集中精力在业务逻辑上；但天下没有免费的午餐，你写的Android应用的某些性能上的问题很可能就是GC导致的。&lt;/p&gt;
-&lt;p&gt;下面是一段非常简单的Java语句：&lt;br&gt;&lt;figure class=&quot;highlight java&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;byte&lt;/span&gt;[] data = &lt;span class=&quot;keyword&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;byte&lt;/span&gt;[&lt;span class=&quot;number&quot;&gt;512&lt;/span&gt; * &lt;span class=&quot;number&quot;&gt;512&lt;/span&gt; * &lt;span class=&quot;number&quot;&gt;4&lt;/span&gt;];&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;&lt;/p&gt;
-&lt;p&gt;这条语句申请了一块大小相等于512*512大小图片的内存。执行这条语句会消耗多少时间呢？0+ms吗？基本没有性能影响吗？&lt;/p&gt;
-    
-    </summary>
-    
-    
-      <category term="Android" scheme="https://ivonhoe.github.io/tags/Android/"/>
-    
-      <category term="Delvik" scheme="https://ivonhoe.github.io/tags/Delvik/"/>
-    
-      <category term="GC" scheme="https://ivonhoe.github.io/tags/GC/"/>
-    
-      <category term="转载" scheme="https://ivonhoe.github.io/tags/%E8%BD%AC%E8%BD%BD/"/>
     
   </entry>
   
