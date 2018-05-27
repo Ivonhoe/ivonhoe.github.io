@@ -5,7 +5,7 @@
   
 
 
-<html class="theme-next pisces use-motion" lang="zh-Hans">
+<html class="theme-next mist use-motion" lang="zh-Hans">
 <head>
   <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -77,7 +77,7 @@
 
 
 
-  <link rel="alternate" href="/atom.xml" title="别辜负自己" type="application/atom+xml" />
+  <link rel="alternate" href="/atom.xml" title="病已的博客" type="application/atom+xml" />
 
 
 
@@ -96,7 +96,7 @@ Tween Animation:补间动画（或者叫渐变动画），通过对场景里的�
 <meta property="og:type" content="article">
 <meta property="og:title" content="Android动画总结">
 <meta property="og:url" content="https://ivonhoe.github.io/2015/02/09/Android动画总结/index.html">
-<meta property="og:site_name" content="别辜负自己">
+<meta property="og:site_name" content="病已的博客">
 <meta property="og:description" content="说在开始这篇文档记录了一下自己在实际工作中实现的一些Android动画效果时的开发思路，总结了我自己如何看待Android动画问题，希望能给大家的动画开发提供一些思路和帮助。
 一、Android动画基础1.1 动画类型
 Frame Animation：帧动画，顺序播放事先做好的图像，是一种画面转换动画
@@ -108,7 +108,7 @@ Tween Animation:补间动画（或者叫渐变动画），通过对场景里的�
 <meta property="og:image" content="https://ivonhoe.github.io/android_animation/tubiaodonghua.jpg">
 <meta property="og:image" content="https://ivonhoe.github.io/android_animation/guangbixiaoguo.jpg">
 <meta property="og:image" content="https://ivonhoe.github.io/res/android_animation/choreographer_seq_diag.png">
-<meta property="og:updated_time" content="2016-03-06T13:36:33.000Z">
+<meta property="og:updated_time" content="2018-05-27T08:23:06.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android动画总结">
 <meta name="twitter:description" content="说在开始这篇文档记录了一下自己在实际工作中实现的一些Android动画效果时的开发思路，总结了我自己如何看待Android动画问题，希望能给大家的动画开发提供一些思路和帮助。
@@ -122,8 +122,8 @@ Tween Animation:补间动画（或者叫渐变动画），通过对场景里的�
   var NexT = window.NexT || {};
   var CONFIG = {
     root: '/',
-    scheme: 'Pisces',
-    sidebar: {"position":"right","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
     fancybox: true,
     motion: true,
     duoshuo: {
@@ -148,7 +148,7 @@ Tween Animation:补间动画（或者叫渐变动画），通过对场景里的�
 
 
 
-  <title> Android动画总结 | 别辜负自己 </title>
+  <title> Android动画总结 | 病已的博客 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -192,7 +192,7 @@ Tween Animation:补间动画（或者叫渐变动画），通过对场景里的�
     
   
 
-  <div class="container sidebar-position-right page-post-detail ">
+  <div class="container sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -203,12 +203,12 @@ Tween Animation:补间动画（或者叫渐变动画），通过对场景里的�
     <div class="custom-logo-site-title">
       <a href="/"  class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
-        <span class="site-title">别辜负自己</span>
+        <span class="site-title">病已的博客</span>
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
       
-        <p class="site-subtitle">Read The Fucking Source Code</p>
+        <p class="site-subtitle">枕上，马上，厕上</p>
       
   </div>
 
@@ -238,6 +238,16 @@ Tween Animation:补间动画（或者叫渐变动画），通过对场景里的�
         </li>
       
         
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
         <li class="menu-item menu-item-archives">
           <a href="/archives" rel="section">
             
@@ -257,21 +267,45 @@ Tween Animation:补间动画（或者叫渐变动画），通过对场景里的�
           </a>
         </li>
       
-        
-        <li class="menu-item menu-item-about">
-          <a href="/about" rel="section">
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
             
-              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
             
-            关于
+            搜索
           </a>
         </li>
-      
-
       
     </ul>
   
 
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocapitalize="off" autocomplete="off" autocorrect="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
   
 </nav>
 
@@ -305,7 +339,7 @@ Tween Animation:补间动画（或者叫渐变动画），通过对场景里的�
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="别辜负自己">
+      <meta itemprop="name" content="病已的博客">
     </span>
 
     
@@ -342,6 +376,28 @@ Tween Animation:补间动画（或者叫渐变动画），通过对场景里的�
             
           </span>
 
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/其他/" itemprop="url" rel="index">
+                    <span itemprop="name">其他</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -886,6 +942,15 @@ animator.addUpdateListener(<span class="keyword">new</span> ValueAnimator.Animat
           
 
           
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
 
           
             
@@ -983,7 +1048,7 @@ animator.addUpdateListener(<span class="keyword">new</span> ValueAnimator.Animat
 <div class="theme-info">
   主题 -
   <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
-    NexT.Pisces
+    NexT.Mist
   </a>
 </div>
 
@@ -1059,13 +1124,6 @@ animator.addUpdateListener(<span class="keyword">new</span> ValueAnimator.Animat
   
   
 
-
-  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
-
-  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
-
-
-
   
   <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
 <script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
@@ -1129,6 +1187,132 @@ animator.addUpdateListener(<span class="keyword">new</span> ValueAnimator.Animat
 
 
   
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "";
+    if (search_path.length == 0) {
+      search_path = "search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+      $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        success: function( xmlResponse ) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = $( "entry", xmlResponse ).map(function() {
+            return {
+              title: $( "title", this ).text(),
+              content: $("content",this).text(),
+              url: $( "url" , this).text()
+            };
+          }).get();
+          var $input = document.getElementById(search_id);
+          var $resultContent = document.getElementById(content_id);
+          $input.addEventListener('input', function(){
+            var matchcounts = 0;
+            var str='<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length > 1) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var content_index = [];
+                var data_title = data.title.trim().toLowerCase();
+                var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                var data_url = decodeURIComponent(data.url);
+                var index_title = -1;
+                var index_content = -1;
+                var first_occur = -1;
+                // only match artiles with not empty titles and contents
+                if(data_title != '') {
+                  keywords.forEach(function(keyword, i) {
+                    index_title = data_title.indexOf(keyword);
+                    index_content = data_content.indexOf(keyword);
+                    if( index_title >= 0 || index_content >= 0 ){
+                      isMatch = true;
+                      if (i == 0) {
+                        first_occur = index_content;
+                      }
+                    }
+
+                  });
+                }
+                // show search results
+                if (isMatch) {
+                  matchcounts += 1;
+                  str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                  var content = data.content.trim().replace(/<[^>]+>/g,"");
+                  if (first_occur >= 0) {
+                    // cut out 100 characters
+                    var start = first_occur - 20;
+                    var end = first_occur + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if(start == 0){
+                      end = 50;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    var match_content = content.substring(start, end);
+                    // highlight all keywords
+                    keywords.forEach(function(keyword){
+                      var regS = new RegExp(keyword, "gi");
+                      match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                    });
+
+                    str += "<p class=\"search-result\">" + match_content +"...</p>"
+                  }
+                  str += "</li>";
+                }
+              })};
+            str += "</ul>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+            $resultContent.innerHTML = str;
+          });
+          proceedsearch();
+        }
+      });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  </script>
 
 
 

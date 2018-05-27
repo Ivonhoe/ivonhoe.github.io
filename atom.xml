@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-  <title>别辜负自己</title>
-  <subtitle>Read The Fucking Source Code</subtitle>
+  <title>病已的博客</title>
+  <subtitle>枕上，马上，厕上</subtitle>
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://ivonhoe.github.io/"/>
-  <updated>2018-05-27T07:35:57.000Z</updated>
+  <updated>2018-05-27T08:20:46.000Z</updated>
   <id>https://ivonhoe.github.io/</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="https://ivonhoe.github.io/2018/05/21/https/"/>
     <id>https://ivonhoe.github.io/2018/05/21/https/</id>
     <published>2018-05-21T13:55:38.000Z</published>
-    <updated>2018-05-27T07:35:57.000Z</updated>
+    <updated>2018-05-27T08:20:46.000Z</updated>
     
     <content type="html"><![CDATA[<h3 id="0x00_前言">0x00 前言</h3><p>https为什么安全？因为相对http的明文传输，https引入了数据加密和身份认证。服务器和客户端的消息只有服务器和客户端能够读懂，保证了数据的保密性。同时在交换数据之前，验证了对方的合法身份，保证了通信双方的安全。这篇总结主要记录了在理解https安全性的过程中遇到的问题。</p>
 <h3 id="0x01_什么是对称加密和非对称加密">0x01 什么是对称加密和非对称加密</h3><p>在https的协议中如何实现数据加密和身份认证呢？简单来说是客户端先获取非对称加密的公钥，通过公钥和服务器协商生成对称加密的对称密钥，并使用对称密钥加密传输数据。</p>
@@ -75,6 +75,8 @@
     
     </summary>
     
+      <category term="网络" scheme="https://ivonhoe.github.io/categories/%E7%BD%91%E7%BB%9C/"/>
+    
     
       <category term="https" scheme="https://ivonhoe.github.io/tags/https/"/>
     
@@ -91,7 +93,7 @@
     <link href="https://ivonhoe.github.io/2018/03/14/small-bug-555-fix/"/>
     <id>https://ivonhoe.github.io/2018/03/14/small-bug-555-fix/</id>
     <published>2018-03-14T09:23:27.000Z</published>
-    <updated>2018-03-25T15:10:16.000Z</updated>
+    <updated>2018-05-27T08:20:57.000Z</updated>
     
     <content type="html"><![CDATA[<h4 id="0x00_前言">0x00 前言</h4><p>这篇文章主要记录了在使用Small插件化框架中遇到的资源加载问题及相应解决方案，并梳理出Android的资源加载流程和插件化框架的资源加载原理。在前两篇插件化技术介绍的基础上会关注更多技术细节，希望能有所收获！</p>
 <h4 id="0x01_Small框架的资源加载异常">0x01 Small框架的资源加载异常</h4><p>最近收到一个客户反馈，在他们的中兴V0840手机上打开我们的app会持续崩溃。第一时间在百度移动质量平台上短时租用了该机型，抓取了log。发现是资源查找失败异常。并在Small github issues中搜索<code>android.content.res.Resources$NotFoundException</code> 可以发现很多类似的问题，详细日志可查看下图。</p>
@@ -134,6 +136,8 @@
     
     </summary>
     
+      <category term="插件化" scheme="https://ivonhoe.github.io/categories/%E6%8F%92%E4%BB%B6%E5%8C%96/"/>
+    
     
       <category term="Android" scheme="https://ivonhoe.github.io/tags/Android/"/>
     
@@ -148,7 +152,7 @@
     <link href="https://ivonhoe.github.io/2018/01/18/Small%E6%A1%86%E6%9E%B6%E5%8E%9F%E7%90%86/"/>
     <id>https://ivonhoe.github.io/2018/01/18/Small框架原理/</id>
     <published>2018-01-18T09:54:19.000Z</published>
-    <updated>2018-03-09T16:07:23.000Z</updated>
+    <updated>2018-05-27T08:21:15.000Z</updated>
     
     <content type="html"><![CDATA[<h4 id="0x00_前言">0x00 前言</h4><p>Small是一个轻量化的插件化框架，Small的使用介绍可以查看<a href="http://code.wequick.net/Small/cn/quickstart" target="_blank" rel="external">官网文档</a>了解，Small项目接入总结可以查看博客的另一篇<a href="https://ivonhoe.github.io/2018/01/18/Small%E6%A1%86%E6%9E%B6%E5%AE%9E%E8%B7%B5%E6%80%BB%E7%BB%93/">《Small框架实践总结》</a>。这篇文章主要从以下几个角度来看Small框架的实现原理。</p>
 <ol>
@@ -220,6 +224,8 @@
     
     </summary>
     
+      <category term="插件化" scheme="https://ivonhoe.github.io/categories/%E6%8F%92%E4%BB%B6%E5%8C%96/"/>
+    
     
       <category term="Android" scheme="https://ivonhoe.github.io/tags/Android/"/>
     
@@ -232,7 +238,7 @@
     <link href="https://ivonhoe.github.io/2018/01/18/Small%E6%A1%86%E6%9E%B6%E5%AE%9E%E8%B7%B5%E6%80%BB%E7%BB%93/"/>
     <id>https://ivonhoe.github.io/2018/01/18/Small框架实践总结/</id>
     <published>2018-01-18T09:42:57.000Z</published>
-    <updated>2018-03-25T14:56:40.000Z</updated>
+    <updated>2018-05-27T08:21:08.000Z</updated>
     
     <content type="html"><![CDATA[<h4 id="0x00_前言">0x00 前言</h4><p>这篇文章主要总结了在使用Small框架改造老项目过程中遇到的问题和相应的解决方案，也总结了使用Small框架的基础知识点，并从一个使用者的角度来分析Small框架的优缺点。如果你的项目也面临业务模块耦合，边界不清晰，没有动态部署方案等等需要插件化方案来解决的问题，不妨先看下这篇文章再试一试Small框架，Small的功能未必全面但绝对聚焦了插件化框架需要解决的的核心问题。</p>
 <p>什么是Small框架？ Small是一个轻量级的插件化框架，Small也是一个dex分包方案，Small也是一个业务模块解耦方案，同时Small也是一个动态化加载和更新方案。先去看官网文档了解Small的基础知识~~</p>
@@ -316,6 +322,8 @@
     
     </summary>
     
+      <category term="插件化" scheme="https://ivonhoe.github.io/categories/%E6%8F%92%E4%BB%B6%E5%8C%96/"/>
+    
     
       <category term="Android" scheme="https://ivonhoe.github.io/tags/Android/"/>
     
@@ -328,7 +336,7 @@
     <link href="https://ivonhoe.github.io/2017/06/18/android-app-gold-flow-hack/"/>
     <id>https://ivonhoe.github.io/2017/06/18/android-app-gold-flow-hack/</id>
     <published>2017-06-18T10:13:19.000Z</published>
-    <updated>2018-03-15T02:31:19.000Z</updated>
+    <updated>2018-05-27T08:19:52.000Z</updated>
     
     <content type="html"><![CDATA[<h3 id="0x00_前言">0x00 前言</h3><p>本文记录了破解某外卖App http请求参数加密过程中遇到的问题和解决思路，实现的目标是希望是能够通过一些手段实现自由调用其服务接口。<br>这篇文章主要讲述什么？</p>
 <ol>
@@ -416,6 +424,8 @@
     
     </summary>
     
+      <category term="移动安全" scheme="https://ivonhoe.github.io/categories/%E7%A7%BB%E5%8A%A8%E5%AE%89%E5%85%A8/"/>
+    
     
       <category term="Android" scheme="https://ivonhoe.github.io/tags/Android/"/>
     
@@ -428,7 +438,7 @@
     <link href="https://ivonhoe.github.io/2017/05/12/executor-eat-exception/"/>
     <id>https://ivonhoe.github.io/2017/05/12/executor-eat-exception/</id>
     <published>2017-05-12T08:41:53.000Z</published>
-    <updated>2017-05-16T13:54:27.000Z</updated>
+    <updated>2018-05-27T08:23:47.000Z</updated>
     
     <content type="html"><![CDATA[<h3 id="一、前言">一、前言</h3><p>今天遇到一个很诡异的问题，在多款Android 4.2.2版本的手机上发现处理后台任务的服务对前台请求毫无响应。这里的后台服务是一个RemoteService，目的为了处理更新&amp;上传等任务。本来以为是跨进程组件间通讯出现兼容性问题，后来根据分析发现问题没有那么简单，这里记录下问题原因。</p>
 <a id="more"></a>
@@ -465,6 +475,8 @@
     
     </summary>
     
+      <category term="其他" scheme="https://ivonhoe.github.io/categories/%E5%85%B6%E4%BB%96/"/>
+    
     
       <category term="多线程" scheme="https://ivonhoe.github.io/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/"/>
     
@@ -477,7 +489,7 @@
     <link href="https://ivonhoe.github.io/2017/05/05/android-performance-tips/"/>
     <id>https://ivonhoe.github.io/2017/05/05/android-performance-tips/</id>
     <published>2017-05-05T14:59:14.000Z</published>
-    <updated>2018-04-26T08:11:13.000Z</updated>
+    <updated>2018-05-27T08:20:00.000Z</updated>
     
     <content type="html"><![CDATA[<h3 id="使用windowBackground实现应用秒开">使用windowBackground实现应用秒开</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#60;style name=&#34;SplashTheme&#34; parent=&#34;@android:style/Theme.Black.NoTitleBar.Fullscreen&#34;&#62;&#10;    &#60;item name=&#34;android:windowBackground&#34;&#62;@drawable/bg_splash_activity&#60;/item&#62;&#10;    &#60;item name=&#34;@android:windowAnimationStyle&#34;&#62;@style/myact&#60;/item&#62;&#10;&#60;/style&#62;</span><br></pre></td></tr></table></figure>
 <h3 id="使用windowBackground减少过度绘制">使用windowBackground减少过度绘制</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#60;style name=&#34;AppMainTheme&#34; parent=&#34;@android:style/Theme.Holo.Light&#34;&#62;&#10;    &#60;item name=&#34;android:windowBackground&#34;&#62;@color/white&#60;/item&#62;&#10;    &#60;item name=&#34;android:windowNoTitle&#34;&#62;true&#60;/item&#62;&#10;    &#60;item name=&#34;@android:windowAnimationStyle&#34;&#62;@style/myact&#60;/item&#62;&#10;&#60;/style&#62;</span><br></pre></td></tr></table></figure>
@@ -492,6 +504,8 @@
     
     </summary>
     
+      <category term="性能优化" scheme="https://ivonhoe.github.io/categories/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/"/>
+    
     
       <category term="性能优化" scheme="https://ivonhoe.github.io/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/"/>
     
@@ -502,7 +516,7 @@
     <link href="https://ivonhoe.github.io/2017/04/26/Zygote-2/"/>
     <id>https://ivonhoe.github.io/2017/04/26/Zygote-2/</id>
     <published>2017-04-25T16:49:27.000Z</published>
-    <updated>2018-05-27T07:40:47.000Z</updated>
+    <updated>2018-05-27T07:59:56.000Z</updated>
     
     <content type="html"><![CDATA[<h3 id="一、分析一个Hello_World_App中bitmap对象的分布">一、分析一个Hello World App中bitmap对象的分布</h3><p>使用BitmapAnalyzer分析一个Android Hello World App时你会dump出400+张图片，什么是BitmapAnalyzer？BitmapAnalyzer是一个自动分析Android dump heap中bitmap对象的工具，详细请看<a href="https://ivonhoe.github.io/2017/03/22/Bitmap&amp;Memory/">《Android Bitmap的内存大小是如何计算的？》</a>这篇文章的介绍。</p>
 <p><img src="http://upload-images.jianshu.io/upload_images/695750-211010ed47103e96.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="hprof-3.png"></p>
@@ -547,6 +561,8 @@
     
     </summary>
     
+      <category term="性能优化" scheme="https://ivonhoe.github.io/categories/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/"/>
+    
     
       <category term="Copy-on-write" scheme="https://ivonhoe.github.io/tags/Copy-on-write/"/>
     
@@ -561,7 +577,7 @@
     <link href="https://ivonhoe.github.io/2017/04/25/%E5%A6%82%E4%BD%95%E5%86%99%E5%87%BAGC%E5%8F%8B%E5%A5%BD%E7%9A%84Android%E5%BA%94%E7%94%A8/"/>
     <id>https://ivonhoe.github.io/2017/04/25/如何写出GC友好的Android应用/</id>
     <published>2017-04-25T13:21:23.000Z</published>
-    <updated>2018-05-27T07:38:53.000Z</updated>
+    <updated>2018-05-27T08:19:38.000Z</updated>
     
     <content type="html"><![CDATA[<p>作者：乐蛙科技高级研发经理 易宁</p>
 <p>Android应用普遍没有iOS应用流畅，这与Android应用是运行在Java虚拟机上有很大的关系，而关系最大的恐怕就是Java虚拟机上的Garbage Collection（GC）了。Java语言提供了自动内存管理，垃圾对象会在GC过程中自动被释放。这提供了开发效率，使开发者能集中精力在业务逻辑上；但天下没有免费的午餐，你写的Android应用的某些性能上的问题很可能就是GC导致的。</p>
@@ -646,6 +662,8 @@
     
     </summary>
     
+      <category term="性能优化" scheme="https://ivonhoe.github.io/categories/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/"/>
+    
     
       <category term="Android" scheme="https://ivonhoe.github.io/tags/Android/"/>
     
@@ -664,7 +682,7 @@
     <link href="https://ivonhoe.github.io/2017/04/15/Zygote/"/>
     <id>https://ivonhoe.github.io/2017/04/15/Zygote/</id>
     <published>2017-04-15T15:32:51.000Z</published>
-    <updated>2018-01-18T09:52:59.000Z</updated>
+    <updated>2018-05-27T08:21:41.000Z</updated>
     
     <content type="html"><![CDATA[<p>原文地址：<a href="https://anatomyofandroid.com/2013/10/15/zygote/" target="_blank" rel="external">Zygote https://anatomyofandroid.com/2013/10/15/zygote/</a></p>
 <p>Zygote（受精卵）是一个启动应用的守护进程，在Server Manager之后被init.rc触发，但其实他是真正被app_process启动的，下面是启动这个特殊进程的流程。</p>
@@ -690,6 +708,8 @@
     
     </summary>
     
+      <category term="翻译" scheme="https://ivonhoe.github.io/categories/%E7%BF%BB%E8%AF%91/"/>
+    
     
       <category term="Zygote" scheme="https://ivonhoe.github.io/tags/Zygote/"/>
     
@@ -702,7 +722,7 @@
     <link href="https://ivonhoe.github.io/2017/04/09/how-to-dump-heap/"/>
     <id>https://ivonhoe.github.io/2017/04/09/how-to-dump-heap/</id>
     <published>2017-04-09T11:03:01.000Z</published>
-    <updated>2017-04-26T02:08:11.000Z</updated>
+    <updated>2018-05-27T08:20:36.000Z</updated>
     
     <content type="html"><![CDATA[<p>一般情况下如果我想要较详细的分析内存状况，会使用android monitor(下简称monitor)和Memory Analyzer工具(下简称MAT)，但步骤有些麻烦。</p>
 <ol>
@@ -734,6 +754,8 @@
     
     </summary>
     
+      <category term="性能优化" scheme="https://ivonhoe.github.io/categories/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/"/>
+    
     
       <category term="dump heap" scheme="https://ivonhoe.github.io/tags/dump-heap/"/>
     
@@ -746,7 +768,7 @@
     <link href="https://ivonhoe.github.io/2017/03/22/Bitmap&amp;Memory/"/>
     <id>https://ivonhoe.github.io/2017/03/22/Bitmap&amp;Memory/</id>
     <published>2017-03-22T11:35:36.000Z</published>
-    <updated>2017-04-24T07:02:14.000Z</updated>
+    <updated>2018-05-27T08:20:24.000Z</updated>
     
     <content type="html"><![CDATA[<h3 id="一、前言">一、前言</h3><p>本来只想说下Bitmap和内存的基本关系，但发现如果真的想把这看似简单的事情说清楚，实际上未必那么简单，你不信？不妨先尝试下回答下面几个问题！</p>
 <ul>
@@ -835,6 +857,8 @@
     
     </summary>
     
+      <category term="性能优化" scheme="https://ivonhoe.github.io/categories/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/"/>
+    
     
       <category term="Bitmap" scheme="https://ivonhoe.github.io/tags/Bitmap/"/>
     
@@ -849,7 +873,7 @@
     <link href="https://ivonhoe.github.io/2017/02/09/%E7%BE%8E%E5%9B%A2%E5%A6%82%E4%BD%95%E9%98%B2dex2jar/"/>
     <id>https://ivonhoe.github.io/2017/02/09/美团如何防dex2jar/</id>
     <published>2017-02-09T13:55:01.000Z</published>
-    <updated>2018-01-18T10:11:10.000Z</updated>
+    <updated>2018-05-27T08:19:27.000Z</updated>
     
     <content type="html"><![CDATA[<h3 id="一、反编译某平台代码">一、反编译某平台代码</h3><p>最近在看某外卖平台的代码，发现某外卖平台最新版本版本无法正常的通过dex2jar工具将dex转换出Java源代码，在转换过程中会提示出错，如图：</p>
 <p><img src="https://ivonhoe.github.io/res/dex2jar_error/dex2jar_error1.png" alt="dex2jar异常图"></p>
@@ -921,6 +945,8 @@
     
     </summary>
     
+      <category term="移动安全" scheme="https://ivonhoe.github.io/categories/%E7%A7%BB%E5%8A%A8%E5%AE%89%E5%85%A8/"/>
+    
     
       <category term="Gradle" scheme="https://ivonhoe.github.io/tags/Gradle/"/>
     
@@ -935,7 +961,7 @@
     <link href="https://ivonhoe.github.io/2017/02/04/Android%E5%AE%89%E5%85%A8%E4%B9%8B---APP%E5%8E%BB%E5%B9%BF%E5%91%8A/"/>
     <id>https://ivonhoe.github.io/2017/02/04/Android安全之---APP去广告/</id>
     <published>2017-02-04T05:27:20.000Z</published>
-    <updated>2018-01-18T10:10:47.000Z</updated>
+    <updated>2018-05-27T08:20:12.000Z</updated>
     
     <content type="html"><![CDATA[<h3 id="一、工具介绍">一、工具介绍</h3><ul>
 <li><strong>apktool：</strong>google提供Android apk编译与反编译工具，<a href="https://ibotpeaches.github.io/Apktool/" target="_blank" rel="external">https://ibotpeaches.github.io/Apktool/</a></li>
@@ -983,6 +1009,8 @@
     
     </summary>
     
+      <category term="移动安全" scheme="https://ivonhoe.github.io/categories/%E7%A7%BB%E5%8A%A8%E5%AE%89%E5%85%A8/"/>
+    
     
       <category term="Android" scheme="https://ivonhoe.github.io/tags/Android/"/>
     
@@ -997,7 +1025,7 @@
     <link href="https://ivonhoe.github.io/2017/01/20/MacOS%E4%B8%8A%E7%BC%96%E8%AF%91Android%E6%BA%90%E7%A0%81/"/>
     <id>https://ivonhoe.github.io/2017/01/20/MacOS上编译Android源码/</id>
     <published>2017-01-20T14:16:46.000Z</published>
-    <updated>2017-02-21T10:03:13.000Z</updated>
+    <updated>2018-05-27T08:24:07.000Z</updated>
     
     <content type="html"><![CDATA[<h3 id="一、制作一个大小写敏感的磁盘分区">一、制作一个大小写敏感的磁盘分区</h3><h4 id="1-1-Mac_OS磁盘工具">1.1.Mac OS磁盘工具</h4><p>这里我使用一块移动硬盘，将移动硬盘的一个分区使用Mac OS的硬盘工具，抹掉数据，选择MacOS扩展(区分大小写，日志式)，创建成大小写敏感的分区。</p>
 <p><img src="/res/compile_android_source/android-source-disk1.jpeg" alt=""></p>
@@ -1048,6 +1076,8 @@
     
     </summary>
     
+      <category term="其他" scheme="https://ivonhoe.github.io/categories/%E5%85%B6%E4%BB%96/"/>
+    
     
       <category term="源码编译" scheme="https://ivonhoe.github.io/tags/%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91/"/>
     
@@ -1058,7 +1088,7 @@
     <link href="https://ivonhoe.github.io/2016/12/16/Mac-Linux%E4%B8%8Bgcc%E7%BC%96%E8%AF%91%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5%E5%BA%93-so%E6%96%87%E4%BB%B6/"/>
     <id>https://ivonhoe.github.io/2016/12/16/Mac-Linux下gcc编译动态链接库-so文件/</id>
     <published>2016-12-16T05:47:55.000Z</published>
-    <updated>2017-02-09T10:03:54.000Z</updated>
+    <updated>2018-05-27T08:24:01.000Z</updated>
     
     <content type="html"><![CDATA[<h2 id="一、以bsdiff-c和bspatch-c为例编译bsdiff-so">一、以bsdiff.c和bspatch.c为例编译bsdiff.so</h2><p>bsdiff.c和bspatch.c分别依赖bzip2</p>
 <h3 id="项目结构">项目结构</h3><h3 id="步骤">步骤</h3><ul>
@@ -1104,6 +1134,8 @@
     
     </summary>
     
+      <category term="其他" scheme="https://ivonhoe.github.io/categories/%E5%85%B6%E4%BB%96/"/>
+    
     
       <category term="动态链接库" scheme="https://ivonhoe.github.io/tags/%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5%E5%BA%93/"/>
     
@@ -1114,7 +1146,7 @@
     <link href="https://ivonhoe.github.io/2015/09/01/Android%E5%8A%A8%E7%94%BB%E6%80%BB%E7%BB%93%E4%B9%8B%E6%9C%89%E8%B5%9E%E3%80%81%E9%82%AE%E7%AE%B1%E5%A4%A7%E5%B8%88%E8%BF%9B%E5%BA%A6%E6%9D%A1%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86/"/>
     <id>https://ivonhoe.github.io/2015/09/01/Android动画总结之有赞、邮箱大师进度条实现原理/</id>
     <published>2015-09-01T15:17:29.000Z</published>
-    <updated>2017-02-09T10:12:55.000Z</updated>
+    <updated>2018-05-27T08:23:15.000Z</updated>
     
     <content type="html"><![CDATA[<h2 id="一、效果">一、效果</h2><p><img src="/res/android_animation2/xiaoguo.gif" alt=" "></p>
 <h2 id="二、有赞加载进度条">二、有赞加载进度条</h2><p>四个正方形的运动可以分解成两个分运动，一个是平移运动，一个是自身的旋转运动。在实现这个动画上有两个思路：</p>
@@ -1161,6 +1193,8 @@
     
     </summary>
     
+      <category term="其他" scheme="https://ivonhoe.github.io/categories/%E5%85%B6%E4%BB%96/"/>
+    
     
       <category term="Android" scheme="https://ivonhoe.github.io/tags/Android/"/>
     
@@ -1175,7 +1209,7 @@
     <link href="https://ivonhoe.github.io/2015/08/19/%E6%95%B0%E6%8D%AE%E8%A7%A3%E6%9E%90%E5%B7%A5%E5%85%B7%E8%AE%BE%E8%AE%A1%E6%96%87%E6%A1%A3/"/>
     <id>https://ivonhoe.github.io/2015/08/19/数据解析工具设计文档/</id>
     <published>2015-08-19T13:49:49.000Z</published>
-    <updated>2016-03-06T13:35:36.000Z</updated>
+    <updated>2018-05-27T08:22:53.000Z</updated>
     
     <content type="html"><![CDATA[<h2 id="一、设计目标">一、设计目标</h2><ul>
 <li>设计一个相对通用的数据解析工具，高效解析通过抓包工具抓取的网络数据内容</li>
@@ -1233,6 +1267,8 @@
     
     </summary>
     
+      <category term="其他" scheme="https://ivonhoe.github.io/categories/%E5%85%B6%E4%BB%96/"/>
+    
     
       <category term="数据解析" scheme="https://ivonhoe.github.io/tags/%E6%95%B0%E6%8D%AE%E8%A7%A3%E6%9E%90/"/>
     
@@ -1245,7 +1281,7 @@
     <link href="https://ivonhoe.github.io/2015/04/28/Drawable-%E4%BB%8E%E7%AE%80%E5%8C%96%E5%B8%83%E5%B1%80%E8%B0%88%E8%B5%B7/"/>
     <id>https://ivonhoe.github.io/2015/04/28/Drawable-从简化布局谈起/</id>
     <published>2015-04-28T15:31:29.000Z</published>
-    <updated>2016-03-06T13:37:50.000Z</updated>
+    <updated>2018-05-27T08:23:40.000Z</updated>
     
     <content type="html"><![CDATA[<h2 id="一、Drawble是干嘛的？">一、Drawble是干嘛的？</h2><p>说到Drawable肯定会第一时间想到图片资源，可能有人会认为Drawable就是图片。Drawble从字面上说就是“可绘制的”，google文档的描述:“A Drawable is a general abstraction for “something that can be drawn.””，Drawable其实就是为那些”可以被绘制的’’提供的抽象类。</p>
 <ul>
@@ -1337,6 +1373,8 @@
     
     </summary>
     
+      <category term="性能优化" scheme="https://ivonhoe.github.io/categories/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/"/>
+    
     
       <category term="Android" scheme="https://ivonhoe.github.io/tags/Android/"/>
     
@@ -1351,7 +1389,7 @@
     <link href="https://ivonhoe.github.io/2015/04/23/ColorOS%E5%92%8CAPEX%E6%A1%8C%E9%9D%A2%E4%BA%A7%E5%93%81%E5%88%86%E6%9E%90/"/>
     <id>https://ivonhoe.github.io/2015/04/23/ColorOS和APEX桌面产品分析/</id>
     <published>2015-04-23T13:30:35.000Z</published>
-    <updated>2016-03-06T13:37:30.000Z</updated>
+    <updated>2018-05-27T08:23:26.000Z</updated>
     
     <content type="html"><![CDATA[<h2 id="一、桌面基本操作">一、桌面基本操作</h2><h3 id="1-1_安装初体验">1.1 安装初体验</h3><ul>
 <li><p><strong>安装包大小</strong><br>ColorOS桌面含有两个安装包，OppoLauncher.apk(2.8M)和OppoLauncherSystem.apk(8.5KB)<br>APEX桌面安装包大小4.36M，并且进行了代码混淆</p>
@@ -1409,6 +1447,8 @@
 &lt;li&gt;&lt;p&gt;&lt;strong&gt;默认桌面&lt;/strong&gt;&lt;br&gt;ColorOS桌面，前两个屏幕是系统应用，包含一个小工具的文件夹，其他所有应用平铺桌面，用户自己安装的应用从第三屏开始平铺。&lt;br&gt;APEX桌面，默认的应用排列就很随意，在不同的手机上的表现有差别，应该是不同手机的系统应用的包名不同，造成APEX的预制桌面并不是顺序紧密在桌面显示应用图标。&lt;/p&gt;
     
     </summary>
+    
+      <category term="其他" scheme="https://ivonhoe.github.io/categories/%E5%85%B6%E4%BB%96/"/>
     
     
       <category term="产品分析" scheme="https://ivonhoe.github.io/tags/%E4%BA%A7%E5%93%81%E5%88%86%E6%9E%90/"/>
