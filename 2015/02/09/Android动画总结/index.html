@@ -107,8 +107,7 @@ Tween Animation:补间动画（或者叫渐变动画），通过对场景里的�
 <meta property="og:image" content="https://ivonhoe.github.io/res/android_animation/xiangsi.jpg">
 <meta property="og:image" content="https://ivonhoe.github.io/android_animation/tubiaodonghua.jpg">
 <meta property="og:image" content="https://ivonhoe.github.io/android_animation/guangbixiaoguo.jpg">
-<meta property="og:image" content="https://ivonhoe.github.io/res/android_animation/choreographer_seq_diag.png">
-<meta property="og:updated_time" content="2018-05-27T08:23:06.000Z">
+<meta property="og:updated_time" content="2018-06-03T14:56:52.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android动画总结">
 <meta name="twitter:description" content="说在开始这篇文档记录了一下自己在实际工作中实现的一些Android动画效果时的开发思路，总结了我自己如何看待Android动画问题，希望能给大家的动画开发提供一些思路和帮助。
@@ -355,8 +354,8 @@ Tween Animation:补间动画（或者叫渐变动画），通过对场景里的�
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/其他/" itemprop="url" rel="index">
-                    <span itemprop="name">其他</span>
+                  <a href="/categories/思考/" itemprop="url" rel="index">
+                    <span itemprop="name">思考</span>
                   </a>
                 </span>
 
@@ -503,257 +502,7 @@ animator.addUpdateListener(<span class="keyword">new</span> ValueAnimator.Animat
 <p><img src="/android_animation/guangbixiaoguo.jpg" alt="关闭效果"></p>
 <p>处理完文件夹视图的问题，相信这个问题已经解决大半了，剩下的就是桌面上其他图标的移动，简单来说还是缩放动画，只需要让每个图标的缩放点和Folder视图的缩放点相对于屏幕坐标系重合就可以了。</p>
 <h4 id="2-2_总结">2.2 总结</h4><p>1.处理动画问题首先确定动画起始和终止的状态，根据状态确定动画类型。<br>2.确定动画坐标系。动画坐标系如何确定取决与动画改变的属性，对于缩放动画，缩放改变是视图本身，那缩放动画的坐标系一定是相对于视图自己建立的，左上角是原点。而对于位移动画，改变translationX和X的值都能实现位置上的改变，但是他们表示的含义不一样，translationX是相对于视图本身而言的，X是相对于父布局而言的，那他们建立的坐标系肯定也不一样。<br>3.根据建立坐标系完成动画，把复杂的合运动分解成在不同坐标系上的分运动简单求解。</p>
-<h3 id="三、动画源码分析（基于Android_5-0）">三、动画源码分析（基于Android 5.0）</h3><h4 id="3-1_动画插值源码">3.1 动画插值源码</h4><p>想要实现动画无非想做一件事情，就是把动画的对象在合适的时间画出合适的状态，如何控制时间？就是通过补间动画或者属性动画设置动画的时长、起始时间、起始延迟这些属性来控制动画的时间。如何控制动画状态？就可以通过动画插值，插值方法getInterpolation(input),input就是当前动画运行时间的百分比，而函数返回值就是当前动画的进度百分比，通过动画进度和动画的起始状态和结束状态来控制动画对象的当前状态。无论是补间动画或者属性动画都是定义动画状态的起始状态、终止状态、动画多久、如何动画。</p>
-<h4 id="3-2_补间动画源码">3.2 补间动画源码</h4><p>先找到动画执行的入口View.startAnimation(animation)，startAnimation执行了invalidate，触发了重绘刷新视图界面。</p>
-<pre><code>public void <span class="function">startAnimation</span>(<span class="attribute">Animation</span> <span class="attribute">animation</span>) {
-    <span class="attribute">animation</span><span class="class">.setStartTime</span>(<span class="attribute">Animation</span><span class="class">.START_ON_FIRST_FRAME</span>);
-    <span class="function">setAnimation</span>(<span class="attribute">animation</span>);
-    <span class="function">invalidateParentCaches</span>();
-    <span class="function">invalidate</span>(true);
-}
-</code></pre><p>invalidate()触发执行View.draw(Canvas canvas, ViewGroup parent, long drawingTime)函数</p>
-<ul>
-<li>调用动画的 getTransformation 方法，得到当前时间点的矩阵</li>
-<li>将该矩阵设置成 Canvas 的当前矩阵</li>
-<li>调用 canvas 的 drawBitmap 方法，绘制屏幕</li>
-<li>判断 getTransformation 的返回值，若为真，调用 invalidate 方法，刷新屏幕进入下一桢；若为假，说明动画完成。</li>
-</ul>
-<pre><code><span class="built_in">boolean</span> draw(Canvas canvas, ViewGroup <span class="keyword">parent</span>, long drawingTime) {
-    <span class="attribute">...</span><span class="attribute">...</span>
-    <span class="comment">// 如果有需要执行的动画</span>
-    final Animation a = getAnimation();
-    <span class="keyword">if</span> (a != <span class="built_in">null</span>) {
-        <span class="comment">// 根据动画和当前时间计算Transformation，并返回是否需要再继续做动画</span>
-        more = drawAnimation(<span class="keyword">parent</span>, drawingTime, a, scalingRequired);
-        concatMatrix = a<span class="built_in">.</span>willChangeTransformationMatrix();
-        <span class="keyword">if</span> (concatMatrix) {
-            mPrivateFlags3 |= PFLAG3_VIEW_IS_ANIMATING_TRANSFORM;
-        }
-        <span class="comment">// 得到动画的变换结果</span>
-        transformToApply = <span class="keyword">parent</span><span class="built_in">.</span>mChildTransformation;
-    } <span class="keyword">else</span> {
-        <span class="attribute">...</span><span class="attribute">...</span>
-    }
-
-    <span class="attribute">...</span><span class="attribute">...</span>
-
-    float alpha = useDisplayListProperties ? <span class="number">1</span> : getAlpha();
-    <span class="keyword">if</span> (transformToApply != <span class="built_in">null</span> <span class="subst">||</span> alpha &lt; <span class="number">1</span> <span class="subst">||</span> <span class="subst">!</span>hasIdentityMatrix() <span class="subst">||</span>
-            (mPrivateFlags3 <span class="subst">&amp;</span> PFLAG3_VIEW_IS_ANIMATING_ALPHA) == PFLAG3_VIEW_IS_ANIMATING_ALPHA) {
-        <span class="attribute">...</span><span class="attribute">...</span>
-            <span class="comment">// 根据Transformation值变换canvs</span>
-            <span class="keyword">if</span> (transformToApply != <span class="built_in">null</span>) {
-                <span class="keyword">if</span> (concatMatrix) {
-                    <span class="keyword">if</span> (useDisplayListProperties) {
-                        displayList<span class="built_in">.</span>setAnimationMatrix(transformToApply<span class="built_in">.</span>getMatrix());
-                    } <span class="keyword">else</span> {
-                        <span class="comment">// Undo the scroll translation, apply the transformation matrix,</span>
-                        <span class="comment">// then redo the scroll translate to get the correct result.</span>
-                        canvas<span class="built_in">.</span>translate(<span class="attribute">-transX</span>, <span class="attribute">-transY</span>);
-                        canvas<span class="built_in">.</span>concat(transformToApply<span class="built_in">.</span>getMatrix());
-                        canvas<span class="built_in">.</span>translate(transX, transY);
-                    }
-                    <span class="keyword">parent</span><span class="built_in">.</span>mGroupFlags |= ViewGroup<span class="built_in">.</span>FLAG_CLEAR_TRANSFORMATION;
-                }
-
-                float transformAlpha = transformToApply<span class="built_in">.</span>getAlpha();
-                <span class="keyword">if</span> (transformAlpha &lt; <span class="number">1</span>) {
-                    alpha *= transformAlpha;
-                    <span class="keyword">parent</span><span class="built_in">.</span>mGroupFlags |= ViewGroup<span class="built_in">.</span>FLAG_CLEAR_TRANSFORMATION;
-                }
-
-            <span class="keyword">if</span> (<span class="subst">!</span>childHasIdentityMatrix <span class="subst">&amp;&amp;</span> <span class="subst">!</span>useDisplayListProperties) {
-                canvas<span class="built_in">.</span>translate(<span class="attribute">-transX</span>, <span class="attribute">-transY</span>);
-                canvas<span class="built_in">.</span>concat(getMatrix());
-                canvas<span class="built_in">.</span>translate(transX, transY);
-            }
-        }
-        <span class="attribute">...</span><span class="attribute">...</span>
-    }
-
-    <span class="keyword">if</span> (a != <span class="built_in">null</span> <span class="subst">&amp;&amp;</span> <span class="subst">!</span>more) {
-        <span class="keyword">if</span> (<span class="subst">!</span>hardwareAccelerated <span class="subst">&amp;&amp;</span> <span class="subst">!</span>a<span class="built_in">.</span>getFillAfter()) {
-            onSetAlpha(<span class="number">255</span>);
-        }
-        <span class="keyword">parent</span><span class="built_in">.</span>finishAnimatingView(this, a);
-    }
-
-    <span class="comment">// 根据动画进度判断是否需要继续重绘</span>
-    <span class="keyword">if</span> (more <span class="subst">&amp;&amp;</span> hardwareAccelerated) {
-        <span class="comment">// invalidation is the trigger to recreate display lists, so if we're using</span>
-        <span class="comment">// display lists to render, force an invalidate to allow the animation to</span>
-        <span class="comment">// continue drawing another frame</span>
-        <span class="keyword">parent</span><span class="built_in">.</span>invalidate(<span class="literal">true</span>);
-        <span class="keyword">if</span> (a<span class="built_in">.</span>hasAlpha() <span class="subst">&amp;&amp;</span> (mPrivateFlags <span class="subst">&amp;</span> PFLAG_ALPHA_SET) == PFLAG_ALPHA_SET) {
-            <span class="comment">// alpha animations should cause the child to recreate its display list</span>
-            invalidate(<span class="literal">true</span>);
-        }
-    }
-
-    mRecreateDisplayList = <span class="literal">false</span>;
-
-    <span class="keyword">return</span> more;
-}
-</code></pre><p>时序图：</p>
-<h4 id="3-2_属性动画源码">3.2 属性动画源码</h4><p>onsync时序图：<br><img src="/res/android_animation/choreographer_seq_diag.png" alt="choreographer onVsync时序图"></p>
-<p>从ObjectAnimator的start()方法开始,跳转到父类ValueAnimator的start()方法，为了减少篇幅，这里的代码就不贴出来了，详细的代码可以查看从ObjectAnimator.java。</p>
-<pre><code><span class="annotation">@Override</span>
-<span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">start</span><span class="params">()</span> </span>{
-    <span class="comment">// See if any of the current active/pending animators need to be canceled</span>
-    <span class="comment">// 这里先判断当前的动画、等待的动画和延迟执行的动画和this去比较，如果动画的目标对象相同并且属性相同就取消相同的动画。</span>
-    ......
-
-    <span class="keyword">super</span>.start();
-}
-</code></pre><p>ValueAnimator的start(boolean)方法只是做了两件事：<br>1.把当前的animator加入等待队列中，<br>2.启动animationHandler。AnimationHandler并不是一个Handler，而是Runnable。</p>
-<pre><code><span class="keyword">private</span> <span class="function"><span class="keyword">void</span> <span class="title">start</span><span class="params">(<span class="keyword">boolean</span> playBackwards)</span> </span>{
-    <span class="keyword">if</span> (Looper.myLooper() == <span class="keyword">null</span>) {
-        <span class="keyword">throw</span> <span class="keyword">new</span> AndroidRuntimeException(<span class="string">"Animators may only be run on Looper threads"</span>);
-    }
-
-    ......
-
-    AnimationHandler animationHandler = getOrCreateAnimationHandler();
-    animationHandler.mPendingAnimations.add(<span class="keyword">this</span>);
-    <span class="keyword">if</span> (mStartDelay == <span class="number">0</span>) {
-        <span class="comment">// This sets the initial value of the animation, prior to actually starting it running</span>
-        setCurrentPlayTime(<span class="number">0</span>);
-        mPlayingState = STOPPED;
-        mRunning = <span class="keyword">true</span>;
-        notifyStartListeners();
-    }
-    animationHandler.start();
-}
-</code></pre><p>将AnimationHandler对象传递给Choreographer(编舞者)，Choreographer是和线程绑定的单例。告诉编舞者，我是一个CALLBACK_ANIMATION(动画类型)，你自己看着办吧。</p>
-<pre><code><span class="keyword">private</span> <span class="function"><span class="keyword">void</span> <span class="title">scheduleAnimation</span><span class="params">()</span> </span>{
-    <span class="keyword">if</span> (!mAnimationScheduled) {
-        mChoreographer.postCallback(Choreographer.CALLBACK_ANIMATION, <span class="keyword">this</span>, <span class="keyword">null</span>);
-        mAnimationScheduled = <span class="keyword">true</span>;
-    }
-}
-</code></pre><p>编舞者根据callbackType(就是上面的CALLBACK_ANIMATION类型)，把当前的action(就是animationHandler)加入相应类型的Callback队列等待被执行。并且安排下一帧的时间。</p>
-<pre><code><span class="keyword">private</span> <span class="keyword">void</span> postCallbackDelayedInternal(<span class="built_in">int</span> callbackType,
-        <span class="keyword">Object</span> action, <span class="keyword">Object</span> token, <span class="keyword">long</span> delayMillis) {
-
-    <span class="keyword">synchronized</span> (mLock) {
-        <span class="keyword">final</span> <span class="keyword">long</span> now = SystemClock.uptimeMillis();
-        <span class="keyword">final</span> <span class="keyword">long</span> dueTime = now + delayMillis;
-        <span class="comment">// 加入相应类型的Callback队列等待被执行</span>
-        mCallbackQueues[callbackType].addCallbackLocked(dueTime, action, token);
-
-        <span class="keyword">if</span> (dueTime &lt;= now) {
-            scheduleFrameLocked(now);
-        } <span class="keyword">else</span> {
-            Message msg = mHandler.obtainMessage(MSG_DO_SCHEDULE_CALLBACK, action);
-            msg.arg1 = callbackType;
-            msg.setAsynchronous(<span class="keyword">true</span>);
-            mHandler.sendMessageAtTime(msg, dueTime);
-        }
-    }
-}
-</code></pre><p>如果使用Vsync，通过FrameDisplayEventReceiver的scheduleVsync方法，申请一次VSYNC中断，这样就可以在中断处理的onVsync函数去进行绘制。如果不需要直接发送MSG_DO_FRAME消息。</p>
-<pre><code><span class="keyword">private</span> <span class="function"><span class="keyword">void</span> <span class="title">scheduleFrameLocked</span><span class="params">(<span class="keyword">long</span> now)</span> </span>{
-    <span class="keyword">if</span> (!mFrameScheduled) {
-        mFrameScheduled = <span class="keyword">true</span>;
-        <span class="keyword">if</span> (USE_VSYNC) {
-            <span class="comment">// If running on the Looper thread, then schedule the vsync immediately,</span>
-            <span class="comment">// otherwise post a message to schedule the vsync from the UI thread</span>
-            <span class="comment">// as soon as possible.</span>
-            <span class="comment">// 如果使用VSYNC就申请一次中断请求</span>
-            <span class="keyword">if</span> (isRunningOnLooperThreadLocked()) {
-                scheduleVsyncLocked();
-            } <span class="keyword">else</span> {
-                Message msg = mHandler.obtainMessage(MSG_DO_SCHEDULE_VSYNC);
-                msg.setAsynchronous(<span class="keyword">true</span>);
-                mHandler.sendMessageAtFrontOfQueue(msg);
-            }
-        } <span class="keyword">else</span> {
-            <span class="keyword">final</span> <span class="keyword">long</span> nextFrameTime = Math.max(
-                    mLastFrameTimeNanos / TimeUtils.NANOS_PER_MS + sFrameDelay, now);
-            <span class="comment">// 如果不是要VSYNC，就直接触发MSG_DO_FRAME</span>
-            Message msg = mHandler.obtainMessage(MSG_DO_FRAME);
-            msg.setAsynchronous(<span class="keyword">true</span>);
-            mHandler.sendMessageAtTime(msg, nextFrameTime);
-        }
-    }
-}
-</code></pre><p>上面注册一个了reciver，在VSYNC发生的时候接受到消息，就会触发onVsync方法,执行当前的FrameDisplayEventReceiver Runnable。</p>
-<pre><code><span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">onVsync</span><span class="params">(<span class="keyword">long</span> timestampNanos, <span class="keyword">int</span> builtInDisplayId, <span class="keyword">int</span> frame)</span> </span>{
-    ......
-    Message msg = Message.obtain(mHandler, <span class="keyword">this</span>);
-    msg.setAsynchronous(<span class="keyword">true</span>);
-    mHandler.sendMessageAtTime(msg, timestampNanos / TimeUtils.NANOS_PER_MS);
-}
-
-<span class="annotation">@Override</span>
-<span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>{
-    mHavePendingVsync = <span class="keyword">false</span>;
-    doFrame(mTimestampNanos, mFrame);
-}
-</code></pre><p>我们看doFrame方法做了什么？调用doCallbacks方法，获取当前类型的等待序列中在当前时间的callback，得到action并执行run方法，在这里callback的action就是AnimationHandler。</p>
-<pre><code><span class="function"><span class="keyword">void</span> <span class="title">doFrame</span><span class="params">(<span class="keyword">long</span> frameTimeNanos, <span class="keyword">int</span> frame)</span> </span>{
-    ......
-    <span class="comment">// 优先级最高，和输入事件处理有关</span>
-    doCallbacks(Choreographer.CALLBACK_INPUT, frameTimeNanos);
-    <span class="comment">// 优先级其次，和Animation的处理有关</span>
-    doCallbacks(Choreographer.CALLBACK_ANIMATION, frameTimeNanos);
-    <span class="comment">// 优先级最低，和UI等控件绘制有关</span>
-    doCallbacks(Choreographer.CALLBACK_TRAVERSAL, frameTimeNanos);
-}
-
-
-<span class="function"><span class="keyword">void</span> <span class="title">doCallbacks</span><span class="params">(<span class="keyword">int</span> callbackType, <span class="keyword">long</span> frameTimeNanos)</span> </span>{
-    CallbackRecord callbacks;
-    <span class="keyword">synchronized</span> (mLock) {
-        <span class="comment">// We use "now" to determine when callbacks become due because it's possible</span>
-        <span class="comment">// for earlier processing phases in a frame to post callbacks that should run</span>
-        <span class="comment">// in a following phase, such as an input event that causes an animation to start.</span>
-        <span class="keyword">final</span> <span class="keyword">long</span> now = SystemClock.uptimeMillis();
-        callbacks = mCallbackQueues[callbackType].extractDueCallbacksLocked(now);
-        <span class="keyword">if</span> (callbacks == <span class="keyword">null</span>) {
-            <span class="keyword">return</span>;
-        }
-        mCallbacksRunning = <span class="keyword">true</span>;
-    }
-    <span class="keyword">try</span> {
-        <span class="keyword">for</span> (CallbackRecord c = callbacks; c != <span class="keyword">null</span>; c = c.next) {
-            <span class="comment">// 在这里回调callback的action</span>
-            c.run(frameTimeNanos);
-        }
-    }
-    ......
-}
-</code></pre><p>终于回调了AnimationHandler的run方法，代码很多，起始无非就是让应该启动的animation启动起来，该延迟的放在延迟队列，正在做动画的调用doAnimationFrame方法，动画播放结束的就结束动画。当然如果还需要继续动画那就继续调用scheduleAnimation方法，告诉编舞者，还有呢，继续在下个帧时间执行我。当然所有时间控制是根据VSYNC回调上来的时间和每个动画的时间信息共同控制的。</p>
-<pre><code><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">doAnimationFrame</span><span class="params">(<span class="keyword">long</span> frameTime)</span> </span>{
-    ......
-    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; numAnims; ++i) {
-        ValueAnimator anim = mTmpAnimations.get(i);
-        <span class="keyword">if</span> (mAnimations.contains(anim) &amp;&amp; anim.doAnimationFrame(frameTime)) {
-            mEndingAnims.add(anim);
-        }
-    }
-    ......
-    <span class="comment">// If there are still active or delayed animations, schedule a future call to</span>
-    <span class="comment">// onAnimate to process the next frame of the animations.</span>
-    <span class="keyword">if</span> (!mAnimations.isEmpty() || !mDelayedAnims.isEmpty()) {
-        scheduleAnimation();
-    }
-}
-</code></pre><h4 id="3-3_动画源码总结">3.3 动画源码总结</h4><p>1.针对视图来说，Animation和Scroller相似，都是如何控制视图的重绘，它们都指示定义了在某一个特定时刻我应该画成什么样子。<br>2.Choreographer实际上是视图所有重绘进度的实际控制者，因为它在控制着时间节奏，告诉应用们什么时间可以画，视图不需要自己控制刷新时间。<br>3.回头看Animation的源码分析，视图的重绘最终是触发ViewRootImpl的invalidate函数，该函数将最终调用ViewRootImpl的scheduleTraversals。同样是通过mChoreographer只是类型变成了CALLBACK_TRAVERSAL，代码如下所示：</p>
-<pre><code>void scheduleTraversals<span class="literal">()</span> {
-    <span class="keyword">if</span> (!mTraversalScheduled) {
-        mTraversalScheduled = <span class="literal">true</span>;
-        mTraversalBarrier = mHandler.getLooper<span class="literal">()</span>.postSyncBarrier<span class="literal">()</span>;
-        mChoreographer.postCallback(
-                <span class="type">Choreographer</span>.<span class="type">CALLBACK_TRAVERSAL</span>, mTraversalRunnable, null);
-        <span class="keyword">if</span> (!mUnbufferedInputDispatch) {
-            scheduleConsumeBatchedInput<span class="literal">()</span>;
-        }
-        notifyRendererOfFramePending<span class="literal">()</span>;
-    }
-}
-</code></pre><p>4.Asynchronous Message和Synchronization Barrier我还没有理解，当你觉得自己明白了的时候，其实你还有很多不知道，当你觉得你不明白的时候，那是你真的不知道。不知道还是不知道！！</p>
-<h3 id="四、参考文档">四、参考文档</h3><p><a href="http://blog.csdn.net/lmj623565791/article/details/38067475" target="_blank" rel="external">Android 属性动画（Property Animation） 完全解析 （上）</a><br><a href="http://blog.csdn.net/lmj623565791/article/details/38092093" target="_blank" rel="external">Android 属性动画（Property Animation） 完全解析 （下）</a><br><a href="http://www.uml.org.cn/mobiledev/201301081.asp" target="_blank" rel="external">Android Project Butter分析</a><br><a href="http://developer.android.com/reference/android/view/Choreographer.html" target="_blank" rel="external">http://developer.android.com/reference/android/view/Choreographer.html</a><br><a href="http://developer.android.com/reference/android/view/Choreographer.FrameCallback.html" target="_blank" rel="external">http://developer.android.com/reference/android/view/Choreographer.FrameCallback.html</a><br><a href="https://github.com/samchen2009/android_uml" target="_blank" rel="external">https://github.com/samchen2009/android_uml</a></p>
+<h3 id="三、参考文档">三、参考文档</h3><p><a href="http://blog.csdn.net/lmj623565791/article/details/38067475" target="_blank" rel="external">Android 属性动画（Property Animation） 完全解析 （上）</a><br><a href="http://blog.csdn.net/lmj623565791/article/details/38092093" target="_blank" rel="external">Android 属性动画（Property Animation） 完全解析 （下）</a><br><a href="http://www.uml.org.cn/mobiledev/201301081.asp" target="_blank" rel="external">Android Project Butter分析</a><br><a href="http://developer.android.com/reference/android/view/Choreographer.html" target="_blank" rel="external">http://developer.android.com/reference/android/view/Choreographer.html</a><br><a href="http://developer.android.com/reference/android/view/Choreographer.FrameCallback.html" target="_blank" rel="external">http://developer.android.com/reference/android/view/Choreographer.FrameCallback.html</a><br><a href="https://github.com/samchen2009/android_uml" target="_blank" rel="external">https://github.com/samchen2009/android_uml</a></p>
 
       
     </div>
@@ -825,8 +574,8 @@ animator.addUpdateListener(<span class="keyword">new</span> ValueAnimator.Animat
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2015/04/08/-翻译-Context-什么是Context？/" rel="prev" title="[译]Context?什么是Context？">
-                [译]Context?什么是Context？ <i class="fa fa-chevron-right"></i>
+              <a href="/2015/03/03/android-animation-source/" rel="prev" title="动画源码分析（基于Android 5.0）">
+                动画源码分析（基于Android 5.0） <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -901,7 +650,7 @@ animator.addUpdateListener(<span class="keyword">new</span> ValueAnimator.Animat
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">24</span>
+                <span class="site-state-item-count">26</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -912,7 +661,7 @@ animator.addUpdateListener(<span class="keyword">new</span> ValueAnimator.Animat
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-count">8</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -923,7 +672,7 @@ animator.addUpdateListener(<span class="keyword">new</span> ValueAnimator.Animat
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">34</span>
+                <span class="site-state-item-count">36</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -976,7 +725,7 @@ animator.addUpdateListener(<span class="keyword">new</span> ValueAnimator.Animat
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#说在开始"><span class="nav-number">1.</span> <span class="nav-text">说在开始</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#一、Android动画基础"><span class="nav-number">2.</span> <span class="nav-text">一、Android动画基础</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1_动画类型"><span class="nav-number">2.1.</span> <span class="nav-text">1.1 动画类型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-2_帧动画："><span class="nav-number">2.2.</span> <span class="nav-text">1.2 帧动画：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-3_补间动画："><span class="nav-number">2.3.</span> <span class="nav-text">1.3 补间动画：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-4_属性动画："><span class="nav-number">2.4.</span> <span class="nav-text">1.4 属性动画：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-5_动画插值："><span class="nav-number">2.5.</span> <span class="nav-text">1.5 动画插值：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-6_动画估值器"><span class="nav-number">2.6.</span> <span class="nav-text">1.6 动画估值器</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二、桌面文件夹伸缩动画"><span class="nav-number">3.</span> <span class="nav-text">二、桌面文件夹伸缩动画</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1_IOS文件夹动画原理"><span class="nav-number">3.1.</span> <span class="nav-text">2.1 IOS文件夹动画原理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2_总结"><span class="nav-number">3.2.</span> <span class="nav-text">2.2 总结</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#三、动画源码分析（基于Android_5-0）"><span class="nav-number">4.</span> <span class="nav-text">三、动画源码分析（基于Android 5.0）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1_动画插值源码"><span class="nav-number">4.1.</span> <span class="nav-text">3.1 动画插值源码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2_补间动画源码"><span class="nav-number">4.2.</span> <span class="nav-text">3.2 补间动画源码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2_属性动画源码"><span class="nav-number">4.3.</span> <span class="nav-text">3.2 属性动画源码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-3_动画源码总结"><span class="nav-number">4.4.</span> <span class="nav-text">3.3 动画源码总结</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#四、参考文档"><span class="nav-number">5.</span> <span class="nav-text">四、参考文档</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#说在开始"><span class="nav-number">1.</span> <span class="nav-text">说在开始</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#一、Android动画基础"><span class="nav-number">2.</span> <span class="nav-text">一、Android动画基础</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1_动画类型"><span class="nav-number">2.1.</span> <span class="nav-text">1.1 动画类型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-2_帧动画："><span class="nav-number">2.2.</span> <span class="nav-text">1.2 帧动画：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-3_补间动画："><span class="nav-number">2.3.</span> <span class="nav-text">1.3 补间动画：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-4_属性动画："><span class="nav-number">2.4.</span> <span class="nav-text">1.4 属性动画：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-5_动画插值："><span class="nav-number">2.5.</span> <span class="nav-text">1.5 动画插值：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-6_动画估值器"><span class="nav-number">2.6.</span> <span class="nav-text">1.6 动画估值器</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二、桌面文件夹伸缩动画"><span class="nav-number">3.</span> <span class="nav-text">二、桌面文件夹伸缩动画</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1_IOS文件夹动画原理"><span class="nav-number">3.1.</span> <span class="nav-text">2.1 IOS文件夹动画原理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2_总结"><span class="nav-number">3.2.</span> <span class="nav-text">2.2 总结</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#三、参考文档"><span class="nav-number">4.</span> <span class="nav-text">三、参考文档</span></a></li></ol></div>
             
 
           </div>
