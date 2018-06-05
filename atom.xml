@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://ivonhoe.github.io/"/>
-  <updated>2018-06-03T14:58:36.000Z</updated>
+  <updated>2018-06-05T13:15:01.000Z</updated>
   <id>https://ivonhoe.github.io/</id>
   
   <author>
@@ -16,11 +16,42 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>Android NDK编译错误解决</title>
+    <link href="https://ivonhoe.github.io/2018/06/05/ndk17-build-error/"/>
+    <id>https://ivonhoe.github.io/2018/06/05/ndk17-build-error/</id>
+    <published>2018-06-05T13:10:54.000Z</published>
+    <updated>2018-06-05T13:15:01.000Z</updated>
+    
+    <content type="html"><![CDATA[<h4 id="0x01_问题描述">0x01 问题描述</h4><p><strong>现象：</strong> 将ndk版本升级到    <code>17.0.4754217</code>编译报错</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">* What went wrong:&#10;Execution failed for task &#39;:app+stub:transformNativeLibsWithStripDebugSymbolForRelease&#39;.&#10;&#62; A problem occurred starting process &#39;command &#39;/Users/Ivonhoe/Library/Android/sdk/ndk-bundle/toolchains/mips64el-linux-android-4.9/prebuilt/darwin-x86_64/bin/mips64el-linux-android-strip&#39;&#39;&#10;&#10;* Try:&#10;Run with --stacktrace option to get the stack trace. Run with --info or --debug option to get more log output.</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Caused by: java.io.IOException: Cannot run program &#34;/Users/Ivonhoe/Library/Android/sdk/ndk-bundle/toolchains/mips64el-linux-android-4.9/prebuilt/darwin-x86_64/bin/mips64el-linux-android-strip&#34; (in directory &#34;/Users/Ivonhoe/Workspace/keyaccount-repo/app+stub&#34;): error=2, No such file or directory&#10;        at net.rubygrapefruit.platform.internal.DefaultProcessLauncher.start(DefaultProcessLauncher.java:25)&#10;        ... 4 more&#10;Caused by: java.io.IOException: error=2, No such file or directory&#10;        ... 5 more</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<p><strong>原因：</strong></p>
+<p>升级android ndk版本到17时未同时升级gradle编译工具到3.0.0以上，低版本的编译工具会执行mips64的脚本。而mips64的脚本在ndk17上已经被删除了！</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">This mipsel-linux-android-4.9 directory exists to make the NDK compatible with the Android&#10;SDK&#39;s Gradle plugin, version 3.0.1 and earlier, which expects the NDK&#10;to have a MIPS toolchain directory.</span><br></pre></td></tr></table></figure>
+<p><strong>解决方案：</strong><br>一种解决办法是同时升级gradle编译工具的版本。但是因为项目的原因，无法使用最新版本的gradle编译工具，只能使用2.3.0版本的编译工具，所以使用一个绕过问题的方法，<br>在<code>/Users/Ivonhoe/Library/Android/sdk/ndk-bundle/toolchains/mips64el-linux-android-4.9/prebuilt/darwin-x86_64/bin/</code>目录创建一个<code>mips64el-linux-android-strip</code>的空文件。记得使用<code>chmod</code>命令修改空文件的执行权限。</p>
+<h4 id="0x03_参考文档：">0x03 参考文档：</h4><p><a href="https://github.com/android-ndk/ndk/issues/700" target="_blank" rel="external">React Native apps fail to build since NDK update to r17 (due to missing mipsel-linux-android-4.9 toolchain files)</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h4 id=&quot;0x01_问题描述&quot;&gt;0x01 问题描述&lt;/h4&gt;&lt;p&gt;&lt;strong&gt;现象：&lt;/strong&gt; 将ndk版本升级到    &lt;code&gt;17.0.4754217&lt;/code&gt;编译报错&lt;/p&gt;
+&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;* What went wrong:&amp;#10;Execution failed for task &amp;#39;:app+stub:transformNativeLibsWithStripDebugSymbolForRelease&amp;#39;.&amp;#10;&amp;#62; A problem occurred starting process &amp;#39;command &amp;#39;/Users/Ivonhoe/Library/Android/sdk/ndk-bundle/toolchains/mips64el-linux-android-4.9/prebuilt/darwin-x86_64/bin/mips64el-linux-android-strip&amp;#39;&amp;#39;&amp;#10;&amp;#10;* Try:&amp;#10;Run with --stacktrace option to get the stack trace. Run with --info or --debug option to get more log output.&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;Caused by: java.io.IOException: Cannot run program &amp;#34;/Users/Ivonhoe/Library/Android/sdk/ndk-bundle/toolchains/mips64el-linux-android-4.9/prebuilt/darwin-x86_64/bin/mips64el-linux-android-strip&amp;#34; (in directory &amp;#34;/Users/Ivonhoe/Workspace/keyaccount-repo/app+stub&amp;#34;): error=2, No such file or directory&amp;#10;        at net.rubygrapefruit.platform.internal.DefaultProcessLauncher.start(DefaultProcessLauncher.java:25)&amp;#10;        ... 4 more&amp;#10;Caused by: java.io.IOException: error=2, No such file or directory&amp;#10;        ... 5 more&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+    
+    </summary>
+    
+      <category term="其他" scheme="https://ivonhoe.github.io/categories/%E5%85%B6%E4%BB%96/"/>
+    
+    
+  </entry>
+  
+  <entry>
     <title>深入浅出JVM垃圾回收算法</title>
     <link href="https://ivonhoe.github.io/2018/06/03/jvm-gc-1/"/>
     <id>https://ivonhoe.github.io/2018/06/03/jvm-gc-1/</id>
     <published>2018-06-03T14:43:32.000Z</published>
-    <updated>2018-06-03T14:58:36.000Z</updated>
+    <updated>2018-06-03T14:58:50.000Z</updated>
     
     <content type="html"><![CDATA[<h4 id="0x00_前言">0x00 前言</h4><p>在学习JVM如何进行垃圾回收方法时，发现所谓的JVM垃圾回收思想和现实生活的场景有很多相似的地方。所以用餐厅回收餐桌的方式类比JVM垃圾回收算法，应该能帮助JVM学习的理解和记忆。</p>
 <h4 id="0x01_经典垃圾回收算法">0x01 经典垃圾回收算法</h4><blockquote>
@@ -1326,78 +1357,6 @@
       <category term="动画" scheme="https://ivonhoe.github.io/tags/%E5%8A%A8%E7%94%BB/"/>
     
       <category term="进度条" scheme="https://ivonhoe.github.io/tags/%E8%BF%9B%E5%BA%A6%E6%9D%A1/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>数据解析工具</title>
-    <link href="https://ivonhoe.github.io/2015/08/19/%E6%95%B0%E6%8D%AE%E8%A7%A3%E6%9E%90%E5%B7%A5%E5%85%B7%E8%AE%BE%E8%AE%A1%E6%96%87%E6%A1%A3/"/>
-    <id>https://ivonhoe.github.io/2015/08/19/数据解析工具设计文档/</id>
-    <published>2015-08-19T13:49:49.000Z</published>
-    <updated>2018-05-27T08:22:53.000Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="一、设计目标">一、设计目标</h2><ul>
-<li>设计一个相对通用的数据解析工具，高效解析通过抓包工具抓取的网络数据内容</li>
-<li>只需要添加少量代码，实现不同数据格式的解析，并支持不同文件格式保存</li>
-</ul>
-<h2 id="二、实施步骤">二、实施步骤</h2><p>总的来说，就是使用MonkeyRunner自动测试脚本对手机进行某一些具体的操作时，通过Fiddler工具截取手机App的Http通讯数据，通过对这些数据进行解析从而达到获取应用数据的过程。</p>
-<h3 id="2-1、编写MonkeyRunner自动脚本">2.1、编写MonkeyRunner自动脚本</h3><ul>
-<li>环境和工具：Python，Android SDK开发环境， Android手机一台（debug选项连接PC）</li>
-<li>脚本目标：循环对手机屏幕进行上划操作</li>
-<li>代码：<a id="more"></a>
-</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#coding=utf-8&#10;from com.android.monkeyrunner import MonkeyRunner,MonkeyDevice,MonkeyImage&#10;device = MonkeyRunner.waitForConnection(5,&#39;351BBJHUHDPU&#39;)&#10;sleepTime = 0.2&#10;for x in xrange(1,10000):&#10;&#9;MonkeyRunner.sleep(sleepTime)&#10;&#9;device.drag((436,1234),(378,346),1,10)</span><br></pre></td></tr></table></figure>
-<ul>
-<li>注：MonkeyRunner.waitForConnection方法参数为adb devices 下的手机设备名</li>
-</ul>
-<h3 id="2-2、抓取应用流量信息">2.2、抓取应用流量信息</h3><ul>
-<li>下载并安装需要抓取数据的Android应用</li>
-<li>Google搜索获得<a href="http://jingyan.baidu.com/article/fd8044faebfaa85030137a72.html" target="_blank" rel="external">Android手机设置代理上网</a>方法，并成功设置手机通过PC代理上网功能</li>
-<li>安装Fiddler，通过设置Fiddler host过滤可以获取固定host的HTTP Request和Response</li>
-<li>使用MonkeyRunner测试脚本，循环触发手机上划操作，自动浏览手机应用商店的应用分类界面，通过Fiddler抓取手机的HTTP请求和响应消息内容，并导出</li>
-</ul>
-<h3 id="2-3、数据解析实现">2.3、数据解析实现</h3><h4 id="2-3-1、数据处理流程">2.3.1、数据处理流程</h4><p><img src="/res/parser/liuchentu.png" alt="Alt text"></p>
-<h4 id="2-3-2、使用生产者消费者模式处理数据">2.3.2、使用生产者消费者模式处理数据</h4><p>生产者线程读取源数据文件，生产出待解析的字符串数据放入数据池中。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/**&#10;  * &#29983;&#20135;&#32773;&#30340;&#29983;&#20135;&#23481;&#22120;&#10;  */&#10;private LinkedList&#60;Object&#62; mProductPool = new LinkedList&#60;Object&#62;();&#10;&#10;private void addProduct(List&#60;Object&#62; data) &#123;&#10;    while (!data.isEmpty()) &#123;&#10;        synchronized (mProductPool) &#123;&#10;             while (mProductPool.size() &#62;= MAX_SIZE) &#123;&#10;                try &#123;&#10;                    mProductPool.wait();&#10;                &#125; catch (InterruptedException e) &#123;&#10;                    e.printStackTrace();&#10;                &#125;&#10;            &#125;&#10;&#10;        getDataProducer().startProduce();&#10;&#10;        for (int i = 0; i &#60; Math.min(MAX_SIZE, data.size()) &#38;&#38;&#10;                mProductPool.size() &#60; MAX_SIZE; i++) &#123;&#10;                if (!data.isEmpty()) &#123;&#10;                    mProductPool.add(data.get(0));&#10;                    data.remove(0);&#10;                &#125;&#10;            &#125;&#10;            mProductPool.notifyAll();&#10;        &#125;&#10;    &#125;&#10;&#125;</span><br></pre></td></tr></table></figure></p>
-<p>多个消费者线程每次从数据池中获取一定数量的数据内容用来解析，并把解析结果放入最终的处理结果池中。这里并没有使用二级的消费者去做数据保存操作，因为可能需要把所有数据解析完成后做统一的分类、统计、筛选操作。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/**&#10;  * &#28040;&#36153;&#32773;&#22788;&#29702;&#25968;&#25454;&#21518;&#30340;&#23481;&#22120;&#10;  */&#10;private List&#60;Unit&#62; mConsumedPool = new ArrayList&#60;Unit&#62;()&#65307;&#10;&#10;public class Consumer implements Runnable &#123;&#10;&#10;    @Override&#10;    public void run() &#123;&#10;        while (true) &#123;&#10;            List&#60;Object&#62; queue = mEngine.getProductPool();&#10;            if (queue == null) &#123;&#10;                return;&#10;            &#125;&#10;&#10;            List&#60;Object&#62; temp = new ArrayList&#60;Object&#62;();&#10;            synchronized (queue) &#123;&#10;                while (queue.size() == 0 &#38;&#38; !mEngine.isProduceComplete()) &#123;&#10;                    try &#123;&#10;                        queue.wait();&#10;                    &#125; catch (InterruptedException e) &#123;&#10;                        e.printStackTrace();&#10;                        queue.notify();&#10;                    &#125;&#10;                &#125;&#10;&#10;                int size = queue.size();&#10;                int k = Math.max(0, size - NUM_PER_CONSUME);&#10;                for (int i = size - 1; i &#62;= k; i--) &#123;&#10;                    temp.add(queue.get(i));&#10;                    queue.remove(i);&#10;                &#125;&#10;&#10;                queue.notifyAll();&#10;            &#125;&#10;&#10;            for (Object str : temp) &#123;&#10;                ArrayList&#60;Unit&#62; result = onParse((String) str);&#10;                if (result != null) &#123;&#10;                    mEngine.addParsedUnit(result);&#10;                &#125;&#10;            &#125;&#10;&#10;            if (mEngine.isProduceComplete() &#38;&#38; queue.isEmpty()) &#123;&#10;                complete(this);&#10;                Thread t = Thread.currentThread();&#10;                t.interrupt();&#10;                return;&#10;            &#125;&#10;        &#125;&#10;    &#125;&#10;&#125;</span><br></pre></td></tr></table></figure></p>
-<p>Engine.java作为整个解析过程的引擎，不同的数据需要不同的解析实现和保存格式实现,使用Reader读取数据的数据，将读取的数据填充到数据池中，当池满时，Reader线程阻塞当池空时，解析线程阻塞。在数据全部读取并解析完成之后，通过IWriter将结果保存到文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public class Engine implements IParser.ParseListener &#123;&#10;    // &#25351;&#23450;&#35299;&#26512;&#30340;&#25968;&#25454;&#36335;&#24452;&#10;    public void setSourcePath(String path) &#123;&#125;&#10;    // &#35774;&#32622;Reader&#10;    public void setReader(IReader reader) &#123;&#125;&#10;    // &#35774;&#32622;&#35299;&#26512;&#22120;&#10;    public void setParser(IParser parser) &#123;&#125;&#10;    // &#35774;&#32622;Writer&#10;    public void setWriter(IWriter writer) &#123;&#125;&#10;    // &#35299;&#26512;&#22120;&#35299;&#26512;&#23436;&#25104;&#30340;&#22238;&#35843;&#10;    public void onParseComplete() &#123;&#125;&#10;    // &#21551;&#21160;&#65292;&#24320;&#22987;&#22788;&#29702;&#25968;&#25454;&#10;    public void start()&#10;&#125;</span><br></pre></td></tr></table></figure></p>
-<h2 id="三、针对第三方应用商店分类数据的解析">三、针对第三方应用商店分类数据的解析</h2><h3 id="2-1、定义不同类型的解析器">2.1、定义不同类型的解析器</h3><p>在分析第三方商店数据的过程中发现，每个应用市场都会选择性的屏蔽竞品信息的行为，例如除非通过搜索功能，你很难在360应用商店看到直接百度的应用。淘宝应用商店的屏蔽行为相对较少，但是会刻意提高一些推广应用的下载排名。很难在应用商店中抓取完全的应用信息，可能需要解析一些自己手动收集的应用分类信息。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">//&#20570;&#20855;&#20307;&#38024;&#23545;&#28120;&#23453;&#25968;&#25454;&#30340;JSON&#23383;&#31526;&#20018;&#36827;&#34892;&#25968;&#25454;&#35299;&#26512;&#10;public class TBParser extends IParser &#123;&#10;    @Override&#10;    public ArrayList&#60;Unit&#62; onParse(String source) &#123;&#10;    &#125;&#10;&#125;&#10;//&#20570;&#20855;&#20307;&#38024;&#23545;360&#30340;JSON&#23383;&#31526;&#20018;&#36827;&#34892;&#25968;&#25454;&#35299;&#26512;&#10;public class QHParser extends IParser &#123;&#10;    @Override&#10;    public ArrayList&#60;Unit&#62; onParse(String source) &#123;&#10;    &#125;&#10;&#125;&#10;// &#38024;&#23545;&#33258;&#24049;&#23450;&#20041;&#30340;&#25968;&#25454;&#36827;&#34892;&#35299;&#26512;&#10;public class CustomParser extends IParser &#123;&#10;    @Override&#10;    public ArrayList&#60;Unit&#62; onParse(String source) &#123;&#10;    &#125;&#10;&#125;</span><br></pre></td></tr></table></figure></p>
-<h3 id="2-2、Zip压缩和Huffman编码数据压缩的比较">2.2、Zip压缩和Huffman编码数据压缩的比较</h3><p>针对ZIP压缩，java提供了标准的接口<br>针对Huffman编码压缩文本的原理，可以参照<a href="http://coolshell.cn/articles/7459.html" target="_blank" rel="external">这里</a>,具体实现在工程代码在：com.ivonhoe.parser.huffman.HuffmanCode.java的实现<br>比较发现针对字符的压缩，直接ZIP压缩比先Huffman压缩后ZIP压缩的压缩比率高。</p>
-<h3 id="2-3、保存文本格式">2.3、保存文本格式</h3><p>保存的数据文件包含两个部分</p>
-<ul>
-<li>第一部分表示各种分类数据的条目数量<br>{健康运动:81}<br>{通讯社交:326}<br>{生活休闲:485}<br>……</li>
-<li>第二部分表示所有的包名，按照文件开始部分的分类顺序和条目数依次保存<br>com.hk515.patient<br>com.guokr.zhixing<br>com.yidian.health<br>……</li>
-<li>如上所示，健康运动应用数量81个，分别是第二部分的1~81条目，通讯社交应用有326个，分别是第二部分的82~408条目，依次类推。</li>
-</ul>
-<h2 id="四、针对京东商品评论数据的解析">四、针对京东商品评论数据的解析</h2><p>针对京东的评论数据信息，通过继承IParser的接口实现具体针对京东数据的解析方式。<br>针对解析数据的保存，通过继承IWriter的保存接口，实现针对Excel文件格式的保存<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">**&#10; * &#38024;&#23545;JD&#30340;&#35780;&#35770;&#25968;&#25454;&#35299;&#26512;&#10; *&#10; * @author ivonhoe&#10; */&#10;public class JDWebParser extends IParser &#123;&#10;    @Override&#10;    public ArrayList&#60;Unit&#62; onParse(String source) &#123;&#10;    &#125;&#10;&#125;&#10;&#10;**&#10; * &#36890;&#36807;&#25509;&#21475;&#20445;&#23384;&#21040;Excel&#34920;&#26684;&#20013;&#10; *&#10; * @author ivonhoe&#10; */&#10;public class JDCommentWriter extends ExlWriter &#123;&#10;    @Override&#10;    public void onWrite(List&#60;Unit&#62; list) &#123;&#10;        // TODO Auto-generated method stub&#10;        exportToSheet(&#34;comments&#34;, TITLE_STRINGS, list);&#10;    &#125;&#10;&#125;</span><br></pre></td></tr></table></figure></p>
-<h2 id="五、总结">五、总结</h2><ul>
-<li>在python部分，在实现上只需要通过简单的循环让手机屏幕不停的滑动就可以了。针对移动端数据传输的特点，绝大多数的客户端应用和服务器数据传输的格式都是通过JSON或者XML。你不再需要想办法在爬取网站页面的基础上进行数据收集，不再需要考虑如何从繁杂的网页上筛选你想要的正文。通过抓包分析的方式，这就像一个漏斗，你不需要再去筛选数据。你拿到的都是格式化的数据了。</li>
-<li>如果能够集合一些更智能的自动化测试工具如百度的MTC测试工具，录制一些特殊的操作脚本，那应该可以做更多的事情。</li>
-<li>如果针对复杂的业务需求，可以增加二级的消费者针对数据进行进一步的处理。</li>
-<li>针对应用分类数据的筛选，因为不同数据源的信息（如下载量）也并不是完全可信的。还需要做进一步的筛选。目前的做法是根据不同数据源进行加权平均取排名的方式（测试效果并不好），或者根据数据源的并集和应用下载量的排名综合筛选，应该可以有更好的方式。</li>
-</ul>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;h2 id=&quot;一、设计目标&quot;&gt;一、设计目标&lt;/h2&gt;&lt;ul&gt;
-&lt;li&gt;设计一个相对通用的数据解析工具，高效解析通过抓包工具抓取的网络数据内容&lt;/li&gt;
-&lt;li&gt;只需要添加少量代码，实现不同数据格式的解析，并支持不同文件格式保存&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;二、实施步骤&quot;&gt;二、实施步骤&lt;/h2&gt;&lt;p&gt;总的来说，就是使用MonkeyRunner自动测试脚本对手机进行某一些具体的操作时，通过Fiddler工具截取手机App的Http通讯数据，通过对这些数据进行解析从而达到获取应用数据的过程。&lt;/p&gt;
-&lt;h3 id=&quot;2-1、编写MonkeyRunner自动脚本&quot;&gt;2.1、编写MonkeyRunner自动脚本&lt;/h3&gt;&lt;ul&gt;
-&lt;li&gt;环境和工具：Python，Android SDK开发环境， Android手机一台（debug选项连接PC）&lt;/li&gt;
-&lt;li&gt;脚本目标：循环对手机屏幕进行上划操作&lt;/li&gt;
-&lt;li&gt;代码：
-    
-    </summary>
-    
-      <category term="其他" scheme="https://ivonhoe.github.io/categories/%E5%85%B6%E4%BB%96/"/>
-    
-    
-      <category term="数据解析" scheme="https://ivonhoe.github.io/tags/%E6%95%B0%E6%8D%AE%E8%A7%A3%E6%9E%90/"/>
-    
-      <category term="生产者消费者模式" scheme="https://ivonhoe.github.io/tags/%E7%94%9F%E4%BA%A7%E8%80%85%E6%B6%88%E8%B4%B9%E8%80%85%E6%A8%A1%E5%BC%8F/"/>
     
   </entry>
   
