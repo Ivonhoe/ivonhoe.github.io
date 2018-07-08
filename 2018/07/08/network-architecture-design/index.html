@@ -1,0 +1,967 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="网络," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="病已的博客" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="0x01 前言不管是android、ios还是浏览器端的开发，在正常的产品迭代过程中HTTP网络请求都是高频使用的功能。以android端为例，在使用常见的http网络框架时，如HttpUrlConnection,HttpClient或者okHttp，开发者都必须在此自身业务场景的基础上进行api的二次封装。一个功能强大且易用的网络框架不仅仅能够提高开发效率，起到事半功倍的效果，还能起到规范业务开">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android客户端HTTP网络框架设计与实践">
+<meta property="og:url" content="https://ivonhoe.github.io/2018/07/08/network-architecture-design/index.html">
+<meta property="og:site_name" content="病已的博客">
+<meta property="og:description" content="0x01 前言不管是android、ios还是浏览器端的开发，在正常的产品迭代过程中HTTP网络请求都是高频使用的功能。以android端为例，在使用常见的http网络框架时，如HttpUrlConnection,HttpClient或者okHttp，开发者都必须在此自身业务场景的基础上进行api的二次封装。一个功能强大且易用的网络框架不仅仅能够提高开发效率，起到事半功倍的效果，还能起到规范业务开">
+<meta property="og:image" content="https://ivonhoe.github.io/res/network/cache-ttl.png">
+<meta property="og:updated_time" content="2018-07-08T13:44:35.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android客户端HTTP网络框架设计与实践">
+<meta name="twitter:description" content="0x01 前言不管是android、ios还是浏览器端的开发，在正常的产品迭代过程中HTTP网络请求都是高频使用的功能。以android端为例，在使用常见的http网络框架时，如HttpUrlConnection,HttpClient或者okHttp，开发者都必须在此自身业务场景的基础上进行api的二次封装。一个功能强大且易用的网络框架不仅仅能够提高开发效率，起到事半功倍的效果，还能起到规范业务开">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"right","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 'undefined',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://ivonhoe.github.io/2018/07/08/network-architecture-design/"/>
+
+
+
+
+
+  <title> Android客户端HTTP网络框架设计与实践 | 病已的博客 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-97550712-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?666a58de875adc9dd40d5de65ceac026";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">病已的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">枕上，马上，厕上</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://ivonhoe.github.io/2018/07/08/network-architecture-design/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="病已">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/5706813?v=3&s=460">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="病已的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Android客户端HTTP网络框架设计与实践
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-08T21:30:33+08:00">
+                Jul 8 2018
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/思考总结/" itemprop="url" rel="index">
+                    <span itemprop="name">思考总结</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2018/07/08/network-architecture-design/" class="leancloud_visitors" data-flag-title="Android客户端HTTP网络框架设计与实践">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="0x01_前言">0x01 前言</h3><p>不管是android、ios还是浏览器端的开发，在正常的产品迭代过程中HTTP网络请求都是高频使用的功能。以android端为例，在使用常见的http网络框架时，如<code>HttpUrlConnection</code>,<code>HttpClient</code>或者<code>okHttp</code>，开发者都必须在此自身业务场景的基础上进行api的二次封装。一个功能强大且易用的网络框架不仅仅能够提高开发效率，起到事半功倍的效果，还能起到规范业务开发结果的作用。<br>希望通过这篇文章，总结下自己在设计和实现一个网络框架时的思考过程，也帮助团队同学了解现有网络框架的能力和不足。<br><a id="more"></a></p>
+<h3 id="0x02_使用者的视角">0x02 使用者的视角</h3><h4 id="2-1_使用volley">2.1 使用volley</h4><p>发送Http get请求的示例代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">// Instantiate the RequestQueue.&#10;RequestQueue queue = Volley.newRequestQueue(this);&#10;String url =&#34;http://www.google.com&#34;;&#10;&#10;// Request a string response from the provided URL.&#10;StringRequest stringRequest = new StringRequest(Request.Method.GET, url,&#10;            new Response.Listener&#60;String&#62;() &#123;&#10;    @Override&#10;    public void onResponse(String response) &#123;&#10;        // Display the first 500 characters of the response string.&#10;        mTextView.setText(&#34;Response is: &#34;+ response.substring(0,500));&#10;    &#125;&#10;&#125;, new Response.ErrorListener() &#123;&#10;    @Override&#10;    public void onErrorResponse(VolleyError error) &#123;&#10;        mTextView.setText(&#34;That didn&#39;t work!&#34;);&#10;    &#125;&#10;&#125;);&#10;&#10;// Add the request to the RequestQueue.&#10;queue.add(stringRequest);</span><br></pre></td></tr></table></figure>
+<p>查看以上Volley使用的官方示例，可以将其划分为以下几个使用步骤：</p>
+<ol>
+<li>构建一个请求队列</li>
+<li>构造一个请求Request对象和接收请求结果的<code>Response.Listener</code></li>
+<li>将请求Request添加到请求队列中</li>
+</ol>
+<p>通过volley的使用方法你就可以大致猜测volley在完成一个网络请求的大致过程。开发者使用请求相关信息和接收返回结果的<code>Callback</code>封装成一个<code>Request</code>,并将其放在请求队列中，在请求队列的背后一定有负责真正网络请求任务的线程从队列中消费网络请求的<code>Request</code>，在获取网络请求结果后通过线程间消息机制将网络请求的结果在主线程返回给接受消息的<code>Response.Listener</code>。当然真正的过程肯定会更复杂。但是不管怎样，volley的设计思路是一个经典的生产者消费者模式。<br>从一个Volley api使用者的视角回头再看一下volley，你是否有这些疑问？</p>
+<ul>
+<li>在一个开发者的使用过程，他需要知道请求队列的存在吗？除非他想要改变请求的优先级规则或者有其他想要改变请求在请求队列中顺序的需求。</li>
+<li>构造<code>Request</code>的方式不友好。以Get请求为例，需要自己手动将请求参数拼接到请求url中。如果是POST请求情况还会更复杂。</li>
+<li>接受请求结果的方式不友好，指定<code>Response.Listener</code>对象接收请求让代码不够美观不说，更建立了请求者和请求框架之间的强耦合关系。以上面的示例代码为例，如果这段代码写在Activity中，构造的<code>Response.Listener</code>的匿名内部类存在当前Activity的隐式引用，很容易引起不必要的内存泄露。如果这段代码不在Activity中，那还要多一层数据的轮转机制。简直是开发者的噩梦。</li>
+<li>针对失败的回调处理并不科学。在实际的业务开发中，你可能需要针对某几类返回数据做异常处理，虽然他们整个Http请求的网络过程是正常的，但是针对这些返回的结果把它看成异常流。如果希望Volley在这一点达到你的要求你还需要多一层封装。</li>
+</ul>
+<h4 id="2-2_使用okhttp">2.2 使用okhttp</h4><p>发送Http post请求的示例代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">//&#21019;&#24314;&#32593;&#32476;&#22788;&#29702;&#30340;&#23545;&#35937;&#10;OkHttpClient client = new OkHttpClient.Builder()&#10;        .readTimeout(5, TimeUnit.SECONDS)&#10;        .build();&#10;&#10;//post&#35831;&#27714;&#26469;&#33719;&#24471;&#25968;&#25454;&#10;//&#21019;&#24314;&#19968;&#20010;RequestBody&#65292;&#23384;&#25918;&#37325;&#35201;&#25968;&#25454;&#30340;&#38190;&#20540;&#23545;&#10;RequestBody body = new FormBody.Builder()&#10;        .add(&#34;showapi_appid&#34;, &#34;13074&#34;)&#10;        .add(&#34;showapi_sign&#34;, &#34;ea5b4bf2e140498bb772d1bf2a51a7a0&#34;).build();&#10;//&#21019;&#24314;&#19968;&#20010;&#35831;&#27714;&#23545;&#35937;&#65292;&#20256;&#20837;URL&#22320;&#22336;&#21644;&#30456;&#20851;&#25968;&#25454;&#30340;&#38190;&#20540;&#23545;&#30340;&#23545;&#35937;&#10;Request request = new Request.Builder()&#10;        .url(&#34;http://route.showapi.com/341-3&#34;)&#10;        .post(body).build();&#10;&#10;//&#21019;&#24314;&#19968;&#20010;&#33021;&#22788;&#29702;&#35831;&#27714;&#25968;&#25454;&#30340;&#25805;&#20316;&#31867;&#10;Call call = client.newCall(request);&#10;&#10;//&#20351;&#29992;&#24322;&#27493;&#20219;&#21153;&#30340;&#27169;&#24335;&#35831;&#27714;&#25968;&#25454;&#10;call.enqueue(new Callback() &#123;&#10;    @Override&#10;    public void onFailure(Call call, IOException e) &#123;&#10;        Log.e(&#8220;TAG&#8221;,&#34;&#38169;&#35823;&#20449;&#24687;&#65306;&#34; + e.toString());&#10;    &#125;&#10;&#10;    @Override&#10;    public void onResponse(Call call, Response response) throws IOException &#123;&#10;       Log.e(&#8220;TAG&#8221;,response.body().string());&#10;    &#125;&#10;&#125;);</span><br></pre></td></tr></table></figure>
+<p>相比较volley，okhttp在请求api的设计上更合理些。okhttp使用RequestBuilder和BodyBuilder构造网络请求，并且隐藏了网络框架的内部实现，让请求的过程更简单优雅。但在接收请求结果上依然选择<code>Callback</code>监听的方式。</p>
+<h3 id="0x03_设计者如何面对">0x03 设计者如何面对</h3><h4 id="3-1_请求需求与请求协议">3.1 请求需求与请求协议</h4><p>目前android平台上主流的网络请求都是基于OkHttp框架的，okhttp框架针对http协议进行了封装和优化，支持http/2协议，共享连接池的设计有利于提高请求效率，拦截器的设计支持监视、重写、和重试等特殊业务场景的需求。极大地降低了开发者的使用成本，同时兼备稳定性和可扩展性。所以我们在分析volley和okhttp在实际业务中的不足和优势，选择使用okhttp进行网络请求和连接，在其基础上进行业务封装，力求设计出尽可能的符合自身业务需求和场景的网络框架。具体使用设计需求如下：</p>
+<ol>
+<li>尽可能优雅的方式构造一个网络请求，不管他是get、post还是其他请求方法，也不管请求参数格式是form还是json。在构造Request方式上力求简单统一。</li>
+<li>尽可能简单的方式获取请求结果，最好不要再用Callback的方式接收回调数据。</li>
+<li>支持多种不同的请求结果类型，不管是<code>String</code>还是<code>JSON</code>，不管是Java对象还是文件，都能简单的获取。</li>
+<li>对失败的异常处理要更符合自身业务场景，并不是网络连接错误才会触发请求失败的接口</li>
+</ol>
+<p>结合以上几点对网络框架的期望，所以诞生了以下实例的API：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">@Test&#10;public void getMethodTest() &#123;&#10;    TestLog.d(&#34;get url:&#34; + getUrl(PATH_GET));&#10;&#10;    BasicRequest request = RequestBuilder.obtain().get()&#10;            .setUrl(getUrl(PATH_GET))&#10;            .addParam(&#34;shopIds&#34;, 123445)&#10;            .into(this, &#34;getMethod&#34;, 1, 1L, (short) 1, false, 1D, 1f)&#10;            .buildJsonRequest(ShopInfo.class);&#10;&#10;    request.send();&#10;&#125;&#10;&#10;@Keep&#10;@NetworkCallback(name = &#34;getMethod;getMethod2&#34;, type = ResponseType.SUCCESS)&#10;private void onGetMethodSuccess(ShopInfo info, int h, long h1, short h2, boolean h3, double h4&#10;        , float h5) &#123;&#10;    TestLog.d(&#34;++++++++get method success:&#34; + info.toString());&#10;&#125;&#10;&#10;@Keep&#10;@NetworkCallback(name = &#34;getMethod&#34;, type = ResponseType.FAILED)&#10;private void onGetMethodFailed(CommonError error, int h, long h1, short h2, boolean h3,&#10;                               double h4, float h5) &#123;&#10;    TestLog.d(&#34;++++++++get method failed:&#34; + error.toString());&#10;&#125;</span><br></pre></td></tr></table></figure>
+<p>API说明：</p>
+<ul>
+<li><code>RequestBuilder.obtain</code>从对象池中返回复用的Request对象</li>
+<li><code>.get()</code> <code>.postJson()</code> <code>.postFormEncode()</code> <code>postStream(Binary binary)</code>等方法封装了常见的get与post请求并指定了不同的body格式</li>
+<li>使用<code>addParam(key, value)</code>方法添加请求参数，这里并不因为请求方法的不同而存在api上的差异</li>
+<li><strong>使用注解标记接收网络请求结果回调的方法</strong>。如上例中，<code>onGetMethodSuccess()</code>和 <code>onGetMethodFailed()</code>方便被<code>NetworkCallback</code>注解标记，并且通过<code>BasicRequest.into(this, &quot;getMethod&quot;, 1, 1L, (short) 1, false, 1D, 1f)</code>绑定了请求与回调方法之间的关系。其中into的方法参数一次为：包含改回调方法的对象，注解的名称，以及Callback方法需要的其他额外参数。</li>
+<li><code>buildJsonRequest</code>将返回结果自动转换成<code>ShopInfo</code>对象。</li>
+</ul>
+<h4 id="3-2_缓存">3.2 缓存</h4><p>Http缓存策略是一个相对复杂的问题，大致分为以下三个方面：</p>
+<h5 id="3-2-1_缓存存储策略">3.2.1 缓存存储策略</h5><p><strong>决定Http的相应内容是否可缓存在客户端</strong>。Http响应头中的<code>Cache-Control</code>字段，分为<code>Public</code>、<code>Private</code>、<code>no-cache</code>、<code>max-age</code> 、<code>no-store</code>5种类型。其中前4个都会缓存文件数据（关于 no-cache 应理解为“不建议使用本地缓存”，其仍然会缓存数据到本地），后者 no-store 则不会在客户端缓存任何响应数据。</p>
+<h5 id="3-2-2_缓存过期策略">3.2.2 缓存过期策略</h5><p><strong>决定客户端是否可直接从本地缓存数据中加载数据并展示，否则就发请求到服务端获取</strong>。Http响应头中的<code>Expires</code>字段指明了缓存数据有效的绝对时间，告诉客户端到了这个时间点后该本地缓存就该作废了。这里的作废是指客户端不能直接再从本地读取缓存，需要再发一次请求到服务端去确认。确认下这个缓存还有没有用。这个过程就要说到下面的缓存对比策略。</p>
+<h5 id="3-2-3_缓存对比策略">3.2.3 缓存对比策略</h5><p><strong>决定客户端本地的缓存数据是否仍然有效。</strong>客户端检测到数据过期或浏览器刷新后，往往会重新发起一个 http 请求到服务器，服务器此时并不急于返回数据，而是看请求头有没有带标识（ If-Modified-Since、If-None-Match）过来，如果判断标识仍然有效，则返回304告诉客户端取本地缓存数据来用即可（这里要注意的是你必须要在首次响应时输出相应的头信息（Last-Modified、ETags）到客户端）。</p>
+<p>根据上述的三种缓存策略，这里贴出客户端对http缓存控制的关键代码:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/**&#10; * &#20808;&#26816;&#26597;&#26159;&#21542;&#26377;&#26410;&#36807;&#26399;&#32531;&#23384;&#10; */&#10;CacheControl cacheControl = cacheKey.getCacheControl();&#10;if (cacheControl != null &#38;&#38; cacheControl.shouldCache()) &#123;&#10;    cacheEntry = mCacheManager.get(cacheKey);&#10;    // TestLog.d(&#34;&#32531;&#23384;=====cache entry:&#34; + cacheEntry);&#10;&#125;&#10;&#10;/**&#10; * &#22914;&#26524;&#23384;&#22312;&#32531;&#23384;&#25968;&#25454;&#65292;&#26816;&#26597;&#26159;&#21542;&#36807;&#26399;&#10; */&#10;if (cacheEntry != null) &#123;&#10;    boolean isExpired = cacheEntry.isExpired();&#10;    if (!isExpired) &#123;&#10;        // &#27809;&#26377;&#36807;&#26399;&#65292;delivery&#32531;&#23384;&#20449;&#24687;&#10;        Headers headers = CacheExecutor.getResponseHeaders(cacheEntry);&#10;        byte[] body = CacheExecutor.getResponseBody(cacheEntry);&#10;&#10;        Object result = performParseResponse(requestEvent, headers, body);&#10;        response = BasicResponse.success(result);&#10;        return;&#10;    &#125; else &#123;&#10;        // &#36807;&#26399;&#65292;&#26816;&#26597;&#26159;&#21542;&#26377;Etag&#21644;Last-Modified&#20449;&#24687;&#10;        if (!TextUtils.isEmpty(cacheEntry.etag)) &#123;&#10;            requestHeaders.set(&#34;If-None-Match&#34;, cacheEntry.etag);&#10;        &#125;&#10;&#10;        if (cacheEntry.lastModified &#62; 0) &#123;&#10;            requestHeaders.set(&#34;If-Modified-Since&#34;,&#10;                    DateUtils.formatMillisToGMT(cacheEntry.lastModified));&#10;        &#125;&#10;    &#125;&#10;&#125;</span><br></pre></td></tr></table></figure>
+<p>如何确定缓存时间的关键流程：</p>
+<p><img src="/res/network/cache-ttl.png" alt=""></p>
+<h4 id="3-3_JSON转换与错误处理">3.3 JSON转换与错误处理</h4><p>首先需要定义一个CommonResponse，所有的JSON格式的Response都继承它。按照服务端低响应状态的约定，当status为<code>false</code>时表示请求结果失败，这里说的失败指的是无法返回客户端预期的正确业务结果。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public class CommonResponse implements Serializable &#123;&#10;    /**&#10;     * &#29366;&#24577;&#30721;&#10;     */&#10;    private boolean status;&#10;    /**&#10;     * &#25551;&#36848;&#10;     */&#10;    private String message;&#10;    /**&#10;     * &#21709;&#24212;&#30721;&#10;     */&#10;    private String responseCode;&#10;&#125;</span><br></pre></td></tr></table></figure>
+<p>当网络出现异常导致的连接失败时，或者当服务端返回的数据无法正常序列化为指定的类的实例时，或者CommonResponse的status变量为false时，网络框架都会抛出一个可被自动捕获的<code>Throwable</code>，并将返回值和错误类型回调到标记为<code>@NetworkCallback(type = ResponseType.FAILED)</code>的对应方法中。</p>
+<h3 id="0x04_总结">0x04 总结</h3><p>因为篇幅的原因，暂时只针对上述的几个方面较的阐述了一个网络框架的设计思路，还包括但不仅限于下面的这些讨论方向，有机会再详聊！如：</p>
+<blockquote>
+<p>线程的切换<br>对响应数据完整性的校验<br>Zip文件的请求与自动解压缩，bspatch算法的增量文件请求并根据增量文件自动生成全量文件灯<br>网络模块与缓存模块的解耦设计<br>网络性能的监控<br>httpDNS方案的应用<br>cookie的管理(可参考github开源项目<code>nohttp</code>项目的设计)</p>
+</blockquote>
+<p>在实际的业务开发过程中，针对上述问题的设计和封装已经能够覆盖大部分复杂的业务场景。相信一定能让一个开发人员写出赏心悦目自嗨的代码了。</p>
+<h3 id="0x05_参考文档">0x05 参考文档</h3><p><a href="https://tech.youzan.com/android_http/" target="_blank" rel="external">https://tech.youzan.com/android_http/</a></p>
+<p><a href="https://mp.weixin.qq.com/s/qOMO0LIdA47j3RjhbCWUEQ" target="_blank" rel="external">https://mp.weixin.qq.com/s/qOMO0LIdA47j3RjhbCWUEQ</a></p>
+<p><a href="https://www.cnblogs.com/chenqf/p/6386163.html" target="_blank" rel="external">https://www.cnblogs.com/chenqf/p/6386163.html</a></p>
+<p><a href="http://blog.csdn.net/yaofeiNO1/article/details/54428021" target="_blank" rel="external">http://blog.csdn.net/yaofeiNO1/article/details/54428021</a></p>
+<p><a href="http://blog.csdn.net/qmickecs/article/details/73696954" target="_blank" rel="external">http://blog.csdn.net/qmickecs/article/details/73696954</a></p>
+<p><a href="http://blog.csdn.net/qmickecs/article/details/73822619" target="_blank" rel="external">http://blog.csdn.net/qmickecs/article/details/73822619</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+    <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+      <span>赏</span>
+    </button>
+    <div id="QR" style="display: none;">
+      
+        <div id="wechat" style="display: inline-block">
+          <img id="wechat_qr" src="https://ivonhoe.github.io/res/dex2jar_error/WechatIMG56.png" alt="病已 WeChat Pay"/>
+          <p>微信打赏</p>
+        </div>
+      
+      
+        <div id="alipay" style="display: inline-block">
+          <img id="alipay_qr" src="https://ivonhoe.github.io/res/dex2jar_error/WechatIMG57.jpeg" alt="病已 Alipay"/>
+          <p>支付宝打赏</p>
+        </div>
+      
+    </div>
+  </div>
+
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/网络/" rel="tag"># 网络</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/07/03/how-to-track-users/" rel="next" title="客户端无痕埋点实践详解">
+                <i class="fa fa-chevron-left"></i> 客户端无痕埋点实践详解
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zNDkyNS8xMTQ2Mg=="></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="https://avatars1.githubusercontent.com/u/5706813?v=3&s=460"
+               alt="病已" />
+          <p class="site-author-name" itemprop="name">病已</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">29</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">36</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/Ivonhoe" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#0x01_前言"><span class="nav-number">1.</span> <span class="nav-text">0x01 前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x02_使用者的视角"><span class="nav-number">2.</span> <span class="nav-text">0x02 使用者的视角</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1_使用volley"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 使用volley</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2_使用okhttp"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 使用okhttp</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x03_设计者如何面对"><span class="nav-number">3.</span> <span class="nav-text">0x03 设计者如何面对</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1_请求需求与请求协议"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 请求需求与请求协议</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2_缓存"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 缓存</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#3-2-1_缓存存储策略"><span class="nav-number">3.2.1.</span> <span class="nav-text">3.2.1 缓存存储策略</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-2-2_缓存过期策略"><span class="nav-number">3.2.2.</span> <span class="nav-text">3.2.2 缓存过期策略</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-2-3_缓存对比策略"><span class="nav-number">3.2.3.</span> <span class="nav-text">3.2.3 缓存对比策略</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-3_JSON转换与错误处理"><span class="nav-number">3.3.</span> <span class="nav-text">3.3 JSON转换与错误处理</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x04_总结"><span class="nav-number">4.</span> <span class="nav-text">0x04 总结</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x05_参考文档"><span class="nav-number">5.</span> <span class="nav-text">0x05 参考文档</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">病已</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+  
+    <!-- 来必力City版安装代码 -->
+<div id="lv-container" data-id="city" data-uid="MTAyMC8zNDkyNS8xMTQ2Mg==">
+<script type="text/javascript">
+   (function(d, s) {
+       var j, e = d.getElementsByTagName(s)[0];
+
+       if (typeof LivereTower === 'function') { return; }
+
+       j = d.createElement(s);
+       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+       j.async = true;
+
+       e.parentNode.insertBefore(j, e);
+   })(document, 'script');
+</script>
+<noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+</div>
+<!-- City版安装代码已完成 -->
+  
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("JdLpddsaWqwfJtXPdDK8woaF-gzGzoHsz", "CEmtHXH8f0PtvF0zYtVE0EeY");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

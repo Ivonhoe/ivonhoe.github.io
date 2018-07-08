@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://ivonhoe.github.io/"/>
-  <updated>2018-07-03T10:05:54.000Z</updated>
+  <updated>2018-07-08T13:44:35.000Z</updated>
   <id>https://ivonhoe.github.io/</id>
   
   <author>
@@ -14,6 +14,86 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Android客户端HTTP网络框架设计与实践</title>
+    <link href="https://ivonhoe.github.io/2018/07/08/network-architecture-design/"/>
+    <id>https://ivonhoe.github.io/2018/07/08/network-architecture-design/</id>
+    <published>2018-07-08T13:30:33.000Z</published>
+    <updated>2018-07-08T13:44:35.000Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="0x01_前言">0x01 前言</h3><p>不管是android、ios还是浏览器端的开发，在正常的产品迭代过程中HTTP网络请求都是高频使用的功能。以android端为例，在使用常见的http网络框架时，如<code>HttpUrlConnection</code>,<code>HttpClient</code>或者<code>okHttp</code>，开发者都必须在此自身业务场景的基础上进行api的二次封装。一个功能强大且易用的网络框架不仅仅能够提高开发效率，起到事半功倍的效果，还能起到规范业务开发结果的作用。<br>希望通过这篇文章，总结下自己在设计和实现一个网络框架时的思考过程，也帮助团队同学了解现有网络框架的能力和不足。<br><a id="more"></a></p>
+<h3 id="0x02_使用者的视角">0x02 使用者的视角</h3><h4 id="2-1_使用volley">2.1 使用volley</h4><p>发送Http get请求的示例代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">// Instantiate the RequestQueue.&#10;RequestQueue queue = Volley.newRequestQueue(this);&#10;String url =&#34;http://www.google.com&#34;;&#10;&#10;// Request a string response from the provided URL.&#10;StringRequest stringRequest = new StringRequest(Request.Method.GET, url,&#10;            new Response.Listener&#60;String&#62;() &#123;&#10;    @Override&#10;    public void onResponse(String response) &#123;&#10;        // Display the first 500 characters of the response string.&#10;        mTextView.setText(&#34;Response is: &#34;+ response.substring(0,500));&#10;    &#125;&#10;&#125;, new Response.ErrorListener() &#123;&#10;    @Override&#10;    public void onErrorResponse(VolleyError error) &#123;&#10;        mTextView.setText(&#34;That didn&#39;t work!&#34;);&#10;    &#125;&#10;&#125;);&#10;&#10;// Add the request to the RequestQueue.&#10;queue.add(stringRequest);</span><br></pre></td></tr></table></figure>
+<p>查看以上Volley使用的官方示例，可以将其划分为以下几个使用步骤：</p>
+<ol>
+<li>构建一个请求队列</li>
+<li>构造一个请求Request对象和接收请求结果的<code>Response.Listener</code></li>
+<li>将请求Request添加到请求队列中</li>
+</ol>
+<p>通过volley的使用方法你就可以大致猜测volley在完成一个网络请求的大致过程。开发者使用请求相关信息和接收返回结果的<code>Callback</code>封装成一个<code>Request</code>,并将其放在请求队列中，在请求队列的背后一定有负责真正网络请求任务的线程从队列中消费网络请求的<code>Request</code>，在获取网络请求结果后通过线程间消息机制将网络请求的结果在主线程返回给接受消息的<code>Response.Listener</code>。当然真正的过程肯定会更复杂。但是不管怎样，volley的设计思路是一个经典的生产者消费者模式。<br>从一个Volley api使用者的视角回头再看一下volley，你是否有这些疑问？</p>
+<ul>
+<li>在一个开发者的使用过程，他需要知道请求队列的存在吗？除非他想要改变请求的优先级规则或者有其他想要改变请求在请求队列中顺序的需求。</li>
+<li>构造<code>Request</code>的方式不友好。以Get请求为例，需要自己手动将请求参数拼接到请求url中。如果是POST请求情况还会更复杂。</li>
+<li>接受请求结果的方式不友好，指定<code>Response.Listener</code>对象接收请求让代码不够美观不说，更建立了请求者和请求框架之间的强耦合关系。以上面的示例代码为例，如果这段代码写在Activity中，构造的<code>Response.Listener</code>的匿名内部类存在当前Activity的隐式引用，很容易引起不必要的内存泄露。如果这段代码不在Activity中，那还要多一层数据的轮转机制。简直是开发者的噩梦。</li>
+<li>针对失败的回调处理并不科学。在实际的业务开发中，你可能需要针对某几类返回数据做异常处理，虽然他们整个Http请求的网络过程是正常的，但是针对这些返回的结果把它看成异常流。如果希望Volley在这一点达到你的要求你还需要多一层封装。</li>
+</ul>
+<h4 id="2-2_使用okhttp">2.2 使用okhttp</h4><p>发送Http post请求的示例代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">//&#21019;&#24314;&#32593;&#32476;&#22788;&#29702;&#30340;&#23545;&#35937;&#10;OkHttpClient client = new OkHttpClient.Builder()&#10;        .readTimeout(5, TimeUnit.SECONDS)&#10;        .build();&#10;&#10;//post&#35831;&#27714;&#26469;&#33719;&#24471;&#25968;&#25454;&#10;//&#21019;&#24314;&#19968;&#20010;RequestBody&#65292;&#23384;&#25918;&#37325;&#35201;&#25968;&#25454;&#30340;&#38190;&#20540;&#23545;&#10;RequestBody body = new FormBody.Builder()&#10;        .add(&#34;showapi_appid&#34;, &#34;13074&#34;)&#10;        .add(&#34;showapi_sign&#34;, &#34;ea5b4bf2e140498bb772d1bf2a51a7a0&#34;).build();&#10;//&#21019;&#24314;&#19968;&#20010;&#35831;&#27714;&#23545;&#35937;&#65292;&#20256;&#20837;URL&#22320;&#22336;&#21644;&#30456;&#20851;&#25968;&#25454;&#30340;&#38190;&#20540;&#23545;&#30340;&#23545;&#35937;&#10;Request request = new Request.Builder()&#10;        .url(&#34;http://route.showapi.com/341-3&#34;)&#10;        .post(body).build();&#10;&#10;//&#21019;&#24314;&#19968;&#20010;&#33021;&#22788;&#29702;&#35831;&#27714;&#25968;&#25454;&#30340;&#25805;&#20316;&#31867;&#10;Call call = client.newCall(request);&#10;&#10;//&#20351;&#29992;&#24322;&#27493;&#20219;&#21153;&#30340;&#27169;&#24335;&#35831;&#27714;&#25968;&#25454;&#10;call.enqueue(new Callback() &#123;&#10;    @Override&#10;    public void onFailure(Call call, IOException e) &#123;&#10;        Log.e(&#8220;TAG&#8221;,&#34;&#38169;&#35823;&#20449;&#24687;&#65306;&#34; + e.toString());&#10;    &#125;&#10;&#10;    @Override&#10;    public void onResponse(Call call, Response response) throws IOException &#123;&#10;       Log.e(&#8220;TAG&#8221;,response.body().string());&#10;    &#125;&#10;&#125;);</span><br></pre></td></tr></table></figure>
+<p>相比较volley，okhttp在请求api的设计上更合理些。okhttp使用RequestBuilder和BodyBuilder构造网络请求，并且隐藏了网络框架的内部实现，让请求的过程更简单优雅。但在接收请求结果上依然选择<code>Callback</code>监听的方式。</p>
+<h3 id="0x03_设计者如何面对">0x03 设计者如何面对</h3><h4 id="3-1_请求需求与请求协议">3.1 请求需求与请求协议</h4><p>目前android平台上主流的网络请求都是基于OkHttp框架的，okhttp框架针对http协议进行了封装和优化，支持http/2协议，共享连接池的设计有利于提高请求效率，拦截器的设计支持监视、重写、和重试等特殊业务场景的需求。极大地降低了开发者的使用成本，同时兼备稳定性和可扩展性。所以我们在分析volley和okhttp在实际业务中的不足和优势，选择使用okhttp进行网络请求和连接，在其基础上进行业务封装，力求设计出尽可能的符合自身业务需求和场景的网络框架。具体使用设计需求如下：</p>
+<ol>
+<li>尽可能优雅的方式构造一个网络请求，不管他是get、post还是其他请求方法，也不管请求参数格式是form还是json。在构造Request方式上力求简单统一。</li>
+<li>尽可能简单的方式获取请求结果，最好不要再用Callback的方式接收回调数据。</li>
+<li>支持多种不同的请求结果类型，不管是<code>String</code>还是<code>JSON</code>，不管是Java对象还是文件，都能简单的获取。</li>
+<li>对失败的异常处理要更符合自身业务场景，并不是网络连接错误才会触发请求失败的接口</li>
+</ol>
+<p>结合以上几点对网络框架的期望，所以诞生了以下实例的API：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">@Test&#10;public void getMethodTest() &#123;&#10;    TestLog.d(&#34;get url:&#34; + getUrl(PATH_GET));&#10;&#10;    BasicRequest request = RequestBuilder.obtain().get()&#10;            .setUrl(getUrl(PATH_GET))&#10;            .addParam(&#34;shopIds&#34;, 123445)&#10;            .into(this, &#34;getMethod&#34;, 1, 1L, (short) 1, false, 1D, 1f)&#10;            .buildJsonRequest(ShopInfo.class);&#10;&#10;    request.send();&#10;&#125;&#10;&#10;@Keep&#10;@NetworkCallback(name = &#34;getMethod;getMethod2&#34;, type = ResponseType.SUCCESS)&#10;private void onGetMethodSuccess(ShopInfo info, int h, long h1, short h2, boolean h3, double h4&#10;        , float h5) &#123;&#10;    TestLog.d(&#34;++++++++get method success:&#34; + info.toString());&#10;&#125;&#10;&#10;@Keep&#10;@NetworkCallback(name = &#34;getMethod&#34;, type = ResponseType.FAILED)&#10;private void onGetMethodFailed(CommonError error, int h, long h1, short h2, boolean h3,&#10;                               double h4, float h5) &#123;&#10;    TestLog.d(&#34;++++++++get method failed:&#34; + error.toString());&#10;&#125;</span><br></pre></td></tr></table></figure>
+<p>API说明：</p>
+<ul>
+<li><code>RequestBuilder.obtain</code>从对象池中返回复用的Request对象</li>
+<li><code>.get()</code> <code>.postJson()</code> <code>.postFormEncode()</code> <code>postStream(Binary binary)</code>等方法封装了常见的get与post请求并指定了不同的body格式</li>
+<li>使用<code>addParam(key, value)</code>方法添加请求参数，这里并不因为请求方法的不同而存在api上的差异</li>
+<li><strong>使用注解标记接收网络请求结果回调的方法</strong>。如上例中，<code>onGetMethodSuccess()</code>和 <code>onGetMethodFailed()</code>方便被<code>NetworkCallback</code>注解标记，并且通过<code>BasicRequest.into(this, &quot;getMethod&quot;, 1, 1L, (short) 1, false, 1D, 1f)</code>绑定了请求与回调方法之间的关系。其中into的方法参数一次为：包含改回调方法的对象，注解的名称，以及Callback方法需要的其他额外参数。</li>
+<li><code>buildJsonRequest</code>将返回结果自动转换成<code>ShopInfo</code>对象。</li>
+</ul>
+<h4 id="3-2_缓存">3.2 缓存</h4><p>Http缓存策略是一个相对复杂的问题，大致分为以下三个方面：</p>
+<h5 id="3-2-1_缓存存储策略">3.2.1 缓存存储策略</h5><p><strong>决定Http的相应内容是否可缓存在客户端</strong>。Http响应头中的<code>Cache-Control</code>字段，分为<code>Public</code>、<code>Private</code>、<code>no-cache</code>、<code>max-age</code> 、<code>no-store</code>5种类型。其中前4个都会缓存文件数据（关于 no-cache 应理解为“不建议使用本地缓存”，其仍然会缓存数据到本地），后者 no-store 则不会在客户端缓存任何响应数据。</p>
+<h5 id="3-2-2_缓存过期策略">3.2.2 缓存过期策略</h5><p><strong>决定客户端是否可直接从本地缓存数据中加载数据并展示，否则就发请求到服务端获取</strong>。Http响应头中的<code>Expires</code>字段指明了缓存数据有效的绝对时间，告诉客户端到了这个时间点后该本地缓存就该作废了。这里的作废是指客户端不能直接再从本地读取缓存，需要再发一次请求到服务端去确认。确认下这个缓存还有没有用。这个过程就要说到下面的缓存对比策略。</p>
+<h5 id="3-2-3_缓存对比策略">3.2.3 缓存对比策略</h5><p><strong>决定客户端本地的缓存数据是否仍然有效。</strong>客户端检测到数据过期或浏览器刷新后，往往会重新发起一个 http 请求到服务器，服务器此时并不急于返回数据，而是看请求头有没有带标识（ If-Modified-Since、If-None-Match）过来，如果判断标识仍然有效，则返回304告诉客户端取本地缓存数据来用即可（这里要注意的是你必须要在首次响应时输出相应的头信息（Last-Modified、ETags）到客户端）。</p>
+<p>根据上述的三种缓存策略，这里贴出客户端对http缓存控制的关键代码:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/**&#10; * &#20808;&#26816;&#26597;&#26159;&#21542;&#26377;&#26410;&#36807;&#26399;&#32531;&#23384;&#10; */&#10;CacheControl cacheControl = cacheKey.getCacheControl();&#10;if (cacheControl != null &#38;&#38; cacheControl.shouldCache()) &#123;&#10;    cacheEntry = mCacheManager.get(cacheKey);&#10;    // TestLog.d(&#34;&#32531;&#23384;=====cache entry:&#34; + cacheEntry);&#10;&#125;&#10;&#10;/**&#10; * &#22914;&#26524;&#23384;&#22312;&#32531;&#23384;&#25968;&#25454;&#65292;&#26816;&#26597;&#26159;&#21542;&#36807;&#26399;&#10; */&#10;if (cacheEntry != null) &#123;&#10;    boolean isExpired = cacheEntry.isExpired();&#10;    if (!isExpired) &#123;&#10;        // &#27809;&#26377;&#36807;&#26399;&#65292;delivery&#32531;&#23384;&#20449;&#24687;&#10;        Headers headers = CacheExecutor.getResponseHeaders(cacheEntry);&#10;        byte[] body = CacheExecutor.getResponseBody(cacheEntry);&#10;&#10;        Object result = performParseResponse(requestEvent, headers, body);&#10;        response = BasicResponse.success(result);&#10;        return;&#10;    &#125; else &#123;&#10;        // &#36807;&#26399;&#65292;&#26816;&#26597;&#26159;&#21542;&#26377;Etag&#21644;Last-Modified&#20449;&#24687;&#10;        if (!TextUtils.isEmpty(cacheEntry.etag)) &#123;&#10;            requestHeaders.set(&#34;If-None-Match&#34;, cacheEntry.etag);&#10;        &#125;&#10;&#10;        if (cacheEntry.lastModified &#62; 0) &#123;&#10;            requestHeaders.set(&#34;If-Modified-Since&#34;,&#10;                    DateUtils.formatMillisToGMT(cacheEntry.lastModified));&#10;        &#125;&#10;    &#125;&#10;&#125;</span><br></pre></td></tr></table></figure>
+<p>如何确定缓存时间的关键流程：</p>
+<p><img src="/res/network/cache-ttl.png" alt=""></p>
+<h4 id="3-3_JSON转换与错误处理">3.3 JSON转换与错误处理</h4><p>首先需要定义一个CommonResponse，所有的JSON格式的Response都继承它。按照服务端低响应状态的约定，当status为<code>false</code>时表示请求结果失败，这里说的失败指的是无法返回客户端预期的正确业务结果。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public class CommonResponse implements Serializable &#123;&#10;    /**&#10;     * &#29366;&#24577;&#30721;&#10;     */&#10;    private boolean status;&#10;    /**&#10;     * &#25551;&#36848;&#10;     */&#10;    private String message;&#10;    /**&#10;     * &#21709;&#24212;&#30721;&#10;     */&#10;    private String responseCode;&#10;&#125;</span><br></pre></td></tr></table></figure>
+<p>当网络出现异常导致的连接失败时，或者当服务端返回的数据无法正常序列化为指定的类的实例时，或者CommonResponse的status变量为false时，网络框架都会抛出一个可被自动捕获的<code>Throwable</code>，并将返回值和错误类型回调到标记为<code>@NetworkCallback(type = ResponseType.FAILED)</code>的对应方法中。</p>
+<h3 id="0x04_总结">0x04 总结</h3><p>因为篇幅的原因，暂时只针对上述的几个方面较的阐述了一个网络框架的设计思路，还包括但不仅限于下面的这些讨论方向，有机会再详聊！如：</p>
+<blockquote>
+<p>线程的切换<br>对响应数据完整性的校验<br>Zip文件的请求与自动解压缩，bspatch算法的增量文件请求并根据增量文件自动生成全量文件灯<br>网络模块与缓存模块的解耦设计<br>网络性能的监控<br>httpDNS方案的应用<br>cookie的管理(可参考github开源项目<code>nohttp</code>项目的设计)</p>
+</blockquote>
+<p>在实际的业务开发过程中，针对上述问题的设计和封装已经能够覆盖大部分复杂的业务场景。相信一定能让一个开发人员写出赏心悦目自嗨的代码了。</p>
+<h3 id="0x05_参考文档">0x05 参考文档</h3><p><a href="https://tech.youzan.com/android_http/" target="_blank" rel="external">https://tech.youzan.com/android_http/</a></p>
+<p><a href="https://mp.weixin.qq.com/s/qOMO0LIdA47j3RjhbCWUEQ" target="_blank" rel="external">https://mp.weixin.qq.com/s/qOMO0LIdA47j3RjhbCWUEQ</a></p>
+<p><a href="https://www.cnblogs.com/chenqf/p/6386163.html" target="_blank" rel="external">https://www.cnblogs.com/chenqf/p/6386163.html</a></p>
+<p><a href="http://blog.csdn.net/yaofeiNO1/article/details/54428021" target="_blank" rel="external">http://blog.csdn.net/yaofeiNO1/article/details/54428021</a></p>
+<p><a href="http://blog.csdn.net/qmickecs/article/details/73696954" target="_blank" rel="external">http://blog.csdn.net/qmickecs/article/details/73696954</a></p>
+<p><a href="http://blog.csdn.net/qmickecs/article/details/73822619" target="_blank" rel="external">http://blog.csdn.net/qmickecs/article/details/73822619</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h3 id=&quot;0x01_前言&quot;&gt;0x01 前言&lt;/h3&gt;&lt;p&gt;不管是android、ios还是浏览器端的开发，在正常的产品迭代过程中HTTP网络请求都是高频使用的功能。以android端为例，在使用常见的http网络框架时，如&lt;code&gt;HttpUrlConnection&lt;/code&gt;,&lt;code&gt;HttpClient&lt;/code&gt;或者&lt;code&gt;okHttp&lt;/code&gt;，开发者都必须在此自身业务场景的基础上进行api的二次封装。一个功能强大且易用的网络框架不仅仅能够提高开发效率，起到事半功倍的效果，还能起到规范业务开发结果的作用。&lt;br&gt;希望通过这篇文章，总结下自己在设计和实现一个网络框架时的思考过程，也帮助团队同学了解现有网络框架的能力和不足。&lt;br&gt;
+    
+    </summary>
+    
+      <category term="思考总结" scheme="https://ivonhoe.github.io/categories/%E6%80%9D%E8%80%83%E6%80%BB%E7%BB%93/"/>
+    
+    
+      <category term="网络" scheme="https://ivonhoe.github.io/tags/%E7%BD%91%E7%BB%9C/"/>
+    
+  </entry>
   
   <entry>
     <title>客户端无痕埋点实践详解</title>
@@ -218,7 +298,7 @@
     <link href="https://ivonhoe.github.io/2018/05/21/https/"/>
     <id>https://ivonhoe.github.io/2018/05/21/https/</id>
     <published>2018-05-21T13:55:38.000Z</published>
-    <updated>2018-05-27T08:42:15.000Z</updated>
+    <updated>2018-07-08T13:35:46.000Z</updated>
     
     <content type="html"><![CDATA[<h3 id="0x00_前言">0x00 前言</h3><p>https为什么安全？因为相对http的明文传输，https引入了数据加密和身份认证。服务器和客户端的消息只有服务器和客户端能够读懂，保证了数据的保密性。同时在交换数据之前，验证了对方的合法身份，保证了通信双方的安全。这篇总结主要记录了在理解https安全性的过程中遇到的问题。</p>
 <h3 id="0x01_什么是对称加密和非对称加密">0x01 什么是对称加密和非对称加密</h3><p>在https的协议中如何实现数据加密和身份认证呢？简单来说是客户端先获取非对称加密的公钥，通过公钥和服务器协商生成对称加密的对称密钥，并使用对称密钥加密传输数据。</p>
@@ -276,11 +356,11 @@
       <category term="网络" scheme="https://ivonhoe.github.io/categories/%E7%BD%91%E7%BB%9C/"/>
     
     
-      <category term="https" scheme="https://ivonhoe.github.io/tags/https/"/>
-    
       <category term="对称加密" scheme="https://ivonhoe.github.io/tags/%E5%AF%B9%E7%A7%B0%E5%8A%A0%E5%AF%86/"/>
     
       <category term="数字签名，数字证书" scheme="https://ivonhoe.github.io/tags/%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D%EF%BC%8C%E6%95%B0%E5%AD%97%E8%AF%81%E4%B9%A6/"/>
+    
+      <category term="网络" scheme="https://ivonhoe.github.io/tags/%E7%BD%91%E7%BB%9C/"/>
     
       <category term="非对称加密" scheme="https://ivonhoe.github.io/tags/%E9%9D%9E%E5%AF%B9%E7%A7%B0%E5%8A%A0%E5%AF%86/"/>
     
@@ -1278,64 +1358,6 @@
     
     
       <category term="源码编译" scheme="https://ivonhoe.github.io/tags/%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Mac/Linux下gcc编译动态链接库[.so文件]</title>
-    <link href="https://ivonhoe.github.io/2016/12/16/Mac-Linux%E4%B8%8Bgcc%E7%BC%96%E8%AF%91%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5%E5%BA%93-so%E6%96%87%E4%BB%B6/"/>
-    <id>https://ivonhoe.github.io/2016/12/16/Mac-Linux下gcc编译动态链接库-so文件/</id>
-    <published>2016-12-16T05:47:55.000Z</published>
-    <updated>2018-05-27T08:24:01.000Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="一、以bsdiff-c和bspatch-c为例编译bsdiff-so">一、以bsdiff.c和bspatch.c为例编译bsdiff.so</h2><p>bsdiff.c和bspatch.c分别依赖bzip2</p>
-<h3 id="项目结构">项目结构</h3><h3 id="步骤">步骤</h3><ul>
-<li><p>使用BsDiff.java生成BsDiff.class文件</p>
-<p><strong>javac</strong> ivonhoe/spring/wrcenter/jni/BsDiff.java</p>
-</li>
-<li><p>生成BsDiff.h文件</p>
-<p><strong>javah</strong> ivonhoe.spring.wrcenter.jni.BsDiff </p>
-</li>
-<li><p>生成bspatch.o</p>
-<a id="more"></a>
-<p><strong>gcc -fPIC -D_REENTRANT</strong> -I<strong>JAVA_INCLUDE1</strong> -I/JAVA_INCLUDE2/ -I/Users/Ivonhoe/Downloads/VelocityDemo/src/main/java/jni/bzip2 -I/Users/Ivonhoe/Downloads/VelocityDemo/src/main/java/jni -c ./jni/bspatch.c</p>
-</li>
-<li><p>生成bsdiff.o</p>
-<p><strong>gcc -fPIC -D_REENTRANT</strong> -I/Library/Java/JavaVirtualMachines/jdk1.8.0_60.jdk/Contents/Home/include -I/Library/Java/JavaVirtualMachines/jdk1.8.0_60.jdk/Contents/Home/include/darwin -I/Users/Ivonhoe/Downloads/VelocityDemo/src/main/java/jni/bzip2 -I/Users/Ivonhoe/Downloads/VelocityDemo/src/main/java/jni -c ./jni/bsdiff.c</p>
-</li>
-<li><p>将bzip2下的c文件生成相应的.o文件</p>
-<p><strong>gcc -fPIC -D_REENTRANT</strong> -I/Library/Java/JavaVirtualMachines/jdk1.8.0_60.jdk/Contents/Home/include -I/Library/Java/JavaVirtualMachines/jdk1.8.0_60.jdk/Contents/Home/include/darwin -I/Users/Ivonhoe/Downloads/VelocityDemo/src/main/java/jni/bzip2 -c ./jni/bzip2/*.c</p>
-</li>
-<li><p>生成so文件</p>
-<p><strong>gcc *.o -o bsdiff.so -shared  -v</strong></p>
-</li>
-</ul>
-<ul>
-<li>注:</li>
-</ul>
-<p>  JAVA_INCLUDE1:/usr/local/java/jdk1.7.0_40/include<br>  JAVA_INCLUDE2:/usr/local/java/jdk1.7.0_40/include/linux<br>  是 jdk 中的 jni.h 文件的所在目录，这两个目录需要大家替换为自己的对应路径</p>
-<p>  BZIP2_INCLUDE:</p>
-<p>参考文档：<br><a href="http://www.cppblog.com/deane/articles/165216.html" target="_blank" rel="external">http://www.cppblog.com/deane/articles/165216.html</a><br><a href="http://blog.csdn.net/hongquan1991/article/details/12426615" target="_blank" rel="external">http://blog.csdn.net/hongquan1991/article/details/12426615</a><br><a href="http://codepub.cn/2015/05/19/How-to-load-dll-file-in-Java-Web-Project/" target="_blank" rel="external">http://codepub.cn/2015/05/19/How-to-load-dll-file-in-Java-Web-Project/</a></p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;h2 id=&quot;一、以bsdiff-c和bspatch-c为例编译bsdiff-so&quot;&gt;一、以bsdiff.c和bspatch.c为例编译bsdiff.so&lt;/h2&gt;&lt;p&gt;bsdiff.c和bspatch.c分别依赖bzip2&lt;/p&gt;
-&lt;h3 id=&quot;项目结构&quot;&gt;项目结构&lt;/h3&gt;&lt;h3 id=&quot;步骤&quot;&gt;步骤&lt;/h3&gt;&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;使用BsDiff.java生成BsDiff.class文件&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;javac&lt;/strong&gt; ivonhoe/spring/wrcenter/jni/BsDiff.java&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;生成BsDiff.h文件&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;javah&lt;/strong&gt; ivonhoe.spring.wrcenter.jni.BsDiff &lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;生成bspatch.o&lt;/p&gt;
-    
-    </summary>
-    
-      <category term="其他" scheme="https://ivonhoe.github.io/categories/%E5%85%B6%E4%BB%96/"/>
-    
-    
-      <category term="动态链接库" scheme="https://ivonhoe.github.io/tags/%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5%E5%BA%93/"/>
     
   </entry>
   
