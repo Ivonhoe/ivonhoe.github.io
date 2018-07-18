@@ -82,19 +82,19 @@
 
 
 
-<meta name="description" content="0x00 前言埋点项目的一般思路是使用代码手动埋点。国内主要的第三方数据分析服务商，如百度统计、友盟、TalkingData等都提供这一方案。用户数据埋点是少见的涉及到一个产品研发团队所有角色的项目。从运营的数据需求，到产品经理的抽象和规范，到客户端前端的手动采集数据，再到服务端和大数据的存储和转换，最终把结果反馈给运营和产品经理。涉及到几乎所有部门，如果按照链式的工作流来解决埋点问题，当任何一个">
+<meta name="description" content="0x00 前言埋点项目的一般思路是使用代码手动埋点。国内主要的第三方数据分析服务商，如百度统计、友盟、TalkingData等都提供这一方案。用户数据埋点是少见的涉及到一个产品研发团队所有角色的项目。从运营的数据需求，到产品经理的抽象和规范，到移动端前端的手动采集数据，再到服务端和大数据的存储和转换，最终把结果反馈给运营和产品经理。涉及到几乎所有部门，如果按照链式的工作流来解决埋点问题，当任何一个">
 <meta property="og:type" content="article">
-<meta property="og:title" content="客户端无痕埋点实践详解">
+<meta property="og:title" content="移动端无痕埋点实践详解">
 <meta property="og:url" content="https://ivonhoe.github.io/2018/07/03/how-to-track-users/index.html">
 <meta property="og:site_name" content="病已的博客">
-<meta property="og:description" content="0x00 前言埋点项目的一般思路是使用代码手动埋点。国内主要的第三方数据分析服务商，如百度统计、友盟、TalkingData等都提供这一方案。用户数据埋点是少见的涉及到一个产品研发团队所有角色的项目。从运营的数据需求，到产品经理的抽象和规范，到客户端前端的手动采集数据，再到服务端和大数据的存储和转换，最终把结果反馈给运营和产品经理。涉及到几乎所有部门，如果按照链式的工作流来解决埋点问题，当任何一个">
+<meta property="og:description" content="0x00 前言埋点项目的一般思路是使用代码手动埋点。国内主要的第三方数据分析服务商，如百度统计、友盟、TalkingData等都提供这一方案。用户数据埋点是少见的涉及到一个产品研发团队所有角色的项目。从运营的数据需求，到产品经理的抽象和规范，到移动端前端的手动采集数据，再到服务端和大数据的存储和转换，最终把结果反馈给运营和产品经理。涉及到几乎所有部门，如果按照链式的工作流来解决埋点问题，当任何一个">
 <meta property="og:image" content="https://ivonhoe.github.io/res/trace_user/trace1.png">
 <meta property="og:image" content="https://ivonhoe.github.io/res/trace_user/trace2.png">
 <meta property="og:image" content="https://ivonhoe.github.io/res/trace_user/trace3.png">
-<meta property="og:updated_time" content="2018-07-03T10:05:54.000Z">
+<meta property="og:updated_time" content="2018-07-18T02:17:32.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="客户端无痕埋点实践详解">
-<meta name="twitter:description" content="0x00 前言埋点项目的一般思路是使用代码手动埋点。国内主要的第三方数据分析服务商，如百度统计、友盟、TalkingData等都提供这一方案。用户数据埋点是少见的涉及到一个产品研发团队所有角色的项目。从运营的数据需求，到产品经理的抽象和规范，到客户端前端的手动采集数据，再到服务端和大数据的存储和转换，最终把结果反馈给运营和产品经理。涉及到几乎所有部门，如果按照链式的工作流来解决埋点问题，当任何一个">
+<meta name="twitter:title" content="移动端无痕埋点实践详解">
+<meta name="twitter:description" content="0x00 前言埋点项目的一般思路是使用代码手动埋点。国内主要的第三方数据分析服务商，如百度统计、友盟、TalkingData等都提供这一方案。用户数据埋点是少见的涉及到一个产品研发团队所有角色的项目。从运营的数据需求，到产品经理的抽象和规范，到移动端前端的手动采集数据，再到服务端和大数据的存储和转换，最终把结果反馈给运营和产品经理。涉及到几乎所有部门，如果按照链式的工作流来解决埋点问题，当任何一个">
 
 
 
@@ -128,7 +128,7 @@
 
 
 
-  <title> 客户端无痕埋点实践详解 | 病已的博客 </title>
+  <title> 移动端无痕埋点实践详解 | 病已的博客 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -297,7 +297,7 @@
             
             
               
-                客户端无痕埋点实践详解
+                移动端无痕埋点实践详解
               
             
           </h1>
@@ -352,7 +352,7 @@
 
           
           
-             <span id="/2018/07/03/how-to-track-users/" class="leancloud_visitors" data-flag-title="客户端无痕埋点实践详解">
+             <span id="/2018/07/03/how-to-track-users/" class="leancloud_visitors" data-flag-title="移动端无痕埋点实践详解">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -381,7 +381,7 @@
       
 
       
-        <h3 id="0x00_前言">0x00 前言</h3><p>埋点项目的一般思路是使用代码手动埋点。国内主要的第三方数据分析服务商，如百度统计、友盟、TalkingData等都提供这一方案。用户数据埋点是少见的涉及到一个产品研发团队所有角色的项目。从运营的数据需求，到产品经理的抽象和规范，到客户端前端的手动采集数据，再到服务端和大数据的存储和转换，最终把结果反馈给运营和产品经理。涉及到几乎所有部门，如果按照链式的工作流来解决埋点问题，当任何一个环节出现问题，都会对整个项目结果的产出产生影响。</p>
+        <h3 id="0x00_前言">0x00 前言</h3><p>埋点项目的一般思路是使用代码手动埋点。国内主要的第三方数据分析服务商，如百度统计、友盟、TalkingData等都提供这一方案。用户数据埋点是少见的涉及到一个产品研发团队所有角色的项目。从运营的数据需求，到产品经理的抽象和规范，到移动端前端的手动采集数据，再到服务端和大数据的存储和转换，最终把结果反馈给运营和产品经理。涉及到几乎所有部门，如果按照链式的工作流来解决埋点问题，当任何一个环节出现问题，都会对整个项目结果的产出产生影响。</p>
 <a id="more"></a>
 <p><img src="/res/trace_user/trace1.png" alt=""></p>
 <h3 id="0x01_什么是无痕埋点？">0x01 什么是无痕埋点？</h3><p>在技术上，所谓的”无痕埋点”，其实就是通过技术手段，无差别的记录用户在产品中的行为，当有一天突然想对某一个控件做点击分析时，不再需要开发手动添加数据采集信息。因为从部署埋点SDK的数据开始就一直在收集所有的用户点击了。用户的数据并不是分析需求产生的那一刻才有的。<br>从技术角度总结以往埋点项目结果产出困难的原因，这些也是无痕埋点方案想要解决的核心问题。</p>
@@ -392,7 +392,7 @@
 </ul>
 <p>在项目上，无痕埋点解决项目链路过长的问题，将埋点数据的产生过程分成两个并行的部分。将数据的采集过程前置，不再依赖运营和产品经理的需求产出。</p>
 <p><img src="/res/trace_user/trace2.png" alt=""></p>
-<h3 id="0x02_客户端无痕埋点如何实现？">0x02 客户端无痕埋点如何实现？</h3><p>客户端埋点的方案以在Android系统上实现为例，关键在如何统一标识控件和统一拦截用户操作行为。这里说的用户操作主要还是用户的单击事件。</p>
+<h3 id="0x02_移动端无痕埋点如何实现？">0x02 移动端无痕埋点如何实现？</h3><p>移动端埋点的方案以在Android系统上实现为例，关键在如何统一标识控件和统一拦截用户操作行为。这里说的用户操作主要还是用户的单击事件。</p>
 <h4 id="2-1_如何标识控件">2.1 如何标识控件</h4><p>为了自动生成事件标识，我们需要获取每个控件自身的ID、类名以及位于所属父组件的Index等特征信息，并逐级向上遍历找到根节点。约定控件标识的生成规则为 <code>/root/ClassName:id/ClassName:id</code>，以某一个业务界面的<code>扫一扫</code>按钮为例，寻找它到root节点的控件路径，它的控件标识字符串应该是 <code>/root/RelativeLayout:-1/FrameLayout:1997209645/RelativeLayout:-1/RelativeLayout:1997209836/LinearLayout:1997209965/TextView:1997209967</code>，并通过md5算法将这个标识字符串生成为<code>XPATH</code>就是我们想要的控件标识。当后台上报数据中包含<code>1e3cdc9499fac8088220756a46c85599</code>的点击时。我们就认为是<code>扫一扫</code>控件被点击了。</p>
 <p><img src="/res/trace_user/trace3.png" alt=""></p>
 <h4 id="2-2_如何统一拦截单击事件">2.2 如何统一拦截单击事件</h4><p>还是以Android端上的实现为例，如何统一拦截用户的单击事件呢？先看如何实现一个单击操作的响应，在Android上一般的做法是针对View设置一个单击的监听。</p>
@@ -619,7 +619,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#0x00_前言"><span class="nav-number">1.</span> <span class="nav-text">0x00 前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x01_什么是无痕埋点？"><span class="nav-number">2.</span> <span class="nav-text">0x01 什么是无痕埋点？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x02_客户端无痕埋点如何实现？"><span class="nav-number">3.</span> <span class="nav-text">0x02 客户端无痕埋点如何实现？</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1_如何标识控件"><span class="nav-number">3.1.</span> <span class="nav-text">2.1 如何标识控件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2_如何统一拦截单击事件"><span class="nav-number">3.2.</span> <span class="nav-text">2.2 如何统一拦截单击事件</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x03_总结"><span class="nav-number">4.</span> <span class="nav-text">0x03 总结</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x04_参考文档"><span class="nav-number">5.</span> <span class="nav-text">0x04 参考文档</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#0x00_前言"><span class="nav-number">1.</span> <span class="nav-text">0x00 前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x01_什么是无痕埋点？"><span class="nav-number">2.</span> <span class="nav-text">0x01 什么是无痕埋点？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x02_移动端无痕埋点如何实现？"><span class="nav-number">3.</span> <span class="nav-text">0x02 移动端无痕埋点如何实现？</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1_如何标识控件"><span class="nav-number">3.1.</span> <span class="nav-text">2.1 如何标识控件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2_如何统一拦截单击事件"><span class="nav-number">3.2.</span> <span class="nav-text">2.2 如何统一拦截单击事件</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x03_总结"><span class="nav-number">4.</span> <span class="nav-text">0x03 总结</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x04_参考文档"><span class="nav-number">5.</span> <span class="nav-text">0x04 参考文档</span></a></li></ol></div>
             
 
           </div>
