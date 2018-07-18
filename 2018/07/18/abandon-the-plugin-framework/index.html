@@ -64,7 +64,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Android,Delvik,GC,性能优化,转载," />
+  <meta name="keywords" content="Hexo, NexT" />
 
 
 
@@ -82,22 +82,18 @@
 
 
 
-<meta name="description" content="作者：乐蛙科技高级研发经理 易宁
-Android应用普遍没有iOS应用流畅，这与Android应用是运行在Java虚拟机上有很大的关系，而关系最大的恐怕就是Java虚拟机上的Garbage Collection（GC）了。Java语言提供了自动内存管理，垃圾对象会在GC过程中自动被释放。这提供了开发效率，使开发者能集中精力在业务逻辑上；但天下没有免费的午餐，你写的Android应用的某些性能上的问">
+<meta name="description" content="0x01 前言Android插件化框架一直以来就是安卓平台上的一个重要技术方向，从携程的DynamicAPK到360RePlugin再到阿里巴巴的Atlas，甚至美团和滴滴的安卓团队都有自己的一套安卓插件化解决方案。面对业界如此热门的技术方向，在对比业界开源的插件化方案后，团队内部于去年10月份开始(2017.10)在项目中选择开源的Small插件化框架进行了尝试。鞋是否合适需要穿上脚才能知道。这">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Android性能优化之如何写出GC友好的Android应用">
-<meta property="og:url" content="https://ivonhoe.github.io/2017/04/25/如何写出GC友好的Android应用/index.html">
+<meta property="og:title" content="Android插件化之从入门到放弃">
+<meta property="og:url" content="https://ivonhoe.github.io/2018/07/18/abandon-the-plugin-framework/index.html">
 <meta property="og:site_name" content="病已的博客">
-<meta property="og:description" content="作者：乐蛙科技高级研发经理 易宁
-Android应用普遍没有iOS应用流畅，这与Android应用是运行在Java虚拟机上有很大的关系，而关系最大的恐怕就是Java虚拟机上的Garbage Collection（GC）了。Java语言提供了自动内存管理，垃圾对象会在GC过程中自动被释放。这提供了开发效率，使开发者能集中精力在业务逻辑上；但天下没有免费的午餐，你写的Android应用的某些性能上的问">
-<meta property="og:image" content="https://ivonhoe.github.io/res/dalvik_gc/1.png">
-<meta property="og:image" content="https://ivonhoe.github.io/res/dalvik_gc/2.png">
-<meta property="og:image" content="https://ivonhoe.github.io/res/dalvik_gc/3.png">
-<meta property="og:updated_time" content="2018-05-27T08:19:38.000Z">
+<meta property="og:description" content="0x01 前言Android插件化框架一直以来就是安卓平台上的一个重要技术方向，从携程的DynamicAPK到360RePlugin再到阿里巴巴的Atlas，甚至美团和滴滴的安卓团队都有自己的一套安卓插件化解决方案。面对业界如此热门的技术方向，在对比业界开源的插件化方案后，团队内部于去年10月份开始(2017.10)在项目中选择开源的Small插件化框架进行了尝试。鞋是否合适需要穿上脚才能知道。这">
+<meta property="og:image" content="https://ivonhoe.github.io/res/no-small/google-implementation.png">
+<meta property="og:image" content="https://ivonhoe.github.io/res/no-small/implementation-api.png">
+<meta property="og:updated_time" content="2018-07-18T12:52:58.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Android性能优化之如何写出GC友好的Android应用">
-<meta name="twitter:description" content="作者：乐蛙科技高级研发经理 易宁
-Android应用普遍没有iOS应用流畅，这与Android应用是运行在Java虚拟机上有很大的关系，而关系最大的恐怕就是Java虚拟机上的Garbage Collection（GC）了。Java语言提供了自动内存管理，垃圾对象会在GC过程中自动被释放。这提供了开发效率，使开发者能集中精力在业务逻辑上；但天下没有免费的午餐，你写的Android应用的某些性能上的问">
+<meta name="twitter:title" content="Android插件化之从入门到放弃">
+<meta name="twitter:description" content="0x01 前言Android插件化框架一直以来就是安卓平台上的一个重要技术方向，从携程的DynamicAPK到360RePlugin再到阿里巴巴的Atlas，甚至美团和滴滴的安卓团队都有自己的一套安卓插件化解决方案。面对业界如此热门的技术方向，在对比业界开源的插件化方案后，团队内部于去年10月份开始(2017.10)在项目中选择开源的Small插件化框架进行了尝试。鞋是否合适需要穿上脚才能知道。这">
 
 
 
@@ -125,13 +121,13 @@ Android应用普遍没有iOS应用流畅，这与Android应用是运行在Java�
 
 
 
-  <link rel="canonical" href="https://ivonhoe.github.io/2017/04/25/如何写出GC友好的Android应用/"/>
+  <link rel="canonical" href="https://ivonhoe.github.io/2018/07/18/abandon-the-plugin-framework/"/>
 
 
 
 
 
-  <title> Android性能优化之如何写出GC友好的Android应用 | 病已的博客 </title>
+  <title> Android插件化之从入门到放弃 | 病已的博客 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -279,7 +275,7 @@ Android应用普遍没有iOS应用流畅，这与Android应用是运行在Java�
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="https://ivonhoe.github.io/2017/04/25/如何写出GC友好的Android应用/">
+    <link itemprop="mainEntityOfPage" href="https://ivonhoe.github.io/2018/07/18/abandon-the-plugin-framework/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="病已">
@@ -300,7 +296,7 @@ Android应用普遍没有iOS应用流畅，这与Android应用是运行在Java�
             
             
               
-                Android性能优化之如何写出GC友好的Android应用
+                Android插件化之从入门到放弃
               
             
           </h1>
@@ -315,8 +311,8 @@ Android应用普遍没有iOS应用流畅，这与Android应用是运行在Java�
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-25T21:21:23+08:00">
-                Apr 25 2017
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-18T20:45:30+08:00">
+                Jul 18 2018
               </time>
             
 
@@ -338,8 +334,8 @@ Android应用普遍没有iOS应用流畅，这与Android应用是运行在Java�
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/性能优化/" itemprop="url" rel="index">
-                    <span itemprop="name">性能优化</span>
+                  <a href="/categories/思考总结/" itemprop="url" rel="index">
+                    <span itemprop="name">思考总结</span>
                   </a>
                 </span>
 
@@ -355,7 +351,7 @@ Android应用普遍没有iOS应用流畅，这与Android应用是运行在Java�
 
           
           
-             <span id="/2017/04/25/如何写出GC友好的Android应用/" class="leancloud_visitors" data-flag-title="Android性能优化之如何写出GC友好的Android应用">
+             <span id="/2018/07/18/abandon-the-plugin-framework/" class="leancloud_visitors" data-flag-title="Android插件化之从入门到放弃">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -384,78 +380,57 @@ Android应用普遍没有iOS应用流畅，这与Android应用是运行在Java�
       
 
       
-        <p>作者：乐蛙科技高级研发经理 易宁</p>
-<p>Android应用普遍没有iOS应用流畅，这与Android应用是运行在Java虚拟机上有很大的关系，而关系最大的恐怕就是Java虚拟机上的Garbage Collection（GC）了。Java语言提供了自动内存管理，垃圾对象会在GC过程中自动被释放。这提供了开发效率，使开发者能集中精力在业务逻辑上；但天下没有免费的午餐，你写的Android应用的某些性能上的问题很可能就是GC导致的。</p>
-<p>下面是一段非常简单的Java语句：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">byte</span>[] data = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">512</span> * <span class="number">512</span> * <span class="number">4</span>];</span><br></pre></td></tr></table></figure></p>
-<p>这条语句申请了一块大小相等于512*512大小图片的内存。执行这条语句会消耗多少时间呢？0+ms吗？基本没有性能影响吗？</p>
+        <h3 id="0x01_前言">0x01 前言</h3><p>Android插件化框架一直以来就是安卓平台上的一个重要技术方向，从携程的DynamicAPK到360RePlugin再到阿里巴巴的Atlas，甚至美团和滴滴的安卓团队都有自己的一套安卓插件化解决方案。面对业界如此热门的技术方向，在对比业界开源的插件化方案后，团队内部于去年10月份开始(2017.10)在项目中选择开源的Small插件化框架进行了尝试。鞋是否合适需要穿上脚才能知道。这篇文章总结了我在使用Small插件化框架后，自己对插件化的理解和思考。</p>
 <a id="more"></a>
-<p>实际的情况是：0~200ms，甚至更多！这取决于应用当前Heap使用情况。在一个类似Hello World的测试程序里，执行这条语句有时候只需要0+ms就完成了，但一般情况是16+ms，甚至有时候需要30+ms。我们知道一段流畅的动画每帧绘图消耗的时间应该小于16ms，因为这样才能保证动画有60FPS的帧率。但如果执行上面那句简单的语句就要错过1~2帧，那就难怪动画不流畅了。</p>
-<p>不过，有人可能要说了：“没人会傻到在每帧绘图的时候去申请一块这么大的内存，实际情况不会有这个问题”。实际的工程中的确不会这么写，但造成执行这条语句耗时比较长的原因不是因为申请的内存太大，而是申请过程中产生了GC，就算是一个Byte的内存申请也可能消耗比这更长的时间。</p>
-<h3 id="Dalvik中GC的原理">Dalvik中GC的原理</h3><p>在Dalvik虚拟机中定义了四种触发GC的条件（参看<a href="http://androidxref.com/4.2.2_r1/xref/dalvik/vm/alloc/Heap.h" target="_blank" rel="external">Heap.h</a>）：</p>
-<blockquote>
-<ul>
-<li><code>GC_CONCURRENT</code>，当Heap的使用率达到某一阈值时自动触发。</li>
-<li><code>GC_FOR_MALLOC</code>，当Heap没有足够的空间用于容下新创建的对象时。</li>
-<li><code>GC_EXPLICIT</code>，用户主动调用GC时。</li>
-<li><code>GC_BEFORE_OOM</code>，当要发生OOM时系统尝试进行最后GC的努力。</li>
-</ul>
+<h3 id="0x02_重新审视插件化框架的利弊">0x02 重新审视插件化框架的利弊</h3><h4 id="2-1_插件化方案想要解决的核心问题">2.1 插件化方案想要解决的核心问题</h4><blockquote>
+<p>安卓的动态化发布</p>
 </blockquote>
-<p><code>GC_CONCURRENT</code>和<code>GC_EXPLICIT</code>是并行的，GC过程中应用不会被暂停，只在GC开始和结束时会暂停应用，每次暂停的时间比较短，一般只有3~4ms。<code>GC_FOR_MALLOC</code>是非并行的，GC过程中应用被暂停，耗时比较长，可能几十毫秒也可能几百毫秒。在应用向Dalvik申请内存时，Dalvik先检查当前Heap中有无足够的空余空间用来安排对象，当发现没有足够的空间的时候会先进行<code>GC_FOR_MALLOC</code>以试图释放垃圾对象来获取新的空间，如果发现空间还不够则进行Heap的增长。在每次成功分配完新的空间后，Dalvik会检查当前Heap的使用情况，如果使用空间超过一定的阈值的时候，<code>GC_CONCURRENT</code>就会触发。</p>
-<p>每次GC的时候会打印如下的Log信息：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">D/dalvikvm(10497): GC_CONCURRENT freed 2940K, 54% free 2885K/6204K, paused 1ms+4ms&#65292; total 38ms</span><br></pre></td></tr></table></figure>
-<p>上面的Log信息表明：这次<code>GC_CONCURRENT</code>释放了2940K的空间，当前Heap使用率为54%，总的Heap大小是6204K，空余2885K，GC开始时暂停了1ms，GC结束时暂停了4ms，GC总共花了38ms。</p>
-<p>Dalvik虚拟机通过下面几个个属性值来控制Heap的空间配置：</p>
+<p>动态化就像是天赋，有些人天生就有的能力却是需要你花非常大精力也未必能获取到的。前端的开发应该从来不需要动态化的方案吧！插件化方案的一个最大作用应该就是绕开应用市场的审核周期，尽可能的像后端Java或者前端JS一样，随时发布随时生效。</p>
 <blockquote>
-<ul>
-<li><code>targetUtilization</code>，理想的Heap利用率，每当Heap增长时Dalvik会使增长后的Heap维持在这个利用率附近。</li>
-<li><code>minFree</code>，空余空间最小值。</li>
-<li><code>maxFree</code>，空余空间最大值。</li>
-<li><code>startSize</code>，虚拟机启动时初始的Heap大小。</li>
-<li><code>growthLimit</code>，用户设置的允许的最大Heap大小。</li>
-<li><code>maximumSize</code>， Heap空间最大极限值。</li>
-</ul>
+<p>真正意义上的模块解耦</p>
 </blockquote>
-<p>这些属性值都可以通过<code>system/build.prop</code>来配置，zygote启动dalvik虚拟机时会从该文件中读取这些参数。通常来说，Heap空余空间越大应用越流畅，消耗的内存也更多。</p>
-<p>下图为一次“顺利”的4M内存申请:<br><img src="/res/dalvik_gc/1.png" alt="Alt text"><br>可以看到在申请之前，空余的空间达到8M，申请4M的内存很顺利没有任何GC发生。</p>
-<p>下图为一次“不顺利”的8M内存申请：<br><img src="/res/dalvik_gc/2.png" alt="Alt text"><br>虽然空余的空间已经有8M，但是为了保证正常的Heap利用率，Heap空间还是增长了，并且增长Heap之前进行了一次<code>GC_FOR_MALLOC</code>。</p>
-<p>下图为继续申请8M的内存：<br><img src="/res/dalvik_gc/3.png" alt="Alt text"><br>相应的输出Log：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">D/dalvikvm&#65109; GC_FOR_ALLOC freed 8195K, 34% free 16726K/24972K, paused 23ms, total 23ms</span><br></pre></td></tr></table></figure></p>
-<p>上图和Log更加清晰的表明Heap空间不够时会先进行一次GC，GC的类型就是<code>GC_FOR_MALLOC</code>。</p>
-<h3 id="Android流畅的关键：GC_FOR_MALLOC">Android流畅的关键：<code>GC_FOR_MALLOC</code></h3><p><code>GC_CONCURRENT</code>和<code>GC_FOR_MALLOC</code>虽然都是系统自动调用的，都暂停了应用，但它们花费的时间不在一个数量级。通过上面的分析我们知道每次申请内存空间不够时就会产生<code>GC_FOR_MALLOC</code>，我们不可能不申请内存，所以也不可能完全避免<code>GC_FOR_MALLOC</code>，但还是有些策略能降低<code>GC_FOR_MALLOC</code>的影响：</p>
+<p>插件化的方式让模块与模块之间在开发方式上真正的隔离，达到了解耦的目标。而这在<strong>之前</strong>android原生的开发方式上是很难达到的。</p>
+<blockquote>
+<p>dex 65535问题</p>
+</blockquote>
+<p>插件化的方案也可以看做一个dex分包和资源分包的方案。</p>
+<h4 id="2-2_Small插件化方案带来的新问题">2.2 Small插件化方案带来的新问题</h4><p>在<a href="https://ivonhoe.github.io/2018/01/18/Small%E6%A1%86%E6%9E%B6%E5%AE%9E%E8%B7%B5%E6%80%BB%E7%BB%93/">《Android插件化之Small框架实践总结》</a> 中对比了Small插件化框架的优缺点，选择Small最重要的原因还是轻量化，当然很多问题也是轻量化带来的。</p>
+<blockquote>
+<p>兼容性问题</p>
+</blockquote>
+<p>兼容性问题大致分布在以下几个方面：</p>
 <ol>
-<li><p>避免不必要的<code>GC_FOR_MALLOC</code></p>
-<blockquote>
-<ul>
-<li>Heap空间都有其理想的利用率，在理想的利用空间内，申请内存是不会发生<code>GC_FOR_MALLOC</code>。</li>
-<li>应用应该避免内存开销的波动，将内存的波动维持在<code>maxFree</code>和<code>mixFree</code>之间。</li>
-<li>避免大的内存需求。比如，不要轻易去用<code>WallpaperManager</code>，因为壁纸占用巨大的内存。</li>
-<li>应该尽量复用对象。比如，使用<code>BitmapFactory</code>加载图片时使用<code>BitmapFactory.Option.inBitmap</code>复用Bitmap，避免申请内存。</li>
-<li>对于已知有垃圾对象的情况下，先进行手动的<code>System.gc()</code>来释放空间，而不是等到系统自动调用<code>GC_FOR_MALLOC</code>。因为<code>GC_EXPLICIT</code>是异步的，暂停应用的时间远小于<code>GC_FOR_MALLOC</code>。</li>
-<li>不要在循环中申请创建对象。循环中申请的对象会不断累积，直到空间不够发生<code>GC_FOR_MALLOC</code>。</li>
-</ul>
-</blockquote>
-</li>
-<li><p>减少<code>GC_FOR_MALLOC</code>的影响</p>
-<blockquote>
-<ul>
-<li>不要在Android应用运行的关键阶段申请内存。比如，不要在<code>onDraw</code>, <code>onLayout</code>, <code>onXXX</code>中创建对象。在关键阶段创建对象可能使应用出现随机性卡顿。</li>
-<li>尽量在<code>onCreate</code>和<code>onStart</code>阶段创建对象，同时在<code>onStop</code>和<code>onDestroy</code>阶段释放对象。</li>
-<li>尽量复用<code>ListView</code>中Item，在<code>ListView</code>滑动时不要创建对象。</li>
-</ul>
-</blockquote>
-</li>
-<li><p>降低每次<code>GC_FOR_MALLOC</code>的时间消耗</p>
-<blockquote>
-<ul>
-<li>避免大量的，细小的对象。这些对象会增加Heap空间的复杂度，在GC时会严重影响GC的耗时。</li>
-<li>对于不用的对象近早将其引用消除，减少Heap空间占用和复杂度。</li>
-<li>尽量用数据结构，数组来组织对象。</li>
-<li>明确对象之间的关系，使对象之间的依赖关系简单明了。</li>
-<li>减少View的数量。每个View包含大量属性，对于没有交互的View，大多数的属性都是没有用的，可以用Drawable替代。</li>
-</ul>
-</blockquote>
-</li>
+<li>与google最新系统和编译工具的兼容。18年第三季度最新版本Android O系统的新手机会陆续上市，插件化架构对新系统的兼容性问题会变的急切。并且插件化框架针对安卓系统的黑科技也越来越不被新版本系统接受。Android Studio 3.1最新新编译工具的兼容问题。</li>
+<li>业界移动安全方案的兼容。常见的三方dex加壳方案无法在插件化框架上顺利运用。</li>
+<li>第三方框架的兼容，常见涉及AOP的第三方框架，如AAC和Small框架不兼容。甚至React Native方案都需要花很多时间和精力去适配。</li>
 </ol>
-<p><em>需要注意的是</em>：本文讨论的只限于Dalvik虚拟机。对于Art虚拟机，<a href="https://developer.android.com/guide/practices/verifying-apps-art.html#GC_Migration" target="_blank" rel="external">官方文档</a>已经表明Art虚拟机有极大的改进，其中就特别提到<strong>不用</strong>主动调用<code>System.gc()</code>来避免产生<code>GC_FOR_MALLOC</code>。</p>
+<blockquote>
+<p>插件化框架带来的稳定性问题</p>
+</blockquote>
+<ol>
+<li>资源查找失败的bug，虽然已经接近了在个别国产手机上的资源查找失败问题，详情见<a href="https://ivonhoe.github.io/2018/03/14/small-bug-555-fix/">《Android插件化之资源加载》</a>。但是在Android 7.1以上的系统上依然出现偶现的资源查找失败问题。并且崩溃率（错误数/启动次数）在0.3%左右。这个比例其实不算低了。这个bug暂时只能通过将插件资源转移到宿主分身中绕过。但是如果把所有插件资源都放到宿主中以规避这个问题，那插件化就没有任何意义了。</li>
+</ol>
+<h4 id="2-3_重新评估Small插件化框架带来的收益">2.3 重新评估Small插件化框架带来的收益</h4><p>在团队技术选型上优先考虑的应该是和现有业务适配吧。如果你所面对的业务不存在快速迭代频繁发布的需求在，插件化框架的威力可能就要减小一半了。在选择个人开发者维护的开源项目时，依然是要考虑到加购稳定性和bug的修复时效上。因为一旦在一个商业化的项目中使用开源框架，稳定性和兼容性一定会放在首要位置的。在这一点上，可能从大公司孵化出的开源项目更有优势。</p>
+<p>在回看插件化框架对android应用中模块解耦的贡献，对比android应用的原生的开发方式。能够从插件化框架吸收的模块解耦方法上可以看到大致这几个方面。</p>
+<blockquote>
+<p>模块间的解耦要依赖工具而不是开发规范</p>
+</blockquote>
+<p>以2个业务app模块为例，应该有一个工具存在避免这两个模块产生耦合关系，如果一旦存在耦合关系就可能编译报错。而不是靠开发者约定的开发规范。因为规范是可以不遵守的。这是同层级间的耦合管理。</p>
+<blockquote>
+<p>尽可能的避免依赖传递 </p>
+</blockquote>
+<p>这是层级间的耦合管理。</p>
+<blockquote>
+<p>相比较插件化框架你可能更需要一个路由工具 </p>
+</blockquote>
+<p>业界有很多业界路由框架，比如阿里的ARouter，路由是解决模块解耦带来的问题的必要工具。所以自己动手实现一个简单的路由工具也不是很难。</p>
+<h4 id="2-3_implementation、api和compile">2.3 implementation、api和compile</h4><p>可以查看google文档上对Android Studio 3.0后新引入的依赖配置的差异说明。<br><a href="https://developer.android.com/studio/build/gradle-plugin-3-0-0-migration" target="_blank" rel="external">https://developer.android.com/studio/build/gradle-plugin-3-0-0-migration</a></p>
+<p><img src="/res/no-small/google-implementation.png" alt=""></p>
+<p>简单来说google将compile配置拆成了两个关键词，分别是api和implementation。api和implementation的差异不单单是编译效率的差异，我觉得更重要的是，implementation避免了依赖的传递。以下图对比api和implementation的差异可以发现，当使用implementation配置依赖时，app模块将不会直接依赖<code>D</code>模块。在使用老的依赖配置<code>compile</code>时，实际上并没有做到模块的分层，最底下的模块依然可以被最上层的模块依赖，实际的依赖规则在开发者的规范里，而不存在项目模块的管理中。</p>
+<p><img src="/res/no-small/implementation-api.png" alt=""></p>
+<h3 id="0x04_总结">0x04 总结</h3><p>以上就是我对插件化框架的看法，如果你的业务存在开始迭代频繁发布的情况存在，那么你可能就很需要一个插件化框架来带来开发方式上的改变，核心在于提高了研发效率。但是在使用插件化项目之前你需要对插件化框架的边界和扩展边界的成本有一个清晰的认识。实际上上面所说的所有插件化框架带来的问题都是可以解决的。问题的关键在于在你的团队这样的付出和产出是否值得呢？相信每个人都可能会有不同的看法。</p>
+<p><strong>当然开源的插件化框架依然是重点学习的方向，理解不同插件化方案的实现原理是深入理解安卓系统很好的切入点。接下来我还会花更多的时间深入的学习360和阿里巴巴的插件化方案。</strong></p>
+<p>最近在读《邓小平改变中国》这本书，让我对从文革结束到改革开放前那段对大多数中国人讳莫如深的历史有了大致的了解。<strong>“实践是检验真理的唯一标准”</strong>，这句很多80后90后耳熟能详的口号背后，原来发生了这么多的波折，冲破了如此多的障碍。<strong>理论与实践的统一是马克思主义的一个最基本的原则</strong>。<strong>实事求是是毛泽东思想的精髓</strong>。听起来虚头巴脑，但确实应该是解决问题和对待未知事物的核心方法论。对！这是一篇技术总结。</p>
 
       
     </div>
@@ -504,20 +479,6 @@ Android应用普遍没有iOS应用流畅，这与Android应用是运行在Java�
 
     <footer class="post-footer">
       
-        <div class="post-tags">
-          
-            <a href="/tags/Android/" rel="tag"># Android</a>
-          
-            <a href="/tags/Delvik/" rel="tag"># Delvik</a>
-          
-            <a href="/tags/GC/" rel="tag"># GC</a>
-          
-            <a href="/tags/性能优化/" rel="tag"># 性能优化</a>
-          
-            <a href="/tags/转载/" rel="tag"># 转载</a>
-          
-        </div>
-      
 
       
         
@@ -527,8 +488,8 @@ Android应用普遍没有iOS应用流畅，这与Android应用是运行在Java�
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/04/15/Zygote/" rel="next" title="Zygote">
-                <i class="fa fa-chevron-left"></i> Zygote
+              <a href="/2018/07/08/network-architecture-design/" rel="next" title="Android客户端HTTP网络框架设计与实践">
+                <i class="fa fa-chevron-left"></i> Android客户端HTTP网络框架设计与实践
               </a>
             
           </div>
@@ -536,10 +497,6 @@ Android应用普遍没有iOS应用流畅，这与Android应用是运行在Java�
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/04/26/Zygote-2/" rel="prev" title="Android性能优化之系统资源预加载的思考">
-                Android性能优化之系统资源预加载的思考 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -686,7 +643,7 @@ Android应用普遍没有iOS应用流畅，这与Android应用是运行在Java�
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Dalvik中GC的原理"><span class="nav-number">1.</span> <span class="nav-text">Dalvik中GC的原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Android流畅的关键：GC_FOR_MALLOC"><span class="nav-number">2.</span> <span class="nav-text">Android流畅的关键：GC_FOR_MALLOC</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#0x01_前言"><span class="nav-number">1.</span> <span class="nav-text">0x01 前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x02_重新审视插件化框架的利弊"><span class="nav-number">2.</span> <span class="nav-text">0x02 重新审视插件化框架的利弊</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1_插件化方案想要解决的核心问题"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 插件化方案想要解决的核心问题</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2_Small插件化方案带来的新问题"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 Small插件化方案带来的新问题</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3_重新评估Small插件化框架带来的收益"><span class="nav-number">2.3.</span> <span class="nav-text">2.3 重新评估Small插件化框架带来的收益</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3_implementation、api和compile"><span class="nav-number">2.4.</span> <span class="nav-text">2.3 implementation、api和compile</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x04_总结"><span class="nav-number">3.</span> <span class="nav-text">0x04 总结</span></a></li></ol></div>
             
 
           </div>

@@ -274,6 +274,164 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://ivonhoe.github.io/2018/07/18/abandon-the-plugin-framework/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="病已">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/5706813?v=3&s=460">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="病已的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2018/07/18/abandon-the-plugin-framework/" itemprop="url">
+                  Android插件化之从入门到放弃
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-18T20:45:30+08:00">
+                Jul 18 2018
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/思考总结/" itemprop="url" rel="index">
+                    <span itemprop="name">思考总结</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2018/07/18/abandon-the-plugin-framework/" class="leancloud_visitors" data-flag-title="Android插件化之从入门到放弃">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h3 id="0x01_前言">0x01 前言</h3><p>Android插件化框架一直以来就是安卓平台上的一个重要技术方向，从携程的DynamicAPK到360RePlugin再到阿里巴巴的Atlas，甚至美团和滴滴的安卓团队都有自己的一套安卓插件化解决方案。面对业界如此热门的技术方向，在对比业界开源的插件化方案后，团队内部于去年10月份开始(2017.10)在项目中选择开源的Small插件化框架进行了尝试。鞋是否合适需要穿上脚才能知道。这篇文章总结了我在使用Small插件化框架后，自己对插件化的理解和思考。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/07/18/abandon-the-plugin-framework/#далее" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="https://ivonhoe.github.io/2018/07/08/network-architecture-design/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -541,7 +699,7 @@
 
       
         
-          <h3 id="0x00_前言">0x00 前言</h3><p>埋点项目的一般思路是使用代码手动埋点。国内主要的第三方数据分析服务商，如百度统计、友盟、TalkingData等都提供这一方案。用户数据埋点是少见的涉及到一个产品研发团队所有角色的项目。从运营的数据需求，到产品经理的抽象和规范，到移动端前端的手动采集数据，再到服务端和大数据的存储和转换，最终把结果反馈给运营和产品经理。涉及到几乎所有部门，如果按照链式的工作流来解决埋点问题，当任何一个环节出现问题，都会对整个项目结果的产出产生影响。</p>
+          <h3 id="0x00_前言">0x00 前言</h3><p>用户数据埋点的一般解决思路是使用代码手动埋点。国内主要的第三方数据分析服务商，如百度统计、友盟、TalkingData等都提供这一方案。但是使用代码手动埋点的方式，投入资源大，往往很难能够有实际产出。其中一个很重要的原因其实是在分析实际业务数据之前，很难知道我真正想看什么样的数据。用代码手动的埋点方案经常会导致一个尴尬的解决，想要看的数据没有埋，埋了的数据不准。<br>用户数据埋点是少见的涉及到一个产品研发团队所有角色的项目。从运营的数据需求，到产品经理的抽象和规范，到移动端前端的手动采集数据，再到服务端和大数据的存储和转换，最终把结果反馈给运营和产品经理。埋点的实际产出涉及到几乎所有部门，如果按照链式的工作流来解决埋点问题，当任何一个环节出现问题，都会对整个项目结果的产出产生影响。这篇文章记录了无痕埋点方案的思路与其核心问题的解决方案。</p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2018/07/03/how-to-track-users/#далее" rel="contents">
@@ -1704,169 +1862,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="https://ivonhoe.github.io/2017/06/18/android-app-gold-flow-hack/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="病已">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/5706813?v=3&s=460">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="病已的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/06/18/android-app-gold-flow-hack/" itemprop="url">
-                  Android安全之某团请求加密破解
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-18T18:13:19+08:00">
-                Jun 18 2017
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/移动安全/" itemprop="url" rel="index">
-                    <span itemprop="name">移动安全</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-             <span id="/2017/06/18/android-app-gold-flow-hack/" class="leancloud_visitors" data-flag-title="Android安全之某团请求加密破解">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数 </span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h3 id="0x00_前言">0x00 前言</h3><p>本文记录了破解某外卖App http请求参数加密过程中遇到的问题和解决思路，实现的目标是希望是能够通过一些手段实现自由调用其服务接口。<br>这篇文章主要讲述什么？</p>
-<ol>
-<li>静态分析和动态调试的基本方法和遇到的问题</li>
-<li>如何听过修改android源码实现全局hook</li>
-</ol>
-<p><img src="/res/meituan_hack/meituan-1.png" alt="想要破解的网络请求"></p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2017/06/18/android-app-gold-flow-hack/#далее" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1916,7 +1911,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">29</span>
+                <span class="site-state-item-count">30</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

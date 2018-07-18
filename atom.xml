@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://ivonhoe.github.io/"/>
-  <updated>2018-07-13T08:11:00.000Z</updated>
+  <updated>2018-07-18T12:52:58.000Z</updated>
   <id>https://ivonhoe.github.io/</id>
   
   <author>
@@ -14,6 +14,77 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Android插件化之从入门到放弃</title>
+    <link href="https://ivonhoe.github.io/2018/07/18/abandon-the-plugin-framework/"/>
+    <id>https://ivonhoe.github.io/2018/07/18/abandon-the-plugin-framework/</id>
+    <published>2018-07-18T12:45:30.000Z</published>
+    <updated>2018-07-18T12:52:58.000Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="0x01_前言">0x01 前言</h3><p>Android插件化框架一直以来就是安卓平台上的一个重要技术方向，从携程的DynamicAPK到360RePlugin再到阿里巴巴的Atlas，甚至美团和滴滴的安卓团队都有自己的一套安卓插件化解决方案。面对业界如此热门的技术方向，在对比业界开源的插件化方案后，团队内部于去年10月份开始(2017.10)在项目中选择开源的Small插件化框架进行了尝试。鞋是否合适需要穿上脚才能知道。这篇文章总结了我在使用Small插件化框架后，自己对插件化的理解和思考。</p>
+<a id="more"></a>
+<h3 id="0x02_重新审视插件化框架的利弊">0x02 重新审视插件化框架的利弊</h3><h4 id="2-1_插件化方案想要解决的核心问题">2.1 插件化方案想要解决的核心问题</h4><blockquote>
+<p>安卓的动态化发布</p>
+</blockquote>
+<p>动态化就像是天赋，有些人天生就有的能力却是需要你花非常大精力也未必能获取到的。前端的开发应该从来不需要动态化的方案吧！插件化方案的一个最大作用应该就是绕开应用市场的审核周期，尽可能的像后端Java或者前端JS一样，随时发布随时生效。</p>
+<blockquote>
+<p>真正意义上的模块解耦</p>
+</blockquote>
+<p>插件化的方式让模块与模块之间在开发方式上真正的隔离，达到了解耦的目标。而这在<strong>之前</strong>android原生的开发方式上是很难达到的。</p>
+<blockquote>
+<p>dex 65535问题</p>
+</blockquote>
+<p>插件化的方案也可以看做一个dex分包和资源分包的方案。</p>
+<h4 id="2-2_Small插件化方案带来的新问题">2.2 Small插件化方案带来的新问题</h4><p>在<a href="https://ivonhoe.github.io/2018/01/18/Small%E6%A1%86%E6%9E%B6%E5%AE%9E%E8%B7%B5%E6%80%BB%E7%BB%93/">《Android插件化之Small框架实践总结》</a> 中对比了Small插件化框架的优缺点，选择Small最重要的原因还是轻量化，当然很多问题也是轻量化带来的。</p>
+<blockquote>
+<p>兼容性问题</p>
+</blockquote>
+<p>兼容性问题大致分布在以下几个方面：</p>
+<ol>
+<li>与google最新系统和编译工具的兼容。18年第三季度最新版本Android O系统的新手机会陆续上市，插件化架构对新系统的兼容性问题会变的急切。并且插件化框架针对安卓系统的黑科技也越来越不被新版本系统接受。Android Studio 3.1最新新编译工具的兼容问题。</li>
+<li>业界移动安全方案的兼容。常见的三方dex加壳方案无法在插件化框架上顺利运用。</li>
+<li>第三方框架的兼容，常见涉及AOP的第三方框架，如AAC和Small框架不兼容。甚至React Native方案都需要花很多时间和精力去适配。</li>
+</ol>
+<blockquote>
+<p>插件化框架带来的稳定性问题</p>
+</blockquote>
+<ol>
+<li>资源查找失败的bug，虽然已经接近了在个别国产手机上的资源查找失败问题，详情见<a href="https://ivonhoe.github.io/2018/03/14/small-bug-555-fix/">《Android插件化之资源加载》</a>。但是在Android 7.1以上的系统上依然出现偶现的资源查找失败问题。并且崩溃率（错误数/启动次数）在0.3%左右。这个比例其实不算低了。这个bug暂时只能通过将插件资源转移到宿主分身中绕过。但是如果把所有插件资源都放到宿主中以规避这个问题，那插件化就没有任何意义了。</li>
+</ol>
+<h4 id="2-3_重新评估Small插件化框架带来的收益">2.3 重新评估Small插件化框架带来的收益</h4><p>在团队技术选型上优先考虑的应该是和现有业务适配吧。如果你所面对的业务不存在快速迭代频繁发布的需求在，插件化框架的威力可能就要减小一半了。在选择个人开发者维护的开源项目时，依然是要考虑到加购稳定性和bug的修复时效上。因为一旦在一个商业化的项目中使用开源框架，稳定性和兼容性一定会放在首要位置的。在这一点上，可能从大公司孵化出的开源项目更有优势。</p>
+<p>在回看插件化框架对android应用中模块解耦的贡献，对比android应用的原生的开发方式。能够从插件化框架吸收的模块解耦方法上可以看到大致这几个方面。</p>
+<blockquote>
+<p>模块间的解耦要依赖工具而不是开发规范</p>
+</blockquote>
+<p>以2个业务app模块为例，应该有一个工具存在避免这两个模块产生耦合关系，如果一旦存在耦合关系就可能编译报错。而不是靠开发者约定的开发规范。因为规范是可以不遵守的。这是同层级间的耦合管理。</p>
+<blockquote>
+<p>尽可能的避免依赖传递 </p>
+</blockquote>
+<p>这是层级间的耦合管理。</p>
+<blockquote>
+<p>相比较插件化框架你可能更需要一个路由工具 </p>
+</blockquote>
+<p>业界有很多业界路由框架，比如阿里的ARouter，路由是解决模块解耦带来的问题的必要工具。所以自己动手实现一个简单的路由工具也不是很难。</p>
+<h4 id="2-3_implementation、api和compile">2.3 implementation、api和compile</h4><p>可以查看google文档上对Android Studio 3.0后新引入的依赖配置的差异说明。<br><a href="https://developer.android.com/studio/build/gradle-plugin-3-0-0-migration" target="_blank" rel="external">https://developer.android.com/studio/build/gradle-plugin-3-0-0-migration</a></p>
+<p><img src="/res/no-small/google-implementation.png" alt=""></p>
+<p>简单来说google将compile配置拆成了两个关键词，分别是api和implementation。api和implementation的差异不单单是编译效率的差异，我觉得更重要的是，implementation避免了依赖的传递。以下图对比api和implementation的差异可以发现，当使用implementation配置依赖时，app模块将不会直接依赖<code>D</code>模块。在使用老的依赖配置<code>compile</code>时，实际上并没有做到模块的分层，最底下的模块依然可以被最上层的模块依赖，实际的依赖规则在开发者的规范里，而不存在项目模块的管理中。</p>
+<p><img src="/res/no-small/implementation-api.png" alt=""></p>
+<h3 id="0x04_总结">0x04 总结</h3><p>以上就是我对插件化框架的看法，如果你的业务存在开始迭代频繁发布的情况存在，那么你可能就很需要一个插件化框架来带来开发方式上的改变，核心在于提高了研发效率。但是在使用插件化项目之前你需要对插件化框架的边界和扩展边界的成本有一个清晰的认识。实际上上面所说的所有插件化框架带来的问题都是可以解决的。问题的关键在于在你的团队这样的付出和产出是否值得呢？相信每个人都可能会有不同的看法。</p>
+<p><strong>当然开源的插件化框架依然是重点学习的方向，理解不同插件化方案的实现原理是深入理解安卓系统很好的切入点。接下来我还会花更多的时间深入的学习360和阿里巴巴的插件化方案。</strong></p>
+<p>最近在读《邓小平改变中国》这本书，让我对从文革结束到改革开放前那段对大多数中国人讳莫如深的历史有了大致的了解。<strong>“实践是检验真理的唯一标准”</strong>，这句很多80后90后耳熟能详的口号背后，原来发生了这么多的波折，冲破了如此多的障碍。<strong>理论与实践的统一是马克思主义的一个最基本的原则</strong>。<strong>实事求是是毛泽东思想的精髓</strong>。听起来虚头巴脑，但确实应该是解决问题和对待未知事物的核心方法论。对！这是一篇技术总结。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h3 id=&quot;0x01_前言&quot;&gt;0x01 前言&lt;/h3&gt;&lt;p&gt;Android插件化框架一直以来就是安卓平台上的一个重要技术方向，从携程的DynamicAPK到360RePlugin再到阿里巴巴的Atlas，甚至美团和滴滴的安卓团队都有自己的一套安卓插件化解决方案。面对业界如此热门的技术方向，在对比业界开源的插件化方案后，团队内部于去年10月份开始(2017.10)在项目中选择开源的Small插件化框架进行了尝试。鞋是否合适需要穿上脚才能知道。这篇文章总结了我在使用Small插件化框架后，自己对插件化的理解和思考。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="思考总结" scheme="https://ivonhoe.github.io/categories/%E6%80%9D%E8%80%83%E6%80%BB%E7%BB%93/"/>
+    
+    
+  </entry>
   
   <entry>
     <title>Android客户端HTTP网络框架设计与实践</title>
@@ -100,20 +171,27 @@
     <link href="https://ivonhoe.github.io/2018/07/03/how-to-track-users/"/>
     <id>https://ivonhoe.github.io/2018/07/03/how-to-track-users/</id>
     <published>2018-07-03T09:53:56.000Z</published>
-    <updated>2018-07-18T02:17:32.000Z</updated>
+    <updated>2018-07-18T02:43:37.000Z</updated>
     
-    <content type="html"><![CDATA[<h3 id="0x00_前言">0x00 前言</h3><p>埋点项目的一般思路是使用代码手动埋点。国内主要的第三方数据分析服务商，如百度统计、友盟、TalkingData等都提供这一方案。用户数据埋点是少见的涉及到一个产品研发团队所有角色的项目。从运营的数据需求，到产品经理的抽象和规范，到移动端前端的手动采集数据，再到服务端和大数据的存储和转换，最终把结果反馈给运营和产品经理。涉及到几乎所有部门，如果按照链式的工作流来解决埋点问题，当任何一个环节出现问题，都会对整个项目结果的产出产生影响。</p>
+    <content type="html"><![CDATA[<h3 id="0x00_前言">0x00 前言</h3><p>用户数据埋点的一般解决思路是使用代码手动埋点。国内主要的第三方数据分析服务商，如百度统计、友盟、TalkingData等都提供这一方案。但是使用代码手动埋点的方式，投入资源大，往往很难能够有实际产出。其中一个很重要的原因其实是在分析实际业务数据之前，很难知道我真正想看什么样的数据。用代码手动的埋点方案经常会导致一个尴尬的解决，想要看的数据没有埋，埋了的数据不准。<br>用户数据埋点是少见的涉及到一个产品研发团队所有角色的项目。从运营的数据需求，到产品经理的抽象和规范，到移动端前端的手动采集数据，再到服务端和大数据的存储和转换，最终把结果反馈给运营和产品经理。埋点的实际产出涉及到几乎所有部门，如果按照链式的工作流来解决埋点问题，当任何一个环节出现问题，都会对整个项目结果的产出产生影响。这篇文章记录了无痕埋点方案的思路与其核心问题的解决方案。</p>
 <a id="more"></a>
 <p><img src="/res/trace_user/trace1.png" alt=""></p>
-<h3 id="0x01_什么是无痕埋点？">0x01 什么是无痕埋点？</h3><p>在技术上，所谓的”无痕埋点”，其实就是通过技术手段，无差别的记录用户在产品中的行为，当有一天突然想对某一个控件做点击分析时，不再需要开发手动添加数据采集信息。因为从部署埋点SDK的数据开始就一直在收集所有的用户点击了。用户的数据并不是分析需求产生的那一刻才有的。<br>从技术角度总结以往埋点项目结果产出困难的原因，这些也是无痕埋点方案想要解决的核心问题。</p>
+<h3 id="0x01_什么是无痕埋点？">0x01 什么是无痕埋点？</h3><p>所谓的”无痕埋点”，其实就是通过技术手段，无差别的记录用户在产品中的行为，当有一天突然想对某一个控件做点击分析时，不再需要开发手动添加数据采集信息。因为从部署埋点方案的时候，就一直在收集所有的用户的数据了。用户的数据并不是分析需求产生的那一刻才有的。无痕埋点在无差别的记录用户所有行为，而实际的埋点结果产出取决于BI工程师对无痕埋点数据的清洗。</p>
+<p>从技术角度总结以往埋点项目结果产出困难的原因，这些也是无痕埋点方案想要解决的核心问题。</p>
 <ul>
 <li>通过代码手动埋点比较原始，出错概率较高。</li>
 <li>埋点链路较长，出现错埋漏埋需要重新发布</li>
 <li>埋点数据准确性无法校验</li>
 </ul>
-<p>在项目上，无痕埋点解决项目链路过长的问题，将埋点数据的产生过程分成两个并行的部分。将数据的采集过程前置，不再依赖运营和产品经理的需求产出。</p>
+<p>所以，在项目上使用无痕埋点来解决项目链路过长的问题的方法是将埋点数据的产生过程分成两个并行的部分。将数据的采集过程前置，不再依赖运营和产品经理的需求产出。现有全量用户数据，再由运营和产品分析数据产出结果。</p>
 <p><img src="/res/trace_user/trace2.png" alt=""></p>
-<h3 id="0x02_移动端无痕埋点如何实现？">0x02 移动端无痕埋点如何实现？</h3><p>移动端埋点的方案以在Android系统上实现为例，关键在如何统一标识控件和统一拦截用户操作行为。这里说的用户操作主要还是用户的单击事件。</p>
+<h3 id="0x02_移动端无痕埋点如何实现？">0x02 移动端无痕埋点如何实现？</h3><p>移动端埋点的方案以在Android系统上实现为例，关键在于解决2个问题：</p>
+<blockquote>
+<ul>
+<li>如何统一标识控件</li>
+<li>统一拦截用户操作行为。这里说的用户操作主要还是用户的单击事件。</li>
+</ul>
+</blockquote>
 <h4 id="2-1_如何标识控件">2.1 如何标识控件</h4><p>为了自动生成事件标识，我们需要获取每个控件自身的ID、类名以及位于所属父组件的Index等特征信息，并逐级向上遍历找到根节点。约定控件标识的生成规则为 <code>/root/ClassName:id/ClassName:id</code>，以某一个业务界面的<code>扫一扫</code>按钮为例，寻找它到root节点的控件路径，它的控件标识字符串应该是 <code>/root/RelativeLayout:-1/FrameLayout:1997209645/RelativeLayout:-1/RelativeLayout:1997209836/LinearLayout:1997209965/TextView:1997209967</code>，并通过md5算法将这个标识字符串生成为<code>XPATH</code>就是我们想要的控件标识。当后台上报数据中包含<code>1e3cdc9499fac8088220756a46c85599</code>的点击时。我们就认为是<code>扫一扫</code>控件被点击了。</p>
 <p><img src="/res/trace_user/trace3.png" alt=""></p>
 <h4 id="2-2_如何统一拦截单击事件">2.2 如何统一拦截单击事件</h4><p>还是以Android端上的实现为例，如何统一拦截用户的单击事件呢？先看如何实现一个单击操作的响应，在Android上一般的做法是针对View设置一个单击的监听。</p>
@@ -128,7 +206,7 @@
     
     <summary type="html">
     
-      &lt;h3 id=&quot;0x00_前言&quot;&gt;0x00 前言&lt;/h3&gt;&lt;p&gt;埋点项目的一般思路是使用代码手动埋点。国内主要的第三方数据分析服务商，如百度统计、友盟、TalkingData等都提供这一方案。用户数据埋点是少见的涉及到一个产品研发团队所有角色的项目。从运营的数据需求，到产品经理的抽象和规范，到移动端前端的手动采集数据，再到服务端和大数据的存储和转换，最终把结果反馈给运营和产品经理。涉及到几乎所有部门，如果按照链式的工作流来解决埋点问题，当任何一个环节出现问题，都会对整个项目结果的产出产生影响。&lt;/p&gt;
+      &lt;h3 id=&quot;0x00_前言&quot;&gt;0x00 前言&lt;/h3&gt;&lt;p&gt;用户数据埋点的一般解决思路是使用代码手动埋点。国内主要的第三方数据分析服务商，如百度统计、友盟、TalkingData等都提供这一方案。但是使用代码手动埋点的方式，投入资源大，往往很难能够有实际产出。其中一个很重要的原因其实是在分析实际业务数据之前，很难知道我真正想看什么样的数据。用代码手动的埋点方案经常会导致一个尴尬的解决，想要看的数据没有埋，埋了的数据不准。&lt;br&gt;用户数据埋点是少见的涉及到一个产品研发团队所有角色的项目。从运营的数据需求，到产品经理的抽象和规范，到移动端前端的手动采集数据，再到服务端和大数据的存储和转换，最终把结果反馈给运营和产品经理。埋点的实际产出涉及到几乎所有部门，如果按照链式的工作流来解决埋点问题，当任何一个环节出现问题，都会对整个项目结果的产出产生影响。这篇文章记录了无痕埋点方案的思路与其核心问题的解决方案。&lt;/p&gt;
     
     </summary>
     
@@ -1295,69 +1373,6 @@
       <category term="去广告" scheme="https://ivonhoe.github.io/tags/%E5%8E%BB%E5%B9%BF%E5%91%8A/"/>
     
       <category term="移动安全" scheme="https://ivonhoe.github.io/tags/%E7%A7%BB%E5%8A%A8%E5%AE%89%E5%85%A8/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Mac OS上编译Android源码</title>
-    <link href="https://ivonhoe.github.io/2017/01/20/MacOS%E4%B8%8A%E7%BC%96%E8%AF%91Android%E6%BA%90%E7%A0%81/"/>
-    <id>https://ivonhoe.github.io/2017/01/20/MacOS上编译Android源码/</id>
-    <published>2017-01-20T14:16:46.000Z</published>
-    <updated>2018-05-27T08:24:07.000Z</updated>
-    
-    <content type="html"><![CDATA[<h3 id="一、制作一个大小写敏感的磁盘分区">一、制作一个大小写敏感的磁盘分区</h3><h4 id="1-1-Mac_OS磁盘工具">1.1.Mac OS磁盘工具</h4><p>这里我使用一块移动硬盘，将移动硬盘的一个分区使用Mac OS的硬盘工具，抹掉数据，选择MacOS扩展(区分大小写，日志式)，创建成大小写敏感的分区。</p>
-<p><img src="/res/compile_android_source/android-source-disk1.jpeg" alt=""></p>
-<p>这里会遇到一个问题，抹掉分区数据的时候，<code>会报错：“Mac OSX 抹盘发生错误:Mediakit 报告设备上空间不足以执行此操作”</code>，这里的原因是磁盘没有大于200M的UEFI分区。</p>
-<a id="more"></a>
-<h4 id="1-2-制作UEFI分区">1.2.制作UEFI分区</h4><blockquote>
-<p>我是在windows上操作的，<br>使用DiskGenius工具，在移动硬盘的第一分区前部，划分出200MB的空间。<br>在cmd命令行下运行下列命令,记得分步执行啊，小心出错，数据无价。</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">diskpart&#10;list disk&#10;select disk 1 ###&#36825;&#37324;&#36873;&#20013;&#35201;&#20998;&#21306;&#30340;&#30913;&#30424;&#65292;&#22240;&#20026;&#25105;&#26159;&#31227;&#21160;&#30828;&#30424;&#65292;index&#26159;1&#65292;&#36825;&#37324;&#24212;&#35813;&#20250;&#30475;&#21040;&#36873;&#25321;&#20809;&#26631;&#19981;&#35201;&#36873;&#38169;&#20102;&#10;&#10;create partition efi size=200</span><br></pre></td></tr></table></figure>
-<p>详细的图文请参考:</p>
-<p><a href="https://blog.zzzmode.com/2016/05/02/osx-mediakit-reports-partition-map-too-small/" target="_blank" rel="external">Mac OSX 抹盘发生错误:Mediakit 报告设备上空间不足以执行此操作的解决办法
-</a></p>
-<h3 id="二、下载Android源码">二、下载Android源码</h3><h4 id="2-1-repo_sync_出错">2.1.repo sync 出错</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">error: RPC failed; result=56, HTTP code = 200&#60;br&#62;&#10;fatal: The remote end hung up unexpectedly&#60;br&#62;&#10;fatal: early EOF&#60;br&#62;&#10;fatal: index-pack failed</span><br></pre></td></tr></table></figure>
-<p>repo sync时会出现如上错误，安装<code>gnutls</code>和<code>wget</code>后,<br>并参考<a href="http://stackoverflow.com/questions/6842687/the-remote-end-hung-up-unexpectedly-while-git-cloning" target="_blank" rel="external">stackoverflow</a>解决。</p>
-<h4 id="2-2-如何选择驱动">2.2.如何选择驱动</h4><p><a href="https://source.android.com/source/build-numbers.html#source-code-tags-and-builds" target="_blank" rel="external">Source Code Tags and Builds</a></p>
-<p><img src="/res/compile_android_source/android-source2.jpeg" alt=""></p>
-<p><a href="https://developers.google.com/android/drivers" target="_blank" rel="external">Android原生设备驱动</a><br><img src="/res/compile_android_source/android-source3.jpeg" alt=""></p>
-<p>详细的图文请参考:</p>
-<p><a href="http://wl9739.github.io/2016/05/09/Android%E6%BA%90%E7%A0%81%E7%9A%84%E4%B8%8B%E8%BD%BD%E3%80%81%E7%BC%96%E8%AF%91%E4%B8%8E%E5%AF%BC%E5%85%A5%E5%88%B0Android-Studio/" target="_blank" rel="external">Android源码的下载、编译与导入到Android Studio</a></p>
-<p><a href="http://www.jianshu.com/p/1c3d47b2031f" target="_blank" rel="external">Mac OS X下编译Android M源码</a></p>
-<h3 id="三、编译">三、编译</h3><p><code>一定要下载并安装驱动，下载nexus5 6.0.1_r17版本为例，需要下载执行下图三个sh</code></p>
-<p><img src="/res/compile_android_source/android-source4.png" alt=""></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$chmod a+x ./*****.sh&#10;$./*****.sh&#10;&#10;&#36755;&#20837;I ACCEPT&#23436;&#25104;&#23433;&#35013;</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$source build/envsetup.sh&#10;&#10;$lunch&#10;&#10;$make -j16</span><br></pre></td></tr></table></figure>
-<h3 id="四、如何将编译好的Android_img刷入模拟器">四、如何将编译好的Android img刷入模拟器</h3><p>需要设置<code>ANDROID_PRODUCT_OUT</code>变量到<code>~/.bash_profile</code>文件中</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#Android &#28304;&#30721;&#32534;&#35793;&#30446;&#24405;&#10;export PATH=$PATH:/Volumes/AOSP/android-6.0.1_r17-x86_64/out/host/darwin-x86/bin&#10;export ANDROID_PRODUCT_OUT=/Volumes/AOSP/android-6.0.1_r17-x86_64/out/target/product/generic_x86_64&#10;export PATH=$PATH:$ANDROID_PRODUCT_OUT</span><br></pre></td></tr></table></figure>
-<p>使用命令启动emulator，加载指定的kernel内核和img</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kans-MacBook-Pro:android-6.0.1_r17-x86_64 Ivonhoe$&#10;emulator -kernel  /Volumes/AOSP/android-6.0.1_r17-x86_64/prebuilts/qemu-kernel/x86_64/kernel-qemu -sysdir ./out/target/product/generic_x86_64/ -system /Volumes/AOSP/android-6.0.1_r17-x86_64/out/target/product/generic_x86_64/system.img -data /Volumes/AOSP/android-6.0.1_r17-x86_64/out/target/product/generic_x86_64/userdata.img -ramdisk /Volumes/AOSP/android-6.0.1_r17-x86_64/out/target/product/generic_x86_64/ramdisk.img</span><br></pre></td></tr></table></figure>
-<p>参考老罗的博客<a href="http://blog.csdn.net/luoshengyang/article/details/6559955" target="_blank" rel="external">在Ubuntu上下载、编译和安装Android最新源代码</a></p>
-<h3 id="五、刷入Nexus6真机">五、刷入Nexus6真机</h3><p>Nexus6关机状态下,长按音量下+电源,进入recovery模式</p>
-<p>然后在源码根目录下(Android根目录下)执行下面命令:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fastboot -w flashall</span><br></pre></td></tr></table></figure>
-<p><img src="/res/compile_android_source/android-source5.png" alt=""></p>
-<p>使用<code>mmm framework/base</code>单独编译framework代码</p>
-<p>adb push可能会提示 <code>Read-only file system</code></p>
-<p><code>failed to copy &#39;out/target/product/shamu/system/framework/framework.jar&#39;
- to &#39;/system/framework/framework.jar&#39;: Read-only file system</code></p>
-<p>通过下列命令解决：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adb root&#10;adb remount&#10;adb disable-verity&#10;adb reboot&#10;adb root&#10;adb remount</span><br></pre></td></tr></table></figure>
-<h3 id="六、参考文档">六、参考文档</h3><p><a href="http://blog.csdn.net/ljphhj/article/details/51512263" target="_blank" rel="external">Android系统源码下载与编译、刷机–Nexus6实测</a></p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;h3 id=&quot;一、制作一个大小写敏感的磁盘分区&quot;&gt;一、制作一个大小写敏感的磁盘分区&lt;/h3&gt;&lt;h4 id=&quot;1-1-Mac_OS磁盘工具&quot;&gt;1.1.Mac OS磁盘工具&lt;/h4&gt;&lt;p&gt;这里我使用一块移动硬盘，将移动硬盘的一个分区使用Mac OS的硬盘工具，抹掉数据，选择MacOS扩展(区分大小写，日志式)，创建成大小写敏感的分区。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/res/compile_android_source/android-source-disk1.jpeg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
-&lt;p&gt;这里会遇到一个问题，抹掉分区数据的时候，&lt;code&gt;会报错：“Mac OSX 抹盘发生错误:Mediakit 报告设备上空间不足以执行此操作”&lt;/code&gt;，这里的原因是磁盘没有大于200M的UEFI分区。&lt;/p&gt;
-    
-    </summary>
-    
-      <category term="其他" scheme="https://ivonhoe.github.io/categories/%E5%85%B6%E4%BB%96/"/>
-    
-    
-      <category term="源码编译" scheme="https://ivonhoe.github.io/tags/%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91/"/>
     
   </entry>
   
