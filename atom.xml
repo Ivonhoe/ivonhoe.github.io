@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://ivonhoe.github.io/"/>
-  <updated>2018-07-18T12:52:59.000Z</updated>
+  <updated>2018-07-26T06:40:42.000Z</updated>
   <id>https://ivonhoe.github.io/</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="https://ivonhoe.github.io/2018/07/18/abandon-the-plugin-framework/"/>
     <id>https://ivonhoe.github.io/2018/07/18/abandon-the-plugin-framework/</id>
     <published>2018-07-18T12:45:30.000Z</published>
-    <updated>2018-07-18T12:52:59.000Z</updated>
+    <updated>2018-07-26T06:40:42.000Z</updated>
     
     <content type="html"><![CDATA[<h3 id="0x01_前言">0x01 前言</h3><p>Android插件化框架一直以来就是安卓平台上的一个重要技术方向，从携程的DynamicAPK到360RePlugin再到阿里巴巴的Atlas，甚至美团和滴滴的安卓团队都有自己的一套安卓插件化解决方案。面对业界如此热门的技术方向，在对比业界开源的插件化方案后，团队内部于去年10月份开始(2017.10)在项目中选择开源的Small插件化框架进行了尝试。鞋是否合适需要穿上脚才能知道。这篇文章总结了我在使用Small插件化框架后，自己对插件化的理解和思考。</p>
 <a id="more"></a>
@@ -52,27 +52,30 @@
 <ol>
 <li>资源查找失败的bug，虽然已经接近了在个别国产手机上的资源查找失败问题，详情见<a href="https://ivonhoe.github.io/2018/03/14/small-bug-555-fix/">《Android插件化之资源加载》</a>。但是在Android 7.1以上的系统上依然出现偶现的资源查找失败问题。并且崩溃率（错误数/启动次数）在0.3%左右。这个比例其实不算低了。这个bug暂时只能通过将插件资源转移到宿主分身中绕过。但是如果把所有插件资源都放到宿主中以规避这个问题，那插件化就没有任何意义了。</li>
 </ol>
-<h4 id="2-3_重新评估Small插件化框架带来的收益">2.3 重新评估Small插件化框架带来的收益</h4><p>在团队技术选型上优先考虑的应该是和现有业务适配吧。如果你所面对的业务不存在快速迭代频繁发布的需求在，插件化框架的威力可能就要减小一半了。在选择个人开发者维护的开源项目时，依然是要考虑到加购稳定性和bug的修复时效上。因为一旦在一个商业化的项目中使用开源框架，稳定性和兼容性一定会放在首要位置的。在这一点上，可能从大公司孵化出的开源项目更有优势。</p>
+<h4 id="2-3_重新思考插件化框架给安卓app的收益">2.3 重新思考插件化框架给安卓app的收益</h4><p>在团队技术选型上优先考虑的应该是和现有业务适配吧。如果你所面对的业务不存在快速迭代频繁发布的需求，插件化框架的威力可能就要减小一半了。同时在选择个人开发者维护的开源项目时，依然是要考虑到其架构的稳定性和bug的修复时效。因为一旦在一个商业化的项目中使用开源框架，稳定性和兼容性一定会放在首要位置的。在这一点上，可能从大公司孵化出的开源项目会更有优势。</p>
 <p>在回看插件化框架对android应用中模块解耦的贡献，对比android应用的原生的开发方式。能够从插件化框架吸收的模块解耦方法上可以看到大致这几个方面。</p>
 <blockquote>
-<p>模块间的解耦要依赖工具而不是开发规范</p>
+<p>模块间的解耦要依赖工具而不是约定开发规范</p>
 </blockquote>
 <p>以2个业务app模块为例，应该有一个工具存在避免这两个模块产生耦合关系，如果一旦存在耦合关系就可能编译报错。而不是靠开发者约定的开发规范。因为规范是可以不遵守的。这是同层级间的耦合管理。</p>
 <blockquote>
-<p>尽可能的避免依赖传递 </p>
+<p>避免依赖传递 </p>
 </blockquote>
-<p>这是层级间的耦合管理。</p>
+<p>这是不同层级的模块间耦合问题。implementation关键词就可以解决这个问题。</p>
 <blockquote>
-<p>相比较插件化框架你可能更需要一个路由工具 </p>
+<p>路由</p>
 </blockquote>
-<p>业界有很多业界路由框架，比如阿里的ARouter，路由是解决模块解耦带来的问题的必要工具。所以自己动手实现一个简单的路由工具也不是很难。</p>
-<h4 id="2-3_implementation、api和compile">2.3 implementation、api和compile</h4><p>可以查看google文档上对Android Studio 3.0后新引入的依赖配置的差异说明。<br><a href="https://developer.android.com/studio/build/gradle-plugin-3-0-0-migration" target="_blank" rel="external">https://developer.android.com/studio/build/gradle-plugin-3-0-0-migration</a></p>
+<p>相比较插件化框架你可能更需要一个页面路由工具，业界有很多业界路由框架，比如阿里的ARouter，路由用来解决模块解耦带来的页面跳转问题，所以自己动手实现一个简单的路由工具也不是很难。</p>
+<h4 id="2-3_implementation、api和compile的差异">2.3 implementation、api和compile的差异</h4><p>可以查看google文档上对Android Studio 3.0后新引入的依赖配置的差异说明。<br><a href="https://developer.android.com/studio/build/gradle-plugin-3-0-0-migration" target="_blank" rel="external">https://developer.android.com/studio/build/gradle-plugin-3-0-0-migration</a></p>
 <p><img src="/res/no-small/google-implementation.png" alt=""></p>
 <p>简单来说google将compile配置拆成了两个关键词，分别是api和implementation。api和implementation的差异不单单是编译效率的差异，我觉得更重要的是，implementation避免了依赖的传递。以下图对比api和implementation的差异可以发现，当使用implementation配置依赖时，app模块将不会直接依赖<code>D</code>模块。在使用老的依赖配置<code>compile</code>时，实际上并没有做到模块的分层，最底下的模块依然可以被最上层的模块依赖，实际的依赖规则在开发者的规范里，而不存在项目模块的管理中。</p>
 <p><img src="/res/no-small/implementation-api.png" alt=""></p>
 <h3 id="0x04_总结">0x04 总结</h3><p>以上就是我对插件化框架的看法，如果你的业务存在开始迭代频繁发布的情况存在，那么你可能就很需要一个插件化框架来带来开发方式上的改变，核心在于提高了研发效率。但是在使用插件化项目之前你需要对插件化框架的边界和扩展边界的成本有一个清晰的认识。实际上上面所说的所有插件化框架带来的问题都是可以解决的。问题的关键在于在你的团队这样的付出和产出是否值得呢？相信每个人都可能会有不同的看法。</p>
 <p><strong>当然开源的插件化框架依然是重点学习的方向，理解不同插件化方案的实现原理是深入理解安卓系统很好的切入点。接下来我还会花更多的时间深入的学习360和阿里巴巴的插件化方案。</strong></p>
 <p>最近在读《邓小平改变中国》这本书，让我对从文革结束到改革开放前那段对大多数中国人讳莫如深的历史有了大致的了解。<strong>“实践是检验真理的唯一标准”</strong>，这句很多80后90后耳熟能详的口号背后，原来发生了这么多的波折，冲破了如此多的障碍。<strong>理论与实践的统一是马克思主义的一个最基本的原则</strong>。<strong>实事求是是毛泽东思想的精髓</strong>。听起来虚头巴脑，但确实应该是解决问题和对待未知事物的核心方法论。对！这是一篇技术总结。</p>
+<h3 id="0x05_相关阅读">0x05 相关阅读</h3><p><a href="https://ivonhoe.github.io/2018/01/18/Small%E6%A1%86%E6%9E%B6%E5%AE%9E%E8%B7%B5%E6%80%BB%E7%BB%93/">《Android插件化之Small框架实践总结》</a></p>
+<p><a href="https://ivonhoe.github.io/2018/01/18/Small%E6%A1%86%E6%9E%B6%E5%8E%9F%E7%90%86/">《Android插件化之Small框架原理》</a></p>
+<p><a href="https://ivonhoe.github.io/2018/03/14/small-bug-555-fix/">《Android插件化之资源加载》</a></p>
 ]]></content>
     
     <summary type="html">
