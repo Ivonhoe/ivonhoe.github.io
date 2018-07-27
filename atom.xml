@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://ivonhoe.github.io/"/>
-  <updated>2018-07-26T06:40:42.000Z</updated>
+  <updated>2018-07-27T03:27:48.000Z</updated>
   <id>https://ivonhoe.github.io/</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="https://ivonhoe.github.io/2018/07/18/abandon-the-plugin-framework/"/>
     <id>https://ivonhoe.github.io/2018/07/18/abandon-the-plugin-framework/</id>
     <published>2018-07-18T12:45:30.000Z</published>
-    <updated>2018-07-26T06:40:42.000Z</updated>
+    <updated>2018-07-27T03:27:48.000Z</updated>
     
     <content type="html"><![CDATA[<h3 id="0x01_前言">0x01 前言</h3><p>Android插件化框架一直以来就是安卓平台上的一个重要技术方向，从携程的DynamicAPK到360RePlugin再到阿里巴巴的Atlas，甚至美团和滴滴的安卓团队都有自己的一套安卓插件化解决方案。面对业界如此热门的技术方向，在对比业界开源的插件化方案后，团队内部于去年10月份开始(2017.10)在项目中选择开源的Small插件化框架进行了尝试。鞋是否合适需要穿上脚才能知道。这篇文章总结了我在使用Small插件化框架后，自己对插件化的理解和思考。</p>
 <a id="more"></a>
@@ -84,8 +84,10 @@
     
     </summary>
     
-      <category term="思考总结" scheme="https://ivonhoe.github.io/categories/%E6%80%9D%E8%80%83%E6%80%BB%E7%BB%93/"/>
+      <category term="Android插件化" scheme="https://ivonhoe.github.io/categories/Android%E6%8F%92%E4%BB%B6%E5%8C%96/"/>
     
+    
+      <category term="Android插件化" scheme="https://ivonhoe.github.io/tags/Android%E6%8F%92%E4%BB%B6%E5%8C%96/"/>
     
   </entry>
   
@@ -94,7 +96,7 @@
     <link href="https://ivonhoe.github.io/2018/07/08/network-architecture-design/"/>
     <id>https://ivonhoe.github.io/2018/07/08/network-architecture-design/</id>
     <published>2018-07-08T13:30:33.000Z</published>
-    <updated>2018-07-13T08:11:00.000Z</updated>
+    <updated>2018-07-27T03:56:34.000Z</updated>
     
     <content type="html"><![CDATA[<h3 id="0x01_前言">0x01 前言</h3><p>不管是android、ios还是浏览器端的开发，在正常的产品迭代过程中HTTP网络请求都是高频使用的功能。以android端为例，在使用常见的http网络框架时，如<code>HttpUrlConnection</code>,<code>HttpClient</code>或者<code>okHttp</code>，开发者都必须在此自身业务场景的基础上进行api的二次封装。一个功能强大且易用的网络框架不仅仅能够提高开发效率，起到事半功倍的效果，还能起到规范业务开发结果的作用。<br>希望通过这篇文章，总结下自己在设计和实现一个网络框架时的思考过程，也帮助团队同学了解现有网络框架的能力和不足。<br><a id="more"></a></p>
 <h3 id="0x02_使用者的视角">0x02 使用者的视角</h3><h4 id="2-1_使用volley">2.1 使用volley</h4><p>发送Http get请求的示例代码：</p>
@@ -162,7 +164,7 @@
     
     </summary>
     
-      <category term="思考总结" scheme="https://ivonhoe.github.io/categories/%E6%80%9D%E8%80%83%E6%80%BB%E7%BB%93/"/>
+      <category term="框架设计" scheme="https://ivonhoe.github.io/categories/%E6%A1%86%E6%9E%B6%E8%AE%BE%E8%AE%A1/"/>
     
     
       <category term="网络" scheme="https://ivonhoe.github.io/tags/%E7%BD%91%E7%BB%9C/"/>
@@ -174,7 +176,7 @@
     <link href="https://ivonhoe.github.io/2018/07/03/how-to-track-users/"/>
     <id>https://ivonhoe.github.io/2018/07/03/how-to-track-users/</id>
     <published>2018-07-03T09:53:56.000Z</published>
-    <updated>2018-07-18T02:43:37.000Z</updated>
+    <updated>2018-07-27T03:56:04.000Z</updated>
     
     <content type="html"><![CDATA[<h3 id="0x00_前言">0x00 前言</h3><p>用户数据埋点的一般解决思路是使用代码手动埋点。国内主要的第三方数据分析服务商，如百度统计、友盟、TalkingData等都提供这一方案。但是使用代码手动埋点的方式，投入资源大，往往很难能够有实际产出。其中一个很重要的原因其实是在分析实际业务数据之前，很难知道我真正想看什么样的数据。用代码手动的埋点方案经常会导致一个尴尬的解决，想要看的数据没有埋，埋了的数据不准。<br>用户数据埋点是少见的涉及到一个产品研发团队所有角色的项目。从运营的数据需求，到产品经理的抽象和规范，到移动端前端的手动采集数据，再到服务端和大数据的存储和转换，最终把结果反馈给运营和产品经理。埋点的实际产出涉及到几乎所有部门，如果按照链式的工作流来解决埋点问题，当任何一个环节出现问题，都会对整个项目结果的产出产生影响。这篇文章记录了无痕埋点方案的思路与其核心问题的解决方案。</p>
 <a id="more"></a>
@@ -213,7 +215,7 @@
     
     </summary>
     
-      <category term="思考总结" scheme="https://ivonhoe.github.io/categories/%E6%80%9D%E8%80%83%E6%80%BB%E7%BB%93/"/>
+      <category term="学习总结" scheme="https://ivonhoe.github.io/categories/%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/"/>
     
     
   </entry>
@@ -223,7 +225,7 @@
     <link href="https://ivonhoe.github.io/2018/06/05/ndk17-build-error/"/>
     <id>https://ivonhoe.github.io/2018/06/05/ndk17-build-error/</id>
     <published>2018-06-05T13:10:54.000Z</published>
-    <updated>2018-06-05T13:15:01.000Z</updated>
+    <updated>2018-07-27T03:31:52.000Z</updated>
     
     <content type="html"><![CDATA[<h4 id="0x01_问题描述">0x01 问题描述</h4><p><strong>现象：</strong> 将ndk版本升级到    <code>17.0.4754217</code>编译报错</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">* What went wrong:&#10;Execution failed for task &#39;:app+stub:transformNativeLibsWithStripDebugSymbolForRelease&#39;.&#10;&#62; A problem occurred starting process &#39;command &#39;/Users/Ivonhoe/Library/Android/sdk/ndk-bundle/toolchains/mips64el-linux-android-4.9/prebuilt/darwin-x86_64/bin/mips64el-linux-android-strip&#39;&#39;&#10;&#10;* Try:&#10;Run with --stacktrace option to get the stack trace. Run with --info or --debug option to get more log output.</span><br></pre></td></tr></table></figure>
@@ -244,7 +246,7 @@
     
     </summary>
     
-      <category term="其他" scheme="https://ivonhoe.github.io/categories/%E5%85%B6%E4%BB%96/"/>
+      <category term="bug总结" scheme="https://ivonhoe.github.io/categories/bug%E6%80%BB%E7%BB%93/"/>
     
     
   </entry>
@@ -254,7 +256,7 @@
     <link href="https://ivonhoe.github.io/2018/06/03/jvm-gc-1/"/>
     <id>https://ivonhoe.github.io/2018/06/03/jvm-gc-1/</id>
     <published>2018-06-03T14:43:32.000Z</published>
-    <updated>2018-06-03T14:58:50.000Z</updated>
+    <updated>2018-07-27T03:55:03.000Z</updated>
     
     <content type="html"><![CDATA[<h4 id="0x00_前言">0x00 前言</h4><p>在学习JVM如何进行垃圾回收方法时，发现所谓的JVM垃圾回收思想和现实生活的场景有很多相似的地方。所以用餐厅回收餐桌的方式类比JVM垃圾回收算法，应该能帮助JVM学习的理解和记忆。</p>
 <h4 id="0x01_经典垃圾回收算法">0x01 经典垃圾回收算法</h4><blockquote>
@@ -301,7 +303,7 @@
     
     </summary>
     
-      <category term="学习笔记" scheme="https://ivonhoe.github.io/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"/>
+      <category term="学习总结" scheme="https://ivonhoe.github.io/categories/%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/"/>
     
     
       <category term="JVM" scheme="https://ivonhoe.github.io/tags/JVM/"/>
@@ -313,7 +315,7 @@
     <link href="https://ivonhoe.github.io/2018/05/27/singleton/"/>
     <id>https://ivonhoe.github.io/2018/05/27/singleton/</id>
     <published>2018-05-27T14:23:37.000Z</published>
-    <updated>2018-07-03T10:01:27.000Z</updated>
+    <updated>2018-07-27T03:56:45.000Z</updated>
     
     <content type="html"><![CDATA[<h3 id="0x00前言">0x00前言</h3><p>相信很多同学在学习设计模式的过程中，最先了解的就是单例模式，至少我是这样。单例模式看似简单容易理解，实际上却有很多坑，正因为这样也成为了很多公司面试必考的面试题。实际使用单例模式时，难免会遇到滥用的情况，理解单例更要学会何时拒绝单例。</p>
 <h3 id="0x01单例模式的基础知识">0x01单例模式的基础知识</h3><h4 id="1-_单例的几种写法?">1. 单例的几种写法?</h4><a id="more"></a>
@@ -367,7 +369,7 @@
     
     </summary>
     
-      <category term="思考总结" scheme="https://ivonhoe.github.io/categories/%E6%80%9D%E8%80%83%E6%80%BB%E7%BB%93/"/>
+      <category term="框架设计" scheme="https://ivonhoe.github.io/categories/%E6%A1%86%E6%9E%B6%E8%AE%BE%E8%AE%A1/"/>
     
     
       <category term="设计模式" scheme="https://ivonhoe.github.io/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/"/>
@@ -379,7 +381,7 @@
     <link href="https://ivonhoe.github.io/2018/05/21/https/"/>
     <id>https://ivonhoe.github.io/2018/05/21/https/</id>
     <published>2018-05-21T13:55:38.000Z</published>
-    <updated>2018-07-08T13:35:46.000Z</updated>
+    <updated>2018-07-27T03:55:11.000Z</updated>
     
     <content type="html"><![CDATA[<h3 id="0x00_前言">0x00 前言</h3><p>https为什么安全？因为相对http的明文传输，https引入了数据加密和身份认证。服务器和客户端的消息只有服务器和客户端能够读懂，保证了数据的保密性。同时在交换数据之前，验证了对方的合法身份，保证了通信双方的安全。这篇总结主要记录了在理解https安全性的过程中遇到的问题。</p>
 <h3 id="0x01_什么是对称加密和非对称加密">0x01 什么是对称加密和非对称加密</h3><p>在https的协议中如何实现数据加密和身份认证呢？简单来说是客户端先获取非对称加密的公钥，通过公钥和服务器协商生成对称加密的对称密钥，并使用对称密钥加密传输数据。</p>
@@ -434,7 +436,7 @@
     
     </summary>
     
-      <category term="网络" scheme="https://ivonhoe.github.io/categories/%E7%BD%91%E7%BB%9C/"/>
+      <category term="学习总结" scheme="https://ivonhoe.github.io/categories/%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/"/>
     
     
       <category term="对称加密" scheme="https://ivonhoe.github.io/tags/%E5%AF%B9%E7%A7%B0%E5%8A%A0%E5%AF%86/"/>
@@ -452,7 +454,7 @@
     <link href="https://ivonhoe.github.io/2018/03/14/small-bug-555-fix/"/>
     <id>https://ivonhoe.github.io/2018/03/14/small-bug-555-fix/</id>
     <published>2018-03-14T09:23:27.000Z</published>
-    <updated>2018-05-27T08:45:19.000Z</updated>
+    <updated>2018-07-27T03:32:16.000Z</updated>
     
     <content type="html"><![CDATA[<h4 id="0x00_前言">0x00 前言</h4><p>这篇文章主要记录了在使用Small插件化框架中遇到的资源加载问题及相应解决方案，并梳理出Android的资源加载流程和插件化框架的资源加载原理。在前两篇插件化技术介绍的基础上会关注更多技术细节，希望能有所收获！</p>
 <h4 id="0x01_Small框架的资源加载异常">0x01 Small框架的资源加载异常</h4><p>最近收到一个客户反馈，在他们的中兴V0840手机上打开我们的app会持续崩溃。第一时间在百度移动质量平台上短时租用了该机型，抓取了log。发现是资源查找失败异常。并在Small github issues中搜索<code>android.content.res.Resources$NotFoundException</code> 可以发现很多类似的问题，详细日志可查看下图。</p>
@@ -495,7 +497,7 @@
     
     </summary>
     
-      <category term="安卓插件化" scheme="https://ivonhoe.github.io/categories/%E5%AE%89%E5%8D%93%E6%8F%92%E4%BB%B6%E5%8C%96/"/>
+      <category term="Android插件化" scheme="https://ivonhoe.github.io/categories/Android%E6%8F%92%E4%BB%B6%E5%8C%96/"/>
     
     
       <category term="Android" scheme="https://ivonhoe.github.io/tags/Android/"/>
@@ -511,7 +513,7 @@
     <link href="https://ivonhoe.github.io/2018/01/18/Small%E6%A1%86%E6%9E%B6%E5%8E%9F%E7%90%86/"/>
     <id>https://ivonhoe.github.io/2018/01/18/Small框架原理/</id>
     <published>2018-01-18T09:54:19.000Z</published>
-    <updated>2018-05-27T08:45:08.000Z</updated>
+    <updated>2018-07-27T03:32:29.000Z</updated>
     
     <content type="html"><![CDATA[<h4 id="0x00_前言">0x00 前言</h4><p>Small是一个轻量化的插件化框架，Small的使用介绍可以查看<a href="http://code.wequick.net/Small/cn/quickstart" target="_blank" rel="external">官网文档</a>了解，Small项目接入总结可以查看博客的另一篇<a href="https://ivonhoe.github.io/2018/01/18/Small%E6%A1%86%E6%9E%B6%E5%AE%9E%E8%B7%B5%E6%80%BB%E7%BB%93/">《Small框架实践总结》</a>。这篇文章主要从以下几个角度来看Small框架的实现原理。</p>
 <ol>
@@ -583,7 +585,7 @@
     
     </summary>
     
-      <category term="安卓插件化" scheme="https://ivonhoe.github.io/categories/%E5%AE%89%E5%8D%93%E6%8F%92%E4%BB%B6%E5%8C%96/"/>
+      <category term="Android插件化" scheme="https://ivonhoe.github.io/categories/Android%E6%8F%92%E4%BB%B6%E5%8C%96/"/>
     
     
       <category term="Android" scheme="https://ivonhoe.github.io/tags/Android/"/>
@@ -597,7 +599,7 @@
     <link href="https://ivonhoe.github.io/2018/01/18/Small%E6%A1%86%E6%9E%B6%E5%AE%9E%E8%B7%B5%E6%80%BB%E7%BB%93/"/>
     <id>https://ivonhoe.github.io/2018/01/18/Small框架实践总结/</id>
     <published>2018-01-18T09:42:57.000Z</published>
-    <updated>2018-05-27T08:45:14.000Z</updated>
+    <updated>2018-07-27T03:32:22.000Z</updated>
     
     <content type="html"><![CDATA[<h4 id="0x00_前言">0x00 前言</h4><p>这篇文章主要总结了在使用Small框架改造老项目过程中遇到的问题和相应的解决方案，也总结了使用Small框架的基础知识点，并从一个使用者的角度来分析Small框架的优缺点。如果你的项目也面临业务模块耦合，边界不清晰，没有动态部署方案等等需要插件化方案来解决的问题，不妨先看下这篇文章再试一试Small框架，Small的功能未必全面但绝对聚焦了插件化框架需要解决的的核心问题。</p>
 <p>什么是Small框架？ Small是一个轻量级的插件化框架，Small也是一个dex分包方案，Small也是一个业务模块解耦方案，同时Small也是一个动态化加载和更新方案。先去看官网文档了解Small的基础知识~~</p>
@@ -681,7 +683,7 @@
     
     </summary>
     
-      <category term="安卓插件化" scheme="https://ivonhoe.github.io/categories/%E5%AE%89%E5%8D%93%E6%8F%92%E4%BB%B6%E5%8C%96/"/>
+      <category term="Android插件化" scheme="https://ivonhoe.github.io/categories/Android%E6%8F%92%E4%BB%B6%E5%8C%96/"/>
     
     
       <category term="Android" scheme="https://ivonhoe.github.io/tags/Android/"/>
@@ -695,7 +697,7 @@
     <link href="https://ivonhoe.github.io/2017/06/18/android-app-gold-flow-hack/"/>
     <id>https://ivonhoe.github.io/2017/06/18/android-app-gold-flow-hack/</id>
     <published>2017-06-18T10:13:19.000Z</published>
-    <updated>2018-05-27T08:19:52.000Z</updated>
+    <updated>2018-07-27T03:28:08.000Z</updated>
     
     <content type="html"><![CDATA[<h3 id="0x00_前言">0x00 前言</h3><p>本文记录了破解某外卖App http请求参数加密过程中遇到的问题和解决思路，实现的目标是希望是能够通过一些手段实现自由调用其服务接口。<br>这篇文章主要讲述什么？</p>
 <ol>
@@ -783,7 +785,7 @@
     
     </summary>
     
-      <category term="移动安全" scheme="https://ivonhoe.github.io/categories/%E7%A7%BB%E5%8A%A8%E5%AE%89%E5%85%A8/"/>
+      <category term="Android安全" scheme="https://ivonhoe.github.io/categories/Android%E5%AE%89%E5%85%A8/"/>
     
     
       <category term="Android" scheme="https://ivonhoe.github.io/tags/Android/"/>
@@ -797,7 +799,7 @@
     <link href="https://ivonhoe.github.io/2017/05/12/executor-eat-exception/"/>
     <id>https://ivonhoe.github.io/2017/05/12/executor-eat-exception/</id>
     <published>2017-05-12T08:41:53.000Z</published>
-    <updated>2018-05-27T08:23:47.000Z</updated>
+    <updated>2018-07-27T03:30:49.000Z</updated>
     
     <content type="html"><![CDATA[<h3 id="一、前言">一、前言</h3><p>今天遇到一个很诡异的问题，在多款Android 4.2.2版本的手机上发现处理后台任务的服务对前台请求毫无响应。这里的后台服务是一个RemoteService，目的为了处理更新&amp;上传等任务。本来以为是跨进程组件间通讯出现兼容性问题，后来根据分析发现问题没有那么简单，这里记录下问题原因。</p>
 <a id="more"></a>
@@ -834,7 +836,7 @@
     
     </summary>
     
-      <category term="其他" scheme="https://ivonhoe.github.io/categories/%E5%85%B6%E4%BB%96/"/>
+      <category term="bug总结" scheme="https://ivonhoe.github.io/categories/bug%E6%80%BB%E7%BB%93/"/>
     
     
       <category term="多线程" scheme="https://ivonhoe.github.io/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/"/>
@@ -1037,11 +1039,11 @@
   </entry>
   
   <entry>
-    <title>Zygote</title>
+    <title>[译]Zygote</title>
     <link href="https://ivonhoe.github.io/2017/04/15/Zygote/"/>
     <id>https://ivonhoe.github.io/2017/04/15/Zygote/</id>
     <published>2017-04-15T15:32:51.000Z</published>
-    <updated>2018-05-27T08:21:41.000Z</updated>
+    <updated>2018-07-27T03:58:49.000Z</updated>
     
     <content type="html"><![CDATA[<p>原文地址：<a href="https://anatomyofandroid.com/2013/10/15/zygote/" target="_blank" rel="external">Zygote https://anatomyofandroid.com/2013/10/15/zygote/</a></p>
 <p>Zygote（受精卵）是一个启动应用的守护进程，在Server Manager之后被init.rc触发，但其实他是真正被app_process启动的，下面是启动这个特殊进程的流程。</p>
@@ -1232,7 +1234,7 @@
     <link href="https://ivonhoe.github.io/2017/02/09/%E7%BE%8E%E5%9B%A2%E5%A6%82%E4%BD%95%E9%98%B2dex2jar/"/>
     <id>https://ivonhoe.github.io/2017/02/09/美团如何防dex2jar/</id>
     <published>2017-02-09T13:55:01.000Z</published>
-    <updated>2018-05-27T08:19:27.000Z</updated>
+    <updated>2018-07-27T03:26:55.000Z</updated>
     
     <content type="html"><![CDATA[<h3 id="一、反编译某平台代码">一、反编译某平台代码</h3><p>最近在看某外卖平台的代码，发现某外卖平台最新版本版本无法正常的通过dex2jar工具将dex转换出Java源代码，在转换过程中会提示出错，如图：</p>
 <p><img src="https://ivonhoe.github.io/res/dex2jar_error/dex2jar_error1.png" alt="dex2jar异常图"></p>
@@ -1304,7 +1306,7 @@
     
     </summary>
     
-      <category term="移动安全" scheme="https://ivonhoe.github.io/categories/%E7%A7%BB%E5%8A%A8%E5%AE%89%E5%85%A8/"/>
+      <category term="Android安全" scheme="https://ivonhoe.github.io/categories/Android%E5%AE%89%E5%85%A8/"/>
     
     
       <category term="Gradle" scheme="https://ivonhoe.github.io/tags/Gradle/"/>
@@ -1320,7 +1322,7 @@
     <link href="https://ivonhoe.github.io/2017/02/04/Android%E5%AE%89%E5%85%A8%E4%B9%8B---APP%E5%8E%BB%E5%B9%BF%E5%91%8A/"/>
     <id>https://ivonhoe.github.io/2017/02/04/Android安全之---APP去广告/</id>
     <published>2017-02-04T05:27:20.000Z</published>
-    <updated>2018-05-27T08:20:12.000Z</updated>
+    <updated>2018-07-27T03:28:18.000Z</updated>
     
     <content type="html"><![CDATA[<h3 id="一、工具介绍">一、工具介绍</h3><ul>
 <li><strong>apktool：</strong>google提供Android apk编译与反编译工具，<a href="https://ibotpeaches.github.io/Apktool/" target="_blank" rel="external">https://ibotpeaches.github.io/Apktool/</a></li>
@@ -1368,7 +1370,7 @@
     
     </summary>
     
-      <category term="移动安全" scheme="https://ivonhoe.github.io/categories/%E7%A7%BB%E5%8A%A8%E5%AE%89%E5%85%A8/"/>
+      <category term="Android安全" scheme="https://ivonhoe.github.io/categories/Android%E5%AE%89%E5%85%A8/"/>
     
     
       <category term="Android" scheme="https://ivonhoe.github.io/tags/Android/"/>
