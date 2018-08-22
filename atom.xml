@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://ivonhoe.github.io/"/>
-  <updated>2018-07-27T03:27:48.000Z</updated>
+  <updated>2018-07-29T13:01:36.000Z</updated>
   <id>https://ivonhoe.github.io/</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="https://ivonhoe.github.io/2018/07/18/abandon-the-plugin-framework/"/>
     <id>https://ivonhoe.github.io/2018/07/18/abandon-the-plugin-framework/</id>
     <published>2018-07-18T12:45:30.000Z</published>
-    <updated>2018-07-27T03:27:48.000Z</updated>
+    <updated>2018-07-29T13:01:36.000Z</updated>
     
     <content type="html"><![CDATA[<h3 id="0x01_前言">0x01 前言</h3><p>Android插件化框架一直以来就是安卓平台上的一个重要技术方向，从携程的DynamicAPK到360RePlugin再到阿里巴巴的Atlas，甚至美团和滴滴的安卓团队都有自己的一套安卓插件化解决方案。面对业界如此热门的技术方向，在对比业界开源的插件化方案后，团队内部于去年10月份开始(2017.10)在项目中选择开源的Small插件化框架进行了尝试。鞋是否合适需要穿上脚才能知道。这篇文章总结了我在使用Small插件化框架后，自己对插件化的理解和思考。</p>
 <a id="more"></a>
@@ -42,7 +42,7 @@
 </blockquote>
 <p>兼容性问题大致分布在以下几个方面：</p>
 <ol>
-<li>与google最新系统和编译工具的兼容。18年第三季度最新版本Android O系统的新手机会陆续上市，插件化架构对新系统的兼容性问题会变的急切。并且插件化框架针对安卓系统的黑科技也越来越不被新版本系统接受。Android Studio 3.1最新新编译工具的兼容问题。</li>
+<li>与google最新系统和编译工具的兼容。18年第三季度最新版本Android P系统的新手机会陆续上市，插件化架构对新系统的兼容性问题会变的急切。并且插件化框架针对安卓系统的黑科技也越来越不被新版本系统接受。Android Studio 3.1最新新编译工具的兼容问题。</li>
 <li>业界移动安全方案的兼容。常见的三方dex加壳方案无法在插件化框架上顺利运用。</li>
 <li>第三方框架的兼容，常见涉及AOP的第三方框架，如AAC和Small框架不兼容。甚至React Native方案都需要花很多时间和精力去适配。</li>
 </ol>

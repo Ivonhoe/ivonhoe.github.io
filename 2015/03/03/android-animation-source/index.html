@@ -89,7 +89,7 @@
 <meta property="og:site_name" content="病已的博客">
 <meta property="og:description" content="0x01 动画插值源码想要实现动画无非想做一件事情，就是把动画的对象在合适的时间画出合适的状态，如何控制时间？就是通过补间动画或者属性动画设置动画的时长、起始时间、起始延迟这些属性来控制动画的时间。如何控制动画状态？就可以通过动画插值，插值方法getInterpolation(input),input就是当前动画运行时间的百分比，而函数返回值就是当前动画的进度百分比，通过动画进度和动画的起始状态和">
 <meta property="og:image" content="https://ivonhoe.github.io/res/android_animation/choreographer_seq_diag.png">
-<meta property="og:updated_time" content="2018-07-27T03:27:57.000Z">
+<meta property="og:updated_time" content="2018-08-22T04:37:44.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="动画源码分析（基于Android 5.0）">
 <meta name="twitter:description" content="0x01 动画插值源码想要实现动画无非想做一件事情，就是把动画的对象在合适的时间画出合适的状态，如何控制时间？就是通过补间动画或者属性动画设置动画的时长、起始时间、起始延迟这些属性来控制动画的时间。如何控制动画状态？就可以通过动画插值，插值方法getInterpolation(input),input就是当前动画运行时间的百分比，而函数返回值就是当前动画的进度百分比，通过动画进度和动画的起始状态和">
@@ -380,6 +380,7 @@
 
       
         <h4 id="0x01_动画插值源码">0x01 动画插值源码</h4><p>想要实现动画无非想做一件事情，就是把动画的对象在合适的时间画出合适的状态，如何控制时间？就是通过补间动画或者属性动画设置动画的时长、起始时间、起始延迟这些属性来控制动画的时间。如何控制动画状态？就可以通过动画插值，插值方法getInterpolation(input),input就是当前动画运行时间的百分比，而函数返回值就是当前动画的进度百分比，通过动画进度和动画的起始状态和结束状态来控制动画对象的当前状态。无论是补间动画或者属性动画都是定义动画状态的起始状态、终止状态、动画多久、如何动画。</p>
+<a id="more"></a>
 <h4 id="0x02_补间动画源码">0x02 补间动画源码</h4><p>先找到动画执行的入口View.startAnimation(animation)，startAnimation执行了invalidate，触发了重绘刷新视图界面。</p>
 <pre><code>public void <span class="function">startAnimation</span>(<span class="attribute">Animation</span> <span class="attribute">animation</span>) {
     <span class="attribute">animation</span><span class="class">.setStartTime</span>(<span class="attribute">Animation</span><span class="class">.START_ON_FIRST_FRAME</span>);
