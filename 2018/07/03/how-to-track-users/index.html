@@ -64,7 +64,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="无痕埋点," />
 
 
 
@@ -84,16 +84,16 @@
 
 <meta name="description" content="0x00 前言用户数据埋点的一般解决思路是使用代码手动埋点。国内主要的第三方数据分析服务商，如百度统计、友盟、TalkingData等都提供这一方案。但是使用代码手动埋点的方式，投入资源大，往往很难能够有实际产出。其中一个很重要的原因其实是在分析实际业务数据之前，很难知道我真正想看什么样的数据。用代码手动的埋点方案经常会导致一个尴尬的解决，想要看的数据没有埋，埋了的数据不准。用户数据埋点是少见的涉">
 <meta property="og:type" content="article">
-<meta property="og:title" content="移动端无痕埋点实践详解">
+<meta property="og:title" content="移动端无痕埋点实践详解(一)">
 <meta property="og:url" content="https://ivonhoe.github.io/2018/07/03/how-to-track-users/index.html">
 <meta property="og:site_name" content="病已的博客">
 <meta property="og:description" content="0x00 前言用户数据埋点的一般解决思路是使用代码手动埋点。国内主要的第三方数据分析服务商，如百度统计、友盟、TalkingData等都提供这一方案。但是使用代码手动埋点的方式，投入资源大，往往很难能够有实际产出。其中一个很重要的原因其实是在分析实际业务数据之前，很难知道我真正想看什么样的数据。用代码手动的埋点方案经常会导致一个尴尬的解决，想要看的数据没有埋，埋了的数据不准。用户数据埋点是少见的涉">
 <meta property="og:image" content="https://ivonhoe.github.io/res/trace_user/trace1.png">
 <meta property="og:image" content="https://ivonhoe.github.io/res/trace_user/trace2.png">
 <meta property="og:image" content="https://ivonhoe.github.io/res/trace_user/trace3.png">
-<meta property="og:updated_time" content="2018-07-27T03:56:04.000Z">
+<meta property="og:updated_time" content="2018-09-11T13:14:16.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="移动端无痕埋点实践详解">
+<meta name="twitter:title" content="移动端无痕埋点实践详解(一)">
 <meta name="twitter:description" content="0x00 前言用户数据埋点的一般解决思路是使用代码手动埋点。国内主要的第三方数据分析服务商，如百度统计、友盟、TalkingData等都提供这一方案。但是使用代码手动埋点的方式，投入资源大，往往很难能够有实际产出。其中一个很重要的原因其实是在分析实际业务数据之前，很难知道我真正想看什么样的数据。用代码手动的埋点方案经常会导致一个尴尬的解决，想要看的数据没有埋，埋了的数据不准。用户数据埋点是少见的涉">
 
 
@@ -128,7 +128,7 @@
 
 
 
-  <title> 移动端无痕埋点实践详解 | 病已的博客 </title>
+  <title> 移动端无痕埋点实践详解(一) | 病已的博客 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -297,7 +297,7 @@
             
             
               
-                移动端无痕埋点实践详解
+                移动端无痕埋点实践详解(一)
               
             
           </h1>
@@ -352,7 +352,7 @@
 
           
           
-             <span id="/2018/07/03/how-to-track-users/" class="leancloud_visitors" data-flag-title="移动端无痕埋点实践详解">
+             <span id="/2018/07/03/how-to-track-users/" class="leancloud_visitors" data-flag-title="移动端无痕埋点实践详解(一)">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -458,6 +458,12 @@
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/tags/无痕埋点/" rel="tag"># 无痕埋点</a>
+          
+        </div>
+      
 
       
         
@@ -551,7 +557,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">30</span>
+                <span class="site-state-item-count">31</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -573,7 +579,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">37</span>
+                <span class="site-state-item-count">38</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

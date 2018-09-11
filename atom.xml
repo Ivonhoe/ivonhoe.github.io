@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://ivonhoe.github.io/"/>
-  <updated>2018-07-29T13:01:36.000Z</updated>
+  <updated>2018-09-11T13:14:24.000Z</updated>
   <id>https://ivonhoe.github.io/</id>
   
   <author>
@@ -14,6 +14,51 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>移动端无痕埋点实践详解(二)</title>
+    <link href="https://ivonhoe.github.io/2018/09/11/how-to-track-users-2/"/>
+    <id>https://ivonhoe.github.io/2018/09/11/how-to-track-users-2/</id>
+    <published>2018-09-11T13:07:24.000Z</published>
+    <updated>2018-09-11T13:14:24.000Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="0x01_前言">0x01 前言</h3><p>在<a href="https://ivonhoe.github.io/2018/07/03/how-to-track-users/">移动端无痕埋点实践详解（一）</a>这篇文章大致总结了移动端无痕埋点的基本原理。主要介绍了什么是无痕埋点，无痕埋点的基础数据流程以及在Android系统上总体思路。这篇文章着重总结下无痕埋点方案的实施过程中在Android和iOS系统上几个细节的解决方案。</p>
+<a id="more"></a>
+<h3 id="0x02_xpath">0x02 xpath</h3><h4 id="2-1_什么是xpath">2.1 什么是xpath</h4><p>xpath是移动端定义可操作区域的数字标识，是用来标识可操作的控件的。既然想要通过一串字符标识在移动端app中的可操作控件，那么xpath的生成规则需要满足以下几个原则：</p>
+<ul>
+<li>唯一性: 在当前app中不存在不同控件对应相同Xpath</li>
+<li>稳定性: 不同版本app中，在没有页面结构变更的情况下，不同版本中相同页面中相同控件的Xpath要保持不变 </li>
+</ul>
+<h4 id="2-1_Android中如何生成xpath">2.1 Android中如何生成xpath</h4><p>在满足上述xpath原则的基础上，可通过以下几个参数作为组成XPath的生成参数：</p>
+<ul>
+<li><strong>页面</strong>：标记当前控件所在的页面url，Webview页面为其html的url，native页面url可定义该页面的virtual url</li>
+<li><strong>页面中位置</strong>：如何描述一个控件在该页面的位置，在Android系统中很容易想到DecorView和页面子view的关系。使用View到DecorView的位置关系来描述视图控件在该页面中的相对位置。</li>
+</ul>
+<p><img src="/res/trace_user2/trace1.png" alt="Alt text"></p>
+<ul>
+<li><strong>控件标记</strong>：这里的控件标记指的是相对于相同父容器的兄弟视图来说，如何更好的区别彼此。这里很容易能够想到view id。但是这里并不推荐使用view id作为标记。因为id是在版本迭代过程中很容易因为资源数量的变化而发生变化。并不能满足标记稳定性的原则，目前在Android上我选择resource name作为视图控件的标记。在ios上</li>
+</ul>
+<p>综上所述就可以得到以下的XPath生成方式。</p>
+<p>$ xpath = Md5(url+root path + resource name)$</p>
+<h4 id="2-2_iOS系统中如何生成xpath">2.2 iOS系统中如何生成xpath</h4><p>参考 <a href="https://www.jianshu.com/p/69ce01e15042" target="_blank" rel="external">https://www.jianshu.com/p/69ce01e15042</a></p>
+<h4 id="2-3_如何识别xpath">2.3 如何识别xpath</h4><p>在用户产生用户点击数据的过程中，埋点系统上报控件xpath给埋点后台，但是在实际的数据分析过程中需要知道每个xpath对应的控件和区块名称具体是什么。在每个电商系统中针对埋点都会有一套自己的位置模型规范，简称SPM（super position model）。所以针对最终的数据分析和统计需要一个xpath到spm的映射关系，将实际产生的xpath埋点数据转换成业务中的SPM。实现方式也很简单，只需要在开发版本中提供一个编辑模式，将移动端本地生成的xpath通过一个编辑工具转换成SPM数据就可以了，简单的效果图如下所示：</p>
+<p><img src="/res/trace_user2/trace2.jpeg" alt="Alt text"></p>
+<h3 id="0x03_Android如何记录页面跳转">0x03 Android如何记录页面跳转</h3><p>在考虑记录页面跳转的方案时，可能最先想到的是在通过统一路由跳转的方式跟踪所有页面跳转，但是实际的项目中首先你得有个统一的路由不是？在面对已有的项目代码从工作量和效果上来说这种方式都不是最佳方案。即便是已有统一的路由方案也很难保证没有错埋漏埋的情况存在。别忘记 <strong>ActivityLifecycleCallbacks</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public class RuntimeActivityCallbacks implements Application.ActivityLifecycleCallbacks &#123;&#10;&#10;    private Map&#60;String, Long&#62; mPageResumeTime = new HashMap&#60;&#62;();&#10;&#10;    /**&#10;     * &#39029;&#38754;&#23545;&#24212;&#30340;referrerId&#65292;&#19968;&#20010;activity&#21487;&#33021;&#26377;&#22810;&#20010;&#23376;&#39029;&#38754;&#65292;&#19968;&#20010;activity&#30340;referrerId&#20026;&#24403;&#21069;&#26174;&#31034;&#30340;&#23376;&#39029;&#38754;&#30340;referrerId&#10;     */&#10;    private Map&#60;Integer, String&#62; mPageReferrerMap = new HashMap&#60;&#62;();&#10;&#10;    @Override&#10;    public void onActivityResumed(Activity activity) &#123;&#10;        // &#38024;&#23545;&#39029;&#38754;&#30340;&#36319;&#36394;&#10;        if (activity instanceof IPageTracker) &#123;&#10;            IPageTracker pageTracker = (IPageTracker) activity;&#10;            String url = pageTracker.getReferrerId();&#10;&#10;            mPageResumeTime.put(url, System.currentTimeMillis());&#10;            mPageReferrerMap.put(activity.hashCode(), url);&#10;            AppTraceTool.traceOpenPage(url, ModuleManager.getTopPageUrl());&#10;            &#10;            // &#20445;&#23384;&#24403;&#21069;&#39029;&#38754;&#20026;top&#10;            ModuleManager.setTopPageUrl(url);&#10;        &#125; else &#123;&#10;            ModuleManager.setTopPageUrl(&#34;unknown&#34;);&#10;        &#125;&#10;    &#125;&#10;&#10;    @Override&#10;    public void onActivityStopped(Activity activity) &#10;        // &#38024;&#23545;&#39029;&#38754;&#30340;&#36319;&#36394;&#10;        if (activity instanceof IPageTracker) &#123;&#10;            IPageTracker pageTracker = (IPageTracker) activity;&#10;            String url = pageTracker.getReferrerId();&#10;            mPageResumeTime.remove(url);&#10;            mPageReferrerMap.remove(activity.hashCode());&#10;            AppTraceTool.traceLeavePage(url, second);&#10;        &#125;&#10;    &#125;&#10;&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="0x04_未完待续">0x04  未完待续</h3>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h3 id=&quot;0x01_前言&quot;&gt;0x01 前言&lt;/h3&gt;&lt;p&gt;在&lt;a href=&quot;https://ivonhoe.github.io/2018/07/03/how-to-track-users/&quot;&gt;移动端无痕埋点实践详解（一）&lt;/a&gt;这篇文章大致总结了移动端无痕埋点的基本原理。主要介绍了什么是无痕埋点，无痕埋点的基础数据流程以及在Android系统上总体思路。这篇文章着重总结下无痕埋点方案的实施过程中在Android和iOS系统上几个细节的解决方案。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="学习总结" scheme="https://ivonhoe.github.io/categories/%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/"/>
+    
+    
+      <category term="无痕埋点" scheme="https://ivonhoe.github.io/tags/%E6%97%A0%E7%97%95%E5%9F%8B%E7%82%B9/"/>
+    
+  </entry>
   
   <entry>
     <title>Android插件化之从入门到放弃</title>
@@ -172,11 +217,11 @@
   </entry>
   
   <entry>
-    <title>移动端无痕埋点实践详解</title>
+    <title>移动端无痕埋点实践详解(一)</title>
     <link href="https://ivonhoe.github.io/2018/07/03/how-to-track-users/"/>
     <id>https://ivonhoe.github.io/2018/07/03/how-to-track-users/</id>
     <published>2018-07-03T09:53:56.000Z</published>
-    <updated>2018-07-27T03:56:04.000Z</updated>
+    <updated>2018-09-11T13:14:16.000Z</updated>
     
     <content type="html"><![CDATA[<h3 id="0x00_前言">0x00 前言</h3><p>用户数据埋点的一般解决思路是使用代码手动埋点。国内主要的第三方数据分析服务商，如百度统计、友盟、TalkingData等都提供这一方案。但是使用代码手动埋点的方式，投入资源大，往往很难能够有实际产出。其中一个很重要的原因其实是在分析实际业务数据之前，很难知道我真正想看什么样的数据。用代码手动的埋点方案经常会导致一个尴尬的解决，想要看的数据没有埋，埋了的数据不准。<br>用户数据埋点是少见的涉及到一个产品研发团队所有角色的项目。从运营的数据需求，到产品经理的抽象和规范，到移动端前端的手动采集数据，再到服务端和大数据的存储和转换，最终把结果反馈给运营和产品经理。埋点的实际产出涉及到几乎所有部门，如果按照链式的工作流来解决埋点问题，当任何一个环节出现问题，都会对整个项目结果的产出产生影响。这篇文章记录了无痕埋点方案的思路与其核心问题的解决方案。</p>
 <a id="more"></a>
@@ -217,6 +262,8 @@
     
       <category term="学习总结" scheme="https://ivonhoe.github.io/categories/%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/"/>
     
+    
+      <category term="无痕埋点" scheme="https://ivonhoe.github.io/tags/%E6%97%A0%E7%97%95%E5%9F%8B%E7%82%B9/"/>
     
   </entry>
   
@@ -1312,70 +1359,6 @@
       <category term="Gradle" scheme="https://ivonhoe.github.io/tags/Gradle/"/>
     
       <category term="dex2jar" scheme="https://ivonhoe.github.io/tags/dex2jar/"/>
-    
-      <category term="移动安全" scheme="https://ivonhoe.github.io/tags/%E7%A7%BB%E5%8A%A8%E5%AE%89%E5%85%A8/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Android安全之APP去广告</title>
-    <link href="https://ivonhoe.github.io/2017/02/04/Android%E5%AE%89%E5%85%A8%E4%B9%8B---APP%E5%8E%BB%E5%B9%BF%E5%91%8A/"/>
-    <id>https://ivonhoe.github.io/2017/02/04/Android安全之---APP去广告/</id>
-    <published>2017-02-04T05:27:20.000Z</published>
-    <updated>2018-07-27T03:28:18.000Z</updated>
-    
-    <content type="html"><![CDATA[<h3 id="一、工具介绍">一、工具介绍</h3><ul>
-<li><strong>apktool：</strong>google提供Android apk编译与反编译工具，<a href="https://ibotpeaches.github.io/Apktool/" target="_blank" rel="external">https://ibotpeaches.github.io/Apktool/</a></li>
-<li><strong>dex2jar：</strong>dex文件转jar文件工具，<a href="https://github.com/pxb1988/dex2jar" target="_blank" rel="external">https://github.com/pxb1988/dex2jar</a></li>
-<li><strong>jd-gui：</strong>查看jar文件，<a href="http://jd.benow.ca/" target="_blank" rel="external">http://jd.benow.ca/</a></li>
-<li><strong>keytool：</strong>制作和管理数字证书</li>
-<li><strong>jarsigner：</strong>使用数字证书对jar和apk进行签名</li>
-<li><strong>Android killer：</strong>Window系统中，上述工具的集成工具</li>
-</ul>
-<p>更多反编译工具可查看：<a href="http://unclechen.github.io/2016/09/07/Android%E5%8F%8D%E7%BC%96%E8%AF%91%E6%8A%80%E6%9C%AF%E6%80%BB%E7%BB%93/" target="_blank" rel="external">Uncle Chen—Android反编译技术总结</a></p>
-<h3 id="二、去除应用开发助手的广告">二、去除应用开发助手的广告</h3><p>CodeKK公众号在17年初推出了一个<a href="https://mp.weixin.qq.com/s?__biz=MzAxNjI3MDkzOQ==&amp;mid=2654472664&amp;idx=1&amp;sn=dfc2b5beb90daa8fd068d8064ce0dcce&amp;chksm=803bfaecb74c73fa9a9addfd4d8bce031186c34b7d7b59ee22df41799c7eaa71a34863890f56&amp;mpshare=1&amp;scene=1&amp;srcid=0220tEQNaL7PwIgfBT8sIITK&amp;key=776fc8cdd0b88c0d0b9a6c8e271e4cfe2b2363aeda110198d4250b0a422befd0f43f78e2a17d528112f757336e136c56f488bc174baa56c116045a9bdbb37dbccf508eb8c70e48a2d09ca1da1b4d92d3&amp;ascene=0&amp;uin=MTMzNzYxMDM2MQ%3D%3D&amp;devicetype=iMac+MacBookPro11%2C4+OSX+OSX+10.12.1+build(16B2555" target="_blank" rel="external">应用开发助手</a>)。V1.0版本是有广告版本的，下面以这个版本为例，简单看下去广告过程。它的后续的V1.1.0和V1.2.0已经去除了广告功能。</p>
-<a id="more"></a>
-<h4 id="2-1、反编译">2.1、反编译</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apktool.sh d -f ./dev-tools.apk</span><br></pre></td></tr></table></figure>
-<p><img src="/res/dev-tool/dev-tool1.png" alt=""><br><img src="/res/dev-tool/dev-tool2.png" alt=""></p>
-<h4 id="2-2、注释广告代码">2.2、注释广告代码</h4><p>这里可以先用dex2jar转jar后查看下源码，会发现使用的是Google AdMob作为广告平台，简单看下代码可以发现在主页面activty_main.xml中包含广告视图的布局文件。所以只需要找到<code>ad_layout.xml</code>将其<code>android:visibility=&quot;gone&quot;</code>属性设置成<code>gone</code>就可以了。</p>
-<p><img src="/res/dev-tool/dev-tool3.png" alt=""></p>
-<h4 id="2-3、重打包">2.3、重打包</h4><p>这里重打包的过程可能会遇到一些错误，不过认真查看日志并结合Google都是可以找到解决方案的，这里暂且不表。使用apktool b命令，生成的apk默认路径为<code>/dist</code>路径下</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apktool.sh b ./dev-tools</span><br></pre></td></tr></table></figure>
-<p><img src="/res/dev-tool/dev-tool4.png" alt=""></p>
-<h4 id="2-4、制作一个名为hackapk-keystore的证书,并重新签名应用">2.4、制作一个名为hackapk.keystore的证书,并重新签名应用</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#21046;&#20316;&#35777;&#20070;&#65306;&#10;keytool -genkey -keystore hackapk.keystore -keyalg RSA -validity 10000 -alias hackapk&#10;&#10;&#31614;&#21517;&#65306;&#10;jarsigner -verbose -keystore hackapk.keystore -signedjar dev-tools-no-ads.apk ./dev-tools/dist/dev-tools.apk hackapk</span><br></pre></td></tr></table></figure>
-<p><img src="/res/dev-tool/dev-tool5.png" alt=""></p>
-<p>详细的参数可以参考：<br><a href="http://www.tttabc.com/android/keytool-keystore-jarsigner-apk.htm" target="_blank" rel="external">APK签名之keytool生成keystore和jarsigner签名apk</a></p>
-<h4 id="2-5、安装">2.5、安装</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adb install -r dev-tools-no-ads.apk</span><br></pre></td></tr></table></figure>
-<p><img src="/res/dev-tool/dev-tool6.png" alt=""></p>
-<p><img src="/res/dev-tool/dev-tool11.png" alt="有广告版本"></p>
-<p><img src="/res/dev-tool/dev-tool10.png" alt="无广告版本"></p>
-<h4 id="2-6、下载去广告版本的应用开发助手">2.6、下载去广告版本的应用开发助手</h4><p><img src="/res/dev-tool/dev-tool7.png" alt=""></p>
-<h3 id="三、反编译脚本">三、反编译脚本</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#!/bin/sh&#10;workDir=./&#10;if [ &#34;$2&#34; ]&#10;then&#10;         mkdir $2&#10;         workDir=./$2/&#10;fi&#10;&#10;echo $workDir&#10;name=`basename $1 .apk`&#10;zipPath=$workDir$name.zip&#10;&#10;##apkTool&#21453;&#32534;&#35793;&#10;smaliDir=$workDir$name@smali&#10;apktool.sh d -f $1 -o $smaliDir&#10;&#10;## &#35299;&#21387;&#32553;&#65292;&#20351;&#29992;dex2jar&#22788;&#29702;&#10;unzipDir=$workDir$name@unzip&#10;cp $1 $zipPath&#10;unzip $zipPath -d $unzipDir&#10;&#10;d2j-dex2jar.sh -f $unzipDir/classes.dex -o $&#123;workDir&#125;dex2jar.jar&#10;d2j-dex2jar.sh -f $unzipDir/classes2.dex -o $&#123;workDir&#125;dex2jar2.jar&#10;d2j-dex2jar.sh -f $unzipDir/classes3.dex -o $&#123;workDir&#125;dex2jar3.jar&#10;open $workDir</span><br></pre></td></tr></table></figure>
-<p>将上述内容保存到本地<code>hack.sh</code>文件中，使用下面的命令就会把apktool和dex2jar的结果输出到<code>meipu</code>这个目录中，这样就不需要每次收到敲命令喽，只要知道需要反编译的apk和输出的文件夹名称就可以~</p>
-<p><code>./hack.sh ./美铺_1487845975713.apk meipu</code></p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;h3 id=&quot;一、工具介绍&quot;&gt;一、工具介绍&lt;/h3&gt;&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;apktool：&lt;/strong&gt;google提供Android apk编译与反编译工具，&lt;a href=&quot;https://ibotpeaches.github.io/Apktool/&quot;&gt;https://ibotpeaches.github.io/Apktool/&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;dex2jar：&lt;/strong&gt;dex文件转jar文件工具，&lt;a href=&quot;https://github.com/pxb1988/dex2jar&quot;&gt;https://github.com/pxb1988/dex2jar&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;jd-gui：&lt;/strong&gt;查看jar文件，&lt;a href=&quot;http://jd.benow.ca/&quot;&gt;http://jd.benow.ca/&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;keytool：&lt;/strong&gt;制作和管理数字证书&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;jarsigner：&lt;/strong&gt;使用数字证书对jar和apk进行签名&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Android killer：&lt;/strong&gt;Window系统中，上述工具的集成工具&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;更多反编译工具可查看：&lt;a href=&quot;http://unclechen.github.io/2016/09/07/Android%E5%8F%8D%E7%BC%96%E8%AF%91%E6%8A%80%E6%9C%AF%E6%80%BB%E7%BB%93/&quot;&gt;Uncle Chen—Android反编译技术总结&lt;/a&gt;&lt;/p&gt;
-&lt;h3 id=&quot;二、去除应用开发助手的广告&quot;&gt;二、去除应用开发助手的广告&lt;/h3&gt;&lt;p&gt;CodeKK公众号在17年初推出了一个&lt;a href=&quot;https://mp.weixin.qq.com/s?__biz=MzAxNjI3MDkzOQ==&amp;amp;mid=2654472664&amp;amp;idx=1&amp;amp;sn=dfc2b5beb90daa8fd068d8064ce0dcce&amp;amp;chksm=803bfaecb74c73fa9a9addfd4d8bce031186c34b7d7b59ee22df41799c7eaa71a34863890f56&amp;amp;mpshare=1&amp;amp;scene=1&amp;amp;srcid=0220tEQNaL7PwIgfBT8sIITK&amp;amp;key=776fc8cdd0b88c0d0b9a6c8e271e4cfe2b2363aeda110198d4250b0a422befd0f43f78e2a17d528112f757336e136c56f488bc174baa56c116045a9bdbb37dbccf508eb8c70e48a2d09ca1da1b4d92d3&amp;amp;ascene=0&amp;amp;uin=MTMzNzYxMDM2MQ%3D%3D&amp;amp;devicetype=iMac+MacBookPro11%2C4+OSX+OSX+10.12.1+build(16B2555&quot;&gt;应用开发助手&lt;/a&gt;)。V1.0版本是有广告版本的，下面以这个版本为例，简单看下去广告过程。它的后续的V1.1.0和V1.2.0已经去除了广告功能。&lt;/p&gt;
-    
-    </summary>
-    
-      <category term="Android安全" scheme="https://ivonhoe.github.io/categories/Android%E5%AE%89%E5%85%A8/"/>
-    
-    
-      <category term="Android" scheme="https://ivonhoe.github.io/tags/Android/"/>
-    
-      <category term="去广告" scheme="https://ivonhoe.github.io/tags/%E5%8E%BB%E5%B9%BF%E5%91%8A/"/>
     
       <category term="移动安全" scheme="https://ivonhoe.github.io/tags/%E7%A7%BB%E5%8A%A8%E5%AE%89%E5%85%A8/"/>
     
