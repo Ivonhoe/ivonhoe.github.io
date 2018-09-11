@@ -99,7 +99,7 @@
 <meta property="og:image" content="https://ivonhoe.github.io/res/dexguard/dexguard4.jpeg">
 <meta property="og:image" content="https://ivonhoe.github.io/res/dexguard/dexguard6.png">
 <meta property="og:image" content="https://ivonhoe.github.io/res/dexguard/dexguard3.png">
-<meta property="og:updated_time" content="2018-07-27T03:26:55.000Z">
+<meta property="og:updated_time" content="2018-09-11T13:25:23.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android安全之应用防dex2jar原理及实现">
 <meta name="twitter:description" content="一、反编译某平台代码最近在看某外卖平台的代码，发现某外卖平台最新版本版本无法正常的通过dex2jar工具将dex转换出Java源代码，在转换过程中会提示出错，如图：
@@ -451,7 +451,7 @@
 <li><a href="http://www.wangyuwei.me/2017/01/20/ASM-%E6%93%8D%E4%BD%9C%E5%AD%97%E8%8A%82%E7%A0%81%E5%88%9D%E6%8E%A2/" target="_blank" rel="external">ASM-操作字节码初探</a></li>
 <li><a href="https://www.diycode.cc/topics/581" target="_blank" rel="external">手摸手增加字节码往方法体内插代码</a></li>
 </ul>
-
+<h3 id="转载请标明出处病已blog_https://ivonhoe-github-io/">转载请标明出处<a href="https://ivonhoe.github.io/">病已blog https://ivonhoe.github.io/</a></h3>
       
     </div>
 
@@ -677,7 +677,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#一、反编译某平台代码"><span class="nav-number">1.</span> <span class="nav-text">一、反编译某平台代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二、为什么？"><span class="nav-number">2.</span> <span class="nav-text">二、为什么？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#三、手动代码注入"><span class="nav-number">3.</span> <span class="nav-text">三、手动代码注入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#四、实现思路"><span class="nav-number">4.</span> <span class="nav-text">四、实现思路</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#五、使用ASM操作Java字节码"><span class="nav-number">5.</span> <span class="nav-text">五、使用ASM操作Java字节码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#六、总结"><span class="nav-number">6.</span> <span class="nav-text">六、总结</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#插件源码"><span class="nav-number">6.1.</span> <span class="nav-text">插件源码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#使用方法"><span class="nav-number">6.2.</span> <span class="nav-text">使用方法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#七、参考文档"><span class="nav-number">7.</span> <span class="nav-text">七、参考文档</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#一、反编译某平台代码"><span class="nav-number">1.</span> <span class="nav-text">一、反编译某平台代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二、为什么？"><span class="nav-number">2.</span> <span class="nav-text">二、为什么？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#三、手动代码注入"><span class="nav-number">3.</span> <span class="nav-text">三、手动代码注入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#四、实现思路"><span class="nav-number">4.</span> <span class="nav-text">四、实现思路</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#五、使用ASM操作Java字节码"><span class="nav-number">5.</span> <span class="nav-text">五、使用ASM操作Java字节码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#六、总结"><span class="nav-number">6.</span> <span class="nav-text">六、总结</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#插件源码"><span class="nav-number">6.1.</span> <span class="nav-text">插件源码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#使用方法"><span class="nav-number">6.2.</span> <span class="nav-text">使用方法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#七、参考文档"><span class="nav-number">7.</span> <span class="nav-text">七、参考文档</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#转载请标明出处病已blog_https://ivonhoe-github-io/"><span class="nav-number">8.</span> <span class="nav-text">转载请标明出处病已blog https://ivonhoe.github.io/</span></a></li></ol></div>
             
 
           </div>

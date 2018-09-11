@@ -90,7 +90,7 @@
 <meta property="og:site_name" content="病已的博客">
 <meta property="og:description" content="0x01 问题描述现象： 将ndk版本升级到    17.0.4754217编译报错
 1* What went wrong:&amp;#10;Execution failed for task &amp;#39;:app+stub:transformNativeLibsWithStripDebugSymbolForRelease&amp;#39;.&amp;#10;&amp;#62; A problem occurred startin">
-<meta property="og:updated_time" content="2018-07-27T03:31:52.000Z">
+<meta property="og:updated_time" content="2018-09-11T13:29:20.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android NDK编译错误解决">
 <meta name="twitter:description" content="0x01 问题描述现象： 将ndk版本升级到    17.0.4754217编译报错
@@ -390,7 +390,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">This mipsel-linux-android-4.9 directory exists to make the NDK compatible with the Android&#10;SDK&#39;s Gradle plugin, version 3.0.1 and earlier, which expects the NDK&#10;to have a MIPS toolchain directory.</span><br></pre></td></tr></table></figure>
 <p><strong>解决方案：</strong><br>一种解决办法是同时升级gradle编译工具的版本。但是因为项目的原因，无法使用最新版本的gradle编译工具，只能使用2.3.0版本的编译工具，所以使用一个绕过问题的方法，<br>在<code>/Users/Ivonhoe/Library/Android/sdk/ndk-bundle/toolchains/mips64el-linux-android-4.9/prebuilt/darwin-x86_64/bin/</code>目录创建一个<code>mips64el-linux-android-strip</code>的空文件。记得使用<code>chmod</code>命令修改空文件的执行权限。</p>
 <h4 id="0x03_参考文档：">0x03 参考文档：</h4><p><a href="https://github.com/android-ndk/ndk/issues/700" target="_blank" rel="external">React Native apps fail to build since NDK update to r17 (due to missing mipsel-linux-android-4.9 toolchain files)</a></p>
-
+<h3 id="转载请标明出处病已blog_https://ivonhoe-github-io/">转载请标明出处<a href="https://ivonhoe.github.io/">病已blog https://ivonhoe.github.io/</a></h3>
       
     </div>
 
@@ -606,7 +606,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#0x01_问题描述"><span class="nav-number">1.</span> <span class="nav-text">0x01 问题描述</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x03_参考文档："><span class="nav-number">2.</span> <span class="nav-text">0x03 参考文档：</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#0x01_问题描述"><span class="nav-number">1.</span> <span class="nav-text">0x01 问题描述</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x03_参考文档："><span class="nav-number">2.</span> <span class="nav-text">0x03 参考文档：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#转载请标明出处病已blog_https://ivonhoe-github-io/"><span class="nav-number"></span> <span class="nav-text">转载请标明出处病已blog https://ivonhoe.github.io/</span></a></div>
             
 
           </div>

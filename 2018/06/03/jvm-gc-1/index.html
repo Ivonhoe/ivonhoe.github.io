@@ -100,7 +100,7 @@
 <meta property="og:image" content="https://ivonhoe.github.io/res/gc/copy.jpg">
 <meta property="og:image" content="https://ivonhoe.github.io/res/gc/mark-compact.jpg">
 <meta property="og:image" content="https://ivonhoe.github.io/res/gc/gc.jpg">
-<meta property="og:updated_time" content="2018-07-27T03:55:03.000Z">
+<meta property="og:updated_time" content="2018-09-11T13:29:00.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="深入浅出JVM垃圾回收算法">
 <meta name="twitter:description" content="0x00 前言在学习JVM如何进行垃圾回收方法时，发现所谓的JVM垃圾回收思想和现实生活的场景有很多相似的地方。所以用餐厅回收餐桌的方式类比JVM垃圾回收算法，应该能帮助JVM学习的理解和记忆。
@@ -427,7 +427,7 @@
 <p>这里很显然会有一个问题，理论上每次新生代GC都会回收绝大多数的对象，但是无法保证GC存活后的对象大学都不超过整个新生代的10%。当Survivor空间的内存不够用是，就需要老年代做内存担保。同样用餐厅的理论来理解，你希望把A厅的顾客转移到B厅，但是B厅已经没有足够空间容纳所有顾客了，这时候可以选择将顾客安置在VIP包厢【老年代】。并且每次在新生代GC中存活的对象，其年龄就会+1，默认情况下年龄达到15的对象会被转移到老年代。这里也很好理解，餐厅的忠实吃货为啥不给办张VIP卡呢？</p>
 <h4 id="参考文档">参考文档</h4><p><a href="">《深入理解Java虚拟机》周志明 著</a></p>
 <p><a href="https://www.cnblogs.com/cielosun/p/6674431.html" target="_blank" rel="external">Java基础：JVM垃圾回收算法</a></p>
-
+<h3 id="转载请标明出处病已blog_https://ivonhoe-github-io/">转载请标明出处<a href="https://ivonhoe.github.io/">病已blog https://ivonhoe.github.io/</a></h3>
       
     </div>
 
@@ -649,7 +649,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#0x00_前言"><span class="nav-number">1.</span> <span class="nav-text">0x00 前言</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x01_经典垃圾回收算法"><span class="nav-number">2.</span> <span class="nav-text">0x01 经典垃圾回收算法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x02_分代收集（Generational_Collection）"><span class="nav-number">3.</span> <span class="nav-text">0x02 分代收集（Generational Collection）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#参考文档"><span class="nav-number">4.</span> <span class="nav-text">参考文档</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#0x00_前言"><span class="nav-number">1.</span> <span class="nav-text">0x00 前言</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x01_经典垃圾回收算法"><span class="nav-number">2.</span> <span class="nav-text">0x01 经典垃圾回收算法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x02_分代收集（Generational_Collection）"><span class="nav-number">3.</span> <span class="nav-text">0x02 分代收集（Generational Collection）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#参考文档"><span class="nav-number">4.</span> <span class="nav-text">参考文档</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#转载请标明出处病已blog_https://ivonhoe-github-io/"><span class="nav-number"></span> <span class="nav-text">转载请标明出处病已blog https://ivonhoe.github.io/</span></a></div>
             
 
           </div>

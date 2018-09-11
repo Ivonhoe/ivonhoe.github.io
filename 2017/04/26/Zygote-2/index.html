@@ -94,7 +94,7 @@
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/695750-4eebdbaf6e95eff4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/695750-14ca03d88be43c61.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/695750-5f0921dc8e336f51.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:updated_time" content="2018-05-27T08:21:22.000Z">
+<meta property="og:updated_time" content="2018-09-11T13:30:06.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android性能优化之系统资源预加载的思考">
 <meta name="twitter:description" content="一、分析一个Hello World App中bitmap对象的分布使用BitmapAnalyzer分析一个Android Hello World App时你会dump出400+张图片，什么是BitmapAnalyzer？BitmapAnalyzer是一个自动分析Android dump heap中bitmap对象的工具，详细请看《Android Bitmap的内存大小是如何计算的？》这篇文章的介绍">
@@ -417,7 +417,7 @@
 <p><a href="http://wiki.jikexueyuan.com/project/deep-android-v1/zygote.html" target="_blank" rel="external">深入理解 Zygote</a></p>
 <p><a href="http://www.cnblogs.com/biyeymyhjob/archive/2012/07/20/2601655.html" target="_blank" rel="external">Linux写时拷贝技术(copy-on-write)</a></p>
 <p><a href="http://luodw.cc/2016/02/17/address/" target="_blank" rel="external">linux虚拟地址转物理地址</a></p>
-
+<h3 id="转载请标明出处病已blog_https://ivonhoe-github-io/">转载请标明出处<a href="https://ivonhoe.github.io/">病已blog https://ivonhoe.github.io/</a></h3>
       
     </div>
 
@@ -643,7 +643,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#一、分析一个Hello_World_App中bitmap对象的分布"><span class="nav-number">1.</span> <span class="nav-text">一、分析一个Hello World App中bitmap对象的分布</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二、为什么有这么多系统资源被加载？"><span class="nav-number">2.</span> <span class="nav-text">二、为什么有这么多系统资源被加载？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#三、强制清除未使用的系统资源图片会怎样？"><span class="nav-number">3.</span> <span class="nav-text">三、强制清除未使用的系统资源图片会怎样？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#四、Copy-On-Write(COW)"><span class="nav-number">4.</span> <span class="nav-text">四、Copy-On-Write(COW)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#五、总结"><span class="nav-number">5.</span> <span class="nav-text">五、总结</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考"><span class="nav-number">6.</span> <span class="nav-text">参考</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#一、分析一个Hello_World_App中bitmap对象的分布"><span class="nav-number">1.</span> <span class="nav-text">一、分析一个Hello World App中bitmap对象的分布</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二、为什么有这么多系统资源被加载？"><span class="nav-number">2.</span> <span class="nav-text">二、为什么有这么多系统资源被加载？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#三、强制清除未使用的系统资源图片会怎样？"><span class="nav-number">3.</span> <span class="nav-text">三、强制清除未使用的系统资源图片会怎样？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#四、Copy-On-Write(COW)"><span class="nav-number">4.</span> <span class="nav-text">四、Copy-On-Write(COW)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#五、总结"><span class="nav-number">5.</span> <span class="nav-text">五、总结</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考"><span class="nav-number">6.</span> <span class="nav-text">参考</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#转载请标明出处病已blog_https://ivonhoe-github-io/"><span class="nav-number">7.</span> <span class="nav-text">转载请标明出处病已blog https://ivonhoe.github.io/</span></a></li></ol></div>
             
 
           </div>

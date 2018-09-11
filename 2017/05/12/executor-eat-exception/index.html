@@ -89,7 +89,7 @@
 <meta property="og:site_name" content="病已的博客">
 <meta property="og:description" content="一、前言今天遇到一个很诡异的问题，在多款Android 4.2.2版本的手机上发现处理后台任务的服务对前台请求毫无响应。这里的后台服务是一个RemoteService，目的为了处理更新&amp;amp;上传等任务。本来以为是跨进程组件间通讯出现兼容性问题，后来根据分析发现问题没有那么简单，这里记录下问题原因。">
 <meta property="og:image" content="https://ivonhoe.github.io/res/deadlock/deadlock.png">
-<meta property="og:updated_time" content="2018-07-27T03:30:49.000Z">
+<meta property="og:updated_time" content="2018-09-11T13:28:02.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="捕获线程池任务异常引发的血案">
 <meta name="twitter:description" content="一、前言今天遇到一个很诡异的问题，在多款Android 4.2.2版本的手机上发现处理后台任务的服务对前台请求毫无响应。这里的后台服务是一个RemoteService，目的为了处理更新&amp;amp;上传等任务。本来以为是跨进程组件间通讯出现兼容性问题，后来根据分析发现问题没有那么简单，这里记录下问题原因。">
@@ -406,7 +406,7 @@
 <li><a href="http://imxylz.com/blog/2013/08/02/handling-the-uncaught-exception-of-java-thread-pool/" target="_blank" rel="external">捕获Java线程池执行任务抛出的异常
 </a></li>
 </ol>
-
+<h3 id="转载请标明出处病已blog_https://ivonhoe-github-io/">转载请标明出处<a href="https://ivonhoe.github.io/">病已blog https://ivonhoe.github.io/</a></h3>
       
     </div>
 
@@ -630,7 +630,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#一、前言"><span class="nav-number">1.</span> <span class="nav-text">一、前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二、第一个错误"><span class="nav-number">2.</span> <span class="nav-text">二、第一个错误</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#三、第二个错误"><span class="nav-number">3.</span> <span class="nav-text">三、第二个错误</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#三、问题原因及解决方案"><span class="nav-number">4.</span> <span class="nav-text">三、问题原因及解决方案</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#解决方案"><span class="nav-number">4.1.</span> <span class="nav-text">解决方案</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#四、参考文档"><span class="nav-number">5.</span> <span class="nav-text">四、参考文档</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#一、前言"><span class="nav-number">1.</span> <span class="nav-text">一、前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二、第一个错误"><span class="nav-number">2.</span> <span class="nav-text">二、第一个错误</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#三、第二个错误"><span class="nav-number">3.</span> <span class="nav-text">三、第二个错误</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#三、问题原因及解决方案"><span class="nav-number">4.</span> <span class="nav-text">三、问题原因及解决方案</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#解决方案"><span class="nav-number">4.1.</span> <span class="nav-text">解决方案</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#四、参考文档"><span class="nav-number">5.</span> <span class="nav-text">四、参考文档</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#转载请标明出处病已blog_https://ivonhoe-github-io/"><span class="nav-number">6.</span> <span class="nav-text">转载请标明出处病已blog https://ivonhoe.github.io/</span></a></li></ol></div>
             
 
           </div>

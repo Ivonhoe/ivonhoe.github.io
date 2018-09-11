@@ -93,7 +93,7 @@ Zygote（受精卵）是一个启动应用的守护进程，在Server Manager之
 Zygote（受精卵）是一个启动应用的守护进程，在Server Manager之后被init.rc触发，但其实他是真正被app_process启动的，下面是启动这个特殊进程的流程。
 1service zygote /system/bin/app_process -Xzygote">
 <meta property="og:image" content="https://ivonhoe.github.io/res/zygote/zygote-1.png">
-<meta property="og:updated_time" content="2018-07-27T03:58:49.000Z">
+<meta property="og:updated_time" content="2018-09-11T13:30:14.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="[译]Zygote">
 <meta name="twitter:description" content="原文地址：Zygote https://anatomyofandroid.com/2013/10/15/zygote/
@@ -399,6 +399,7 @@ Zygote（受精卵）是一个启动应用的守护进程，在Server Manager之
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public static void main(String argv[]) &#123;&#10; try &#123;&#10;     // Start profiling the zygote initialization.&#10;     SamplingProfilerIntegration.start();&#10;&#10;    registerZygoteSocket();&#10;    EventLog.writeEvent(LOG_BOOT_PROGRESS_PRELOAD_START,&#10;    SystemClock.uptimeMillis());&#10;    preload();&#10;    EventLog.writeEvent(LOG_BOOT_PROGRESS_PRELOAD_END,&#10;    SystemClock.uptimeMillis());&#10;&#10;    // Finish profiling the zygote initialization.&#10;    SamplingProfilerIntegration.writeZygoteSnapshot();&#10;&#10;    // Do an initial gc to clean up after startup&#10;    gc();&#10;&#10;    // Disable tracing so that forked processes do not inherit stale tracing tags from&#10;    // Zygote.&#10;    Trace.setTracingEnabled(false);&#10;&#10;    // If requested, start system server directly from Zygote&#10;    if (argv.length != 2) &#123;&#10;        throw new RuntimeException(argv[0] + USAGE_STRING);&#10;    &#125;&#10;&#10;    if (argv[1].equals(&#34;start-system-server&#34;)) &#123;&#10;        startSystemServer();&#10;    &#125; else if (!argv[1].equals(&#34;&#34;)) &#123;&#10;        throw new RuntimeException(argv[0] + USAGE_STRING);&#10;    &#125;&#10;&#10;    Log.i(TAG, &#34;Accepting command socket connections&#34;);&#10;&#10;    runSelectLoop();&#10;&#10;    closeServerSocket();&#10; &#125; catch (MethodAndArgsCaller caller) &#123;&#10;     caller.run();&#10; &#125; catch (RuntimeException ex) &#123;&#10;     Log.e(TAG, &#34;Zygote died with exception&#34;, ex);&#10;     closeServerSocket();&#10;     throw ex;&#10; &#125;&#10;&#125;</span><br></pre></td></tr></table></figure>
 <p>通过下面代码可以看到Zygote是如何启动System Server的。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/**&#10; * Prepare the arguments and fork for the system server process.&#10; */&#10;private static boolean startSystemServer()&#10;        throws MethodAndArgsCaller, RuntimeException &#123;&#10;    /* Hardcoded command line to start the system server */&#10;    String args[] = &#123;&#10;            &#34;--setuid=1000&#34;,&#10;            &#34;--setgid=1000&#34;,&#10;            &#34;--setgroups=1001,1002,1003,1004,1005,1006,1007,1008,1009,1010,1018,3001,3002,3003,3006,3007&#34;,&#10;            &#34;--capabilities=130104352,130104352&#34;,&#10;            &#34;--runtime-init&#34;,&#10;            &#34;--nice-name=system_server&#34;,&#10;            &#34;com.android.server.SystemServer&#34;,&#10;    &#125;;&#10;    ZygoteConnection.Arguments parsedArgs = null;&#10;&#10;    int pid;&#10;&#10;    try &#123;&#10;        parsedArgs = new ZygoteConnection.Arguments(args);&#10;        ZygoteConnection.applyDebuggerSystemProperty(parsedArgs);&#10;        ZygoteConnection.applyInvokeWithSystemProperty(parsedArgs);&#10;        &#10;        /* Request to fork the system server process */&#10;        pid = Zygote.forkSystemServer(&#10;                parsedArgs.uid, parsedArgs.gid,&#10;                parsedArgs.gids,&#10;                parsedArgs.debugFlags,&#10;                null,&#10;                parsedArgs.permittedCapabilities,&#10;                parsedArgs.effectiveCapabilities);&#10;    &#125; catch (IllegalArgumentException ex) &#123;&#10;        throw new RuntimeException(ex);&#10;    &#125;&#10;    &#10;    /* For child process */&#10;    if (pid == 0) &#123;&#10;        handleSystemServerProcess(parsedArgs);&#10;    &#125;&#10;&#10;    return true;&#10;&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="转载请标明出处病已blog_https://ivonhoe-github-io/">转载请标明出处<a href="https://ivonhoe.github.io/">病已blog https://ivonhoe.github.io/</a></h3>
       
     </div>
 
@@ -522,8 +523,17 @@ Zygote（受精卵）是一个启动应用的守护进程，在Server Manager之
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="https://avatars1.githubusercontent.com/u/5706813?v=3&s=460"
@@ -603,6 +613,22 @@ Zygote（受精卵）是一个启动应用的守护进程，在Server Manager之
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#转载请标明出处病已blog_https://ivonhoe-github-io/"><span class="nav-number">1.</span> <span class="nav-text">转载请标明出处病已blog https://ivonhoe.github.io/</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       

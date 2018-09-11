@@ -107,7 +107,7 @@ jarsigne">
 <meta property="og:image" content="https://ivonhoe.github.io/res/dev-tool/dev-tool11.png">
 <meta property="og:image" content="https://ivonhoe.github.io/res/dev-tool/dev-tool10.png">
 <meta property="og:image" content="https://ivonhoe.github.io/res/dev-tool/dev-tool7.png">
-<meta property="og:updated_time" content="2018-07-27T03:28:18.000Z">
+<meta property="og:updated_time" content="2018-09-11T13:26:57.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android安全之APP去广告">
 <meta name="twitter:description" content="一、工具介绍
@@ -431,7 +431,7 @@ jarsigne">
 <h3 id="三、反编译脚本">三、反编译脚本</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#!/bin/sh&#10;workDir=./&#10;if [ &#34;$2&#34; ]&#10;then&#10;         mkdir $2&#10;         workDir=./$2/&#10;fi&#10;&#10;echo $workDir&#10;name=`basename $1 .apk`&#10;zipPath=$workDir$name.zip&#10;&#10;##apkTool&#21453;&#32534;&#35793;&#10;smaliDir=$workDir$name@smali&#10;apktool.sh d -f $1 -o $smaliDir&#10;&#10;## &#35299;&#21387;&#32553;&#65292;&#20351;&#29992;dex2jar&#22788;&#29702;&#10;unzipDir=$workDir$name@unzip&#10;cp $1 $zipPath&#10;unzip $zipPath -d $unzipDir&#10;&#10;d2j-dex2jar.sh -f $unzipDir/classes.dex -o $&#123;workDir&#125;dex2jar.jar&#10;d2j-dex2jar.sh -f $unzipDir/classes2.dex -o $&#123;workDir&#125;dex2jar2.jar&#10;d2j-dex2jar.sh -f $unzipDir/classes3.dex -o $&#123;workDir&#125;dex2jar3.jar&#10;open $workDir</span><br></pre></td></tr></table></figure>
 <p>将上述内容保存到本地<code>hack.sh</code>文件中，使用下面的命令就会把apktool和dex2jar的结果输出到<code>meipu</code>这个目录中，这样就不需要每次收到敲命令喽，只要知道需要反编译的apk和输出的文件夹名称就可以~</p>
 <p><code>./hack.sh ./美铺_1487845975713.apk meipu</code></p>
-
+<h3 id="转载请标明出处病已blog_https://ivonhoe-github-io/">转载请标明出处<a href="https://ivonhoe.github.io/">病已blog https://ivonhoe.github.io/</a></h3>
       
     </div>
 
@@ -657,7 +657,7 @@ jarsigne">
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#一、工具介绍"><span class="nav-number">1.</span> <span class="nav-text">一、工具介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二、去除应用开发助手的广告"><span class="nav-number">2.</span> <span class="nav-text">二、去除应用开发助手的广告</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1、反编译"><span class="nav-number">2.1.</span> <span class="nav-text">2.1、反编译</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2、注释广告代码"><span class="nav-number">2.2.</span> <span class="nav-text">2.2、注释广告代码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3、重打包"><span class="nav-number">2.3.</span> <span class="nav-text">2.3、重打包</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-4、制作一个名为hackapk-keystore的证书,并重新签名应用"><span class="nav-number">2.4.</span> <span class="nav-text">2.4、制作一个名为hackapk.keystore的证书,并重新签名应用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-5、安装"><span class="nav-number">2.5.</span> <span class="nav-text">2.5、安装</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-6、下载去广告版本的应用开发助手"><span class="nav-number">2.6.</span> <span class="nav-text">2.6、下载去广告版本的应用开发助手</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#三、反编译脚本"><span class="nav-number">3.</span> <span class="nav-text">三、反编译脚本</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#一、工具介绍"><span class="nav-number">1.</span> <span class="nav-text">一、工具介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二、去除应用开发助手的广告"><span class="nav-number">2.</span> <span class="nav-text">二、去除应用开发助手的广告</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1、反编译"><span class="nav-number">2.1.</span> <span class="nav-text">2.1、反编译</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2、注释广告代码"><span class="nav-number">2.2.</span> <span class="nav-text">2.2、注释广告代码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3、重打包"><span class="nav-number">2.3.</span> <span class="nav-text">2.3、重打包</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-4、制作一个名为hackapk-keystore的证书,并重新签名应用"><span class="nav-number">2.4.</span> <span class="nav-text">2.4、制作一个名为hackapk.keystore的证书,并重新签名应用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-5、安装"><span class="nav-number">2.5.</span> <span class="nav-text">2.5、安装</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-6、下载去广告版本的应用开发助手"><span class="nav-number">2.6.</span> <span class="nav-text">2.6、下载去广告版本的应用开发助手</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#三、反编译脚本"><span class="nav-number">3.</span> <span class="nav-text">三、反编译脚本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#转载请标明出处病已blog_https://ivonhoe-github-io/"><span class="nav-number">4.</span> <span class="nav-text">转载请标明出处病已blog https://ivonhoe.github.io/</span></a></li></ol></div>
             
 
           </div>

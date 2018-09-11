@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://ivonhoe.github.io/"/>
-  <updated>2018-09-11T13:14:24.000Z</updated>
+  <updated>2018-09-11T13:28:36.000Z</updated>
   <id>https://ivonhoe.github.io/</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="https://ivonhoe.github.io/2018/09/11/how-to-track-users-2/"/>
     <id>https://ivonhoe.github.io/2018/09/11/how-to-track-users-2/</id>
     <published>2018-09-11T13:07:24.000Z</published>
-    <updated>2018-09-11T13:14:24.000Z</updated>
+    <updated>2018-09-11T13:28:36.000Z</updated>
     
     <content type="html"><![CDATA[<h3 id="0x01_前言">0x01 前言</h3><p>在<a href="https://ivonhoe.github.io/2018/07/03/how-to-track-users/">移动端无痕埋点实践详解（一）</a>这篇文章大致总结了移动端无痕埋点的基本原理。主要介绍了什么是无痕埋点，无痕埋点的基础数据流程以及在Android系统上总体思路。这篇文章着重总结下无痕埋点方案的实施过程中在Android和iOS系统上几个细节的解决方案。</p>
 <a id="more"></a>
@@ -45,7 +45,7 @@
 <p><img src="/res/trace_user2/trace2.jpeg" alt="Alt text"></p>
 <h3 id="0x03_Android如何记录页面跳转">0x03 Android如何记录页面跳转</h3><p>在考虑记录页面跳转的方案时，可能最先想到的是在通过统一路由跳转的方式跟踪所有页面跳转，但是实际的项目中首先你得有个统一的路由不是？在面对已有的项目代码从工作量和效果上来说这种方式都不是最佳方案。即便是已有统一的路由方案也很难保证没有错埋漏埋的情况存在。别忘记 <strong>ActivityLifecycleCallbacks</strong></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public class RuntimeActivityCallbacks implements Application.ActivityLifecycleCallbacks &#123;&#10;&#10;    private Map&#60;String, Long&#62; mPageResumeTime = new HashMap&#60;&#62;();&#10;&#10;    /**&#10;     * &#39029;&#38754;&#23545;&#24212;&#30340;referrerId&#65292;&#19968;&#20010;activity&#21487;&#33021;&#26377;&#22810;&#20010;&#23376;&#39029;&#38754;&#65292;&#19968;&#20010;activity&#30340;referrerId&#20026;&#24403;&#21069;&#26174;&#31034;&#30340;&#23376;&#39029;&#38754;&#30340;referrerId&#10;     */&#10;    private Map&#60;Integer, String&#62; mPageReferrerMap = new HashMap&#60;&#62;();&#10;&#10;    @Override&#10;    public void onActivityResumed(Activity activity) &#123;&#10;        // &#38024;&#23545;&#39029;&#38754;&#30340;&#36319;&#36394;&#10;        if (activity instanceof IPageTracker) &#123;&#10;            IPageTracker pageTracker = (IPageTracker) activity;&#10;            String url = pageTracker.getReferrerId();&#10;&#10;            mPageResumeTime.put(url, System.currentTimeMillis());&#10;            mPageReferrerMap.put(activity.hashCode(), url);&#10;            AppTraceTool.traceOpenPage(url, ModuleManager.getTopPageUrl());&#10;            &#10;            // &#20445;&#23384;&#24403;&#21069;&#39029;&#38754;&#20026;top&#10;            ModuleManager.setTopPageUrl(url);&#10;        &#125; else &#123;&#10;            ModuleManager.setTopPageUrl(&#34;unknown&#34;);&#10;        &#125;&#10;    &#125;&#10;&#10;    @Override&#10;    public void onActivityStopped(Activity activity) &#10;        // &#38024;&#23545;&#39029;&#38754;&#30340;&#36319;&#36394;&#10;        if (activity instanceof IPageTracker) &#123;&#10;            IPageTracker pageTracker = (IPageTracker) activity;&#10;            String url = pageTracker.getReferrerId();&#10;            mPageResumeTime.remove(url);&#10;            mPageReferrerMap.remove(activity.hashCode());&#10;            AppTraceTool.traceLeavePage(url, second);&#10;        &#125;&#10;    &#125;&#10;&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="0x04_未完待续">0x04  未完待续</h3>]]></content>
+<h3 id="0x04_未完待续">0x04  未完待续</h3><h3 id="转载请标明出处病已blog_https://ivonhoe-github-io/">转载请标明出处<a href="https://ivonhoe.github.io/">病已blog https://ivonhoe.github.io/</a></h3>]]></content>
     
     <summary type="html">
     
@@ -65,7 +65,7 @@
     <link href="https://ivonhoe.github.io/2018/07/18/abandon-the-plugin-framework/"/>
     <id>https://ivonhoe.github.io/2018/07/18/abandon-the-plugin-framework/</id>
     <published>2018-07-18T12:45:30.000Z</published>
-    <updated>2018-07-29T13:01:36.000Z</updated>
+    <updated>2018-09-11T13:26:08.000Z</updated>
     
     <content type="html"><![CDATA[<h3 id="0x01_前言">0x01 前言</h3><p>Android插件化框架一直以来就是安卓平台上的一个重要技术方向，从携程的DynamicAPK到360RePlugin再到阿里巴巴的Atlas，甚至美团和滴滴的安卓团队都有自己的一套安卓插件化解决方案。面对业界如此热门的技术方向，在对比业界开源的插件化方案后，团队内部于去年10月份开始(2017.10)在项目中选择开源的Small插件化框架进行了尝试。鞋是否合适需要穿上脚才能知道。这篇文章总结了我在使用Small插件化框架后，自己对插件化的理解和思考。</p>
 <a id="more"></a>
@@ -121,7 +121,7 @@
 <h3 id="0x05_相关阅读">0x05 相关阅读</h3><p><a href="https://ivonhoe.github.io/2018/01/18/Small%E6%A1%86%E6%9E%B6%E5%AE%9E%E8%B7%B5%E6%80%BB%E7%BB%93/">《Android插件化之Small框架实践总结》</a></p>
 <p><a href="https://ivonhoe.github.io/2018/01/18/Small%E6%A1%86%E6%9E%B6%E5%8E%9F%E7%90%86/">《Android插件化之Small框架原理》</a></p>
 <p><a href="https://ivonhoe.github.io/2018/03/14/small-bug-555-fix/">《Android插件化之资源加载》</a></p>
-]]></content>
+<h3 id="0x06_转载请标明出处病已blog_https://ivonhoe-github-io/">0x06 转载请标明出处<a href="https://ivonhoe.github.io/">病已blog https://ivonhoe.github.io/</a></h3>]]></content>
     
     <summary type="html">
     
@@ -141,7 +141,7 @@
     <link href="https://ivonhoe.github.io/2018/07/08/network-architecture-design/"/>
     <id>https://ivonhoe.github.io/2018/07/08/network-architecture-design/</id>
     <published>2018-07-08T13:30:33.000Z</published>
-    <updated>2018-07-27T03:56:34.000Z</updated>
+    <updated>2018-09-11T13:29:30.000Z</updated>
     
     <content type="html"><![CDATA[<h3 id="0x01_前言">0x01 前言</h3><p>不管是android、ios还是浏览器端的开发，在正常的产品迭代过程中HTTP网络请求都是高频使用的功能。以android端为例，在使用常见的http网络框架时，如<code>HttpUrlConnection</code>,<code>HttpClient</code>或者<code>okHttp</code>，开发者都必须在此自身业务场景的基础上进行api的二次封装。一个功能强大且易用的网络框架不仅仅能够提高开发效率，起到事半功倍的效果，还能起到规范业务开发结果的作用。<br>希望通过这篇文章，总结下自己在设计和实现一个网络框架时的思考过程，也帮助团队同学了解现有网络框架的能力和不足。<br><a id="more"></a></p>
 <h3 id="0x02_使用者的视角">0x02 使用者的视角</h3><h4 id="2-1_使用volley">2.1 使用volley</h4><p>发送Http get请求的示例代码：</p>
@@ -201,7 +201,7 @@
 <p><a href="http://blog.csdn.net/yaofeiNO1/article/details/54428021" target="_blank" rel="external">http://blog.csdn.net/yaofeiNO1/article/details/54428021</a></p>
 <p><a href="http://blog.csdn.net/qmickecs/article/details/73696954" target="_blank" rel="external">http://blog.csdn.net/qmickecs/article/details/73696954</a></p>
 <p><a href="http://blog.csdn.net/qmickecs/article/details/73822619" target="_blank" rel="external">http://blog.csdn.net/qmickecs/article/details/73822619</a></p>
-]]></content>
+<h3 id="转载请标明出处病已blog_https://ivonhoe-github-io/">转载请标明出处<a href="https://ivonhoe.github.io/">病已blog https://ivonhoe.github.io/</a></h3>]]></content>
     
     <summary type="html">
     
@@ -221,7 +221,7 @@
     <link href="https://ivonhoe.github.io/2018/07/03/how-to-track-users/"/>
     <id>https://ivonhoe.github.io/2018/07/03/how-to-track-users/</id>
     <published>2018-07-03T09:53:56.000Z</published>
-    <updated>2018-09-11T13:14:16.000Z</updated>
+    <updated>2018-09-11T13:28:44.000Z</updated>
     
     <content type="html"><![CDATA[<h3 id="0x00_前言">0x00 前言</h3><p>用户数据埋点的一般解决思路是使用代码手动埋点。国内主要的第三方数据分析服务商，如百度统计、友盟、TalkingData等都提供这一方案。但是使用代码手动埋点的方式，投入资源大，往往很难能够有实际产出。其中一个很重要的原因其实是在分析实际业务数据之前，很难知道我真正想看什么样的数据。用代码手动的埋点方案经常会导致一个尴尬的解决，想要看的数据没有埋，埋了的数据不准。<br>用户数据埋点是少见的涉及到一个产品研发团队所有角色的项目。从运营的数据需求，到产品经理的抽象和规范，到移动端前端的手动采集数据，再到服务端和大数据的存储和转换，最终把结果反馈给运营和产品经理。埋点的实际产出涉及到几乎所有部门，如果按照链式的工作流来解决埋点问题，当任何一个环节出现问题，都会对整个项目结果的产出产生影响。这篇文章记录了无痕埋点方案的思路与其核心问题的解决方案。</p>
 <a id="more"></a>
@@ -250,9 +250,10 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public class AutoTraceListenerWrapper implements View.OnClickListener &#123;&#10;&#10;    private View.OnClickListener mClickListener;&#10;&#10;    public AutoTraceListenerWrapper(View.OnClickListener listener) &#123;&#10;        mClickListener = listener;&#10;    &#125;&#10;&#10;    @Override&#10;    public void onClick(View view) &#123;&#10;        onViewClick(view);&#10;&#10;        if (mClickListener != null) &#123;&#10;            mClickListener.onClick(view);&#10;        &#125;&#10;    &#125;&#10;&#125;</span><br></pre></td></tr></table></figure>
 <p>那么如何统一替换所有的View的单击监听呢？只需要遍历安卓视图结构的View Tree，使用反射机制替换掉所有的原生<code>OnClickListener</code>就可以了。</p>
 <h3 id="0x03_总结">0x03 总结</h3><p>埋点问题是不能通过一个方案适配所有业务场景的，不同的场景下需要选择不同的埋点方案。无痕埋点方案针对的是用户的简单用户行为事件，比如如何规范采集用户的点击事件。例如针对页面跳转的事件统计还是需要你单独埋点。埋点数据能不能最终完美的呈现依赖的不单单是技术方案，还有更多的是数据规范的问题。例如在面对运行时才能获知的业务信息时，如何使用埋点技术将需要的业务信息做统一的上报，是另一个重要的关键点。例如在做数据清洗时如何建立规范的数据中间表？无痕埋点只是获取完整埋点数据的第一步。</p>
+<p><a href="https://ivonhoe.github.io/2018/09/11/how-to-track-users-2/">移动端无痕埋点实践详解(二)</a></p>
 <h3 id="0x04_参考文档">0x04 参考文档</h3><p><a href="https://tech.meituan.com/mt-mobile-analytics-practice.html" target="_blank" rel="external">美团点评前端无痕埋点实践</a></p>
 <p><a href="https://blog.csdn.net/vshuang/article/details/60361314" target="_blank" rel="external">数据采集与埋点简介之 代码埋点、可视化埋点与无痕埋点</a></p>
-]]></content>
+<h3 id="0x05_转载请标明出处病已blog_https://ivonhoe-github-io/">0x05 转载请标明出处<a href="https://ivonhoe.github.io/">病已blog https://ivonhoe.github.io/</a></h3><h3 id="转载请标明出处病已blog_https://ivonhoe-github-io/">转载请标明出处<a href="https://ivonhoe.github.io/">病已blog https://ivonhoe.github.io/</a></h3>]]></content>
     
     <summary type="html">
     
@@ -272,7 +273,7 @@
     <link href="https://ivonhoe.github.io/2018/06/05/ndk17-build-error/"/>
     <id>https://ivonhoe.github.io/2018/06/05/ndk17-build-error/</id>
     <published>2018-06-05T13:10:54.000Z</published>
-    <updated>2018-07-27T03:31:52.000Z</updated>
+    <updated>2018-09-11T13:29:20.000Z</updated>
     
     <content type="html"><![CDATA[<h4 id="0x01_问题描述">0x01 问题描述</h4><p><strong>现象：</strong> 将ndk版本升级到    <code>17.0.4754217</code>编译报错</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">* What went wrong:&#10;Execution failed for task &#39;:app+stub:transformNativeLibsWithStripDebugSymbolForRelease&#39;.&#10;&#62; A problem occurred starting process &#39;command &#39;/Users/Ivonhoe/Library/Android/sdk/ndk-bundle/toolchains/mips64el-linux-android-4.9/prebuilt/darwin-x86_64/bin/mips64el-linux-android-strip&#39;&#39;&#10;&#10;* Try:&#10;Run with --stacktrace option to get the stack trace. Run with --info or --debug option to get more log output.</span><br></pre></td></tr></table></figure>
@@ -283,7 +284,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">This mipsel-linux-android-4.9 directory exists to make the NDK compatible with the Android&#10;SDK&#39;s Gradle plugin, version 3.0.1 and earlier, which expects the NDK&#10;to have a MIPS toolchain directory.</span><br></pre></td></tr></table></figure>
 <p><strong>解决方案：</strong><br>一种解决办法是同时升级gradle编译工具的版本。但是因为项目的原因，无法使用最新版本的gradle编译工具，只能使用2.3.0版本的编译工具，所以使用一个绕过问题的方法，<br>在<code>/Users/Ivonhoe/Library/Android/sdk/ndk-bundle/toolchains/mips64el-linux-android-4.9/prebuilt/darwin-x86_64/bin/</code>目录创建一个<code>mips64el-linux-android-strip</code>的空文件。记得使用<code>chmod</code>命令修改空文件的执行权限。</p>
 <h4 id="0x03_参考文档：">0x03 参考文档：</h4><p><a href="https://github.com/android-ndk/ndk/issues/700" target="_blank" rel="external">React Native apps fail to build since NDK update to r17 (due to missing mipsel-linux-android-4.9 toolchain files)</a></p>
-]]></content>
+<h3 id="转载请标明出处病已blog_https://ivonhoe-github-io/">转载请标明出处<a href="https://ivonhoe.github.io/">病已blog https://ivonhoe.github.io/</a></h3>]]></content>
     
     <summary type="html">
     
@@ -303,7 +304,7 @@
     <link href="https://ivonhoe.github.io/2018/06/03/jvm-gc-1/"/>
     <id>https://ivonhoe.github.io/2018/06/03/jvm-gc-1/</id>
     <published>2018-06-03T14:43:32.000Z</published>
-    <updated>2018-07-27T03:55:03.000Z</updated>
+    <updated>2018-09-11T13:29:00.000Z</updated>
     
     <content type="html"><![CDATA[<h4 id="0x00_前言">0x00 前言</h4><p>在学习JVM如何进行垃圾回收方法时，发现所谓的JVM垃圾回收思想和现实生活的场景有很多相似的地方。所以用餐厅回收餐桌的方式类比JVM垃圾回收算法，应该能帮助JVM学习的理解和记忆。</p>
 <h4 id="0x01_经典垃圾回收算法">0x01 经典垃圾回收算法</h4><blockquote>
@@ -338,7 +339,7 @@
 <p>这里很显然会有一个问题，理论上每次新生代GC都会回收绝大多数的对象，但是无法保证GC存活后的对象大学都不超过整个新生代的10%。当Survivor空间的内存不够用是，就需要老年代做内存担保。同样用餐厅的理论来理解，你希望把A厅的顾客转移到B厅，但是B厅已经没有足够空间容纳所有顾客了，这时候可以选择将顾客安置在VIP包厢【老年代】。并且每次在新生代GC中存活的对象，其年龄就会+1，默认情况下年龄达到15的对象会被转移到老年代。这里也很好理解，餐厅的忠实吃货为啥不给办张VIP卡呢？</p>
 <h4 id="参考文档">参考文档</h4><p><a href="">《深入理解Java虚拟机》周志明 著</a></p>
 <p><a href="https://www.cnblogs.com/cielosun/p/6674431.html" target="_blank" rel="external">Java基础：JVM垃圾回收算法</a></p>
-]]></content>
+<h3 id="转载请标明出处病已blog_https://ivonhoe-github-io/">转载请标明出处<a href="https://ivonhoe.github.io/">病已blog https://ivonhoe.github.io/</a></h3>]]></content>
     
     <summary type="html">
     
@@ -362,7 +363,7 @@
     <link href="https://ivonhoe.github.io/2018/05/27/singleton/"/>
     <id>https://ivonhoe.github.io/2018/05/27/singleton/</id>
     <published>2018-05-27T14:23:37.000Z</published>
-    <updated>2018-07-27T03:56:45.000Z</updated>
+    <updated>2018-09-11T13:29:45.000Z</updated>
     
     <content type="html"><![CDATA[<h3 id="0x00前言">0x00前言</h3><p>相信很多同学在学习设计模式的过程中，最先了解的就是单例模式，至少我是这样。单例模式看似简单容易理解，实际上却有很多坑，正因为这样也成为了很多公司面试必考的面试题。实际使用单例模式时，难免会遇到滥用的情况，理解单例更要学会何时拒绝单例。</p>
 <h3 id="0x01单例模式的基础知识">0x01单例模式的基础知识</h3><h4 id="1-_单例的几种写法?">1. 单例的几种写法?</h4><a id="more"></a>
@@ -407,7 +408,7 @@
 </ul>
 <p><img src="/res/singleton/singleton.png" alt=""></p>
 <h3 id="0x04_参考文档">0x04 参考文档</h3><p><a href="https://coolshell.cn/articles/265.html" target="_blank" rel="external">深入浅出单实例SINGLETON设计模式</a></p>
-]]></content>
+<h3 id="转载请标明出处病已blog_https://ivonhoe-github-io/">转载请标明出处<a href="https://ivonhoe.github.io/">病已blog https://ivonhoe.github.io/</a></h3>]]></content>
     
     <summary type="html">
     
@@ -428,7 +429,7 @@
     <link href="https://ivonhoe.github.io/2018/05/21/https/"/>
     <id>https://ivonhoe.github.io/2018/05/21/https/</id>
     <published>2018-05-21T13:55:38.000Z</published>
-    <updated>2018-07-27T03:55:11.000Z</updated>
+    <updated>2018-09-11T13:28:52.000Z</updated>
     
     <content type="html"><![CDATA[<h3 id="0x00_前言">0x00 前言</h3><p>https为什么安全？因为相对http的明文传输，https引入了数据加密和身份认证。服务器和客户端的消息只有服务器和客户端能够读懂，保证了数据的保密性。同时在交换数据之前，验证了对方的合法身份，保证了通信双方的安全。这篇总结主要记录了在理解https安全性的过程中遇到的问题。</p>
 <h3 id="0x01_什么是对称加密和非对称加密">0x01 什么是对称加密和非对称加密</h3><p>在https的协议中如何实现数据加密和身份认证呢？简单来说是客户端先获取非对称加密的公钥，通过公钥和服务器协商生成对称加密的对称密钥，并使用对称密钥加密传输数据。</p>
@@ -474,7 +475,7 @@
 <p><strong>数字证书：</strong>由权威的认证机构证明公钥的正确性。</p>
 <h3 id="0x04_参考文档">0x04 参考文档</h3><p><a href="http://wetest.qq.com/lab/view/110.html" target="_blank" rel="external">HTTPS为什么安全 &amp;分析 HTTPS 连接建立全过程</a></p>
 <p><a href="https://www.cnblogs.com/franson-2016/p/5530671.html" target="_blank" rel="external">一个故事教你看懂什么是数字证书，它的原理是什么?它的作用是什么？</a></p>
-]]></content>
+<h3 id="转载请标明出处病已blog_https://ivonhoe-github-io/">转载请标明出处<a href="https://ivonhoe.github.io/">病已blog https://ivonhoe.github.io/</a></h3>]]></content>
     
     <summary type="html">
     
@@ -501,7 +502,7 @@
     <link href="https://ivonhoe.github.io/2018/03/14/small-bug-555-fix/"/>
     <id>https://ivonhoe.github.io/2018/03/14/small-bug-555-fix/</id>
     <published>2018-03-14T09:23:27.000Z</published>
-    <updated>2018-07-27T03:32:16.000Z</updated>
+    <updated>2018-09-11T13:29:38.000Z</updated>
     
     <content type="html"><![CDATA[<h4 id="0x00_前言">0x00 前言</h4><p>这篇文章主要记录了在使用Small插件化框架中遇到的资源加载问题及相应解决方案，并梳理出Android的资源加载流程和插件化框架的资源加载原理。在前两篇插件化技术介绍的基础上会关注更多技术细节，希望能有所收获！</p>
 <h4 id="0x01_Small框架的资源加载异常">0x01 Small框架的资源加载异常</h4><p>最近收到一个客户反馈，在他们的中兴V0840手机上打开我们的app会持续崩溃。第一时间在百度移动质量平台上短时租用了该机型，抓取了log。发现是资源查找失败异常。并在Small github issues中搜索<code>android.content.res.Resources$NotFoundException</code> 可以发现很多类似的问题，详细日志可查看下图。</p>
@@ -535,7 +536,7 @@
 <h4 id="0x05_完">0x05 完</h4><p>Small插件化框架是我在项目中使用的框架，他的设计和实现思路上都非常优雅，是首选的轻量级插件化框架。以上分析只是对Android源码和Small框架的个人理解，如有理解有误的地方还望指出，个人微信号:tykYang，邮箱:yangfan3687@163.com。🙏🙏🙏</p>
 <p><a href="https://ivonhoe.github.io/2018/01/18/Small%E6%A1%86%E6%9E%B6%E5%AE%9E%E8%B7%B5%E6%80%BB%E7%BB%93/">Android插件化之Small框架实践总结</a></p>
 <p><a href="https://ivonhoe.github.io/2018/01/18/Small%E6%A1%86%E6%9E%B6%E5%8E%9F%E7%90%86/">Android插件化之Small框架原理</a></p>
-]]></content>
+<h3 id="转载请标明出处病已blog_https://ivonhoe-github-io/">转载请标明出处<a href="https://ivonhoe.github.io/">病已blog https://ivonhoe.github.io/</a></h3>]]></content>
     
     <summary type="html">
     
@@ -560,7 +561,7 @@
     <link href="https://ivonhoe.github.io/2018/01/18/Small%E6%A1%86%E6%9E%B6%E5%8E%9F%E7%90%86/"/>
     <id>https://ivonhoe.github.io/2018/01/18/Small框架原理/</id>
     <published>2018-01-18T09:54:19.000Z</published>
-    <updated>2018-07-27T03:32:29.000Z</updated>
+    <updated>2018-09-11T13:30:00.000Z</updated>
     
     <content type="html"><![CDATA[<h4 id="0x00_前言">0x00 前言</h4><p>Small是一个轻量化的插件化框架，Small的使用介绍可以查看<a href="http://code.wequick.net/Small/cn/quickstart" target="_blank" rel="external">官网文档</a>了解，Small项目接入总结可以查看博客的另一篇<a href="https://ivonhoe.github.io/2018/01/18/Small%E6%A1%86%E6%9E%B6%E5%AE%9E%E8%B7%B5%E6%80%BB%E7%BB%93/">《Small框架实践总结》</a>。这篇文章主要从以下几个角度来看Small框架的实现原理。</p>
 <ol>
@@ -618,7 +619,7 @@
 <h4 id="0x06_Small如何动态更新插件模块?">0x06 Small如何动态更新插件模块?</h4><p><a href="https://github.com/wequick/Small/blob/master/Android/Sample/app.home/src/main/java/net/wequick/example/small/app/home/MainFragment.java" target="_blank" rel="external">查看github sample实现方式</a></p>
 <h4 id="0x07_参考文档">0x07 参考文档</h4><p><a href="https://github.com/wequick/Small/wiki" target="_blank" rel="external">Small 官方 wiki</a></p>
 <p><a href="https://mp.weixin.qq.com/s?__biz=MzI1MTA1MzM2Nw==&amp;mid=400118620&amp;idx=1&amp;sn=b4fdd5055731290eef12ad0d17f39d4a&amp;scene=0" target="_blank" rel="external">QQ空间热补丁动态修复技术介绍</a></p>
-]]></content>
+<h3 id="转载请标明出处病已blog_https://ivonhoe-github-io/">转载请标明出处<a href="https://ivonhoe.github.io/">病已blog https://ivonhoe.github.io/</a></h3>]]></content>
     
     <summary type="html">
     
@@ -646,7 +647,7 @@
     <link href="https://ivonhoe.github.io/2018/01/18/Small%E6%A1%86%E6%9E%B6%E5%AE%9E%E8%B7%B5%E6%80%BB%E7%BB%93/"/>
     <id>https://ivonhoe.github.io/2018/01/18/Small框架实践总结/</id>
     <published>2018-01-18T09:42:57.000Z</published>
-    <updated>2018-07-27T03:32:22.000Z</updated>
+    <updated>2018-09-11T13:29:53.000Z</updated>
     
     <content type="html"><![CDATA[<h4 id="0x00_前言">0x00 前言</h4><p>这篇文章主要总结了在使用Small框架改造老项目过程中遇到的问题和相应的解决方案，也总结了使用Small框架的基础知识点，并从一个使用者的角度来分析Small框架的优缺点。如果你的项目也面临业务模块耦合，边界不清晰，没有动态部署方案等等需要插件化方案来解决的问题，不妨先看下这篇文章再试一试Small框架，Small的功能未必全面但绝对聚焦了插件化框架需要解决的的核心问题。</p>
 <p>什么是Small框架？ Small是一个轻量级的插件化框架，Small也是一个dex分包方案，Small也是一个业务模块解耦方案，同时Small也是一个动态化加载和更新方案。先去看官网文档了解Small的基础知识~~</p>
@@ -720,7 +721,7 @@
 <h4 id="0x06_参考">0x06 参考</h4><p>Small官网文档 <a href="http://code.wequick.net/Small/cn/quickstart" target="_blank" rel="external">http://code.wequick.net/Small/cn/quickstart</a></p>
 <p>Small github主页 <a href="https://github.com/wequick/Small" target="_blank" rel="external">https://github.com/wequick/Small</a></p>
 <p><a href="http://code.wequick.net/small/docs/ppt/gmtc-galen-small.ppsx" target="_blank" rel="external">GMTC演讲PPT</a></p>
-]]></content>
+<h3 id="转载请标明出处病已blog_https://ivonhoe-github-io/">转载请标明出处<a href="https://ivonhoe.github.io/">病已blog https://ivonhoe.github.io/</a></h3>]]></content>
     
     <summary type="html">
     
@@ -744,7 +745,7 @@
     <link href="https://ivonhoe.github.io/2017/06/18/android-app-gold-flow-hack/"/>
     <id>https://ivonhoe.github.io/2017/06/18/android-app-gold-flow-hack/</id>
     <published>2017-06-18T10:13:19.000Z</published>
-    <updated>2018-07-27T03:28:08.000Z</updated>
+    <updated>2018-09-11T13:26:37.000Z</updated>
     
     <content type="html"><![CDATA[<h3 id="0x00_前言">0x00 前言</h3><p>本文记录了破解某外卖App http请求参数加密过程中遇到的问题和解决思路，实现的目标是希望是能够通过一些手段实现自由调用其服务接口。<br>这篇文章主要讲述什么？</p>
 <ol>
@@ -819,7 +820,7 @@
 <li><a href="http://www.jianshu.com/p/6438f161875a" target="_blank" rel="external">Android动态加载jar</a></li>
 <li><a href="http://www.jianshu.com/p/61cfa1347894" target="_blank" rel="external">Java之jar打包</a></li>
 </ul>
-]]></content>
+<h3 id="0x06_转载请标明出处病已blog_https://ivonhoe-github-io/">0x06 转载请标明出处<a href="https://ivonhoe.github.io/">病已blog https://ivonhoe.github.io/</a></h3>]]></content>
     
     <summary type="html">
     
@@ -846,7 +847,7 @@
     <link href="https://ivonhoe.github.io/2017/05/12/executor-eat-exception/"/>
     <id>https://ivonhoe.github.io/2017/05/12/executor-eat-exception/</id>
     <published>2017-05-12T08:41:53.000Z</published>
-    <updated>2018-07-27T03:30:49.000Z</updated>
+    <updated>2018-09-11T13:28:02.000Z</updated>
     
     <content type="html"><![CDATA[<h3 id="一、前言">一、前言</h3><p>今天遇到一个很诡异的问题，在多款Android 4.2.2版本的手机上发现处理后台任务的服务对前台请求毫无响应。这里的后台服务是一个RemoteService，目的为了处理更新&amp;上传等任务。本来以为是跨进程组件间通讯出现兼容性问题，后来根据分析发现问题没有那么简单，这里记录下问题原因。</p>
 <a id="more"></a>
@@ -875,7 +876,7 @@
 <li><a href="http://imxylz.com/blog/2013/08/02/handling-the-uncaught-exception-of-java-thread-pool/" target="_blank" rel="external">捕获Java线程池执行任务抛出的异常
 </a></li>
 </ol>
-]]></content>
+<h3 id="转载请标明出处病已blog_https://ivonhoe-github-io/">转载请标明出处<a href="https://ivonhoe.github.io/">病已blog https://ivonhoe.github.io/</a></h3>]]></content>
     
     <summary type="html">
     
@@ -897,13 +898,13 @@
     <link href="https://ivonhoe.github.io/2017/05/05/android-performance-tips/"/>
     <id>https://ivonhoe.github.io/2017/05/05/android-performance-tips/</id>
     <published>2017-05-05T14:59:14.000Z</published>
-    <updated>2018-05-27T08:20:00.000Z</updated>
+    <updated>2018-09-11T13:26:46.000Z</updated>
     
     <content type="html"><![CDATA[<h3 id="使用windowBackground实现应用秒开">使用windowBackground实现应用秒开</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#60;style name=&#34;SplashTheme&#34; parent=&#34;@android:style/Theme.Black.NoTitleBar.Fullscreen&#34;&#62;&#10;    &#60;item name=&#34;android:windowBackground&#34;&#62;@drawable/bg_splash_activity&#60;/item&#62;&#10;    &#60;item name=&#34;@android:windowAnimationStyle&#34;&#62;@style/myact&#60;/item&#62;&#10;&#60;/style&#62;</span><br></pre></td></tr></table></figure>
 <h3 id="使用windowBackground减少过度绘制">使用windowBackground减少过度绘制</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#60;style name=&#34;AppMainTheme&#34; parent=&#34;@android:style/Theme.Holo.Light&#34;&#62;&#10;    &#60;item name=&#34;android:windowBackground&#34;&#62;@color/white&#60;/item&#62;&#10;    &#60;item name=&#34;android:windowNoTitle&#34;&#62;true&#60;/item&#62;&#10;    &#60;item name=&#34;@android:windowAnimationStyle&#34;&#62;@style/myact&#60;/item&#62;&#10;&#60;/style&#62;</span><br></pre></td></tr></table></figure>
 <a id="more"></a>
 <p><img src="/res/performance-tips/overdraw.png" alt="使用windowBackground前后对比"></p>
-]]></content>
+<h3 id="转载请标明出处病已blog_https://ivonhoe-github-io/">转载请标明出处<a href="https://ivonhoe.github.io/">病已blog https://ivonhoe.github.io/</a></h3>]]></content>
     
     <summary type="html">
     
@@ -924,7 +925,7 @@
     <link href="https://ivonhoe.github.io/2017/04/26/Zygote-2/"/>
     <id>https://ivonhoe.github.io/2017/04/26/Zygote-2/</id>
     <published>2017-04-25T16:49:27.000Z</published>
-    <updated>2018-05-27T08:21:22.000Z</updated>
+    <updated>2018-09-11T13:30:06.000Z</updated>
     
     <content type="html"><![CDATA[<h3 id="一、分析一个Hello_World_App中bitmap对象的分布">一、分析一个Hello World App中bitmap对象的分布</h3><p>使用BitmapAnalyzer分析一个Android Hello World App时你会dump出400+张图片，什么是BitmapAnalyzer？BitmapAnalyzer是一个自动分析Android dump heap中bitmap对象的工具，详细请看<a href="https://ivonhoe.github.io/2017/03/22/Bitmap&amp;Memory/">《Android Bitmap的内存大小是如何计算的？》</a>这篇文章的介绍。</p>
 <p><img src="http://upload-images.jianshu.io/upload_images/695750-211010ed47103e96.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="hprof-3.png"></p>
@@ -959,7 +960,7 @@
 <p><a href="http://wiki.jikexueyuan.com/project/deep-android-v1/zygote.html" target="_blank" rel="external">深入理解 Zygote</a></p>
 <p><a href="http://www.cnblogs.com/biyeymyhjob/archive/2012/07/20/2601655.html" target="_blank" rel="external">Linux写时拷贝技术(copy-on-write)</a></p>
 <p><a href="http://luodw.cc/2016/02/17/address/" target="_blank" rel="external">linux虚拟地址转物理地址</a></p>
-]]></content>
+<h3 id="转载请标明出处病已blog_https://ivonhoe-github-io/">转载请标明出处<a href="https://ivonhoe.github.io/">病已blog https://ivonhoe.github.io/</a></h3>]]></content>
     
     <summary type="html">
     
@@ -985,7 +986,7 @@
     <link href="https://ivonhoe.github.io/2017/04/25/%E5%A6%82%E4%BD%95%E5%86%99%E5%87%BAGC%E5%8F%8B%E5%A5%BD%E7%9A%84Android%E5%BA%94%E7%94%A8/"/>
     <id>https://ivonhoe.github.io/2017/04/25/如何写出GC友好的Android应用/</id>
     <published>2017-04-25T13:21:23.000Z</published>
-    <updated>2018-05-27T08:19:38.000Z</updated>
+    <updated>2018-09-11T13:25:35.000Z</updated>
     
     <content type="html"><![CDATA[<p>作者：乐蛙科技高级研发经理 易宁</p>
 <p>Android应用普遍没有iOS应用流畅，这与Android应用是运行在Java虚拟机上有很大的关系，而关系最大的恐怕就是Java虚拟机上的Garbage Collection（GC）了。Java语言提供了自动内存管理，垃圾对象会在GC过程中自动被释放。这提供了开发效率，使开发者能集中精力在业务逻辑上；但天下没有免费的午餐，你写的Android应用的某些性能上的问题很可能就是GC导致的。</p>
@@ -1059,7 +1060,7 @@
 </li>
 </ol>
 <p><em>需要注意的是</em>：本文讨论的只限于Dalvik虚拟机。对于Art虚拟机，<a href="https://developer.android.com/guide/practices/verifying-apps-art.html#GC_Migration" target="_blank" rel="external">官方文档</a>已经表明Art虚拟机有极大的改进，其中就特别提到<strong>不用</strong>主动调用<code>System.gc()</code>来避免产生<code>GC_FOR_MALLOC</code>。</p>
-]]></content>
+<h3 id="转载请标明出处病已blog_https://ivonhoe-github-io/">转载请标明出处<a href="https://ivonhoe.github.io/">病已blog https://ivonhoe.github.io/</a></h3>]]></content>
     
     <summary type="html">
     
@@ -1090,7 +1091,7 @@
     <link href="https://ivonhoe.github.io/2017/04/15/Zygote/"/>
     <id>https://ivonhoe.github.io/2017/04/15/Zygote/</id>
     <published>2017-04-15T15:32:51.000Z</published>
-    <updated>2018-07-27T03:58:49.000Z</updated>
+    <updated>2018-09-11T13:30:14.000Z</updated>
     
     <content type="html"><![CDATA[<p>原文地址：<a href="https://anatomyofandroid.com/2013/10/15/zygote/" target="_blank" rel="external">Zygote https://anatomyofandroid.com/2013/10/15/zygote/</a></p>
 <p>Zygote（受精卵）是一个启动应用的守护进程，在Server Manager之后被init.rc触发，但其实他是真正被app_process启动的，下面是启动这个特殊进程的流程。</p>
@@ -1105,7 +1106,8 @@
 <p>zygote的main()方法：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public static void main(String argv[]) &#123;&#10; try &#123;&#10;     // Start profiling the zygote initialization.&#10;     SamplingProfilerIntegration.start();&#10;&#10;    registerZygoteSocket();&#10;    EventLog.writeEvent(LOG_BOOT_PROGRESS_PRELOAD_START,&#10;    SystemClock.uptimeMillis());&#10;    preload();&#10;    EventLog.writeEvent(LOG_BOOT_PROGRESS_PRELOAD_END,&#10;    SystemClock.uptimeMillis());&#10;&#10;    // Finish profiling the zygote initialization.&#10;    SamplingProfilerIntegration.writeZygoteSnapshot();&#10;&#10;    // Do an initial gc to clean up after startup&#10;    gc();&#10;&#10;    // Disable tracing so that forked processes do not inherit stale tracing tags from&#10;    // Zygote.&#10;    Trace.setTracingEnabled(false);&#10;&#10;    // If requested, start system server directly from Zygote&#10;    if (argv.length != 2) &#123;&#10;        throw new RuntimeException(argv[0] + USAGE_STRING);&#10;    &#125;&#10;&#10;    if (argv[1].equals(&#34;start-system-server&#34;)) &#123;&#10;        startSystemServer();&#10;    &#125; else if (!argv[1].equals(&#34;&#34;)) &#123;&#10;        throw new RuntimeException(argv[0] + USAGE_STRING);&#10;    &#125;&#10;&#10;    Log.i(TAG, &#34;Accepting command socket connections&#34;);&#10;&#10;    runSelectLoop();&#10;&#10;    closeServerSocket();&#10; &#125; catch (MethodAndArgsCaller caller) &#123;&#10;     caller.run();&#10; &#125; catch (RuntimeException ex) &#123;&#10;     Log.e(TAG, &#34;Zygote died with exception&#34;, ex);&#10;     closeServerSocket();&#10;     throw ex;&#10; &#125;&#10;&#125;</span><br></pre></td></tr></table></figure>
 <p>通过下面代码可以看到Zygote是如何启动System Server的。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/**&#10; * Prepare the arguments and fork for the system server process.&#10; */&#10;private static boolean startSystemServer()&#10;        throws MethodAndArgsCaller, RuntimeException &#123;&#10;    /* Hardcoded command line to start the system server */&#10;    String args[] = &#123;&#10;            &#34;--setuid=1000&#34;,&#10;            &#34;--setgid=1000&#34;,&#10;            &#34;--setgroups=1001,1002,1003,1004,1005,1006,1007,1008,1009,1010,1018,3001,3002,3003,3006,3007&#34;,&#10;            &#34;--capabilities=130104352,130104352&#34;,&#10;            &#34;--runtime-init&#34;,&#10;            &#34;--nice-name=system_server&#34;,&#10;            &#34;com.android.server.SystemServer&#34;,&#10;    &#125;;&#10;    ZygoteConnection.Arguments parsedArgs = null;&#10;&#10;    int pid;&#10;&#10;    try &#123;&#10;        parsedArgs = new ZygoteConnection.Arguments(args);&#10;        ZygoteConnection.applyDebuggerSystemProperty(parsedArgs);&#10;        ZygoteConnection.applyInvokeWithSystemProperty(parsedArgs);&#10;        &#10;        /* Request to fork the system server process */&#10;        pid = Zygote.forkSystemServer(&#10;                parsedArgs.uid, parsedArgs.gid,&#10;                parsedArgs.gids,&#10;                parsedArgs.debugFlags,&#10;                null,&#10;                parsedArgs.permittedCapabilities,&#10;                parsedArgs.effectiveCapabilities);&#10;    &#125; catch (IllegalArgumentException ex) &#123;&#10;        throw new RuntimeException(ex);&#10;    &#125;&#10;    &#10;    /* For child process */&#10;    if (pid == 0) &#123;&#10;        handleSystemServerProcess(parsedArgs);&#10;    &#125;&#10;&#10;    return true;&#10;&#125;</span><br></pre></td></tr></table></figure>]]></content>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/**&#10; * Prepare the arguments and fork for the system server process.&#10; */&#10;private static boolean startSystemServer()&#10;        throws MethodAndArgsCaller, RuntimeException &#123;&#10;    /* Hardcoded command line to start the system server */&#10;    String args[] = &#123;&#10;            &#34;--setuid=1000&#34;,&#10;            &#34;--setgid=1000&#34;,&#10;            &#34;--setgroups=1001,1002,1003,1004,1005,1006,1007,1008,1009,1010,1018,3001,3002,3003,3006,3007&#34;,&#10;            &#34;--capabilities=130104352,130104352&#34;,&#10;            &#34;--runtime-init&#34;,&#10;            &#34;--nice-name=system_server&#34;,&#10;            &#34;com.android.server.SystemServer&#34;,&#10;    &#125;;&#10;    ZygoteConnection.Arguments parsedArgs = null;&#10;&#10;    int pid;&#10;&#10;    try &#123;&#10;        parsedArgs = new ZygoteConnection.Arguments(args);&#10;        ZygoteConnection.applyDebuggerSystemProperty(parsedArgs);&#10;        ZygoteConnection.applyInvokeWithSystemProperty(parsedArgs);&#10;        &#10;        /* Request to fork the system server process */&#10;        pid = Zygote.forkSystemServer(&#10;                parsedArgs.uid, parsedArgs.gid,&#10;                parsedArgs.gids,&#10;                parsedArgs.debugFlags,&#10;                null,&#10;                parsedArgs.permittedCapabilities,&#10;                parsedArgs.effectiveCapabilities);&#10;    &#125; catch (IllegalArgumentException ex) &#123;&#10;        throw new RuntimeException(ex);&#10;    &#125;&#10;    &#10;    /* For child process */&#10;    if (pid == 0) &#123;&#10;        handleSystemServerProcess(parsedArgs);&#10;    &#125;&#10;&#10;    return true;&#10;&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="转载请标明出处病已blog_https://ivonhoe-github-io/">转载请标明出处<a href="https://ivonhoe.github.io/">病已blog https://ivonhoe.github.io/</a></h3>]]></content>
     
     <summary type="html">
     
@@ -1130,7 +1132,7 @@
     <link href="https://ivonhoe.github.io/2017/04/09/how-to-dump-heap/"/>
     <id>https://ivonhoe.github.io/2017/04/09/how-to-dump-heap/</id>
     <published>2017-04-09T11:03:01.000Z</published>
-    <updated>2018-05-27T08:20:36.000Z</updated>
+    <updated>2018-09-11T13:28:25.000Z</updated>
     
     <content type="html"><![CDATA[<p>一般情况下如果我想要较详细的分析内存状况，会使用android monitor(下简称monitor)和Memory Analyzer工具(下简称MAT)，但步骤有些麻烦。</p>
 <ol>
@@ -1148,7 +1150,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/**&#10; * dump&#26632;&#39030;&#36827;&#31243;&#30340;hprof&#10; */&#10;public void dumpTopTaskHprof() &#123;&#10;    if (isDumping) &#123;&#10;        return;&#10;    &#125;&#10;&#10;    IDevice iDevice = mDevice.getIDevice();&#10;&#10;    /**&#10;     * &#36825;&#37324;&#33258;&#21160;&#36873;&#25321;&#25163;&#26426;&#19978;&#26632;&#39030;&#36827;&#31243;&#20570;dump&#25805;&#20316;&#65292;&#33719;&#21462;applicationName&#10;     */&#10;    String topApp = getTopApplication();&#10;    Client client = iDevice.getClient(topApp);&#10;&#10;    if (client == null) &#123;&#10;        throw new RuntimeException(&#34;Can not dump app:&#34; + topApp);&#10;    &#125;&#10;    client.dumpHprof();&#10;    isDumping = true;&#10;&#125;</span><br></pre></td></tr></table></figure>
 <p><strong>在IHprofDumpHandler的回调中, 保存hprof文件，做格式转换，分析Bitmap对象的状况。BitmapAnalyzer.java的代码在上文说过。</strong></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">private void conversionAndRemoveHprof(String hprofPath) &#123;&#10;    String convHprofPath = getConvHprofPath(hprofPath);&#10;    hprofConv(hprofPath, convHprofPath);&#10;    removeFile(hprofPath);&#10;&#10;    analyzerBitmap(convHprofPath);&#10;&#125;&#10;&#10;private void hprofConv(String hprofPath, String convHprofPath) &#123;&#10;    String adbPath = Adb.instance().getAdbPath();&#10;    String hprofConvPath = adbPath.replace(&#34;adb&#34;, &#34;hprof-conv&#34;);&#10;    ShellCommand.exec(hprofConvPath + &#34; &#34; + hprofPath + &#34; &#34; + convHprofPath);&#10;&#125;&#10;&#10;private void analyzerBitmap(String hprofPath) &#123;&#10;    String[] args = new String[2];&#10;    args[0] = hprofPath;&#10;    args[1] = &#34;bitmap&#34;;&#10;    BitmapAnalyzer.main(args);&#10;&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="关于BitmapAnalyzer的那些发现">关于BitmapAnalyzer的那些发现</h3>]]></content>
+<h3 id="转载请标明出处病已blog_https://ivonhoe-github-io/">转载请标明出处<a href="https://ivonhoe.github.io/">病已blog https://ivonhoe.github.io/</a></h3>]]></content>
     
     <summary type="html">
     
@@ -1176,7 +1178,7 @@
     <link href="https://ivonhoe.github.io/2017/03/22/Bitmap&amp;Memory/"/>
     <id>https://ivonhoe.github.io/2017/03/22/Bitmap&amp;Memory/</id>
     <published>2017-03-22T11:35:36.000Z</published>
-    <updated>2018-05-27T08:20:24.000Z</updated>
+    <updated>2018-09-11T13:27:36.000Z</updated>
     
     <content type="html"><![CDATA[<h3 id="一、前言">一、前言</h3><p>本来只想说下Bitmap和内存的基本关系，但发现如果真的想把这看似简单的事情说清楚，实际上未必那么简单，你不信？不妨先尝试下回答下面几个问题！</p>
 <ul>
@@ -1249,7 +1251,7 @@
 <p><a href="http://www.10tiao.com/html/336/201703/2652262290/1.html" target="_blank" rel="external">关于Android适配，看完这篇文章就够了</a></p>
 <p><a href="http://wangjunyan.github.io/2014/12/02/export-android-bitmap-from-dump-file/" target="_blank" rel="external">批量导出dump文件中的Bitmap</a></p>
 <p><a href="https://mp.weixin.qq.com/s?__biz=MzA3NTYzODYzMg==&amp;mid=403263974&amp;idx=1&amp;sn=b0315addbc47f3c38e65d9c633a12cd6&amp;scene=21#wechat_redirect" target="_blank" rel="external">Android 开发绕不过的坑：你的 Bitmap 究竟占多大内存？</a></p>
-]]></content>
+<h3 id="转载请标明出处病已blog_https://ivonhoe-github-io/">转载请标明出处<a href="https://ivonhoe.github.io/">病已blog https://ivonhoe.github.io/</a></h3>]]></content>
     
     <summary type="html">
     
@@ -1281,7 +1283,7 @@
     <link href="https://ivonhoe.github.io/2017/02/09/%E7%BE%8E%E5%9B%A2%E5%A6%82%E4%BD%95%E9%98%B2dex2jar/"/>
     <id>https://ivonhoe.github.io/2017/02/09/美团如何防dex2jar/</id>
     <published>2017-02-09T13:55:01.000Z</published>
-    <updated>2018-07-27T03:26:55.000Z</updated>
+    <updated>2018-09-11T13:25:23.000Z</updated>
     
     <content type="html"><![CDATA[<h3 id="一、反编译某平台代码">一、反编译某平台代码</h3><p>最近在看某外卖平台的代码，发现某外卖平台最新版本版本无法正常的通过dex2jar工具将dex转换出Java源代码，在转换过程中会提示出错，如图：</p>
 <p><img src="https://ivonhoe.github.io/res/dex2jar_error/dex2jar_error1.png" alt="dex2jar异常图"></p>
@@ -1342,7 +1344,7 @@
 <li><a href="http://www.wangyuwei.me/2017/01/20/ASM-%E6%93%8D%E4%BD%9C%E5%AD%97%E8%8A%82%E7%A0%81%E5%88%9D%E6%8E%A2/" target="_blank" rel="external">ASM-操作字节码初探</a></li>
 <li><a href="https://www.diycode.cc/topics/581" target="_blank" rel="external">手摸手增加字节码往方法体内插代码</a></li>
 </ul>
-]]></content>
+<h3 id="转载请标明出处病已blog_https://ivonhoe-github-io/">转载请标明出处<a href="https://ivonhoe.github.io/">病已blog https://ivonhoe.github.io/</a></h3>]]></content>
     
     <summary type="html">
     

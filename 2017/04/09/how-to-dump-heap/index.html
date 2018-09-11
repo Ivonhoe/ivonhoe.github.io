@@ -101,7 +101,7 @@
 
 需要手动dump hprof再使用hprof-conv工具手动转码，上篇Android Bitmap">
 <meta property="og:image" content="https://ivonhoe.github.io/res/hprof/hprof-1.png">
-<meta property="og:updated_time" content="2018-05-27T08:20:36.000Z">
+<meta property="og:updated_time" content="2018-09-11T13:28:25.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="如何使用ddmlib dump出堆文件">
 <meta name="twitter:description" content="一般情况下如果我想要较详细的分析内存状况，会使用android monitor(下简称monitor)和Memory Analyzer工具(下简称MAT)，但步骤有些麻烦。
@@ -413,7 +413,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/**&#10; * dump&#26632;&#39030;&#36827;&#31243;&#30340;hprof&#10; */&#10;public void dumpTopTaskHprof() &#123;&#10;    if (isDumping) &#123;&#10;        return;&#10;    &#125;&#10;&#10;    IDevice iDevice = mDevice.getIDevice();&#10;&#10;    /**&#10;     * &#36825;&#37324;&#33258;&#21160;&#36873;&#25321;&#25163;&#26426;&#19978;&#26632;&#39030;&#36827;&#31243;&#20570;dump&#25805;&#20316;&#65292;&#33719;&#21462;applicationName&#10;     */&#10;    String topApp = getTopApplication();&#10;    Client client = iDevice.getClient(topApp);&#10;&#10;    if (client == null) &#123;&#10;        throw new RuntimeException(&#34;Can not dump app:&#34; + topApp);&#10;    &#125;&#10;    client.dumpHprof();&#10;    isDumping = true;&#10;&#125;</span><br></pre></td></tr></table></figure>
 <p><strong>在IHprofDumpHandler的回调中, 保存hprof文件，做格式转换，分析Bitmap对象的状况。BitmapAnalyzer.java的代码在上文说过。</strong></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">private void conversionAndRemoveHprof(String hprofPath) &#123;&#10;    String convHprofPath = getConvHprofPath(hprofPath);&#10;    hprofConv(hprofPath, convHprofPath);&#10;    removeFile(hprofPath);&#10;&#10;    analyzerBitmap(convHprofPath);&#10;&#125;&#10;&#10;private void hprofConv(String hprofPath, String convHprofPath) &#123;&#10;    String adbPath = Adb.instance().getAdbPath();&#10;    String hprofConvPath = adbPath.replace(&#34;adb&#34;, &#34;hprof-conv&#34;);&#10;    ShellCommand.exec(hprofConvPath + &#34; &#34; + hprofPath + &#34; &#34; + convHprofPath);&#10;&#125;&#10;&#10;private void analyzerBitmap(String hprofPath) &#123;&#10;    String[] args = new String[2];&#10;    args[0] = hprofPath;&#10;    args[1] = &#34;bitmap&#34;;&#10;    BitmapAnalyzer.main(args);&#10;&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="关于BitmapAnalyzer的那些发现">关于BitmapAnalyzer的那些发现</h3>
+<h3 id="转载请标明出处病已blog_https://ivonhoe-github-io/">转载请标明出处<a href="https://ivonhoe.github.io/">病已blog https://ivonhoe.github.io/</a></h3>
       
     </div>
 
@@ -637,7 +637,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#如何使用ddmlib获取adb连接的设备"><span class="nav-number">1.</span> <span class="nav-text">如何使用ddmlib获取adb连接的设备</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#如何dump_hprof"><span class="nav-number">2.</span> <span class="nav-text">如何dump hprof</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#关于BitmapAnalyzer的那些发现"><span class="nav-number">3.</span> <span class="nav-text">关于BitmapAnalyzer的那些发现</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#如何使用ddmlib获取adb连接的设备"><span class="nav-number">1.</span> <span class="nav-text">如何使用ddmlib获取adb连接的设备</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#如何dump_hprof"><span class="nav-number">2.</span> <span class="nav-text">如何dump hprof</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#转载请标明出处病已blog_https://ivonhoe-github-io/"><span class="nav-number">3.</span> <span class="nav-text">转载请标明出处病已blog https://ivonhoe.github.io/</span></a></li></ol></div>
             
 
           </div>

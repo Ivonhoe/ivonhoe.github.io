@@ -91,7 +91,7 @@
 <meta property="og:image" content="https://ivonhoe.github.io/res/trace_user/trace1.png">
 <meta property="og:image" content="https://ivonhoe.github.io/res/trace_user/trace2.png">
 <meta property="og:image" content="https://ivonhoe.github.io/res/trace_user/trace3.png">
-<meta property="og:updated_time" content="2018-09-11T13:14:16.000Z">
+<meta property="og:updated_time" content="2018-09-11T13:28:44.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="移动端无痕埋点实践详解(一)">
 <meta name="twitter:description" content="0x00 前言用户数据埋点的一般解决思路是使用代码手动埋点。国内主要的第三方数据分析服务商，如百度统计、友盟、TalkingData等都提供这一方案。但是使用代码手动埋点的方式，投入资源大，往往很难能够有实际产出。其中一个很重要的原因其实是在分析实际业务数据之前，很难知道我真正想看什么样的数据。用代码手动的埋点方案经常会导致一个尴尬的解决，想要看的数据没有埋，埋了的数据不准。用户数据埋点是少见的涉">
@@ -408,9 +408,10 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public class AutoTraceListenerWrapper implements View.OnClickListener &#123;&#10;&#10;    private View.OnClickListener mClickListener;&#10;&#10;    public AutoTraceListenerWrapper(View.OnClickListener listener) &#123;&#10;        mClickListener = listener;&#10;    &#125;&#10;&#10;    @Override&#10;    public void onClick(View view) &#123;&#10;        onViewClick(view);&#10;&#10;        if (mClickListener != null) &#123;&#10;            mClickListener.onClick(view);&#10;        &#125;&#10;    &#125;&#10;&#125;</span><br></pre></td></tr></table></figure>
 <p>那么如何统一替换所有的View的单击监听呢？只需要遍历安卓视图结构的View Tree，使用反射机制替换掉所有的原生<code>OnClickListener</code>就可以了。</p>
 <h3 id="0x03_总结">0x03 总结</h3><p>埋点问题是不能通过一个方案适配所有业务场景的，不同的场景下需要选择不同的埋点方案。无痕埋点方案针对的是用户的简单用户行为事件，比如如何规范采集用户的点击事件。例如针对页面跳转的事件统计还是需要你单独埋点。埋点数据能不能最终完美的呈现依赖的不单单是技术方案，还有更多的是数据规范的问题。例如在面对运行时才能获知的业务信息时，如何使用埋点技术将需要的业务信息做统一的上报，是另一个重要的关键点。例如在做数据清洗时如何建立规范的数据中间表？无痕埋点只是获取完整埋点数据的第一步。</p>
+<p><a href="https://ivonhoe.github.io/2018/09/11/how-to-track-users-2/">移动端无痕埋点实践详解(二)</a></p>
 <h3 id="0x04_参考文档">0x04 参考文档</h3><p><a href="https://tech.meituan.com/mt-mobile-analytics-practice.html" target="_blank" rel="external">美团点评前端无痕埋点实践</a></p>
 <p><a href="https://blog.csdn.net/vshuang/article/details/60361314" target="_blank" rel="external">数据采集与埋点简介之 代码埋点、可视化埋点与无痕埋点</a></p>
-
+<h3 id="0x05_转载请标明出处病已blog_https://ivonhoe-github-io/">0x05 转载请标明出处<a href="https://ivonhoe.github.io/">病已blog https://ivonhoe.github.io/</a></h3><h3 id="转载请标明出处病已blog_https://ivonhoe-github-io/">转载请标明出处<a href="https://ivonhoe.github.io/">病已blog https://ivonhoe.github.io/</a></h3>
       
     </div>
 
@@ -632,7 +633,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#0x00_前言"><span class="nav-number">1.</span> <span class="nav-text">0x00 前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x01_什么是无痕埋点？"><span class="nav-number">2.</span> <span class="nav-text">0x01 什么是无痕埋点？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x02_移动端无痕埋点如何实现？"><span class="nav-number">3.</span> <span class="nav-text">0x02 移动端无痕埋点如何实现？</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1_如何标识控件"><span class="nav-number">3.1.</span> <span class="nav-text">2.1 如何标识控件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2_如何统一拦截单击事件"><span class="nav-number">3.2.</span> <span class="nav-text">2.2 如何统一拦截单击事件</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x03_总结"><span class="nav-number">4.</span> <span class="nav-text">0x03 总结</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x04_参考文档"><span class="nav-number">5.</span> <span class="nav-text">0x04 参考文档</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#0x00_前言"><span class="nav-number">1.</span> <span class="nav-text">0x00 前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x01_什么是无痕埋点？"><span class="nav-number">2.</span> <span class="nav-text">0x01 什么是无痕埋点？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x02_移动端无痕埋点如何实现？"><span class="nav-number">3.</span> <span class="nav-text">0x02 移动端无痕埋点如何实现？</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1_如何标识控件"><span class="nav-number">3.1.</span> <span class="nav-text">2.1 如何标识控件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2_如何统一拦截单击事件"><span class="nav-number">3.2.</span> <span class="nav-text">2.2 如何统一拦截单击事件</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x03_总结"><span class="nav-number">4.</span> <span class="nav-text">0x03 总结</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x04_参考文档"><span class="nav-number">5.</span> <span class="nav-text">0x04 参考文档</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x05_转载请标明出处病已blog_https://ivonhoe-github-io/"><span class="nav-number">6.</span> <span class="nav-text">0x05 转载请标明出处病已blog https://ivonhoe.github.io/</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#转载请标明出处病已blog_https://ivonhoe-github-io/"><span class="nav-number">7.</span> <span class="nav-text">转载请标明出处病已blog https://ivonhoe.github.io/</span></a></li></ol></div>
             
 
           </div>
