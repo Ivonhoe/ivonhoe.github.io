@@ -88,7 +88,7 @@ Small如何实现插件代码打包和资源打包
 Small加载插件代码和资源的原理
 Small代理插件activity生命周期的原理
 
-0x01 Small如何打包module代码?">
+关于Small插件化的其他文档：《Android">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Android插件化之Small框架原理">
 <meta property="og:url" content="https://ivonhoe.github.io/2018/01/18/Small框架原理/index.html">
@@ -99,8 +99,8 @@ Small如何实现插件代码打包和资源打包
 Small加载插件代码和资源的原理
 Small代理插件activity生命周期的原理
 
-0x01 Small如何打包module代码?">
-<meta property="og:updated_time" content="2018-09-11T13:30:00.000Z">
+关于Small插件化的其他文档：《Android">
+<meta property="og:updated_time" content="2018-09-18T09:51:48.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android插件化之Small框架原理">
 <meta name="twitter:description" content="0x00 前言Small是一个轻量化的插件化框架，Small的使用介绍可以查看官网文档了解，Small项目接入总结可以查看博客的另一篇《Small框架实践总结》。这篇文章主要从以下几个角度来看Small框架的实现原理。
@@ -109,7 +109,7 @@ Small如何实现插件代码打包和资源打包
 Small加载插件代码和资源的原理
 Small代理插件activity生命周期的原理
 
-0x01 Small如何打包module代码?">
+关于Small插件化的其他文档：《Android">
 
 
 
@@ -396,14 +396,15 @@ Small代理插件activity生命周期的原理
       
 
       
-        <h4 id="0x00_前言">0x00 前言</h4><p>Small是一个轻量化的插件化框架，Small的使用介绍可以查看<a href="http://code.wequick.net/Small/cn/quickstart" target="_blank" rel="external">官网文档</a>了解，Small项目接入总结可以查看博客的另一篇<a href="https://ivonhoe.github.io/2018/01/18/Small%E6%A1%86%E6%9E%B6%E5%AE%9E%E8%B7%B5%E6%80%BB%E7%BB%93/">《Small框架实践总结》</a>。这篇文章主要从以下几个角度来看Small框架的实现原理。</p>
+        <h3 id="0x00_前言">0x00 前言</h3><p>Small是一个轻量化的插件化框架，Small的使用介绍可以查看<a href="http://code.wequick.net/Small/cn/quickstart" target="_blank" rel="external">官网文档</a>了解，Small项目接入总结可以查看博客的另一篇<a href="https://ivonhoe.github.io/2018/01/18/Small%E6%A1%86%E6%9E%B6%E5%AE%9E%E8%B7%B5%E6%80%BB%E7%BB%93/">《Small框架实践总结》</a>。这篇文章主要从以下几个角度来看Small框架的实现原理。</p>
 <ol>
 <li>Small如何实现插件代码打包和资源打包</li>
 <li>Small加载插件代码和资源的原理</li>
 <li>Small代理插件activity生命周期的原理</li>
 </ol>
-<h4 id="0x01_Small如何打包module代码?">0x01 Small如何打包module代码?</h4><a id="more"></a>
-<p>small插件化中的三种组件角色，分别是<code>app.*</code>，<code>lib.*</code>，<code>宿主</code>。small在打包过程中会根据不同module的类型针对不同组件使用不同编译插件做处理，分别是:</p>
+<h3 id="关于Small插件化的其他文档：">关于Small插件化的其他文档：</h3><p><a href="http://ivonhoe.github.io/2018/01/18/Small%E6%A1%86%E6%9E%B6%E5%AE%9E%E8%B7%B5%E6%80%BB%E7%BB%93/"><strong>《Android插件化之Small框架实践总结》</strong></a><br><a href="http://ivonhoe.github.io/2018/03/14/small-bug-555-fix/"><strong>《Android插件化之资源加载机制》</strong></a><br><a href="https://ivonhoe.github.io/2018/07/18/abandon-the-plugin-framework/"><strong>《Android插件化之从入门到放弃》</strong></a></p>
+<a id="more"></a>
+<h3 id="0x01_Small如何打包module代码?">0x01 Small如何打包module代码?</h3><p>small插件化中的三种组件角色，分别是<code>app.*</code>，<code>lib.*</code>，<code>宿主</code>。small在打包过程中会根据不同module的类型针对不同组件使用不同编译插件做处理，分别是:</p>
 <ol>
 <li><code>AppPlugin</code> –&gt; <code>app.*</code></li>
 <li><code>LibraryPlugin</code> –&gt; <code>lib.*</code></li>
@@ -417,7 +418,6 @@ Small代理插件activity生命周期的原理
 </ol>
 <p>在打包<code>app.*</code>插件时，将<code>app.*</code>对其他module的依赖转换成<code>provided</code>依赖。当执行插件打包时可以看做是插件模块执行<code>assembleRelease</code>。</p>
 <p>在打包<code>lib.*</code>插件时，<code>LibraryPlugin</code>会修改插件模块的<code>build.gradle</code>文件，<code>apply plugin:</code>从<code>&#39;com.android.library&#39;</code>修改成<code>&#39;com.android.application&#39;</code>，将对lib的方式转换成app的打包，再执行<code>assembleRelease</code>任务。</p>
-<p>👍👍👍</p>
 <h4 id="0x02_Small如何解决资源id冲突?">0x02 Small如何解决资源id冲突?</h4><p>Android App资源id的格式是0xPPTTNNNN，其中：</p>
 <ul>
 <li>PP 资源的package id</li>
@@ -527,8 +527,8 @@ Small代理插件activity生命周期的原理
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/03/14/small-bug-555-fix/" rel="prev" title="Android插件化之资源加载">
-                Android插件化之资源加载 <i class="fa fa-chevron-right"></i>
+              <a href="/2018/03/14/small-bug-555-fix/" rel="prev" title="Android插件化之资源加载机制">
+                Android插件化之资源加载机制 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -676,7 +676,7 @@ Small代理插件activity生命周期的原理
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#0x00_前言"><span class="nav-number">1.</span> <span class="nav-text">0x00 前言</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x01_Small如何打包module代码?"><span class="nav-number">2.</span> <span class="nav-text">0x01 Small如何打包module代码?</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x02_Small如何解决资源id冲突?"><span class="nav-number">3.</span> <span class="nav-text">0x02 Small如何解决资源id冲突?</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x03_Small如何加载插件代码？"><span class="nav-number">4.</span> <span class="nav-text">0x03 Small如何加载插件代码？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x04_Small如何加载插件资源?"><span class="nav-number">5.</span> <span class="nav-text">0x04 Small如何加载插件资源?</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x05_Small如何代理插件Activity的生命周期?"><span class="nav-number">6.</span> <span class="nav-text">0x05 Small如何代理插件Activity的生命周期?</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x06_Small如何动态更新插件模块?"><span class="nav-number">7.</span> <span class="nav-text">0x06 Small如何动态更新插件模块?</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x07_参考文档"><span class="nav-number">8.</span> <span class="nav-text">0x07 参考文档</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#转载请标明出处病已blog_https://ivonhoe-github-io/"><span class="nav-number"></span> <span class="nav-text">转载请标明出处病已blog https://ivonhoe.github.io/</span></a></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#0x00_前言"><span class="nav-number">1.</span> <span class="nav-text">0x00 前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#关于Small插件化的其他文档："><span class="nav-number">2.</span> <span class="nav-text">关于Small插件化的其他文档：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x01_Small如何打包module代码?"><span class="nav-number">3.</span> <span class="nav-text">0x01 Small如何打包module代码?</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#0x02_Small如何解决资源id冲突?"><span class="nav-number">3.1.</span> <span class="nav-text">0x02 Small如何解决资源id冲突?</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x03_Small如何加载插件代码？"><span class="nav-number">3.2.</span> <span class="nav-text">0x03 Small如何加载插件代码？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x04_Small如何加载插件资源?"><span class="nav-number">3.3.</span> <span class="nav-text">0x04 Small如何加载插件资源?</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x05_Small如何代理插件Activity的生命周期?"><span class="nav-number">3.4.</span> <span class="nav-text">0x05 Small如何代理插件Activity的生命周期?</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x06_Small如何动态更新插件模块?"><span class="nav-number">3.5.</span> <span class="nav-text">0x06 Small如何动态更新插件模块?</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x07_参考文档"><span class="nav-number">3.6.</span> <span class="nav-text">0x07 参考文档</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#转载请标明出处病已blog_https://ivonhoe-github-io/"><span class="nav-number">4.</span> <span class="nav-text">转载请标明出处病已blog https://ivonhoe.github.io/</span></a></li></ol></div>
             
 
           </div>

@@ -542,6 +542,7 @@
       
         
           <h3 id="0x01_前言">0x01 前言</h3><p>Android插件化框架一直以来就是安卓平台上的一个重要技术方向，从携程的DynamicAPK到360RePlugin再到阿里巴巴的Atlas，甚至美团和滴滴的安卓团队都有自己的一套安卓插件化解决方案。面对业界如此热门的技术方向，在对比业界开源的插件化方案后，团队内部于去年10月份开始(2017.10)在项目中选择开源的Small插件化框架进行了尝试。鞋是否合适需要穿上脚才能知道。这篇文章总结了我在使用Small插件化框架后，自己对插件化的理解和思考。</p>
+<h3 id="关于Small插件化的其他文档">关于Small插件化的其他文档</h3><p><a href="https://ivonhoe.github.io/2018/01/18/Small%E6%A1%86%E6%9E%B6%E5%AE%9E%E8%B7%B5%E6%80%BB%E7%BB%93/"><strong>《Android插件化之Small框架实践总结》</strong></a><br><a href="https://ivonhoe.github.io/2018/01/18/Small%E6%A1%86%E6%9E%B6%E5%8E%9F%E7%90%86/"><strong>《Android插件化之Small框架原理》</strong></a><br><a href="https://ivonhoe.github.io/2018/03/14/small-bug-555-fix/"><strong>《Android插件化之资源加载机制》</strong></a></p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2018/07/18/abandon-the-plugin-framework/#далее" rel="contents">
@@ -1569,7 +1570,7 @@
               
                 
                 <a class="post-title-link" href="/2018/03/14/small-bug-555-fix/" itemprop="url">
-                  Android插件化之资源加载
+                  Android插件化之资源加载机制
                 </a>
               
             
@@ -1625,7 +1626,7 @@
 
           
           
-             <span id="/2018/03/14/small-bug-555-fix/" class="leancloud_visitors" data-flag-title="Android插件化之资源加载">
+             <span id="/2018/03/14/small-bug-555-fix/" class="leancloud_visitors" data-flag-title="Android插件化之资源加载机制">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -1655,8 +1656,9 @@
 
       
         
-          <h4 id="0x00_前言">0x00 前言</h4><p>这篇文章主要记录了在使用Small插件化框架中遇到的资源加载问题及相应解决方案，并梳理出Android的资源加载流程和插件化框架的资源加载原理。在前两篇插件化技术介绍的基础上会关注更多技术细节，希望能有所收获！</p>
-<h4 id="0x01_Small框架的资源加载异常">0x01 Small框架的资源加载异常</h4><p>最近收到一个客户反馈，在他们的中兴V0840手机上打开我们的app会持续崩溃。第一时间在百度移动质量平台上短时租用了该机型，抓取了log。发现是资源查找失败异常。并在Small github issues中搜索<code>android.content.res.Resources$NotFoundException</code> 可以发现很多类似的问题，详细日志可查看下图。</p>
+          <h3 id="0x00_前言">0x00 前言</h3><p>这篇文章主要记录了在使用Small插件化框架中遇到的资源加载问题及相应解决方案，并梳理出Android的资源加载流程和插件化框架的资源加载原理。在前两篇插件化技术介绍的基础上会关注更多技术细节，希望能有所收获！</p>
+<h3 id="关于Small插件化的其他文档：">关于Small插件化的其他文档：</h3><p><a href="http://ivonhoe.github.io/2018/01/18/Small%E6%A1%86%E6%9E%B6%E5%AE%9E%E8%B7%B5%E6%80%BB%E7%BB%93/"><strong>《Android插件化之Small框架实践总结》</strong></a><br><a href="http://ivonhoe.github.io/2018/01/18/Small%E6%A1%86%E6%9E%B6%E5%8E%9F%E7%90%86/"><strong>《Android插件化之Small框架原理》</strong></a><br><a href="https://ivonhoe.github.io/2018/07/18/abandon-the-plugin-framework/"><strong>《Android插件化之从入门到放弃》</strong></a></p>
+<h3 id="0x01_Small框架的资源加载异常">0x01 Small框架的资源加载异常</h3><p>最近收到一个客户反馈，在他们的中兴V0840手机上打开我们的app会持续崩溃。第一时间在百度移动质量平台上短时租用了该机型，抓取了log。发现是资源查找失败异常。并在Small github issues中搜索<code>android.content.res.Resources$NotFoundException</code> 可以发现很多类似的问题，详细日志可查看下图。</p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2018/03/14/small-bug-555-fix/#далее" rel="contents">
@@ -1814,13 +1816,13 @@
 
       
         
-          <h4 id="0x00_前言">0x00 前言</h4><p>Small是一个轻量化的插件化框架，Small的使用介绍可以查看<a href="http://code.wequick.net/Small/cn/quickstart">官网文档</a>了解，Small项目接入总结可以查看博客的另一篇<a href="https://ivonhoe.github.io/2018/01/18/Small%E6%A1%86%E6%9E%B6%E5%AE%9E%E8%B7%B5%E6%80%BB%E7%BB%93/">《Small框架实践总结》</a>。这篇文章主要从以下几个角度来看Small框架的实现原理。</p>
+          <h3 id="0x00_前言">0x00 前言</h3><p>Small是一个轻量化的插件化框架，Small的使用介绍可以查看<a href="http://code.wequick.net/Small/cn/quickstart">官网文档</a>了解，Small项目接入总结可以查看博客的另一篇<a href="https://ivonhoe.github.io/2018/01/18/Small%E6%A1%86%E6%9E%B6%E5%AE%9E%E8%B7%B5%E6%80%BB%E7%BB%93/">《Small框架实践总结》</a>。这篇文章主要从以下几个角度来看Small框架的实现原理。</p>
 <ol>
 <li>Small如何实现插件代码打包和资源打包</li>
 <li>Small加载插件代码和资源的原理</li>
 <li>Small代理插件activity生命周期的原理</li>
 </ol>
-<h4 id="0x01_Small如何打包module代码?">0x01 Small如何打包module代码?</h4>
+<h3 id="关于Small插件化的其他文档：">关于Small插件化的其他文档：</h3><p><a href="http://ivonhoe.github.io/2018/01/18/Small%E6%A1%86%E6%9E%B6%E5%AE%9E%E8%B7%B5%E6%80%BB%E7%BB%93/"><strong>《Android插件化之Small框架实践总结》</strong></a><br><a href="http://ivonhoe.github.io/2018/03/14/small-bug-555-fix/"><strong>《Android插件化之资源加载机制》</strong></a><br><a href="https://ivonhoe.github.io/2018/07/18/abandon-the-plugin-framework/"><strong>《Android插件化之从入门到放弃》</strong></a></p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2018/01/18/Small框架原理/#далее" rel="contents">
