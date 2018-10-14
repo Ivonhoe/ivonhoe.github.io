@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://ivonhoe.github.io/"/>
-  <updated>2018-09-11T13:28:36.000Z</updated>
+  <updated>2018-10-14T13:12:21.000Z</updated>
   <id>https://ivonhoe.github.io/</id>
   
   <author>
@@ -14,6 +14,81 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Android性能优化之ANR分析记录(一)</title>
+    <link href="https://ivonhoe.github.io/2018/10/14/android-anr-1/"/>
+    <id>https://ivonhoe.github.io/2018/10/14/android-anr-1/</id>
+    <published>2018-10-14T13:09:15.000Z</published>
+    <updated>2018-10-14T13:12:21.000Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="0x01_前言">0x01 前言</h3><p>Application Not Responding（简称:ANR）指应用中一些特定的事件（如用户触摸事件、广播等）在应用的主线程没有在规定的时间内处理完，系统自动做出终止应用运行的响应。问题出现的原因主要是两个方面：</p>
+<blockquote>
+<ol>
+<li>应用进程自身引起的，例如：主线程阻塞、挂起、死循环</li>
+<li>应用进程的其他线程的CPU占用率高，使得主线程无法抢占到CPU时间片</li>
+</ol>
+</blockquote>
+<p>常见的三种ANR类型：</p>
+<ol>
+<li>KeyDispatchTimeout(谷歌默认5s，MTK平台上是8s): 主要类型按键或触摸事件在特定时间内无响应</li>
+<li>BroadcastTimeout(10s): 主要是BroadcastRecevier在规定时间无法处理完成。前台广播超时时间是10s,后台广播超时是60s,这类超时没有提示框弹出。代码见AMS的<code>BROADCAST_FG_TIMEOUT</code>和<code>BROADCAST_BG_TIMEOUT</code>。</li>
+<li>ServiceTimeout(20s): Service在规定时间内无法处理完成操作，即会报出服务超时，这类ANR同样没有提示框出现。超时时间，前台Service是20s，后台Service是200s。代码见ActivityServices的<code>SERVICE_TIMEOUT</code>和<code>SERVICE_BACKGROUND_TIMEOUT</code>。</li>
+</ol>
+<a id="more"></a>
+<h3 id="0x02_KeyDispatchingTimedOut">0x02 KeyDispatchingTimedOut</h3><h4 id="2-1_错误实例">2.1 错误实例</h4><p>先看下面的错误实例：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="annotation">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">    setContentView(R.layout.activity_main);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 异步操作数组</span></span><br><span class="line">    saveListToDb();</span><br><span class="line"></span><br><span class="line">    traverseList();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">traverseList</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    Handler handler = <span class="keyword">new</span> Handler();</span><br><span class="line">    handler.post(<span class="keyword">new</span> Runnable()&#123;</span><br><span class="line">        <span class="keyword">synchronized</span> (mList) &#123;</span><br><span class="line">        <span class="comment">// todo something</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">saveListToDb</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">        <span class="annotation">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (mList) &#123;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    <span class="comment">// todo save list</span></span><br><span class="line">                    Thread.sleep(<span class="number">50000</span>);</span><br><span class="line">                &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;).start();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="2-2_adb日志和traces分析">2.2 adb日志和traces分析</h4><p>在子线程保存数据到文件或数据库(这里用sleep操作模拟耗时io操作)，如果同时可能涉及到在主线程操作同一个锁对象的情况在，这时你是否会习惯的使用synchronized关键词保证list的同步呢？当在主线程和异步线程产生了对相同对象的竞争关系，那这时就很容易出现主线程的阻塞，而阻塞的时间长短就取决于主线程啥时候获取到竞争对象。而此时反馈在系统层面当用户操作不会得到响应，最终应用以ANR的形式退出。运行上面的错误代码你会获取类似下面的ANR日志信息<br><code>Input dispatching timed out (Waiting because no window has focus but there is a focused application that may eventually add a window when it finishes starting up.)</code><br>查看虚拟机trace文件输出目录<code>adb shell getprop dalvik.vm.stack-trace-file</code>，再查看手机目录下<code>/data/anr/traces.txt</code>的文件内容，会发现main线程在等待释放锁<0x0af98db2>,而这个锁正在被thread 10所持有</0x0af98db2></p>
+<p><img src="/res/anr-1/anr-1.png" alt="Alt text"></p>
+<p>再查看tid=10的线程的线程状态，该线程正在sleeping，这也印证了上面实例的代码，主线程在等待一个sleep线程释放锁而导致了ANR。当然在实际项目中的日志和原因未必会这么明显，但形如实例的错误代码确实是很常见的场景。</p>
+<p><img src="/res/anr-1/anr-2.png" alt="Alt text"></p>
+<h4 id="2-3_traces-txt关键信息注">2.3 traces.txt关键信息注</h4><ol>
+<li>pid为进程id，sysTid=pid，这里主线程的线程号=进程号，prio=5为线程优先级</li>
+<li>当一个线程占有一个锁的时候，会打印-locked<0xxxxxxx></0xxxxxxx></li>
+<li>当该线程正在等待别的线程释放该锁，会打印waiting to lock <0xxxxxx></0xxxxxx></li>
+<li>如果代码中有wait()调用的话，首先是locked，然后会打印waiting on <0xxxxxx></0xxxxxx></li>
+</ol>
+<h4 id="2-4_ANR_Input_event_dispatching_timed_out_Reason">2.4  ANR Input event dispatching timed out Reason</h4><p>参考<a href="http://gityuan.com/2017/01/01/input-anr/的input-anr异常原因的总结，input" target="_blank" rel="external">http://gityuan.com/2017/01/01/input-anr/的input-anr异常原因的总结，input</a> anr主要分为以下几类。</p>
+<ol>
+<li>无窗口, 有应用：Waiting because no window has focus but there is a focused application that may eventually add a window when it finishes starting up.</li>
+<li>窗口暂停: Waiting because the [targetType] window is paused.</li>
+<li>窗口未连接: Waiting because the [targetType] window’s input channel is not registered with the input dispatcher. The window may be in the process of being removed.</li>
+<li>窗口连接已死亡：Waiting because the [targetType] window’s input connection is [Connection.Status]. The window may be in the process of being removed.</li>
+<li>窗口连接已满：Waiting because the [targetType] window’s input channel is full. Outbound queue length: [outboundQueue长度]. Wait queue length: [waitQueue长度].</li>
+<li>按键事件，输出队列或事件等待队列不为空：Waiting to send key event because the [targetType] window has not finished processing all of the input events that were previously delivered to it. Outbound queue length: [outboundQueue长度]. Wait queue length: [waitQueue长度].</li>
+<li>非按键事件，事件等待队列不为空且头事件分发超时500ms：Waiting to send non-key event because the [targetType] window has not finished processing certain input events that were delivered to it over 500ms ago. Wait queue length: [waitQueue长度]. Wait queue head age: [等待时长].</li>
+</ol>
+<ul>
+<li>targetType: 取值为”focused”或者”touched”</li>
+<li>Connection.Status: 取值为”NORMAL”，”BROKEN”，”ZOMBIE”</li>
+</ul>
+<p>所以如2.1中实例代码，当ANR发生在Activity的onCreate流程中时，你讲看到<code>无窗口, 有应用</code>的日志信息，当ANR发生在对某个View的OnClickListener中时，你将从日志中获取<code>事件等待队列不为空且头事件分发超时500ms</code>的信息，这样通过不同的日志信息就可大致定位ANR出现的用户场景，进而方便定位出问题代码。</p>
+<h3 id="参考文档">参考文档</h3><p><a href="http://yuanfentiank789.github.io/2017/09/05/ANR%E5%88%86%E6%9E%90/" target="_blank" rel="external">http://yuanfentiank789.github.io/2017/09/05/ANR%E5%88%86%E6%9E%90/</a><br><a href="http://gityuan.com/2017/01/01/input-anr/" target="_blank" rel="external">http://gityuan.com/2017/01/01/input-anr/</a><br><a href="https://maoao530.github.io/2017/02/21/anr-analyse/" target="_blank" rel="external">https://maoao530.github.io/2017/02/21/anr-analyse/</a><br><a href="http://rayleeya.iteye.com/blog/1955657" target="_blank" rel="external">http://rayleeya.iteye.com/blog/1955657</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h3 id=&quot;0x01_前言&quot;&gt;0x01 前言&lt;/h3&gt;&lt;p&gt;Application Not Responding（简称:ANR）指应用中一些特定的事件（如用户触摸事件、广播等）在应用的主线程没有在规定的时间内处理完，系统自动做出终止应用运行的响应。问题出现的原因主要是两个方面：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;ol&gt;
+&lt;li&gt;应用进程自身引起的，例如：主线程阻塞、挂起、死循环&lt;/li&gt;
+&lt;li&gt;应用进程的其他线程的CPU占用率高，使得主线程无法抢占到CPU时间片&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;常见的三种ANR类型：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;KeyDispatchTimeout(谷歌默认5s，MTK平台上是8s): 主要类型按键或触摸事件在特定时间内无响应&lt;/li&gt;
+&lt;li&gt;BroadcastTimeout(10s): 主要是BroadcastRecevier在规定时间无法处理完成。前台广播超时时间是10s,后台广播超时是60s,这类超时没有提示框弹出。代码见AMS的&lt;code&gt;BROADCAST_FG_TIMEOUT&lt;/code&gt;和&lt;code&gt;BROADCAST_BG_TIMEOUT&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;ServiceTimeout(20s): Service在规定时间内无法处理完成操作，即会报出服务超时，这类ANR同样没有提示框出现。超时时间，前台Service是20s，后台Service是200s。代码见ActivityServices的&lt;code&gt;SERVICE_TIMEOUT&lt;/code&gt;和&lt;code&gt;SERVICE_BACKGROUND_TIMEOUT&lt;/code&gt;。&lt;/li&gt;
+&lt;/ol&gt;
+    
+    </summary>
+    
+      <category term="性能优化" scheme="https://ivonhoe.github.io/categories/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/"/>
+    
+    
+      <category term="anr" scheme="https://ivonhoe.github.io/tags/anr/"/>
+    
+  </entry>
   
   <entry>
     <title>移动端无痕埋点实践详解(二)</title>
@@ -1273,94 +1348,6 @@
       <category term="Drawable" scheme="https://ivonhoe.github.io/tags/Drawable/"/>
     
       <category term="内存" scheme="https://ivonhoe.github.io/tags/%E5%86%85%E5%AD%98/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Android安全之应用防dex2jar原理及实现</title>
-    <link href="https://ivonhoe.github.io/2017/02/09/%E7%BE%8E%E5%9B%A2%E5%A6%82%E4%BD%95%E9%98%B2dex2jar/"/>
-    <id>https://ivonhoe.github.io/2017/02/09/美团如何防dex2jar/</id>
-    <published>2017-02-09T13:55:01.000Z</published>
-    <updated>2018-09-11T13:25:23.000Z</updated>
-    
-    <content type="html"><![CDATA[<h3 id="一、反编译某平台代码">一、反编译某平台代码</h3><p>最近在看某外卖平台的代码，发现某外卖平台最新版本版本无法正常的通过dex2jar工具将dex转换出Java源代码，在转换过程中会提示出错，如图：</p>
-<p><img src="https://ivonhoe.github.io/res/dex2jar_error/dex2jar_error1.png" alt="dex2jar异常图"></p>
-<p>查看转换出的Java源代码，会发现很多类方法提示下图所示异常，很多方法中都会抛出<code>RuntimeException：can not merge I and Z</code>:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public class AsyncTaskService extends IntentService &#123; &#10;  &#10;  protected void onHandleIntent(Intent paramIntent)&#123;&#10;    throw new RuntimeException(&#34;d2j fail translate: java.lang.RuntimeException: can not merge I and Z\n\tat...);&#10;  &#125;&#10;  &#10;  public int onStartCommand(Intent paramIntent, int paramInt1, int paramInt2)&#123;&#10;    throw new RuntimeException(&#34;d2j fail translate: java.lang.RuntimeException: can not merge I and Z\n\tat...&#34;);&#10;  &#125;&#10;&#125;</span><br></pre></td></tr></table></figure>
-<a id="more"></a>
-<p>查看日志文件会发现很多类似的错误信息，可以看到方法内<code>RuntimeException</code>栈信息和反编译的错误信息是相同的，都提示<code>can not merge I and Z</code>。</p>
-<p><img src="https://ivonhoe.github.io/res/dex2jar_error/dex2jar_error2.png" alt="dex2jar日志"></p>
-<h3 id="二、为什么？">二、为什么？</h3><p>本来以为这是dex2jar工具低版本的一个bug，但更新了dex2jar以后，依然还是会出现上述错误。<br><code>java.lang.RuntimeException: can not merge I and Z</code>这个异常，在<a href="https://sourceforge.net/p/dex2jar/tickets/238/" target="_blank" rel="external">sourceforge</a>上解释的比较清楚，其实是一个dex2jar工具检查出的一个参数异常”，<strong>The problem is caused by strict type calculation, because in java syntaxt, a boolean can not assign to an inteager. so dex2jar forbid merge type Z and I.</strong> 你用布尔类型入参调用一个参数为整型的函数，当然会检查出错，为啥这么说，我使用apktool工具，看了一下apk的smali代码。发现报错的函数的最前面都含有一段奇怪smali的代码：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">invoke-static &#123;&#125;, Lpnf/this/object/does/not/Exist;-&#62;a()Z&#10;&#10;move-result v0&#10;&#10;invoke-static &#123;v0&#125;, Lpnf/this/object/does/not/Exist;-&#62;b(I)V</span><br></pre></td></tr></table></figure>
-<p>看上面的代码，<code>pnf.this.object.does.not.Exist.a()</code>方法返回一个boolean类型数据，放入v0寄存器，作为<code>pnf.this.object.does.not.Exist.b(int)</code>函数的入参。正常情况下这样的语法错误在java代码编译时就不会通过的。看到这里你会不会想，如果我不想别人直接看到我的Java代码，是不是可以通过在核心函数中插入上面这段有语法错误的代码，以达到dex2jar工具检查出错的目的呢？从而将代码被阅读的门槛从java提高到smali。</p>
-<h3 id="三、手动代码注入">三、手动代码注入</h3><p>为了验证上面的猜想，这里我通过反编译一个apk，手动插入有语法错误的smali代码，以验证防dex2jar的思路，具体步骤如下：</p>
-<ul>
-<li>1.反编译一个apk。</li>
-<li>2.修改smali代码，插入上面这三句有语法错误的代码。</li>
-<li>3.重打包，使用dex2jar工具转换新包的dex，看是否能正常转换出Java源代码。并检查运行时是否出错。</li>
-</ul>
-<p>我这里用一个Hello World应用来测试，使用apktool反编译出smali代码，并在Application的onCreate方法中插入这段有语法错误的代码。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># virtual methods&#10;.method public onCreate()V&#10;    .locals 3&#10;&#10;    invoke-super &#123;p0&#125;, Lcn/trinea/android/lib/h/c;-&#62;onCreate()V&#10;&#10;    invoke-virtual &#123;p0&#125;, Lcn/trinea/android/developertools/MyApplication;-&#62;getApplicationContext()Landroid/content/Context;&#10;&#10;    move-result-object v0&#10;&#10;    invoke-static &#123;&#125;, Lpnf/object/does/not/Exist;-&#62;a()Z&#10;&#10;    move-result v3&#10;&#10;    invoke-static &#123;v3&#125;, Lpnf/object/does/not/Exist;-&#62;b(I)V&#10;&#10;    return-void&#10;.end method</span><br></pre></td></tr></table></figure>
-<p>这里不要忘了，你可能需要另外编译出Exist.smali这个文件，不然运行时一定会爆出ClassNotFound异常。将下面的Exist.java<strong>编译出Exist.smali</strong>放入相应的包路径，重打包就可以了。Java代码如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public class Exist &#123;&#10;    public static boolean a() &#123;&#10;        return false;&#10;    &#125;&#10;&#10;    public static void b(int test) &#123;&#10;&#10;    &#125;&#10;&#125;</span><br></pre></td></tr></table></figure>
-<p>最后，验证下果然重新打包后的apk，确实不能正常转换出Java源代码，这里就不贴图了，因为转换出错日志是一样的。并且运行时也不会出错。接下来会写一个Gradle编译插件，针对特定的函数，插入代码，防止dex2jar工具查看Java源代码。</p>
-<h3 id="四、实现思路">四、实现思路</h3><p>Android客户端在防止其Java代码被dex2jar转换时其实就是借助dex2jar的语法检查机制，将有语法错误的字节码插入到想要保护的Java函数中里面，以达到dex2jar转换出错的目的。接下来我就大致记录下如何开发Gradle编译插件，在编译过程中实现上述防护思路，先看下Android APK打包流程：</p>
-<!--more-->
-<p><img src="https://ivonhoe.github.io/res/dexguard/dexguard4.jpeg" alt="Android apk打包流程"></p>
-<p>Android APK打包流程如上图所示，Java代码先通过Java Compiler生成.class文件，再通过dx工具生成dex文件，最后使用apkbuilder工具完成代码与资源文件的打包，并使用jarsigner签名，最后可能还有使用zipalign对签名后的apk做对齐处理。</p>
-<p>如果需要完成对特定函数的代码注入，可以在Java代码编译生成class文件后，在dex文件生成前，针对class字节码进行操作，以本例为例需要动态生成Exsit类文件的字节码。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">// &#21160;&#24577;&#29983;&#25104;Exist.class&#10;public class Exist &#123;&#10;    public static boolean a() &#123;&#10;        return false;&#10;    &#125;&#10;&#10;    public static void b(int test) &#123;&#10;    &#125;&#10;&#125;</span><br></pre></td></tr></table></figure>
-<p>将下列Java代码转换成字节码插入需要保护的函数中。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">// &#25554;&#20837;&#21040;&#29305;&#23450;&#30340;Java&#20989;&#25968;&#20869;&#10;Exist.b(Exist.a());</span><br></pre></td></tr></table></figure>
-<p>并将修改后的.class文件放入dex打包目录中，完成dex打包，具体流程如下图所示：</p>
-<p><img src="https://ivonhoe.github.io/res/dexguard/dexguard6.png" alt=""></p>
-<p>Gradle提供了叫<code>Transform</code>的API，允许三方插件在class文件转换为dex文件前操作编译好的class文件，这个API的目标就是简化class文件的自定义的操作而不用对Task进行处理，并且可以更加灵活地进行操作。详细的可以参考<a href="http://blog.csdn.net/sbsujjbcy/article/details/50839263" target="_blank" rel="external">区长的博客</a>。</p>
-<h3 id="五、使用ASM操作Java字节码">五、使用ASM操作Java字节码</h3><p>ASM 是一个 Java 字节码操控框架。它能被用来动态生成类或者增强既有类的功能。ASM 可以直<br>接产生二进制 class 文件，也可以在类被加载入 Java 虚拟机之前动态改变类行为。这里推荐一个IDEA插件:<code>ASM ByteCode Outline</code>。可以查看.class文件的字节码，并可以生成成ASM框架代码。安装<code>ASM Bytecode Outline</code>插件后，可以在<code>Intellij IDEA</code>-&gt;<code>Code</code>-&gt;<code>Show Bytecode Outline</code>查看类文件对应个字节码和ASM框架代码，利用ASM框架代码就可以生成相应的.class文件了。</p>
-<p><img src="https://ivonhoe.github.io/res/dexguard/dexguard3.png" alt=""></p>
-<p>生成Exist字节码的具体实现，生成Exist.java的构造函数：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ClassWriter cw = new ClassWriter(0);&#10;FieldVisitor fv;&#10;MethodVisitor mv;&#10;AnnotationVisitor av0;&#10;&#10;cw.visit(51, ACC_PUBLIC + ACC_SUPER, &#34;ivonhoe/dexguard/java/Exist&#34;, null, &#34;java/lang/Object&#34;, null);&#10;&#10;cw.visitSource(&#34;Exist.java&#34;, null);&#10;&#10;mv = cw.visitMethod(ACC_PUBLIC, &#34;&#60;init&#62;&#34;, &#34;()V&#34;, null, null);&#10;mv.visitCode();&#10;Label l0 = new Label();&#10;mv.visitLabel(l0);&#10;mv.visitLineNumber(7, l0);&#10;mv.visitVarInsn(ALOAD, 0);&#10;mv.visitMethodInsn(INVOKESPECIAL, &#34;java/lang/Object&#34;, &#34;&#60;init&#62;&#34;, &#34;()V&#34;, false);&#10;mv.visitInsn(RETURN);&#10;Label l1 = new Label();&#10;mv.visitLabel(l1);&#10;mv.visitLocalVariable(&#34;this&#34;, &#34;Livonhoe/dexguard/java/Exist;&#34;, null, l0, l1, 0);&#10;mv.visitMaxs(1, 1);&#10;mv.visitEnd();</span><br></pre></td></tr></table></figure>
-<p>声明一个函数名为a，返回值为boolean类型的无参函数：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mv = cw.visitMethod(ACC_PUBLIC + ACC_STATIC, &#34;a&#34;, &#34;()Z&#34;, null, null);&#10;mv.visitCode();&#10;l0 = new Label();&#10;mv.visitLabel(l0);&#10;mv.visitLineNumber(10, l0);&#10;mv.visitInsn(ICONST_0);&#10;mv.visitInsn(IRETURN);&#10;mv.visitMaxs(1, 0);&#10;mv.visitEnd();</span><br></pre></td></tr></table></figure>
-<p>声明一个函数名为b，参数为int型，返回类型为void的函数</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">MV = CW.VISITmETHOD(acc_public + acc_static, &#34;b&#34;, &#34;(i)v&#34;, NULL, NULL);&#10;MV.VISITcODE();&#10;L0 = NEW lABEL();&#10;MV.VISITlABEL(L0);&#10;MV.VISITlINEnUMBER(14, L0);&#10;MV.VISITiNSN(return);&#10;L1 = NEW lABEL();&#10;MV.VISITlABEL(L1);&#10;MV.VISITlOCALvARIABLE(&#34;TEST&#34;, &#34;i&#34;, NULL, L0, L1, 0);&#10;MV.VISITmAXS(0, 1);&#10;MV.VISITeND();</span><br></pre></td></tr></table></figure>
-<p>在指定函数内，插入<code>Exist.b(Exist.a());</code>对应的字节码的具体实现，绕过Java编译器的语法检查：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">static class InjectClassVisitor extends ClassVisitor &#123;&#10;&#10;        private String methodName;&#10;&#10;        InjectClassVisitor(int i, ClassVisitor classVisitor, String method) &#123;&#10;            super(i, classVisitor)&#10;&#10;            this.methodName = method;&#10;        &#125;&#10;&#10;        @Override&#10;        public MethodVisitor visitMethod(int access, String name, String desc,&#10;                                         String signature, String[] exceptions) &#123;&#10;&#10;            MethodVisitor mv = super.visitMethod(access, name, desc, signature, exceptions);&#10;            mv = new MethodVisitor(Opcodes.ASM4, mv) &#123;&#10;&#10;                @Override&#10;                void visitCode() &#123;&#10;                    // &#22312;&#26041;&#27861;&#20307;&#24320;&#22987;&#35843;&#29992;&#26102;&#10;                    if (name.equals(methodName)) &#123;&#10;                        mv.visitMethodInsn(INVOKESTATIC, &#34;ivonhoe/dexguard/java/Exist&#34;, &#34;a&#34;, &#34;()Z&#34;, false);&#10;                        mv.visitMethodInsn(INVOKESTATIC, &#34;ivonhoe/dexguard/java/Exist&#34;, &#34;b&#34;, &#34;(I)V&#34;, false);&#10;                    &#125;&#10;                    super.visitCode()&#10;                &#125;&#10;&#10;                @Override&#10;                public void visitMaxs(int maxStack, int maxLocal) &#123;&#10;                    if (name.equals(methodName)) &#123;&#10;                        super.visitMaxs(maxStack + 1, maxLocal);&#10;                    &#125; else &#123;&#10;                        super.visitMaxs(maxStack, maxLocal);&#10;                    &#125;&#10;                &#125;&#10;            &#125;&#10;            return mv;&#10;        &#125;&#10;    &#125;</span><br></pre></td></tr></table></figure>
-<h3 id="六、总结">六、总结</h3><p>看到这里可能你会有一个疑惑，为什么有语法错误的代码，在运行时不会出错，个人理解不单单是因为bool类型在内存中是以<code>0或1</code>表示，也因为<code>int</code>和<code>bool</code>在Android虚拟机中都存储在32位寄存器中，如果使用<code>int</code>和<code>long</code>类型的参数互换，在dx阶段的编译就会报错。下面是插件源码，有兴趣的同学可以尝试一下~</p>
-<h4 id="插件源码">插件源码</h4><p>详细的Gradle源码和实例可参考<a href="https://github.com/Ivonhoe/dexguard" target="_blank" rel="external">https://github.com/Ivonhoe/dexguard</a></p>
-<h4 id="使用方法">使用方法</h4><ul>
-<li>在root project的build.gradle中添加依赖<code>classpath &#39;ivonhoe.gradle.dexguard:dexguard-gradle:0.0.2-SNAPSHOT&#39;</code></li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">buildscript &#123;&#10;    repositories &#123;&#10;        maven &#123; url &#39;https://raw.githubusercontent.com/Ivonhoe/mvn-repo/master/&#39; &#125;&#10;        mavenCentral()&#10;    &#125;&#10;    dependencies &#123;&#10;        classpath &#39;com.android.tools.build:gradle:2.3.0&#39;&#10;        classpath &#39;ivonhoe.gradle.dexguard:dexguard-gradle:0.0.2-SNAPSHOT&#39;&#10;    &#125;&#10;&#125;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>在app项目的build.gradle中添加插件，map.txt中配置需要保护的方法名</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apply plugin: &#39;ivonhoe.dexguard&#39;&#10;dexguard &#123;&#10;    guardConfig = &#34;$&#123;rootDir&#125;/map.txt&#34;&#10;&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="七、参考文档">七、参考文档</h3><ul>
-<li><a href="https://sourceforge.net/p/dex2jar/tickets/238/" target="_blank" rel="external">#238 java.lang.RuntimeException: can not merge I and Z</a></li>
-<li><a href="http://www.jianshu.com/p/730c6e3e21f6" target="_blank" rel="external">Smali语法</a></li>
-<li><a href="http://blog.csdn.net/sbsujjbcy/article/details/50839263" target="_blank" rel="external">Android 热修复使用Gradle Plugin1.5改造Nuwa插件</a></li>
-<li><a href="http://www.wangyuwei.me/2017/01/20/ASM-%E6%93%8D%E4%BD%9C%E5%AD%97%E8%8A%82%E7%A0%81%E5%88%9D%E6%8E%A2/" target="_blank" rel="external">ASM-操作字节码初探</a></li>
-<li><a href="https://www.diycode.cc/topics/581" target="_blank" rel="external">手摸手增加字节码往方法体内插代码</a></li>
-</ul>
-<h3 id="转载请标明出处病已blog_https://ivonhoe-github-io/">转载请标明出处<a href="https://ivonhoe.github.io/">病已blog https://ivonhoe.github.io/</a></h3>]]></content>
-    
-    <summary type="html">
-    
-      &lt;h3 id=&quot;一、反编译某平台代码&quot;&gt;一、反编译某平台代码&lt;/h3&gt;&lt;p&gt;最近在看某外卖平台的代码，发现某外卖平台最新版本版本无法正常的通过dex2jar工具将dex转换出Java源代码，在转换过程中会提示出错，如图：&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;https://ivonhoe.github.io/res/dex2jar_error/dex2jar_error1.png&quot; alt=&quot;dex2jar异常图&quot;&gt;&lt;/p&gt;
-&lt;p&gt;查看转换出的Java源代码，会发现很多类方法提示下图所示异常，很多方法中都会抛出&lt;code&gt;RuntimeException：can not merge I and Z&lt;/code&gt;:&lt;/p&gt;
-&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;public class AsyncTaskService extends IntentService &amp;#123; &amp;#10;  &amp;#10;  protected void onHandleIntent(Intent paramIntent)&amp;#123;&amp;#10;    throw new RuntimeException(&amp;#34;d2j fail translate: java.lang.RuntimeException: can not merge I and Z\n\tat...);&amp;#10;  &amp;#125;&amp;#10;  &amp;#10;  public int onStartCommand(Intent paramIntent, int paramInt1, int paramInt2)&amp;#123;&amp;#10;    throw new RuntimeException(&amp;#34;d2j fail translate: java.lang.RuntimeException: can not merge I and Z\n\tat...&amp;#34;);&amp;#10;  &amp;#125;&amp;#10;&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
-    
-    </summary>
-    
-      <category term="Android安全" scheme="https://ivonhoe.github.io/categories/Android%E5%AE%89%E5%85%A8/"/>
-    
-    
-      <category term="Gradle" scheme="https://ivonhoe.github.io/tags/Gradle/"/>
-    
-      <category term="dex2jar" scheme="https://ivonhoe.github.io/tags/dex2jar/"/>
-    
-      <category term="移动安全" scheme="https://ivonhoe.github.io/tags/%E7%A7%BB%E5%8A%A8%E5%AE%89%E5%85%A8/"/>
     
   </entry>
   
