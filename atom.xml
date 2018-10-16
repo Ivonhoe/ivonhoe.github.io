@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://ivonhoe.github.io/"/>
-  <updated>2018-10-14T13:12:21.000Z</updated>
+  <updated>2018-10-16T09:59:40.000Z</updated>
   <id>https://ivonhoe.github.io/</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="https://ivonhoe.github.io/2018/10/14/android-anr-1/"/>
     <id>https://ivonhoe.github.io/2018/10/14/android-anr-1/</id>
     <published>2018-10-14T13:09:15.000Z</published>
-    <updated>2018-10-14T13:12:21.000Z</updated>
+    <updated>2018-10-16T09:59:40.000Z</updated>
     
     <content type="html"><![CDATA[<h3 id="0x01_前言">0x01 前言</h3><p>Application Not Responding（简称:ANR）指应用中一些特定的事件（如用户触摸事件、广播等）在应用的主线程没有在规定的时间内处理完，系统自动做出终止应用运行的响应。问题出现的原因主要是两个方面：</p>
 <blockquote>
@@ -83,7 +83,7 @@
     
     </summary>
     
-      <category term="性能优化" scheme="https://ivonhoe.github.io/categories/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/"/>
+      <category term="Android性能优化" scheme="https://ivonhoe.github.io/categories/Android%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/"/>
     
     
       <category term="anr" scheme="https://ivonhoe.github.io/tags/anr/"/>
@@ -347,7 +347,7 @@
     <link href="https://ivonhoe.github.io/2018/06/05/ndk17-build-error/"/>
     <id>https://ivonhoe.github.io/2018/06/05/ndk17-build-error/</id>
     <published>2018-06-05T13:10:54.000Z</published>
-    <updated>2018-09-11T13:29:20.000Z</updated>
+    <updated>2018-10-16T10:01:24.000Z</updated>
     
     <content type="html"><![CDATA[<h4 id="0x01_问题描述">0x01 问题描述</h4><p><strong>现象：</strong> 将ndk版本升级到    <code>17.0.4754217</code>编译报错</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">* What went wrong:&#10;Execution failed for task &#39;:app+stub:transformNativeLibsWithStripDebugSymbolForRelease&#39;.&#10;&#62; A problem occurred starting process &#39;command &#39;/Users/Ivonhoe/Library/Android/sdk/ndk-bundle/toolchains/mips64el-linux-android-4.9/prebuilt/darwin-x86_64/bin/mips64el-linux-android-strip&#39;&#39;&#10;&#10;* Try:&#10;Run with --stacktrace option to get the stack trace. Run with --info or --debug option to get more log output.</span><br></pre></td></tr></table></figure>
@@ -368,7 +368,7 @@
     
     </summary>
     
-      <category term="bug总结" scheme="https://ivonhoe.github.io/categories/bug%E6%80%BB%E7%BB%93/"/>
+      <category term="Bug总结" scheme="https://ivonhoe.github.io/categories/Bug%E6%80%BB%E7%BB%93/"/>
     
     
   </entry>
@@ -920,7 +920,7 @@
     <link href="https://ivonhoe.github.io/2017/05/12/executor-eat-exception/"/>
     <id>https://ivonhoe.github.io/2017/05/12/executor-eat-exception/</id>
     <published>2017-05-12T08:41:53.000Z</published>
-    <updated>2018-09-11T13:28:02.000Z</updated>
+    <updated>2018-10-16T10:00:52.000Z</updated>
     
     <content type="html"><![CDATA[<h3 id="一、前言">一、前言</h3><p>今天遇到一个很诡异的问题，在多款Android 4.2.2版本的手机上发现处理后台任务的服务对前台请求毫无响应。这里的后台服务是一个RemoteService，目的为了处理更新&amp;上传等任务。本来以为是跨进程组件间通讯出现兼容性问题，后来根据分析发现问题没有那么简单，这里记录下问题原因。</p>
 <a id="more"></a>
@@ -957,7 +957,7 @@
     
     </summary>
     
-      <category term="bug总结" scheme="https://ivonhoe.github.io/categories/bug%E6%80%BB%E7%BB%93/"/>
+      <category term="Bug总结" scheme="https://ivonhoe.github.io/categories/Bug%E6%80%BB%E7%BB%93/"/>
     
     
       <category term="多线程" scheme="https://ivonhoe.github.io/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/"/>
@@ -971,7 +971,7 @@
     <link href="https://ivonhoe.github.io/2017/05/05/android-performance-tips/"/>
     <id>https://ivonhoe.github.io/2017/05/05/android-performance-tips/</id>
     <published>2017-05-05T14:59:14.000Z</published>
-    <updated>2018-09-11T13:26:46.000Z</updated>
+    <updated>2018-10-16T09:59:55.000Z</updated>
     
     <content type="html"><![CDATA[<h3 id="使用windowBackground实现应用秒开">使用windowBackground实现应用秒开</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#60;style name=&#34;SplashTheme&#34; parent=&#34;@android:style/Theme.Black.NoTitleBar.Fullscreen&#34;&#62;&#10;    &#60;item name=&#34;android:windowBackground&#34;&#62;@drawable/bg_splash_activity&#60;/item&#62;&#10;    &#60;item name=&#34;@android:windowAnimationStyle&#34;&#62;@style/myact&#60;/item&#62;&#10;&#60;/style&#62;</span><br></pre></td></tr></table></figure>
 <h3 id="使用windowBackground减少过度绘制">使用windowBackground减少过度绘制</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#60;style name=&#34;AppMainTheme&#34; parent=&#34;@android:style/Theme.Holo.Light&#34;&#62;&#10;    &#60;item name=&#34;android:windowBackground&#34;&#62;@color/white&#60;/item&#62;&#10;    &#60;item name=&#34;android:windowNoTitle&#34;&#62;true&#60;/item&#62;&#10;    &#60;item name=&#34;@android:windowAnimationStyle&#34;&#62;@style/myact&#60;/item&#62;&#10;&#60;/style&#62;</span><br></pre></td></tr></table></figure>
@@ -986,7 +986,7 @@
     
     </summary>
     
-      <category term="性能优化" scheme="https://ivonhoe.github.io/categories/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/"/>
+      <category term="Android性能优化" scheme="https://ivonhoe.github.io/categories/Android%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/"/>
     
     
       <category term="性能优化" scheme="https://ivonhoe.github.io/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/"/>
@@ -998,7 +998,7 @@
     <link href="https://ivonhoe.github.io/2017/04/26/Zygote-2/"/>
     <id>https://ivonhoe.github.io/2017/04/26/Zygote-2/</id>
     <published>2017-04-25T16:49:27.000Z</published>
-    <updated>2018-09-11T13:30:06.000Z</updated>
+    <updated>2018-10-16T10:01:47.000Z</updated>
     
     <content type="html"><![CDATA[<h3 id="一、分析一个Hello_World_App中bitmap对象的分布">一、分析一个Hello World App中bitmap对象的分布</h3><p>使用BitmapAnalyzer分析一个Android Hello World App时你会dump出400+张图片，什么是BitmapAnalyzer？BitmapAnalyzer是一个自动分析Android dump heap中bitmap对象的工具，详细请看<a href="https://ivonhoe.github.io/2017/03/22/Bitmap&amp;Memory/">《Android Bitmap的内存大小是如何计算的？》</a>这篇文章的介绍。</p>
 <p><img src="http://upload-images.jianshu.io/upload_images/695750-211010ed47103e96.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="hprof-3.png"></p>
@@ -1043,7 +1043,7 @@
     
     </summary>
     
-      <category term="性能优化" scheme="https://ivonhoe.github.io/categories/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/"/>
+      <category term="Android性能优化" scheme="https://ivonhoe.github.io/categories/Android%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/"/>
     
     
       <category term="Copy-on-write" scheme="https://ivonhoe.github.io/tags/Copy-on-write/"/>
@@ -1055,11 +1055,11 @@
   </entry>
   
   <entry>
-    <title>Android性能优化之如何写出GC友好的Android应用</title>
+    <title>Android性能优化之如何写出GC友好的应用</title>
     <link href="https://ivonhoe.github.io/2017/04/25/%E5%A6%82%E4%BD%95%E5%86%99%E5%87%BAGC%E5%8F%8B%E5%A5%BD%E7%9A%84Android%E5%BA%94%E7%94%A8/"/>
     <id>https://ivonhoe.github.io/2017/04/25/如何写出GC友好的Android应用/</id>
     <published>2017-04-25T13:21:23.000Z</published>
-    <updated>2018-09-11T13:25:35.000Z</updated>
+    <updated>2018-10-16T10:05:59.000Z</updated>
     
     <content type="html"><![CDATA[<p>作者：乐蛙科技高级研发经理 易宁</p>
 <p>Android应用普遍没有iOS应用流畅，这与Android应用是运行在Java虚拟机上有很大的关系，而关系最大的恐怕就是Java虚拟机上的Garbage Collection（GC）了。Java语言提供了自动内存管理，垃圾对象会在GC过程中自动被释放。这提供了开发效率，使开发者能集中精力在业务逻辑上；但天下没有免费的午餐，你写的Android应用的某些性能上的问题很可能就是GC导致的。</p>
@@ -1144,7 +1144,7 @@
     
     </summary>
     
-      <category term="性能优化" scheme="https://ivonhoe.github.io/categories/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/"/>
+      <category term="Android性能优化" scheme="https://ivonhoe.github.io/categories/Android%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/"/>
     
     
       <category term="Android" scheme="https://ivonhoe.github.io/tags/Android/"/>
@@ -1205,7 +1205,7 @@
     <link href="https://ivonhoe.github.io/2017/04/09/how-to-dump-heap/"/>
     <id>https://ivonhoe.github.io/2017/04/09/how-to-dump-heap/</id>
     <published>2017-04-09T11:03:01.000Z</published>
-    <updated>2018-09-11T13:28:25.000Z</updated>
+    <updated>2018-10-16T10:01:03.000Z</updated>
     
     <content type="html"><![CDATA[<p>一般情况下如果我想要较详细的分析内存状况，会使用android monitor(下简称monitor)和Memory Analyzer工具(下简称MAT)，但步骤有些麻烦。</p>
 <ol>
@@ -1237,7 +1237,7 @@
     
     </summary>
     
-      <category term="性能优化" scheme="https://ivonhoe.github.io/categories/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/"/>
+      <category term="Android性能优化" scheme="https://ivonhoe.github.io/categories/Android%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/"/>
     
     
       <category term="dump heap" scheme="https://ivonhoe.github.io/tags/dump-heap/"/>
@@ -1251,7 +1251,7 @@
     <link href="https://ivonhoe.github.io/2017/03/22/Bitmap&amp;Memory/"/>
     <id>https://ivonhoe.github.io/2017/03/22/Bitmap&amp;Memory/</id>
     <published>2017-03-22T11:35:36.000Z</published>
-    <updated>2018-09-11T13:27:36.000Z</updated>
+    <updated>2018-10-16T10:00:09.000Z</updated>
     
     <content type="html"><![CDATA[<h3 id="一、前言">一、前言</h3><p>本来只想说下Bitmap和内存的基本关系，但发现如果真的想把这看似简单的事情说清楚，实际上未必那么简单，你不信？不妨先尝试下回答下面几个问题！</p>
 <ul>
@@ -1340,7 +1340,7 @@
     
     </summary>
     
-      <category term="性能优化" scheme="https://ivonhoe.github.io/categories/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/"/>
+      <category term="Android性能优化" scheme="https://ivonhoe.github.io/categories/Android%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/"/>
     
     
       <category term="Bitmap" scheme="https://ivonhoe.github.io/tags/Bitmap/"/>
