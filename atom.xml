@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://ivonhoe.github.io/"/>
-  <updated>2018-10-16T09:59:40.000Z</updated>
+  <updated>2019-01-29T03:53:24.152Z</updated>
   <id>https://ivonhoe.github.io/</id>
   
   <author>
@@ -14,6 +14,57 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Android系统上绘制圆角和阴影的几种姿势</title>
+    <link href="https://ivonhoe.github.io/2019/01/29/android-corner-shadow/"/>
+    <id>https://ivonhoe.github.io/2019/01/29/android-corner-shadow/</id>
+    <published>2019-01-29T03:41:57.000Z</published>
+    <updated>2019-01-29T03:53:24.152Z</updated>
+    
+    <content type="html"><![CDATA[<h3 id="0x01_前言">0x01 前言</h3><p>在实际的开发工程中，对视图增加圆角和阴影效果的绘制是比较常见的需求，Android系统提供了一系列的方法以帮助开发者实现基础的视图圆角和阴影效果，但在面对实际的视觉需求时，想要完美达到视觉设计师的设计要求就难免需要了解一些基础的绘图原理和绘图方法才能达到特殊的设计需求，这里就简单对比和总结了常见的圆角和阴影的绘图方法。</p>
+<a id="more"></a>
+<h3 id="0x02_圆角">0x02 圆角</h3><h4 id="2-1_View的圆角背景实现圆角效果">2.1 View的圆角背景实现圆角效果</h4><p>使用原生提供的ShapeDrawable实现背景。<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="title">shape</span> <span class="attribute">xmlns:android</span>=<span class="value">"http://schemas.android.com/apk/res/android"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">solid</span> <span class="attribute">android:color</span>=<span class="value">"#ff0000"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="title">corners</span> <span class="attribute">android:topLeftRadius</span>=<span class="value">"10dp"</span></span><br><span class="line">             <span class="attribute">android:topRightRadius</span>=<span class="value">"10dp"</span></span><br><span class="line">             <span class="attribute">android:bottomRightRadius</span>=<span class="value">"10dp"</span></span><br><span class="line">             <span class="attribute">android:bottomLeftRadius</span>=<span class="value">"10dp"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="title">shape</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p><img src="/res/shadow/android_corner_shadow_0.png" alt="Alt text"></p>
+<h4 id="2-2_使用圆角贴图实现圆角效果">2.2 使用圆角贴图实现圆角效果</h4><p>在介绍“贴图”之前先说明在Android绘图相关的两个必备知识，分布是Paint Style和Path。</p>
+<h5 id="2-2-1_Paint_Style">2.2.1 Paint Style</h5><p>在用画笔（Paint）的时候有三种Style，选择不同的画笔样式时就可达到不同的画笔效果，分别是 </p>
+<ul>
+<li>Paint.Style.STROKE 只绘制图形轮廓(描边) </li>
+<li>Paint.Style.FILL 只绘制图形内容 </li>
+<li>Paint.Style.FILL_AND_STROKE 既绘制轮廓也绘制内容<br><img src="/res/shadow/android_corner_shadow_1.png" alt="Alt text"></li>
+</ul>
+<h5 id="2-2-2_Path">2.2.2 Path</h5><p>当我们在想要绘制一些形状时，Canvas提供了一些基础形状的绘制方法，如圆形、矩形、椭圆等。你只需要选择相应的绘制方法并设置你想要的绘制参数就能绘制出你想要的简单图形效果。但对于那些复杂一点的图形则没法去绘制，如一个心形、正多边形、五角星等，使用Path不仅能够绘制简单图形，也可以绘制这些比较复杂的图形。Path封装了由直线和曲线(二次，三次贝塞尔曲线等)构成的几何路径。你能用Canvas中的drawPath来把这条路径画出来(同样支持Paint的不同绘制模式)，也可以用于剪裁画布和根据路径绘制文字。</p>
+<h5 id="2-2-3_如何制作圆角贴图">2.2.3 如何制作圆角贴图</h5><p><strong>以左上角贴图实现为例，使用Path约束绘图范围</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">RectF fakeCornerRectF = sRectF;&#10;fakeCornerRectF.set(0, 0, mCornerRoundRadius * 2, mCornerRoundRadius * 2);&#10;// &#32472;&#21046;&#24038;&#19978;&#22278;&#35282;&#32972;&#26223;&#10;if (mTopLeftCorner) &#123;&#10;    fakeCornerRectF.offsetTo(left - mCornerOffset, top - mCornerOffset);&#10;    mCompatibilityModePath.rewind();&#10;    mCompatibilityModePath.moveTo(left - mCornerOffset, top - mCornerOffset);&#10;    mCompatibilityModePath.lineTo(left + mCornerRoundRadius, top - mCornerOffset);&#10;    mCompatibilityModePath.arcTo(fakeCornerRectF, START_TOP, -QUARTER_CIRCLE);&#10;    mCompatibilityModePath.close();&#10;    canvas.drawPath(mCompatibilityModePath, mBackgroundPaint);&#10;&#125;</span><br></pre></td></tr></table></figure></p>
+<p><img src="/res/shadow/android_corner_shadow_2.png" alt="Alt text"></p>
+<p><strong>使用Paint.Style.FILL画笔绘制，将贴图效果绘制在ImageView容器的（0，0）坐标上。即可达到想要的圆角效果</strong></p>
+<h4 id="2-3_对Bitmap的裁剪实现圆角效果">2.3 对Bitmap的裁剪实现圆角效果</h4><p>例如使用android support包里的RoundedBitmapDrawable，创建一个被裁剪圆角的BitmapDrawable。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">RoundedBitmapDrawable drawable = RoundedBitmapDrawableFactory.create(mContext.getResources(), bitmap);</span><br><span class="line">drawable.setCornerRadius(<span class="number">40</span>);</span><br></pre></td></tr></table></figure></p>
+<h4 id="2-4_对Canvas画板做裁剪实现圆角效果">2.4 对Canvas画板做裁剪实现圆角效果</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="annotation">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onDraw</span><span class="params">(Canvas canvas)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> left = getPaddingLeft();</span><br><span class="line">    <span class="keyword">int</span> top = getPaddingTop();</span><br><span class="line">    <span class="keyword">int</span> right = canvas.getWidth() - getPaddingRight();</span><br><span class="line">    <span class="keyword">int</span> bottom = getHeight() - getPaddingBottom();</span><br><span class="line"></span><br><span class="line">    mCanvasRect.set(left, top, right, bottom);</span><br><span class="line">    mCanvasPath.reset();</span><br><span class="line">    mCanvasPath.addRoundRect(mCanvasRect, mRx, mRy, Path.Direction.CW);</span><br><span class="line">    canvas.clipPath(mCanvasPath);</span><br><span class="line">    <span class="keyword">super</span>.onDraw(canvas);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="0x03_阴影">0x03 阴影</h3><h4 id="3-1_elevation属性和translationZ属性">3.1 elevation属性和translationZ属性</h4><p>UI 控件的elevation属性可以设置其高度，呈现在界面中的直观效果就是阴影效果，在 xml 布局文件中，通过 android:elevation 属性设置，在 java 代码中通过 View 类提供的setElevation()方法设置。但是这个属性存在版本兼容问题，是 Android 5.0 引进的 API。所以，当 minSdkVersion 值小于21时，系统会在 xml 的对应使用地方给出一个 lint 提示：</p>
+<p><code>Attribute elevation is only used in API level 21 and higher</code></p>
+<p>当然你也可以选择忽略这个提示，或者使用tools:targetApi属性消除这个提示，这样做的话，在低于5.0版本的系统中将不会出现阴影效果。然而，有一个更好的办法做到兼容，那就是借助ViewCompat这个万能的兼容类,使View 的 elevation 属性兼容至低版本中：</p>
+<p><code>ViewCompat.setElevation(View view, float elevation)</code></p>
+<p>注意：尤其要注意，视图的阴影一定是由有轮廓的视图投射出来的。简单来说，就是需要设置控件的背景，即 android:background 属性。我们可以选择图片作为背景，也可以使用 <shape> 标签定义一个 drawable 形状。</shape></p>
+<h4 id="3-2_使用-9图实现阴影效果">3.2 使用.9图实现阴影效果</h4><p>说到阴影效果最简单最省力的方法莫过于设置一个.9的背景图啦！这里推荐一个站点，可以在线制作.9阴影图。<a href="http://inloop.github.io/shadow4android/" target="_blank" rel="external">http://inloop.github.io/shadow4android/</a></p>
+<h4 id="3-3_使用模糊画笔绘制阴影效果">3.3 使用模糊画笔绘制阴影效果</h4><p><img src="/res/shadow/android_corner_shadow_3.png" alt="Alt text"></p>
+<p>先看想要做到的阴影效果，想要在红色的轮播banner下方显示一条红色的阴影效果。用已知的阴影方案比如设置视图的Z轴高度或者设置.9阴影背景都无法实现这种效果。</p>
+<p>可以将实现上图的局部阴影效果的绘制步骤分解成两层：</p>
+<ol>
+<li>自定义一个ShadowLayout容器，在onDraw方法中重写绘制步骤</li>
+<li>如何绘制阴影效果？使用带有BlurMaskFilter效果的画笔在合适的地方绘制一个椭圆阴影。可以理解成先用一个模糊画笔先画眉，再在合适的位置上绘制想要的图片。画眉效果如下图：</li>
+</ol>
+<p><img src="/res/shadow/android_corner_shadow_4.png" alt="Alt text"></p>
+<p>这里有个前提，需要关闭当前View的硬件加速功能。<code>setLayerType(LAYER_TYPE_SOFTWARE, null)</code>。具体的实现代码如下所示：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="annotation">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onDraw</span><span class="params">(Canvas canvas)</span> </span>&#123;</span><br><span class="line">    drawShadow(canvas);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">super</span>.onDraw(canvas);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">drawShadow</span><span class="params">(Canvas canvas)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (shadowView != <span class="keyword">null</span> &amp;&amp; shadowOn) &#123;</span><br><span class="line">        canvas.drawOval(getDrawOvalRect(), getShadowPaint());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">getShadowColor</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (!runPalette) &#123;</span><br><span class="line">        <span class="keyword">return</span> shadowColor;</span><br><span class="line">    &#125;</span><br><span class="line">    runPalette = <span class="keyword">false</span>;</span><br><span class="line">    <span class="keyword">if</span> (shadowView <span class="keyword">instanceof</span> ImageView) &#123;</span><br><span class="line">        <span class="keyword">if</span> (((ImageView) shadowView).getDrawable() <span class="keyword">instanceof</span> ColorDrawable) &#123;</span><br><span class="line">            shadowColor = getDarkerColor(((ColorDrawable) ((ImageView) shadowView).getDrawable()).getColor());</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (((ImageView) shadowView).getDrawable() <span class="keyword">instanceof</span> BitmapDrawable) &#123;</span><br><span class="line">            Bitmap bitmap = ((BitmapDrawable) ((ImageView) shadowView).getDrawable()).getBitmap();</span><br><span class="line">            Palette.Swatch mSwatch = Palette.from(bitmap).generate().getDominantSwatch();</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (<span class="keyword">null</span> != mSwatch) &#123;</span><br><span class="line">                <span class="keyword">int</span> rgb = mSwatch.getRgb();</span><br><span class="line">                shadowColor = <span class="number">0x4C000000</span> | (Color.red(rgb) &lt;&lt; <span class="number">16</span>) | (Color.green(rgb) &lt;&lt; <span class="number">8</span>) | Color.blue(rgb);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            shadowColor = Color.TRANSPARENT;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> shadowColor;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> Paint <span class="title">getShadowPaint</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (shadowView != <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">int</span> rgb = getShadowColor();</span><br><span class="line">        shadowPaint.setColor(rgb);</span><br><span class="line">        shadowPaint.setMaskFilter(<span class="keyword">new</span> BlurMaskFilter(paddingBottom, BlurMaskFilter.Blur.NORMAL));</span><br><span class="line"><span class="comment">//            shadowPaint.setShadowLayer(radius, 0, shadowDimen, rgb);</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> shadowPaint;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="0x04_参考文档">0x04 参考文档</h3><p><a href="https://yifeng.studio/2017/02/26/android-elevation-and-shadow/" target="_blank" rel="external">https://yifeng.studio/2017/02/26/android-elevation-and-shadow/</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h3 id=&quot;0x01_前言&quot;&gt;0x01 前言&lt;/h3&gt;&lt;p&gt;在实际的开发工程中，对视图增加圆角和阴影效果的绘制是比较常见的需求，Android系统提供了一系列的方法以帮助开发者实现基础的视图圆角和阴影效果，但在面对实际的视觉需求时，想要完美达到视觉设计师的设计要求就难免需要了解一些基础的绘图原理和绘图方法才能达到特殊的设计需求，这里就简单对比和总结了常见的圆角和阴影的绘图方法。&lt;/p&gt;
+    
+    </summary>
+    
+    
+  </entry>
   
   <entry>
     <title>Android性能优化之ANR分析记录(一)</title>
@@ -1241,111 +1292,6 @@
     
     
       <category term="dump heap" scheme="https://ivonhoe.github.io/tags/dump-heap/"/>
-    
-      <category term="内存" scheme="https://ivonhoe.github.io/tags/%E5%86%85%E5%AD%98/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Android Bitmap的内存大小是如何计算的？</title>
-    <link href="https://ivonhoe.github.io/2017/03/22/Bitmap&amp;Memory/"/>
-    <id>https://ivonhoe.github.io/2017/03/22/Bitmap&amp;Memory/</id>
-    <published>2017-03-22T11:35:36.000Z</published>
-    <updated>2018-10-16T10:00:09.000Z</updated>
-    
-    <content type="html"><![CDATA[<h3 id="一、前言">一、前言</h3><p>本来只想说下Bitmap和内存的基本关系，但发现如果真的想把这看似简单的事情说清楚，实际上未必那么简单，你不信？不妨先尝试下回答下面几个问题！</p>
-<ul>
-<li>问1：什么是dpi？什么是dp？答：你在侮辱我？我拒绝回答！（：无辜脸</li>
-<li>问2：以Nexus6为例，分辨率1440*2560，5.96英寸，ppi是什么？dpi是什么？1dp是多少像素？</li>
-<li>问3：还以Nexus6为例，一张180*180的图片，放置在设置了<code>wrap_content</code>属性的ImageView中，当这张图片，分别放在<code>drawable-nodpi</code>,<code>drawable-mdpi</code>,<code>drawable-hdpi</code>, <code>drawable-xxhdpi</code>,<code>drawable-xxxhdpi</code>这几个资源目录中，在屏幕上分别显示多大(像素)的图片？</li>
-<li>问4：这张图片占用的内存大小分别为多少？</li>
-<li>问5：如果设置ImageView的宽和高为固定的值，如50px，那么上述情况下，加载的Bitmap占用内存大小分别为多大？</li>
-</ul>
-<p>本文主要围绕上述问题，介绍Android图片资源加载的基本机制，图片的内存大小如何计算，以及内存图片分析工具。</p>
-<a id="more"></a>
-<h3 id="二、基础概念">二、基础概念</h3><ul>
-<li>px：像素(pixel)，指的是屏幕上的物理点，最小的独立显示单位</li>
-<li>ppi：每英寸像素点(Pixels Per Inch)，之前我自己的理解就是使用勾股定理，通过屏幕长宽计算出对角线的长度，再除以屏幕对角线英寸值。</li>
-<li>dpi：每英寸点(Dots Per Inch)，和ppi有什么区别？</li>
-<li>dp：像素无关点(Density-Independent pixel)，这个Android定义的虚拟值，和px关系式是<code>px = dp * (dpi / 160)</code>，为啥？</li>
-</ul>
-<p><strong>ppi</strong></p>
-<p>ppi指的是水平方向或者竖直方向上每英寸的像素值，先说为啥很多对ppi的理解都有问题。很多文章利用勾股定理计算手机屏幕对角线像素个数！！但是手机屏幕的像素分布是点阵分布，点阵的对角线像素点不是用勾股定理算出来的，而是等于它的行数或者列数，为啥用对角线计算？因为一般手机的尺寸说的就是对角线英寸值，而不知道长宽的英寸值。这里有个公式推导：<br>设 X/x = Y/y = ppi，这里X为水平像素值，x为水平英寸值，Y为竖直像素值，y为竖直英寸值。则(X²+Y²）/（x²+y²）=（X/x）²=（Y/y）²，这个公式可通过勾股定理和相似三角形原理证明。ppi的计算只是形式和勾股定理一样但并不是勾股定理的意思，分子也不是对角线的像素数！！ppi的计算公式可表示为：√(X²+Y²）/对角线英寸。但不意味着ppi是使用勾股定理计算对角线像素值获得的~~</p>
-<p><img src="/res/bitmap/2.png" alt=""></p>
-<p><a href="https://www.zhihu.com/question/21220154/answer/69672901" target="_blank" rel="external">DPI、PPI、DP、PX 的详细计算方法及算法来源是什么？fsk的回答</a></p>
-<p><strong>dpi</strong></p>
-<p>dpi是由ppi确定的，还是以Nexue6为例，通过ppi的计算公式，可以计算出Nexues6的ppi为<code>492</code>,参照下表，应该在xxxhdpi的范围内，但它的dpi并不是<code>492</code>。实际上dpi只有120(low)、160(medium)、240(high)、260、280、300、320(xhigh)、340、360、400、420、480（xxhpdi）、560、640（xxxhpi）这几种，可以参照<code>android.util.DisplayMetrics</code>的源码。通过<code>getResources().getDisplayMetrics().densityDpi</code>可以获取手机实际的dpi。</p>
-<p><img src="/res/bitmap/dpi.png" alt=""></p>
-<p><a href="https://android.googlesource.com/platform/frameworks/base/+/master/core/java/android/util/DisplayMetrics.java" target="_blank" rel="external">DisplayMetrics.java源码链接</a></p>
-<p><strong>dp</strong></p>
-<p>1dp在Nexues6上是多少像素？<br><code>1dp * (560/160) = 3.5px</code></p>
-<p><strong>如何更改手机的dpi</strong></p>
-<ul>
-<li>需要root的手机</li>
-<li>更改/system/build.prop中的ro.sf.lcd_density属性，这个值越小，屏幕密度越高</li>
-<li>adb reboot 重启手机</li>
-</ul>
-<p><strong>如何快速查看手机屏幕信息</strong></p>
-<p><code>adb shell dumpsys display | findstr DisplayDeviceInfo</code></p>
-<h3 id="三、回到问题">三、回到问题</h3><p>以Nexus6为例，一张180*180的图片，放在设置了<code>wrap_content</code>属性的ImageView中，当这张图片，分别放置在<code>drawable-nodpi</code>,<code>drawable-mdpi</code>,<code>drawable-hdpi</code>, <code>drawable-xxhdpi</code>,<code>drawable-xxxhdpi</code>这几个资源目录中，在屏幕上分别显示多大(像素)的图片？</p>
-<p>答：根据上面的分析，可以看到nexus6，是属于xxxhpi的屏幕，获取到dpi为560。如果把180大小的图片只放在xxxhdpi目录中，是不是屏幕就会显示180px的大小？其实并不是，dpi=640的才是真正的xxxhdpi(这里需要看DisplayMetrics的源码)，当Android系统加载图片时，会针对当前系统的dpi和图片目录的source dpi比较做相应比例的缩放，如果一张图片放在drawable-xxxhdpi目录，这是告诉系统，针对dpi为640的手机屏幕上，这张图片是刚刚好的，它的scale为1.0，同理，drawable-xxhpi对应480dpi，drawable-xhdpi对应的是320dpi。如果希望<code>180*180</code>在nexues6的屏幕上按照原有尺寸显示，只有将其放在drawable-nodpi或者drawable-560dpi目录中才可以。</p>
-<p>回到问题，如果将<code>180*180</code>放入hdpi目录中，那实际显示的图片大小应该为：<code>int (180 * (560 / 240) +0.5f ) = 420px</code>，实际图片的大小应该为420px！同理:<br>放入xhdpi目录中，实际大小应该为<code>int (180 * (560 / 320) +0.5f ) = 315px</code><br>放入xxhdpi目录中，实际大小应该为<code>int (180 * (560 / 480) +0.5f ) = 210px</code></p>
-<p><a href="https://android.googlesource.com/platform/frameworks/base/+/7b2f8b8/core/jni/android/graphics/BitmapFactory.cpp" target="_blank" rel="external">BitmapFactory.cpp源码链接</a></p>
-<p>如果用小的Bitmap容器，放置较大的Bitmap，那这个Bitmap的尺寸大小是按照容器的大小计算？还是按照dpi缩放的规则计算？</p>
-<h3 id="四、一张图片占多大内存">四、一张图片占多大内存</h3><p>现在我们已经知道了一张图片放置在不同的资源目录中，系统decode的bitmap的尺寸大小是如何计算的了。一张图片大概占用多少内存，其实只用看一个像素占用多少内存就可以喽？我们都知道屏幕上的颜色是有R，G，B加透明度表示的，Android官方支持的RGB格式，主要是<code>ALPHA_8</code>，<code>RGB_565</code>，<code>ARGB_4444</code>，<code>ARGB_8888</code>这几种。</p>
-<p>以ARGB_8888为例，表示一个像素点，使用8位表示透明度，8位表示Red，8位表示Green，8位表示Blue。加起来，一个像素就需要4byte，同理，RGB_565一个像素需要2byte。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public enum Config &#123;&#10;    ALPHA_8     (1),&#10;    RGB_565     (3),&#10;    @Deprecated&#10;    ARGB_4444   (4),&#10;    ARGB_8888   (5);&#10;    final int nativeInt;&#10;    Config(int ni) &#123;&#10;        this.nativeInt = ni;&#10;    &#125;&#10;&#125;</span><br></pre></td></tr></table></figure>
-<p>Android decode资源图片时默认会选择ARGB_8888，如果将<code>180*180</code>放入hdpi目录中，那实际大小应该为<code>int (180 * (560 / 240) +0.5f ) = 420px</code>，像素内存大小为 <code>420 * 420 * 4 = 705600byte = 689kb</code>。同理:<br>放入xhdpi目录中，实际大小应该为<code>int (180 * (560 / 320) +0.5f ) = 315px</code>，像素内存大小为<code>315 * 315 * 4 = 396900byte = 387.6kb</code><br>放入xxhdpi目录中，实际大小应该为<code>int (180 * (560 / 480) +0.5f ) = 210px</code>，像素内存大小为<code>210 * 210 * 4 = 176400byte = 172.2kb</code></p>
-<h3 id="五、如何分析内存中的图片问题？">五、如何分析内存中的图片问题？</h3><p>说了这么多，终于到了我原本想说的。Android的内存优化需要重点关注的几个方面，Bitmap的加载，Activity的泄露，webview内存等。图片的内存问题，是很多Android应用，特别是电商APP需要首要关注的问题。那如何简单的分析出内存中Bitmap的情况，这里提供一个工具。借助leakcanary的思路，通过分析内存堆dump文件中<code>android.graphics.Bitmap</code>对象的情况，<strong>将内存中Bitmap对象批量保存到图片文件中</strong>，这样就可以直观的看到内存中加载的Bitmap个数、内容和大小，进而分析可能的内存问题。</p>
-<p><img src="/res/bitmap/bitmap_buffer.png" alt=""></p>
-<p><img src="/res/bitmap/1.png" alt=""></p>
-<p><strong>示例</strong></p>
-<p>以分析蘑菇街APP内存中bitmap为例:</p>
-<ul>
-<li>先使用Android monitor dump hprof</li>
-<li>hprof-conv做格式转换</li>
-<li><code>java -jar ./bitmap-analyzer-0.0.1-SNAPSHOT.jar /Users/Ivonhoe/hprof/com.mogujie-conv.hprof 蘑菇街</code></li>
-</ul>
-<p><strong>参数说明</strong>：</p>
-<ul>
-<li>参数1：需要处理hprof文件的绝对路径</li>
-<li>参数2：图片输出的文件夹名称，在hprof文件目录中创建该文件夹,缺省时直接会在hprof文件目录输出文件</li>
-</ul>
-<p><strong>输出说明</strong></p>
-<p><img src="/res/bitmap/bitmap-analyzer.png" alt=""></p>
-<ul>
-<li>大小排序.txt 按照图片像素尺寸，从大到小排序</li>
-<li>个数排序.txt 按照相同尺寸图片个数，从大到小排序</li>
-<li>文件名 width*height_index.png</li>
-</ul>
-<p><strong>Jar包地址</strong></p>
-<p><a href="https://raw.githubusercontent.com/Ivonhoe/mvn-repo/master/ivonhoe/java/heapanalyzer/bitmap-analyzer/0.0.1-SNAPSHOT/bitmap-analyzer-0.0.1-20170327.112600-1.jar" target="_blank" rel="external">https://raw.githubusercontent.com/Ivonhoe/mvn-repo/master/ivonhoe/java/heapanalyzer/bitmap-analyzer/0.0.1-SNAPSHOT/bitmap-analyzer-0.0.1-20170327.112600-1.jar</a></p>
-<h3 id="六、参考文档">六、参考文档</h3><p><a href="http://blog.csdn.net/guolin_blog/article/details/50727753" target="_blank" rel="external">Android drawable微技巧，你所不知道的drawable的那些细节</a></p>
-<p><a href="http://www.10tiao.com/html/336/201703/2652262290/1.html" target="_blank" rel="external">关于Android适配，看完这篇文章就够了</a></p>
-<p><a href="http://wangjunyan.github.io/2014/12/02/export-android-bitmap-from-dump-file/" target="_blank" rel="external">批量导出dump文件中的Bitmap</a></p>
-<p><a href="https://mp.weixin.qq.com/s?__biz=MzA3NTYzODYzMg==&amp;mid=403263974&amp;idx=1&amp;sn=b0315addbc47f3c38e65d9c633a12cd6&amp;scene=21#wechat_redirect" target="_blank" rel="external">Android 开发绕不过的坑：你的 Bitmap 究竟占多大内存？</a></p>
-<h3 id="转载请标明出处病已blog_https://ivonhoe-github-io/">转载请标明出处<a href="https://ivonhoe.github.io/">病已blog https://ivonhoe.github.io/</a></h3>]]></content>
-    
-    <summary type="html">
-    
-      &lt;h3 id=&quot;一、前言&quot;&gt;一、前言&lt;/h3&gt;&lt;p&gt;本来只想说下Bitmap和内存的基本关系，但发现如果真的想把这看似简单的事情说清楚，实际上未必那么简单，你不信？不妨先尝试下回答下面几个问题！&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;问1：什么是dpi？什么是dp？答：你在侮辱我？我拒绝回答！（：无辜脸&lt;/li&gt;
-&lt;li&gt;问2：以Nexus6为例，分辨率1440*2560，5.96英寸，ppi是什么？dpi是什么？1dp是多少像素？&lt;/li&gt;
-&lt;li&gt;问3：还以Nexus6为例，一张180*180的图片，放置在设置了&lt;code&gt;wrap_content&lt;/code&gt;属性的ImageView中，当这张图片，分别放在&lt;code&gt;drawable-nodpi&lt;/code&gt;,&lt;code&gt;drawable-mdpi&lt;/code&gt;,&lt;code&gt;drawable-hdpi&lt;/code&gt;, &lt;code&gt;drawable-xxhdpi&lt;/code&gt;,&lt;code&gt;drawable-xxxhdpi&lt;/code&gt;这几个资源目录中，在屏幕上分别显示多大(像素)的图片？&lt;/li&gt;
-&lt;li&gt;问4：这张图片占用的内存大小分别为多少？&lt;/li&gt;
-&lt;li&gt;问5：如果设置ImageView的宽和高为固定的值，如50px，那么上述情况下，加载的Bitmap占用内存大小分别为多大？&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;本文主要围绕上述问题，介绍Android图片资源加载的基本机制，图片的内存大小如何计算，以及内存图片分析工具。&lt;/p&gt;
-    
-    </summary>
-    
-      <category term="Android性能优化" scheme="https://ivonhoe.github.io/categories/Android%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/"/>
-    
-    
-      <category term="Bitmap" scheme="https://ivonhoe.github.io/tags/Bitmap/"/>
-    
-      <category term="Drawable" scheme="https://ivonhoe.github.io/tags/Drawable/"/>
     
       <category term="内存" scheme="https://ivonhoe.github.io/tags/%E5%86%85%E5%AD%98/"/>
     

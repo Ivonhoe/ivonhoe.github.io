@@ -274,6 +274,166 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://ivonhoe.github.io/2018/03/14/small-bug-555-fix/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="病已">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/5706813?v=3&s=460">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="病已的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2018/03/14/small-bug-555-fix/" itemprop="url">
+                  Android插件化之资源加载机制
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-14T17:23:27+08:00">
+                Mar 14 2018
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android插件化/" itemprop="url" rel="index">
+                    <span itemprop="name">Android插件化</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2018/03/14/small-bug-555-fix/" class="leancloud_visitors" data-flag-title="Android插件化之资源加载机制">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h3 id="0x00_前言">0x00 前言</h3><p>这篇文章主要记录了在使用Small插件化框架中遇到的资源加载问题及相应解决方案，并梳理出Android的资源加载流程和插件化框架的资源加载原理。在前两篇插件化技术介绍的基础上会关注更多技术细节，希望能有所收获！</p>
+<h3 id="关于Small插件化的其他文档：">关于Small插件化的其他文档：</h3><p><a href="http://ivonhoe.github.io/2018/01/18/Small%E6%A1%86%E6%9E%B6%E5%AE%9E%E8%B7%B5%E6%80%BB%E7%BB%93/"><strong>《Android插件化之Small框架实践总结》</strong></a><br><a href="http://ivonhoe.github.io/2018/01/18/Small%E6%A1%86%E6%9E%B6%E5%8E%9F%E7%90%86/"><strong>《Android插件化之Small框架原理》</strong></a><br><a href="https://ivonhoe.github.io/2018/07/18/abandon-the-plugin-framework/"><strong>《Android插件化之从入门到放弃》</strong></a></p>
+<h3 id="0x01_Small框架的资源加载异常">0x01 Small框架的资源加载异常</h3><p>最近收到一个客户反馈，在他们的中兴V0840手机上打开我们的app会持续崩溃。第一时间在百度移动质量平台上短时租用了该机型，抓取了log。发现是资源查找失败异常。并在Small github issues中搜索<code>android.content.res.Resources$NotFoundException</code> 可以发现很多类似的问题，详细日志可查看下图。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/03/14/small-bug-555-fix/#далее" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="https://ivonhoe.github.io/2018/01/18/Small框架原理/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1716,172 +1876,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="https://ivonhoe.github.io/2017/03/22/Bitmap&Memory/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="病已">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/5706813?v=3&s=460">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="病已的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/03/22/Bitmap&Memory/" itemprop="url">
-                  Android Bitmap的内存大小是如何计算的？
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-22T19:35:36+08:00">
-                Mar 22 2017
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Android性能优化/" itemprop="url" rel="index">
-                    <span itemprop="name">Android性能优化</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-             <span id="/2017/03/22/Bitmap&Memory/" class="leancloud_visitors" data-flag-title="Android Bitmap的内存大小是如何计算的？">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数 </span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h3 id="一、前言">一、前言</h3><p>本来只想说下Bitmap和内存的基本关系，但发现如果真的想把这看似简单的事情说清楚，实际上未必那么简单，你不信？不妨先尝试下回答下面几个问题！</p>
-<ul>
-<li>问1：什么是dpi？什么是dp？答：你在侮辱我？我拒绝回答！（：无辜脸</li>
-<li>问2：以Nexus6为例，分辨率1440*2560，5.96英寸，ppi是什么？dpi是什么？1dp是多少像素？</li>
-<li>问3：还以Nexus6为例，一张180*180的图片，放置在设置了<code>wrap_content</code>属性的ImageView中，当这张图片，分别放在<code>drawable-nodpi</code>,<code>drawable-mdpi</code>,<code>drawable-hdpi</code>, <code>drawable-xxhdpi</code>,<code>drawable-xxxhdpi</code>这几个资源目录中，在屏幕上分别显示多大(像素)的图片？</li>
-<li>问4：这张图片占用的内存大小分别为多少？</li>
-<li>问5：如果设置ImageView的宽和高为固定的值，如50px，那么上述情况下，加载的Bitmap占用内存大小分别为多大？</li>
-</ul>
-<p>本文主要围绕上述问题，介绍Android图片资源加载的基本机制，图片的内存大小如何计算，以及内存图片分析工具。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2017/03/22/Bitmap&Memory/#далее" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1931,7 +1925,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">32</span>
+                <span class="site-state-item-count">33</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -1942,7 +1936,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-count">8</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -2013,7 +2007,7 @@
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2018</span>
+  <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
