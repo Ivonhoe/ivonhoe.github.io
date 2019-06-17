@@ -1,23 +1,4 @@
-<!doctype html>
-
-
-
-  
-
-
-<html class="theme-next mist use-motion" lang="zh-Hans">
-<head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
-
-
-
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
-
-
-
+<!DOCTYPE html>
 
 
 
@@ -31,99 +12,74 @@
 
 
   
-  
-  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
 
 
-
-
-  
-  
-  
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
 
 
 
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
-
-<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
-
-
-  <meta name="keywords" content="Bitmap,Drawable,内存," />
-
-
-
-
-
-  <link rel="alternate" href="/atom.xml" title="病已的博客" type="application/atom+xml" />
-
-
-
-
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
 
 
 
 
 
 
-<meta name="description" content="一、前言本来只想说下Bitmap和内存的基本关系，但发现如果真的想把这看似简单的事情说清楚，实际上未必那么简单，你不信？不妨先尝试下回答下面几个问题！
-
-问1：什么是dpi？什么是dp？答：你在侮辱我？我拒绝回答！（：无辜脸
-问2：以Nexus6为例，分辨率1440*2560，5.96英寸，ppi是什么？dpi是什么？1dp是多少像素？
-问3：还以Nexus6为例，一张180*180的图片，放置在">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Android Bitmap的内存大小是如何计算的？">
-<meta property="og:url" content="https://ivonhoe.github.io/2017/03/22/Bitmap&Memory/index.html">
-<meta property="og:site_name" content="病已的博客">
-<meta property="og:description" content="一、前言本来只想说下Bitmap和内存的基本关系，但发现如果真的想把这看似简单的事情说清楚，实际上未必那么简单，你不信？不妨先尝试下回答下面几个问题！
-
-问1：什么是dpi？什么是dp？答：你在侮辱我？我拒绝回答！（：无辜脸
-问2：以Nexus6为例，分辨率1440*2560，5.96英寸，ppi是什么？dpi是什么？1dp是多少像素？
-问3：还以Nexus6为例，一张180*180的图片，放置在">
-<meta property="og:image" content="https://ivonhoe.github.io/res/bitmap/2.png">
-<meta property="og:image" content="https://ivonhoe.github.io/res/bitmap/dpi.png">
-<meta property="og:image" content="https://ivonhoe.github.io/res/bitmap/bitmap_buffer.png">
-<meta property="og:image" content="https://ivonhoe.github.io/res/bitmap/1.png">
-<meta property="og:image" content="https://ivonhoe.github.io/res/bitmap/bitmap-analyzer.png">
-<meta property="og:updated_time" content="2018-10-16T10:00:09.000Z">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Android Bitmap的内存大小是如何计算的？">
-<meta name="twitter:description" content="一、前言本来只想说下Bitmap和内存的基本关系，但发现如果真的想把这看似简单的事情说清楚，实际上未必那么简单，你不信？不妨先尝试下回答下面几个问题！
-
-问1：什么是dpi？什么是dp？答：你在侮辱我？我拒绝回答！（：无辜脸
-问2：以Nexus6为例，分辨率1440*2560，5.96英寸，ppi是什么？dpi是什么？1dp是多少像素？
-问3：还以Nexus6为例，一张180*180的图片，放置在">
 
 
 
-<script type="text/javascript" id="hexo.configurations">
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.2">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.1.2">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.1.2">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.1.2">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.1.2" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
   var NexT = window.NexT || {};
   var CONFIG = {
     root: '/',
-    scheme: 'Mist',
-    sidebar: {"position":"right","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
-    fancybox: true,
-    motion: true,
-    duoshuo: {
-      userId: 'undefined',
-      author: '博主'
-    },
+    scheme: 'Gemini',
+    version: '7.1.2',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     algolia: {
       applicationID: '',
       apiKey: '',
@@ -135,34 +91,57 @@
 </script>
 
 
-
-  <link rel="canonical" href="https://ivonhoe.github.io/2017/03/22/Bitmap&Memory/"/>
-
-
-
-
-
-  <title> Android Bitmap的内存大小是如何计算的？ | 病已的博客 </title>
-</head>
-
-<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
-
   
 
 
 
 
-<script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-  ga('create', 'UA-97550712-1', 'auto');
-  ga('send', 'pageview');
+  <meta name="description" content="一、前言本来只想说下Bitmap和内存的基本关系，但发现如果真的想把这看似简单的事情说清楚，实际上未必那么简单，你不信？不妨先尝试下回答下面几个问题！  问1：什么是dpi？什么是dp？答：你在侮辱我？我拒绝回答！（：无辜脸 问2：以Nexus6为例，分辨率1440*2560，5.96英寸，ppi是什么？dpi是什么？1dp是多少像素？ 问3：还以Nexus6为例，一张180*180的图片，放置在">
+<meta name="keywords" content="Bitmap,Drawable,内存">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android Bitmap的内存大小是如何计算的？">
+<meta property="og:url" content="https://ivonhoe.github.io/2017/03/22/Bitmap&Memory/index.html">
+<meta property="og:site_name" content="病已的博客">
+<meta property="og:description" content="一、前言本来只想说下Bitmap和内存的基本关系，但发现如果真的想把这看似简单的事情说清楚，实际上未必那么简单，你不信？不妨先尝试下回答下面几个问题！  问1：什么是dpi？什么是dp？答：你在侮辱我？我拒绝回答！（：无辜脸 问2：以Nexus6为例，分辨率1440*2560，5.96英寸，ppi是什么？dpi是什么？1dp是多少像素？ 问3：还以Nexus6为例，一张180*180的图片，放置在">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://ivonhoe.github.io/res/bitmap/2.png">
+<meta property="og:image" content="https://ivonhoe.github.io/res/bitmap/dpi.png">
+<meta property="og:image" content="https://ivonhoe.github.io/res/bitmap/bitmap_buffer.png">
+<meta property="og:image" content="https://ivonhoe.github.io/res/bitmap/1.png">
+<meta property="og:image" content="https://ivonhoe.github.io/res/bitmap/bitmap-analyzer.png">
+<meta property="og:updated_time" content="2018-10-16T10:00:09.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android Bitmap的内存大小是如何计算的？">
+<meta name="twitter:description" content="一、前言本来只想说下Bitmap和内存的基本关系，但发现如果真的想把这看似简单的事情说清楚，实际上未必那么简单，你不信？不妨先尝试下回答下面几个问题！  问1：什么是dpi？什么是dp？答：你在侮辱我？我拒绝回答！（：无辜脸 问2：以Nexus6为例，分辨率1440*2560，5.96英寸，ppi是什么？dpi是什么？1dp是多少像素？ 问3：还以Nexus6为例，一张180*180的图片，放置在">
+<meta name="twitter:image" content="https://ivonhoe.github.io/res/bitmap/2.png">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="病已的博客" type="application/atom+xml">
+
+
+
+  
+  
+  <link rel="canonical" href="https://ivonhoe.github.io/2017/03/22/Bitmap&Memory/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
 </script>
 
+  <title>Android Bitmap的内存大小是如何计算的？ | 病已的博客</title>
+  
 
-  <script type="text/javascript">
+
+
+
+
+
+  <script>
     var _hmt = _hmt || [];
     (function() {
       var hm = document.createElement("script");
@@ -178,36 +157,65 @@
 
 
 
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
 
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
 
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
 
   
   
     
   
 
-  <div class="container sidebar-position-right page-post-detail ">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
       <div class="header-inner"><div class="site-brand-wrapper">
-  <div class="site-meta ">
+  <div class="site-meta">
     
 
     <div class="custom-logo-site-title">
-      <a href="/"  class="brand" rel="start">
+      <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
         <span class="site-title">病已的博客</span>
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
+    
       
         <p class="site-subtitle">枕上，马上，厕上</p>
       
+    
+    
   </div>
 
   <div class="site-nav-toggle">
-    <button>
+    <button aria-label="切换导航栏">
       <span class="btn-bar"></span>
       <span class="btn-bar"></span>
       <span class="btn-bar"></span>
@@ -215,55 +223,103 @@
   </div>
 </div>
 
-<nav class="site-nav">
-  
 
+
+<nav class="site-nav">
   
     <ul id="menu" class="menu">
       
         
-        <li class="menu-item menu-item-home">
-          <a href="/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
-            
-            首页
-          </a>
-        </li>
-      
         
-        <li class="menu-item menu-item-categories">
-          <a href="/categories" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
-            
-            分类
-          </a>
-        </li>
-      
         
-        <li class="menu-item menu-item-archives">
-          <a href="/archives" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
-            
-            归档
-          </a>
-        </li>
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
       
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
         
-        <li class="menu-item menu-item-tags">
-          <a href="/tags" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
-            
-            标签
-          </a>
-        </li>
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
       
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
 
       
+      
     </ul>
+  
+
   
 
   
@@ -271,12 +327,30 @@
 
 
 
- </div>
+  
+
+
+
+</div>
     </header>
+
+    
+  
+  
+
+  
+
+  <a href="https://github.com/Ivonhoe" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewbox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a>
+
+
 
     <main id="main" class="main">
       <div class="main-inner">
         <div class="content-wrap">
+          
+            
+
+          
           <div id="content" class="content">
             
 
@@ -289,13 +363,19 @@
   
   
 
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://ivonhoe.github.io/2017/03/22/Bitmap&Memory/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="病已">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/5706813?v=3&s=460">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -307,11 +387,8 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                Android Bitmap的内存大小是如何计算的？
+          <h1 class="post-title" itemprop="name headline">Android Bitmap的内存大小是如何计算的？
+
               
             
           </h1>
@@ -319,6 +396,11 @@
 
         <div class="post-meta">
           <span class="post-time">
+
+            
+            
+            
+
             
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
@@ -326,18 +408,35 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-22T19:35:36+08:00">
-                Mar 22 2017
-              </time>
+
+              
+                
+              
+
+              <time title="创建时间：3月 22 2017 19:35:36" itemprop="dateCreated datePublished" datetime="2017-03-22T19:35:36+08:00">3月 22 2017</time>
             
 
             
+              
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：10月 16 2018 18:00:09" itemprop="dateModified" datetime="2018-10-16T18:00:09+08:00">10月 16 2018</time>
+              
             
           </span>
 
           
-            <span class="post-category" >
+            <span class="post-category">
             
               <span class="post-meta-divider">|</span>
             
@@ -348,11 +447,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Android性能优化/" itemprop="url" rel="index">
-                    <span itemprop="name">Android性能优化</span>
-                  </a>
-                </span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Android性能优化/" itemprop="url" rel="index"><span itemprop="name">Android性能优化</span></a></span>
 
                 
                 
@@ -362,20 +457,21 @@
 
           
             
+            
           
 
           
           
-             <span id="/2017/03/22/Bitmap&Memory/" class="leancloud_visitors" data-flag-title="Android Bitmap的内存大小是如何计算的？">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数 </span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
+            <span id="/2017/03/22/Bitmap&Memory/" class="leancloud_visitors" data-flag-title="Android Bitmap的内存大小是如何计算的？">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              
+                <span class="post-meta-item-text">阅读次数：</span>
+              
+                <span class="leancloud-visitors-count"></span>
+            </span>
           
 
           
@@ -388,14 +484,16 @@
       </header>
     
 
-
+    
+    
+    
     <div class="post-body" itemprop="articleBody">
 
       
       
 
       
-        <h3 id="一、前言">一、前言</h3><p>本来只想说下Bitmap和内存的基本关系，但发现如果真的想把这看似简单的事情说清楚，实际上未必那么简单，你不信？不妨先尝试下回答下面几个问题！</p>
+        <h3 id="一、前言"><a href="#一、前言" class="headerlink" title="一、前言"></a>一、前言</h3><p>本来只想说下Bitmap和内存的基本关系，但发现如果真的想把这看似简单的事情说清楚，实际上未必那么简单，你不信？不妨先尝试下回答下面几个问题！</p>
 <ul>
 <li>问1：什么是dpi？什么是dp？答：你在侮辱我？我拒绝回答！（：无辜脸</li>
 <li>问2：以Nexus6为例，分辨率1440*2560，5.96英寸，ppi是什么？dpi是什么？1dp是多少像素？</li>
@@ -405,7 +503,7 @@
 </ul>
 <p>本文主要围绕上述问题，介绍Android图片资源加载的基本机制，图片的内存大小如何计算，以及内存图片分析工具。</p>
 <a id="more"></a>
-<h3 id="二、基础概念">二、基础概念</h3><ul>
+<h3 id="二、基础概念"><a href="#二、基础概念" class="headerlink" title="二、基础概念"></a>二、基础概念</h3><ul>
 <li>px：像素(pixel)，指的是屏幕上的物理点，最小的独立显示单位</li>
 <li>ppi：每英寸像素点(Pixels Per Inch)，之前我自己的理解就是使用勾股定理，通过屏幕长宽计算出对角线的长度，再除以屏幕对角线英寸值。</li>
 <li>dpi：每英寸点(Dots Per Inch)，和ppi有什么区别？</li>
@@ -413,12 +511,12 @@
 </ul>
 <p><strong>ppi</strong></p>
 <p>ppi指的是水平方向或者竖直方向上每英寸的像素值，先说为啥很多对ppi的理解都有问题。很多文章利用勾股定理计算手机屏幕对角线像素个数！！但是手机屏幕的像素分布是点阵分布，点阵的对角线像素点不是用勾股定理算出来的，而是等于它的行数或者列数，为啥用对角线计算？因为一般手机的尺寸说的就是对角线英寸值，而不知道长宽的英寸值。这里有个公式推导：<br>设 X/x = Y/y = ppi，这里X为水平像素值，x为水平英寸值，Y为竖直像素值，y为竖直英寸值。则(X²+Y²）/（x²+y²）=（X/x）²=（Y/y）²，这个公式可通过勾股定理和相似三角形原理证明。ppi的计算只是形式和勾股定理一样但并不是勾股定理的意思，分子也不是对角线的像素数！！ppi的计算公式可表示为：√(X²+Y²）/对角线英寸。但不意味着ppi是使用勾股定理计算对角线像素值获得的~~</p>
-<p><img src="/res/bitmap/2.png" alt=""></p>
-<p><a href="https://www.zhihu.com/question/21220154/answer/69672901" target="_blank" rel="external">DPI、PPI、DP、PX 的详细计算方法及算法来源是什么？fsk的回答</a></p>
+<p><img src="/res/bitmap/2.png" alt></p>
+<p><a href="https://www.zhihu.com/question/21220154/answer/69672901" target="_blank" rel="noopener">DPI、PPI、DP、PX 的详细计算方法及算法来源是什么？fsk的回答</a></p>
 <p><strong>dpi</strong></p>
 <p>dpi是由ppi确定的，还是以Nexue6为例，通过ppi的计算公式，可以计算出Nexues6的ppi为<code>492</code>,参照下表，应该在xxxhdpi的范围内，但它的dpi并不是<code>492</code>。实际上dpi只有120(low)、160(medium)、240(high)、260、280、300、320(xhigh)、340、360、400、420、480（xxhpdi）、560、640（xxxhpi）这几种，可以参照<code>android.util.DisplayMetrics</code>的源码。通过<code>getResources().getDisplayMetrics().densityDpi</code>可以获取手机实际的dpi。</p>
-<p><img src="/res/bitmap/dpi.png" alt=""></p>
-<p><a href="https://android.googlesource.com/platform/frameworks/base/+/master/core/java/android/util/DisplayMetrics.java" target="_blank" rel="external">DisplayMetrics.java源码链接</a></p>
+<p><img src="/res/bitmap/dpi.png" alt></p>
+<p><a href="https://android.googlesource.com/platform/frameworks/base/+/master/core/java/android/util/DisplayMetrics.java" target="_blank" rel="noopener">DisplayMetrics.java源码链接</a></p>
 <p><strong>dp</strong></p>
 <p>1dp在Nexues6上是多少像素？<br><code>1dp * (560/160) = 3.5px</code></p>
 <p><strong>如何更改手机的dpi</strong></p>
@@ -429,18 +527,18 @@
 </ul>
 <p><strong>如何快速查看手机屏幕信息</strong></p>
 <p><code>adb shell dumpsys display | findstr DisplayDeviceInfo</code></p>
-<h3 id="三、回到问题">三、回到问题</h3><p>以Nexus6为例，一张180*180的图片，放在设置了<code>wrap_content</code>属性的ImageView中，当这张图片，分别放置在<code>drawable-nodpi</code>,<code>drawable-mdpi</code>,<code>drawable-hdpi</code>, <code>drawable-xxhdpi</code>,<code>drawable-xxxhdpi</code>这几个资源目录中，在屏幕上分别显示多大(像素)的图片？</p>
+<h3 id="三、回到问题"><a href="#三、回到问题" class="headerlink" title="三、回到问题"></a>三、回到问题</h3><p>以Nexus6为例，一张180*180的图片，放在设置了<code>wrap_content</code>属性的ImageView中，当这张图片，分别放置在<code>drawable-nodpi</code>,<code>drawable-mdpi</code>,<code>drawable-hdpi</code>, <code>drawable-xxhdpi</code>,<code>drawable-xxxhdpi</code>这几个资源目录中，在屏幕上分别显示多大(像素)的图片？</p>
 <p>答：根据上面的分析，可以看到nexus6，是属于xxxhpi的屏幕，获取到dpi为560。如果把180大小的图片只放在xxxhdpi目录中，是不是屏幕就会显示180px的大小？其实并不是，dpi=640的才是真正的xxxhdpi(这里需要看DisplayMetrics的源码)，当Android系统加载图片时，会针对当前系统的dpi和图片目录的source dpi比较做相应比例的缩放，如果一张图片放在drawable-xxxhdpi目录，这是告诉系统，针对dpi为640的手机屏幕上，这张图片是刚刚好的，它的scale为1.0，同理，drawable-xxhpi对应480dpi，drawable-xhdpi对应的是320dpi。如果希望<code>180*180</code>在nexues6的屏幕上按照原有尺寸显示，只有将其放在drawable-nodpi或者drawable-560dpi目录中才可以。</p>
 <p>回到问题，如果将<code>180*180</code>放入hdpi目录中，那实际显示的图片大小应该为：<code>int (180 * (560 / 240) +0.5f ) = 420px</code>，实际图片的大小应该为420px！同理:<br>放入xhdpi目录中，实际大小应该为<code>int (180 * (560 / 320) +0.5f ) = 315px</code><br>放入xxhdpi目录中，实际大小应该为<code>int (180 * (560 / 480) +0.5f ) = 210px</code></p>
-<p><a href="https://android.googlesource.com/platform/frameworks/base/+/7b2f8b8/core/jni/android/graphics/BitmapFactory.cpp" target="_blank" rel="external">BitmapFactory.cpp源码链接</a></p>
+<p><a href="https://android.googlesource.com/platform/frameworks/base/+/7b2f8b8/core/jni/android/graphics/BitmapFactory.cpp" target="_blank" rel="noopener">BitmapFactory.cpp源码链接</a></p>
 <p>如果用小的Bitmap容器，放置较大的Bitmap，那这个Bitmap的尺寸大小是按照容器的大小计算？还是按照dpi缩放的规则计算？</p>
-<h3 id="四、一张图片占多大内存">四、一张图片占多大内存</h3><p>现在我们已经知道了一张图片放置在不同的资源目录中，系统decode的bitmap的尺寸大小是如何计算的了。一张图片大概占用多少内存，其实只用看一个像素占用多少内存就可以喽？我们都知道屏幕上的颜色是有R，G，B加透明度表示的，Android官方支持的RGB格式，主要是<code>ALPHA_8</code>，<code>RGB_565</code>，<code>ARGB_4444</code>，<code>ARGB_8888</code>这几种。</p>
+<h3 id="四、一张图片占多大内存"><a href="#四、一张图片占多大内存" class="headerlink" title="四、一张图片占多大内存"></a>四、一张图片占多大内存</h3><p>现在我们已经知道了一张图片放置在不同的资源目录中，系统decode的bitmap的尺寸大小是如何计算的了。一张图片大概占用多少内存，其实只用看一个像素占用多少内存就可以喽？我们都知道屏幕上的颜色是有R，G，B加透明度表示的，Android官方支持的RGB格式，主要是<code>ALPHA_8</code>，<code>RGB_565</code>，<code>ARGB_4444</code>，<code>ARGB_8888</code>这几种。</p>
 <p>以ARGB_8888为例，表示一个像素点，使用8位表示透明度，8位表示Red，8位表示Green，8位表示Blue。加起来，一个像素就需要4byte，同理，RGB_565一个像素需要2byte。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public enum Config &#123;&#10;    ALPHA_8     (1),&#10;    RGB_565     (3),&#10;    @Deprecated&#10;    ARGB_4444   (4),&#10;    ARGB_8888   (5);&#10;    final int nativeInt;&#10;    Config(int ni) &#123;&#10;        this.nativeInt = ni;&#10;    &#125;&#10;&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">public enum Config &#123;</span><br><span class="line">    ALPHA_8     (1),</span><br><span class="line">    RGB_565     (3),</span><br><span class="line">    @Deprecated</span><br><span class="line">    ARGB_4444   (4),</span><br><span class="line">    ARGB_8888   (5);</span><br><span class="line">    final int nativeInt;</span><br><span class="line">    Config(int ni) &#123;</span><br><span class="line">        this.nativeInt = ni;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>Android decode资源图片时默认会选择ARGB_8888，如果将<code>180*180</code>放入hdpi目录中，那实际大小应该为<code>int (180 * (560 / 240) +0.5f ) = 420px</code>，像素内存大小为 <code>420 * 420 * 4 = 705600byte = 689kb</code>。同理:<br>放入xhdpi目录中，实际大小应该为<code>int (180 * (560 / 320) +0.5f ) = 315px</code>，像素内存大小为<code>315 * 315 * 4 = 396900byte = 387.6kb</code><br>放入xxhdpi目录中，实际大小应该为<code>int (180 * (560 / 480) +0.5f ) = 210px</code>，像素内存大小为<code>210 * 210 * 4 = 176400byte = 172.2kb</code></p>
-<h3 id="五、如何分析内存中的图片问题？">五、如何分析内存中的图片问题？</h3><p>说了这么多，终于到了我原本想说的。Android的内存优化需要重点关注的几个方面，Bitmap的加载，Activity的泄露，webview内存等。图片的内存问题，是很多Android应用，特别是电商APP需要首要关注的问题。那如何简单的分析出内存中Bitmap的情况，这里提供一个工具。借助leakcanary的思路，通过分析内存堆dump文件中<code>android.graphics.Bitmap</code>对象的情况，<strong>将内存中Bitmap对象批量保存到图片文件中</strong>，这样就可以直观的看到内存中加载的Bitmap个数、内容和大小，进而分析可能的内存问题。</p>
-<p><img src="/res/bitmap/bitmap_buffer.png" alt=""></p>
-<p><img src="/res/bitmap/1.png" alt=""></p>
+<h3 id="五、如何分析内存中的图片问题？"><a href="#五、如何分析内存中的图片问题？" class="headerlink" title="五、如何分析内存中的图片问题？"></a>五、如何分析内存中的图片问题？</h3><p>说了这么多，终于到了我原本想说的。Android的内存优化需要重点关注的几个方面，Bitmap的加载，Activity的泄露，webview内存等。图片的内存问题，是很多Android应用，特别是电商APP需要首要关注的问题。那如何简单的分析出内存中Bitmap的情况，这里提供一个工具。借助leakcanary的思路，通过分析内存堆dump文件中<code>android.graphics.Bitmap</code>对象的情况，<strong>将内存中Bitmap对象批量保存到图片文件中</strong>，这样就可以直观的看到内存中加载的Bitmap个数、内容和大小，进而分析可能的内存问题。</p>
+<p><img src="/res/bitmap/bitmap_buffer.png" alt></p>
+<p><img src="/res/bitmap/1.png" alt></p>
 <p><strong>示例</strong></p>
 <p>以分析蘑菇街APP内存中bitmap为例:</p>
 <ul>
@@ -454,66 +552,42 @@
 <li>参数2：图片输出的文件夹名称，在hprof文件目录中创建该文件夹,缺省时直接会在hprof文件目录输出文件</li>
 </ul>
 <p><strong>输出说明</strong></p>
-<p><img src="/res/bitmap/bitmap-analyzer.png" alt=""></p>
+<p><img src="/res/bitmap/bitmap-analyzer.png" alt></p>
 <ul>
 <li>大小排序.txt 按照图片像素尺寸，从大到小排序</li>
 <li>个数排序.txt 按照相同尺寸图片个数，从大到小排序</li>
 <li>文件名 width*height_index.png</li>
 </ul>
 <p><strong>Jar包地址</strong></p>
-<p><a href="https://raw.githubusercontent.com/Ivonhoe/mvn-repo/master/ivonhoe/java/heapanalyzer/bitmap-analyzer/0.0.1-SNAPSHOT/bitmap-analyzer-0.0.1-20170327.112600-1.jar" target="_blank" rel="external">https://raw.githubusercontent.com/Ivonhoe/mvn-repo/master/ivonhoe/java/heapanalyzer/bitmap-analyzer/0.0.1-SNAPSHOT/bitmap-analyzer-0.0.1-20170327.112600-1.jar</a></p>
-<h3 id="六、参考文档">六、参考文档</h3><p><a href="http://blog.csdn.net/guolin_blog/article/details/50727753" target="_blank" rel="external">Android drawable微技巧，你所不知道的drawable的那些细节</a></p>
-<p><a href="http://www.10tiao.com/html/336/201703/2652262290/1.html" target="_blank" rel="external">关于Android适配，看完这篇文章就够了</a></p>
-<p><a href="http://wangjunyan.github.io/2014/12/02/export-android-bitmap-from-dump-file/" target="_blank" rel="external">批量导出dump文件中的Bitmap</a></p>
-<p><a href="https://mp.weixin.qq.com/s?__biz=MzA3NTYzODYzMg==&amp;mid=403263974&amp;idx=1&amp;sn=b0315addbc47f3c38e65d9c633a12cd6&amp;scene=21#wechat_redirect" target="_blank" rel="external">Android 开发绕不过的坑：你的 Bitmap 究竟占多大内存？</a></p>
-<h3 id="转载请标明出处病已blog_https://ivonhoe-github-io/">转载请标明出处<a href="https://ivonhoe.github.io/">病已blog https://ivonhoe.github.io/</a></h3>
+<p><a href="https://raw.githubusercontent.com/Ivonhoe/mvn-repo/master/ivonhoe/java/heapanalyzer/bitmap-analyzer/0.0.1-SNAPSHOT/bitmap-analyzer-0.0.1-20170327.112600-1.jar" target="_blank" rel="noopener">https://raw.githubusercontent.com/Ivonhoe/mvn-repo/master/ivonhoe/java/heapanalyzer/bitmap-analyzer/0.0.1-SNAPSHOT/bitmap-analyzer-0.0.1-20170327.112600-1.jar</a></p>
+<h3 id="六、参考文档"><a href="#六、参考文档" class="headerlink" title="六、参考文档"></a>六、参考文档</h3><p><a href="http://blog.csdn.net/guolin_blog/article/details/50727753" target="_blank" rel="noopener">Android drawable微技巧，你所不知道的drawable的那些细节</a></p>
+<p><a href="http://www.10tiao.com/html/336/201703/2652262290/1.html" target="_blank" rel="noopener">关于Android适配，看完这篇文章就够了</a></p>
+<p><a href="http://wangjunyan.github.io/2014/12/02/export-android-bitmap-from-dump-file/" target="_blank" rel="noopener">批量导出dump文件中的Bitmap</a></p>
+<p><a href="https://mp.weixin.qq.com/s?__biz=MzA3NTYzODYzMg==&amp;mid=403263974&amp;idx=1&amp;sn=b0315addbc47f3c38e65d9c633a12cd6&amp;scene=21#wechat_redirect" target="_blank" rel="noopener">Android 开发绕不过的坑：你的 Bitmap 究竟占多大内存？</a></p>
+<h3 id="转载请标明出处病已blog-https-ivonhoe-github-io"><a href="#转载请标明出处病已blog-https-ivonhoe-github-io" class="headerlink" title="转载请标明出处病已blog https://ivonhoe.github.io/"></a>转载请标明出处<a href="https://ivonhoe.github.io/">病已blog https://ivonhoe.github.io/</a></h3>
       
     </div>
 
-    <div>
-      
-        
+    
 
-      
-    </div>
+    
+    
+    
 
-    <div>
-      
-        
-  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
-    <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
-    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
-      <span>赏</span>
-    </button>
-    <div id="QR" style="display: none;">
-      
-        <div id="wechat" style="display: inline-block">
-          <img id="wechat_qr" src="https://ivonhoe.github.io/res/dex2jar_error/WechatIMG56.png" alt="病已 WeChat Pay"/>
-          <p>微信打赏</p>
-        </div>
-      
-      
-        <div id="alipay" style="display: inline-block">
-          <img id="alipay_qr" src="https://ivonhoe.github.io/res/dex2jar_error/WechatIMG57.jpeg" alt="病已 Alipay"/>
-          <p>支付宝打赏</p>
-        </div>
-      
-    </div>
-  </div>
+    
 
-
+    
       
-    </div>
+    
+    
 
-    <div>
-      
-        
-
-      
-    </div>
+    
 
     <footer class="post-footer">
       
+        
+          
+        
         <div class="post-tags">
           
             <a href="/tags/Bitmap/" rel="tag"># Bitmap</a>
@@ -526,7 +600,7 @@
       
 
       
-        
+      
       
 
       
@@ -554,24 +628,21 @@
       
       
     </footer>
+  </div>
+  
+  
+  
   </article>
 
 
-
-    <div class="post-spread">
-      
-    </div>
   </div>
 
 
           </div>
           
 
+  
 
-          
-  <div class="comments" id="comments">
-    
-  </div>
 
 
         </div>
@@ -593,110 +664,208 @@
 
       
         <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
             文章目录
           </li>
-          <li class="sidebar-nav-overview" data-target="site-overview">
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
             站点概览
           </li>
         </ul>
       
 
-      <section class="site-overview sidebar-panel">
-        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-          <img class="site-author-image" itemprop="image"
-               src="https://avatars1.githubusercontent.com/u/5706813?v=3&s=460"
-               alt="病已" />
-          <p class="site-author-name" itemprop="name">病已</p>
-           
-              <p class="site-description motion-element" itemprop="description"></p>
-          
-        </div>
-        <nav class="site-state motion-element">
-
-          
-            <div class="site-state-item site-state-posts">
-              <a href="/archives">
-                <span class="site-state-item-count">33</span>
-                <span class="site-state-item-name">日志</span>
-              </a>
-            </div>
-          
-
-          
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
-            
-            <div class="site-state-item site-state-categories">
-              <a href="/categories/index.html">
-                <span class="site-state-item-count">8</span>
-                <span class="site-state-item-name">分类</span>
-              </a>
-            </div>
-          
-
-          
-            
-            
-            <div class="site-state-item site-state-tags">
-              <a href="/tags/index.html">
-                <span class="site-state-item-count">39</span>
-                <span class="site-state-item-name">标签</span>
-              </a>
-            </div>
-          
-
-        </nav>
-
-        
-          <div class="feed-link motion-element">
-            <a href="/atom.xml" rel="alternate">
-              <i class="fa fa-rss"></i>
-              RSS
-            </a>
+              <p class="site-author-name" itemprop="name">病已</p>
+              <div class="site-description motion-element" itemprop="description"></div>
           </div>
-        
 
-        <div class="links-of-author motion-element">
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">33</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">8</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">39</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+
+          
+
+          
+          
+
           
             
-              <span class="links-of-author-item">
-                <a href="https://github.com/Ivonhoe" target="_blank" title="GitHub">
-                  
-                    <i class="fa fa-fw fa-github"></i>
-                  
-                  GitHub
-                </a>
-              </span>
-            
           
+          
+
         </div>
-
-        
-        
-
-        
-        
-
-        
-
-
-      </section>
+      </div>
 
       
       <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
           <div class="post-toc">
 
             
-              
+            
+            
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#一、前言"><span class="nav-number">1.</span> <span class="nav-text">一、前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二、基础概念"><span class="nav-number">2.</span> <span class="nav-text">二、基础概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#三、回到问题"><span class="nav-number">3.</span> <span class="nav-text">三、回到问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#四、一张图片占多大内存"><span class="nav-number">4.</span> <span class="nav-text">四、一张图片占多大内存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#五、如何分析内存中的图片问题？"><span class="nav-number">5.</span> <span class="nav-text">五、如何分析内存中的图片问题？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#六、参考文档"><span class="nav-number">6.</span> <span class="nav-text">六、参考文档</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#转载请标明出处病已blog_https://ivonhoe-github-io/"><span class="nav-number">7.</span> <span class="nav-text">转载请标明出处病已blog https://ivonhoe.github.io/</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#一、前言"><span class="nav-number">1.</span> <span class="nav-text">一、前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二、基础概念"><span class="nav-number">2.</span> <span class="nav-text">二、基础概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#三、回到问题"><span class="nav-number">3.</span> <span class="nav-text">三、回到问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#四、一张图片占多大内存"><span class="nav-number">4.</span> <span class="nav-text">四、一张图片占多大内存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#五、如何分析内存中的图片问题？"><span class="nav-number">5.</span> <span class="nav-text">五、如何分析内存中的图片问题？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#六、参考文档"><span class="nav-number">6.</span> <span class="nav-text">六、参考文档</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#转载请标明出处病已blog-https-ivonhoe-github-io"><span class="nav-number">7.</span> <span class="nav-text">转载请标明出处病已blog https://ivonhoe.github.io/</span></a></li></ol></div>
             
 
           </div>
-        </section>
+        </div>
       <!--/noindex-->
       
 
@@ -704,6 +873,7 @@
 
     </div>
   </aside>
+  
 
 
         
@@ -712,30 +882,39 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright" >
-  
-  &copy; 
-  <span itemprop="copyrightYear">2019</span>
-  <span class="with-love">
-    <i class="fa fa-heart"></i>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">病已</span>
+
+  
+
+  
 </div>
 
 
-<div class="powered-by">
-  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
-</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
 
-<div class="theme-info">
-  主题 -
-  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
-    NexT.Mist
-  </a>
-</div>
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.1.2</div>
+
+
 
 
         
+
+
+
+
+
+
+
 
         
       </div>
@@ -748,11 +927,16 @@
       </div>
     
 
+    
+
+    
+
+    
   </div>
 
   
 
-<script type="text/javascript">
+<script>
   if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
     window.Promise = null;
   }
@@ -766,7 +950,6 @@
 
 
 
-  
 
 
 
@@ -775,53 +958,9 @@
 
 
 
-  
-  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
-
-  
-  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
-
-  
-  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
-
-  
-  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
-
-  
-  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
-
-  
-  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
-
-
-  
-
-
-  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
-
-  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
 
 
 
-  
-  
-
-  
-  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
-<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
-
-
-
-  
-
-
-  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
-
-
-
-  
-
-  
 
 
 
@@ -829,19 +968,57 @@
 
 
   
+  <script src="/lib/jquery/index.js?v=3.4.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.2"></script>
+
+  <script src="/js/motion.js?v=7.1.2"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/affix.js?v=7.1.2"></script>
+
+  <script src="/js/schemes/pisces.js?v=7.1.2"></script>
 
 
 
 
-	
-
-
+  
+  <script src="/js/scrollspy.js?v=7.1.2"></script>
+<script src="/js/post-details.js?v=7.1.2"></script>
 
 
 
   
 
 
+  <script src="/js/next-boot.js?v=7.1.2"></script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
 
 
   
@@ -850,119 +1027,88 @@
 
 
   
-
-
-
-
-
   
-
-  
-  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
-  <script>AV.initialize("JdLpddsaWqwfJtXPdDK8woaF-gzGzoHsz", "CEmtHXH8f0PtvF0zYtVE0EeY");</script>
   <script>
-    function showTime(Counter) {
-      var query = new AV.Query(Counter);
-      var entries = [];
-      var $visitors = $(".leancloud_visitors");
-
-      $visitors.each(function () {
-        entries.push( $(this).attr("id").trim() );
-      });
-
-      query.containedIn('url', entries);
-      query.find()
-        .done(function (results) {
-          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
-
-          if (results.length === 0) {
-            $visitors.find(COUNT_CONTAINER_REF).text(0);
-            return;
-          }
-
-          for (var i = 0; i < results.length; i++) {
-            var item = results[i];
-            var url = item.get('url');
-            var time = item.get('time');
-            var element = document.getElementById(url);
-
-            $(element).find(COUNT_CONTAINER_REF).text(time);
-          }
-          for(var i = 0; i < entries.length; i++) {
-            var url = entries[i];
-            var element = document.getElementById(url);
-            var countSpan = $(element).find(COUNT_CONTAINER_REF);
-            if( countSpan.text() == '') {
-              countSpan.text(0);
-            }
-          }
-        })
-        .fail(function (object, error) {
-          console.log("Error: " + error.code + " " + error.message);
-        });
-    }
-
+    
     function addCount(Counter) {
-      var $visitors = $(".leancloud_visitors");
+      var $visitors = $('.leancloud_visitors');
       var url = $visitors.attr('id').trim();
       var title = $visitors.attr('data-flag-title').trim();
-      var query = new AV.Query(Counter);
 
-      query.equalTo("url", url);
-      query.find({
-        success: function(results) {
+      Counter('get', '/classes/Counter', { where: JSON.stringify({ url }) })
+        .done(function({ results }) {
           if (results.length > 0) {
             var counter = results[0];
-            counter.fetchWhenSave(true);
-            counter.increment("time");
-            counter.save(null, {
-              success: function(counter) {
+            
+            Counter('put', '/classes/Counter/' + counter.objectId, JSON.stringify({ time: { '__op': 'Increment', 'amount': 1 } }))
+            
+              .done(function() {
                 var $element = $(document.getElementById(url));
-                $element.find('.leancloud-visitors-count').text(counter.get('time'));
-              },
-              error: function(counter, error) {
-                console.log('Failed to save Visitor num, with error message: ' + error.message);
-              }
-            });
+                $element.find('.leancloud-visitors-count').text(counter.time + 1);
+              })
+            
+              .fail(function ({ responseJSON }) {
+                console.log('Failed to save Visitor num, with error message: ' + responseJSON.error);
+              })
           } else {
-            var newcounter = new Counter();
-            /* Set ACL */
-            var acl = new AV.ACL();
-            acl.setPublicReadAccess(true);
-            acl.setPublicWriteAccess(true);
-            newcounter.setACL(acl);
-            /* End Set ACL */
-            newcounter.set("title", title);
-            newcounter.set("url", url);
-            newcounter.set("time", 1);
-            newcounter.save(null, {
-              success: function(newcounter) {
-                var $element = $(document.getElementById(url));
-                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
-              },
-              error: function(newcounter, error) {
-                console.log('Failed to create');
-              }
-            });
+            
+              var $element = $(document.getElementById(url));
+              $element.find('.leancloud-visitors-count').text('Counter not initialized! More info at console err msg.');
+              console.error('ATTENTION! LeanCloud counter has security bug, see how to solve it here: https://github.com/theme-next/hexo-leancloud-counter-security. \n However, you can still use LeanCloud without security, by setting `security` option to `false`.');
+            
           }
-        },
-        error: function(error) {
-          console.log('Error:' + error.code + " " + error.message);
-        }
-      });
+        })
+        .fail(function ({ responseJSON }) {
+          console.log('LeanCloud Counter Error: ' + responseJSON.code + ' ' + responseJSON.error);
+        });
     }
+    
 
     $(function() {
-      var Counter = AV.Object.extend("Counter");
-      if ($('.leancloud_visitors').length == 1) {
-        addCount(Counter);
-      } else if ($('.post-title-link').length > 1) {
-        showTime(Counter);
-      }
+      $.get('https://app-router.leancloud.cn/2/route?appId=' + 'JdLpddsaWqwfJtXPdDK8woaF-gzGzoHsz')
+        .done(function({ api_server }) {
+          var Counter = function(method, url, data) {
+            return $.ajax({
+              method: method,
+              url: 'https://' + api_server + '/1.1' + url,
+              headers: {
+                'X-LC-Id': 'JdLpddsaWqwfJtXPdDK8woaF-gzGzoHsz',
+                'X-LC-Key': 'CEmtHXH8f0PtvF0zYtVE0EeY',
+                'Content-Type': 'application/json',
+              },
+              data: data
+            });
+          };
+          
+            const localhost = /http:\/\/(localhost|127.0.0.1|0.0.0.0)/;
+            if (localhost.test(document.URL)) {
+              return;
+            }
+            addCount(Counter);
+          
+        });
     });
   </script>
 
 
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
 
   
 

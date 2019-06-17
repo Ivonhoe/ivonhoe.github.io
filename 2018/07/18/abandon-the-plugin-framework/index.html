@@ -1,23 +1,4 @@
-<!doctype html>
-
-
-
-  
-
-
-<html class="theme-next mist use-motion" lang="zh-Hans">
-<head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
-
-
-
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
-
-
-
+<!DOCTYPE html>
 
 
 
@@ -31,84 +12,74 @@
 
 
   
-  
-  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
 
 
-
-
-  
-  
-  
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
 
 
 
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
-
-<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
-
-
-  <meta name="keywords" content="Android插件化," />
-
-
-
-
-
-  <link rel="alternate" href="/atom.xml" title="病已的博客" type="application/atom+xml" />
-
-
-
-
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
 
 
 
 
 
 
-<meta name="description" content="0x01 前言Android插件化框架一直以来就是安卓平台上的一个重要技术方向，从携程的DynamicAPK到360RePlugin再到阿里巴巴的Atlas，甚至美团和滴滴的安卓团队都有自己的一套安卓插件化解决方案。面对业界如此热门的技术方向，在对比业界开源的插件化方案后，团队内部于去年10月份开始(2017.10)在项目中选择开源的Small插件化框架进行了尝试。鞋是否合适需要穿上脚才能知道。这">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Android插件化之从入门到放弃">
-<meta property="og:url" content="https://ivonhoe.github.io/2018/07/18/abandon-the-plugin-framework/index.html">
-<meta property="og:site_name" content="病已的博客">
-<meta property="og:description" content="0x01 前言Android插件化框架一直以来就是安卓平台上的一个重要技术方向，从携程的DynamicAPK到360RePlugin再到阿里巴巴的Atlas，甚至美团和滴滴的安卓团队都有自己的一套安卓插件化解决方案。面对业界如此热门的技术方向，在对比业界开源的插件化方案后，团队内部于去年10月份开始(2017.10)在项目中选择开源的Small插件化框架进行了尝试。鞋是否合适需要穿上脚才能知道。这">
-<meta property="og:image" content="https://ivonhoe.github.io/res/no-small/google-implementation.png">
-<meta property="og:image" content="https://ivonhoe.github.io/res/no-small/implementation-api.png">
-<meta property="og:updated_time" content="2018-09-18T09:53:44.000Z">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Android插件化之从入门到放弃">
-<meta name="twitter:description" content="0x01 前言Android插件化框架一直以来就是安卓平台上的一个重要技术方向，从携程的DynamicAPK到360RePlugin再到阿里巴巴的Atlas，甚至美团和滴滴的安卓团队都有自己的一套安卓插件化解决方案。面对业界如此热门的技术方向，在对比业界开源的插件化方案后，团队内部于去年10月份开始(2017.10)在项目中选择开源的Small插件化框架进行了尝试。鞋是否合适需要穿上脚才能知道。这">
 
 
 
-<script type="text/javascript" id="hexo.configurations">
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.2">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.1.2">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.1.2">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.1.2">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.1.2" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
   var NexT = window.NexT || {};
   var CONFIG = {
     root: '/',
-    scheme: 'Mist',
-    sidebar: {"position":"right","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
-    fancybox: true,
-    motion: true,
-    duoshuo: {
-      userId: 'undefined',
-      author: '博主'
-    },
+    scheme: 'Gemini',
+    version: '7.1.2',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     algolia: {
       applicationID: '',
       apiKey: '',
@@ -120,34 +91,54 @@
 </script>
 
 
-
-  <link rel="canonical" href="https://ivonhoe.github.io/2018/07/18/abandon-the-plugin-framework/"/>
-
-
-
-
-
-  <title> Android插件化之从入门到放弃 | 病已的博客 </title>
-</head>
-
-<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
-
   
 
 
 
 
-<script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-  ga('create', 'UA-97550712-1', 'auto');
-  ga('send', 'pageview');
+  <meta name="description" content="0x01 前言Android插件化框架一直以来就是安卓平台上的一个重要技术方向，从携程的DynamicAPK到360RePlugin再到阿里巴巴的Atlas，甚至美团和滴滴的安卓团队都有自己的一套安卓插件化解决方案。面对业界如此热门的技术方向，在对比业界开源的插件化方案后，团队内部于去年10月份开始(2017.10)在项目中选择开源的Small插件化框架进行了尝试。鞋是否合适需要穿上脚才能知道。这">
+<meta name="keywords" content="Android插件化">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android插件化之从入门到放弃">
+<meta property="og:url" content="https://ivonhoe.github.io/2018/07/18/abandon-the-plugin-framework/index.html">
+<meta property="og:site_name" content="病已的博客">
+<meta property="og:description" content="0x01 前言Android插件化框架一直以来就是安卓平台上的一个重要技术方向，从携程的DynamicAPK到360RePlugin再到阿里巴巴的Atlas，甚至美团和滴滴的安卓团队都有自己的一套安卓插件化解决方案。面对业界如此热门的技术方向，在对比业界开源的插件化方案后，团队内部于去年10月份开始(2017.10)在项目中选择开源的Small插件化框架进行了尝试。鞋是否合适需要穿上脚才能知道。这">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://ivonhoe.github.io/res/no-small/google-implementation.png">
+<meta property="og:image" content="https://ivonhoe.github.io/res/no-small/implementation-api.png">
+<meta property="og:updated_time" content="2018-09-18T09:53:44.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android插件化之从入门到放弃">
+<meta name="twitter:description" content="0x01 前言Android插件化框架一直以来就是安卓平台上的一个重要技术方向，从携程的DynamicAPK到360RePlugin再到阿里巴巴的Atlas，甚至美团和滴滴的安卓团队都有自己的一套安卓插件化解决方案。面对业界如此热门的技术方向，在对比业界开源的插件化方案后，团队内部于去年10月份开始(2017.10)在项目中选择开源的Small插件化框架进行了尝试。鞋是否合适需要穿上脚才能知道。这">
+<meta name="twitter:image" content="https://ivonhoe.github.io/res/no-small/google-implementation.png">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="病已的博客" type="application/atom+xml">
+
+
+
+  
+  
+  <link rel="canonical" href="https://ivonhoe.github.io/2018/07/18/abandon-the-plugin-framework/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
 </script>
 
+  <title>Android插件化之从入门到放弃 | 病已的博客</title>
+  
 
-  <script type="text/javascript">
+
+
+
+
+
+  <script>
     var _hmt = _hmt || [];
     (function() {
       var hm = document.createElement("script");
@@ -163,36 +154,65 @@
 
 
 
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
 
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
 
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
 
   
   
     
   
 
-  <div class="container sidebar-position-right page-post-detail ">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
       <div class="header-inner"><div class="site-brand-wrapper">
-  <div class="site-meta ">
+  <div class="site-meta">
     
 
     <div class="custom-logo-site-title">
-      <a href="/"  class="brand" rel="start">
+      <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
         <span class="site-title">病已的博客</span>
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
+    
       
         <p class="site-subtitle">枕上，马上，厕上</p>
       
+    
+    
   </div>
 
   <div class="site-nav-toggle">
-    <button>
+    <button aria-label="切换导航栏">
       <span class="btn-bar"></span>
       <span class="btn-bar"></span>
       <span class="btn-bar"></span>
@@ -200,55 +220,103 @@
   </div>
 </div>
 
-<nav class="site-nav">
-  
 
+
+<nav class="site-nav">
   
     <ul id="menu" class="menu">
       
         
-        <li class="menu-item menu-item-home">
-          <a href="/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
-            
-            首页
-          </a>
-        </li>
-      
         
-        <li class="menu-item menu-item-categories">
-          <a href="/categories" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
-            
-            分类
-          </a>
-        </li>
-      
         
-        <li class="menu-item menu-item-archives">
-          <a href="/archives" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
-            
-            归档
-          </a>
-        </li>
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
       
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
         
-        <li class="menu-item menu-item-tags">
-          <a href="/tags" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
-            
-            标签
-          </a>
-        </li>
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
       
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
 
       
+      
     </ul>
+  
+
   
 
   
@@ -256,12 +324,30 @@
 
 
 
- </div>
+  
+
+
+
+</div>
     </header>
+
+    
+  
+  
+
+  
+
+  <a href="https://github.com/Ivonhoe" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewbox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a>
+
+
 
     <main id="main" class="main">
       <div class="main-inner">
         <div class="content-wrap">
+          
+            
+
+          
           <div id="content" class="content">
             
 
@@ -274,13 +360,19 @@
   
   
 
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://ivonhoe.github.io/2018/07/18/abandon-the-plugin-framework/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="病已">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/5706813?v=3&s=460">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -292,11 +384,8 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                Android插件化之从入门到放弃
+          <h1 class="post-title" itemprop="name headline">Android插件化之从入门到放弃
+
               
             
           </h1>
@@ -304,6 +393,11 @@
 
         <div class="post-meta">
           <span class="post-time">
+
+            
+            
+            
+
             
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
@@ -311,18 +405,35 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-18T20:45:30+08:00">
-                Jul 18 2018
-              </time>
+
+              
+                
+              
+
+              <time title="创建时间：7月 18 2018 20:45:30" itemprop="dateCreated datePublished" datetime="2018-07-18T20:45:30+08:00">7月 18 2018</time>
             
 
             
+              
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：9月 18 2018 17:53:44" itemprop="dateModified" datetime="2018-09-18T17:53:44+08:00">9月 18 2018</time>
+              
             
           </span>
 
           
-            <span class="post-category" >
+            <span class="post-category">
             
               <span class="post-meta-divider">|</span>
             
@@ -333,11 +444,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Android插件化/" itemprop="url" rel="index">
-                    <span itemprop="name">Android插件化</span>
-                  </a>
-                </span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Android插件化/" itemprop="url" rel="index"><span itemprop="name">Android插件化</span></a></span>
 
                 
                 
@@ -347,20 +454,21 @@
 
           
             
+            
           
 
           
           
-             <span id="/2018/07/18/abandon-the-plugin-framework/" class="leancloud_visitors" data-flag-title="Android插件化之从入门到放弃">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数 </span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
+            <span id="/2018/07/18/abandon-the-plugin-framework/" class="leancloud_visitors" data-flag-title="Android插件化之从入门到放弃">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              
+                <span class="post-meta-item-text">阅读次数：</span>
+              
+                <span class="leancloud-visitors-count"></span>
+            </span>
           
 
           
@@ -373,17 +481,19 @@
       </header>
     
 
-
+    
+    
+    
     <div class="post-body" itemprop="articleBody">
 
       
       
 
       
-        <h3 id="0x01_前言">0x01 前言</h3><p>Android插件化框架一直以来就是安卓平台上的一个重要技术方向，从携程的DynamicAPK到360RePlugin再到阿里巴巴的Atlas，甚至美团和滴滴的安卓团队都有自己的一套安卓插件化解决方案。面对业界如此热门的技术方向，在对比业界开源的插件化方案后，团队内部于去年10月份开始(2017.10)在项目中选择开源的Small插件化框架进行了尝试。鞋是否合适需要穿上脚才能知道。这篇文章总结了我在使用Small插件化框架后，自己对插件化的理解和思考。</p>
-<h3 id="关于Small插件化的其他文档">关于Small插件化的其他文档</h3><p><a href="https://ivonhoe.github.io/2018/01/18/Small%E6%A1%86%E6%9E%B6%E5%AE%9E%E8%B7%B5%E6%80%BB%E7%BB%93/"><strong>《Android插件化之Small框架实践总结》</strong></a><br><a href="https://ivonhoe.github.io/2018/01/18/Small%E6%A1%86%E6%9E%B6%E5%8E%9F%E7%90%86/"><strong>《Android插件化之Small框架原理》</strong></a><br><a href="https://ivonhoe.github.io/2018/03/14/small-bug-555-fix/"><strong>《Android插件化之资源加载机制》</strong></a></p>
+        <h3 id="0x01-前言"><a href="#0x01-前言" class="headerlink" title="0x01 前言"></a>0x01 前言</h3><p>Android插件化框架一直以来就是安卓平台上的一个重要技术方向，从携程的DynamicAPK到360RePlugin再到阿里巴巴的Atlas，甚至美团和滴滴的安卓团队都有自己的一套安卓插件化解决方案。面对业界如此热门的技术方向，在对比业界开源的插件化方案后，团队内部于去年10月份开始(2017.10)在项目中选择开源的Small插件化框架进行了尝试。鞋是否合适需要穿上脚才能知道。这篇文章总结了我在使用Small插件化框架后，自己对插件化的理解和思考。</p>
+<h3 id="关于Small插件化的其他文档"><a href="#关于Small插件化的其他文档" class="headerlink" title="关于Small插件化的其他文档"></a>关于Small插件化的其他文档</h3><p><a href="https://ivonhoe.github.io/2018/01/18/Small%E6%A1%86%E6%9E%B6%E5%AE%9E%E8%B7%B5%E6%80%BB%E7%BB%93/"><strong>《Android插件化之Small框架实践总结》</strong></a><br><a href="https://ivonhoe.github.io/2018/01/18/Small%E6%A1%86%E6%9E%B6%E5%8E%9F%E7%90%86/"><strong>《Android插件化之Small框架原理》</strong></a><br><a href="https://ivonhoe.github.io/2018/03/14/small-bug-555-fix/"><strong>《Android插件化之资源加载机制》</strong></a></p>
 <a id="more"></a>
-<h3 id="0x02_重新审视插件化框架的利弊">0x02 重新审视插件化框架的利弊</h3><h4 id="2-1_插件化方案想要解决的核心问题">2.1 插件化方案想要解决的核心问题</h4><blockquote>
+<h3 id="0x02-重新审视插件化框架的利弊"><a href="#0x02-重新审视插件化框架的利弊" class="headerlink" title="0x02 重新审视插件化框架的利弊"></a>0x02 重新审视插件化框架的利弊</h3><h4 id="2-1-插件化方案想要解决的核心问题"><a href="#2-1-插件化方案想要解决的核心问题" class="headerlink" title="2.1 插件化方案想要解决的核心问题"></a>2.1 插件化方案想要解决的核心问题</h4><blockquote>
 <p>安卓的动态化发布</p>
 </blockquote>
 <p>动态化就像是天赋，有些人天生就有的能力却是需要你花非常大精力也未必能获取到的。前端的开发应该从来不需要动态化的方案吧！插件化方案的一个最大作用应该就是绕开应用市场的审核周期，尽可能的像后端Java或者前端JS一样，随时发布随时生效。</p>
@@ -395,7 +505,7 @@
 <p>dex 65535问题</p>
 </blockquote>
 <p>插件化的方案也可以看做一个dex分包和资源分包的方案。</p>
-<h4 id="2-2_Small插件化方案带来的新问题">2.2 Small插件化方案带来的新问题</h4><p>在<a href="https://ivonhoe.github.io/2018/01/18/Small%E6%A1%86%E6%9E%B6%E5%AE%9E%E8%B7%B5%E6%80%BB%E7%BB%93/">《Android插件化之Small框架实践总结》</a> 中对比了Small插件化框架的优缺点，选择Small最重要的原因还是轻量化，当然很多问题也是轻量化带来的。</p>
+<h4 id="2-2-Small插件化方案带来的新问题"><a href="#2-2-Small插件化方案带来的新问题" class="headerlink" title="2.2 Small插件化方案带来的新问题"></a>2.2 Small插件化方案带来的新问题</h4><p>在<a href="https://ivonhoe.github.io/2018/01/18/Small%E6%A1%86%E6%9E%B6%E5%AE%9E%E8%B7%B5%E6%80%BB%E7%BB%93/">《Android插件化之Small框架实践总结》</a> 中对比了Small插件化框架的优缺点，选择Small最重要的原因还是轻量化，当然很多问题也是轻量化带来的。</p>
 <blockquote>
 <p>兼容性问题</p>
 </blockquote>
@@ -411,7 +521,7 @@
 <ol>
 <li>资源查找失败的bug，虽然已经接近了在个别国产手机上的资源查找失败问题，详情见<a href="https://ivonhoe.github.io/2018/03/14/small-bug-555-fix/">《Android插件化之资源加载》</a>。但是在Android 7.1以上的系统上依然出现偶现的资源查找失败问题。并且崩溃率（错误数/启动次数）在0.3%左右。这个比例其实不算低了。这个bug暂时只能通过将插件资源转移到宿主分身中绕过。但是如果把所有插件资源都放到宿主中以规避这个问题，那插件化就没有任何意义了。</li>
 </ol>
-<h4 id="2-3_重新思考插件化框架给安卓app的收益">2.3 重新思考插件化框架给安卓app的收益</h4><p>在团队技术选型上优先考虑的应该是和现有业务适配吧。如果你所面对的业务不存在快速迭代频繁发布的需求，插件化框架的威力可能就要减小一半了。同时在选择个人开发者维护的开源项目时，依然是要考虑到其架构的稳定性和bug的修复时效。因为一旦在一个商业化的项目中使用开源框架，稳定性和兼容性一定会放在首要位置的。在这一点上，可能从大公司孵化出的开源项目会更有优势。</p>
+<h4 id="2-3-重新思考插件化框架给安卓app的收益"><a href="#2-3-重新思考插件化框架给安卓app的收益" class="headerlink" title="2.3 重新思考插件化框架给安卓app的收益"></a>2.3 重新思考插件化框架给安卓app的收益</h4><p>在团队技术选型上优先考虑的应该是和现有业务适配吧。如果你所面对的业务不存在快速迭代频繁发布的需求，插件化框架的威力可能就要减小一半了。同时在选择个人开发者维护的开源项目时，依然是要考虑到其架构的稳定性和bug的修复时效。因为一旦在一个商业化的项目中使用开源框架，稳定性和兼容性一定会放在首要位置的。在这一点上，可能从大公司孵化出的开源项目会更有优势。</p>
 <p>在回看插件化框架对android应用中模块解耦的贡献，对比android应用的原生的开发方式。能够从插件化框架吸收的模块解耦方法上可以看到大致这几个方面。</p>
 <blockquote>
 <p>模块间的解耦要依赖工具而不是约定开发规范</p>
@@ -425,61 +535,37 @@
 <p>路由</p>
 </blockquote>
 <p>相比较插件化框架你可能更需要一个页面路由工具，业界有很多业界路由框架，比如阿里的ARouter，路由用来解决模块解耦带来的页面跳转问题，所以自己动手实现一个简单的路由工具也不是很难。</p>
-<h4 id="2-3_implementation、api和compile的差异">2.3 implementation、api和compile的差异</h4><p>可以查看google文档上对Android Studio 3.0后新引入的依赖配置的差异说明。<br><a href="https://developer.android.com/studio/build/gradle-plugin-3-0-0-migration" target="_blank" rel="external">https://developer.android.com/studio/build/gradle-plugin-3-0-0-migration</a></p>
-<p><img src="/res/no-small/google-implementation.png" alt=""></p>
+<h4 id="2-3-implementation、api和compile的差异"><a href="#2-3-implementation、api和compile的差异" class="headerlink" title="2.3 implementation、api和compile的差异"></a>2.3 implementation、api和compile的差异</h4><p>可以查看google文档上对Android Studio 3.0后新引入的依赖配置的差异说明。<br><a href="https://developer.android.com/studio/build/gradle-plugin-3-0-0-migration" target="_blank" rel="noopener">https://developer.android.com/studio/build/gradle-plugin-3-0-0-migration</a></p>
+<p><img src="/res/no-small/google-implementation.png" alt></p>
 <p>简单来说google将compile配置拆成了两个关键词，分别是api和implementation。api和implementation的差异不单单是编译效率的差异，我觉得更重要的是，implementation避免了依赖的传递。以下图对比api和implementation的差异可以发现，当使用implementation配置依赖时，app模块将不会直接依赖<code>D</code>模块。在使用老的依赖配置<code>compile</code>时，实际上并没有做到模块的分层，最底下的模块依然可以被最上层的模块依赖，实际的依赖规则在开发者的规范里，而不存在项目模块的管理中。</p>
-<p><img src="/res/no-small/implementation-api.png" alt=""></p>
-<h3 id="0x04_总结">0x04 总结</h3><p>以上就是我对插件化框架的看法，如果你的业务存在开始迭代频繁发布的情况存在，那么你可能就很需要一个插件化框架来带来开发方式上的改变，核心在于提高了研发效率。但是在使用插件化项目之前你需要对插件化框架的边界和扩展边界的成本有一个清晰的认识。实际上上面所说的所有插件化框架带来的问题都是可以解决的。问题的关键在于在你的团队这样的付出和产出是否值得呢？相信每个人都可能会有不同的看法。</p>
+<p><img src="/res/no-small/implementation-api.png" alt></p>
+<h3 id="0x04-总结"><a href="#0x04-总结" class="headerlink" title="0x04 总结"></a>0x04 总结</h3><p>以上就是我对插件化框架的看法，如果你的业务存在开始迭代频繁发布的情况存在，那么你可能就很需要一个插件化框架来带来开发方式上的改变，核心在于提高了研发效率。但是在使用插件化项目之前你需要对插件化框架的边界和扩展边界的成本有一个清晰的认识。实际上上面所说的所有插件化框架带来的问题都是可以解决的。问题的关键在于在你的团队这样的付出和产出是否值得呢？相信每个人都可能会有不同的看法。</p>
 <p><strong>当然开源的插件化框架依然是重点学习的方向，理解不同插件化方案的实现原理是深入理解安卓系统很好的切入点。接下来我还会花更多的时间深入的学习360和阿里巴巴的插件化方案。</strong></p>
 <p>最近在读《邓小平改变中国》这本书，让我对从文革结束到改革开放前那段对大多数中国人讳莫如深的历史有了大致的了解。<strong>“实践是检验真理的唯一标准”</strong>，这句很多80后90后耳熟能详的口号背后，原来发生了这么多的波折，冲破了如此多的障碍。<strong>理论与实践的统一是马克思主义的一个最基本的原则</strong>。<strong>实事求是是毛泽东思想的精髓</strong>。听起来虚头巴脑，但确实应该是解决问题和对待未知事物的核心方法论。对！这是一篇技术总结。</p>
-<h3 id="0x05_转载请标明出处病已blog_https://ivonhoe-github-io/">0x05 转载请标明出处<a href="https://ivonhoe.github.io/">病已blog https://ivonhoe.github.io/</a></h3>
+<h3 id="0x05-转载请标明出处病已blog-https-ivonhoe-github-io"><a href="#0x05-转载请标明出处病已blog-https-ivonhoe-github-io" class="headerlink" title="0x05 转载请标明出处病已blog https://ivonhoe.github.io/"></a>0x05 转载请标明出处<a href="https://ivonhoe.github.io/">病已blog https://ivonhoe.github.io/</a></h3>
       
     </div>
 
-    <div>
-      
-        
+    
 
-      
-    </div>
+    
+    
+    
 
-    <div>
-      
-        
-  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
-    <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
-    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
-      <span>赏</span>
-    </button>
-    <div id="QR" style="display: none;">
-      
-        <div id="wechat" style="display: inline-block">
-          <img id="wechat_qr" src="https://ivonhoe.github.io/res/dex2jar_error/WechatIMG56.png" alt="病已 WeChat Pay"/>
-          <p>微信打赏</p>
-        </div>
-      
-      
-        <div id="alipay" style="display: inline-block">
-          <img id="alipay_qr" src="https://ivonhoe.github.io/res/dex2jar_error/WechatIMG57.jpeg" alt="病已 Alipay"/>
-          <p>支付宝打赏</p>
-        </div>
-      
-    </div>
-  </div>
+    
 
-
+    
       
-    </div>
+    
+    
 
-    <div>
-      
-        
-
-      
-    </div>
+    
 
     <footer class="post-footer">
       
+        
+          
+        
         <div class="post-tags">
           
             <a href="/tags/Android插件化/" rel="tag"># Android插件化</a>
@@ -488,7 +574,7 @@
       
 
       
-        
+      
       
 
       
@@ -516,24 +602,21 @@
       
       
     </footer>
+  </div>
+  
+  
+  
   </article>
 
 
-
-    <div class="post-spread">
-      
-    </div>
   </div>
 
 
           </div>
           
 
+  
 
-          
-  <div class="comments" id="comments">
-    
-  </div>
 
 
         </div>
@@ -555,110 +638,208 @@
 
       
         <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
             文章目录
           </li>
-          <li class="sidebar-nav-overview" data-target="site-overview">
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
             站点概览
           </li>
         </ul>
       
 
-      <section class="site-overview sidebar-panel">
-        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-          <img class="site-author-image" itemprop="image"
-               src="https://avatars1.githubusercontent.com/u/5706813?v=3&s=460"
-               alt="病已" />
-          <p class="site-author-name" itemprop="name">病已</p>
-           
-              <p class="site-description motion-element" itemprop="description"></p>
-          
-        </div>
-        <nav class="site-state motion-element">
-
-          
-            <div class="site-state-item site-state-posts">
-              <a href="/archives">
-                <span class="site-state-item-count">33</span>
-                <span class="site-state-item-name">日志</span>
-              </a>
-            </div>
-          
-
-          
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
-            
-            <div class="site-state-item site-state-categories">
-              <a href="/categories/index.html">
-                <span class="site-state-item-count">8</span>
-                <span class="site-state-item-name">分类</span>
-              </a>
-            </div>
-          
-
-          
-            
-            
-            <div class="site-state-item site-state-tags">
-              <a href="/tags/index.html">
-                <span class="site-state-item-count">39</span>
-                <span class="site-state-item-name">标签</span>
-              </a>
-            </div>
-          
-
-        </nav>
-
-        
-          <div class="feed-link motion-element">
-            <a href="/atom.xml" rel="alternate">
-              <i class="fa fa-rss"></i>
-              RSS
-            </a>
+              <p class="site-author-name" itemprop="name">病已</p>
+              <div class="site-description motion-element" itemprop="description"></div>
           </div>
-        
 
-        <div class="links-of-author motion-element">
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">33</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">8</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">39</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+
+          
+
+          
+          
+
           
             
-              <span class="links-of-author-item">
-                <a href="https://github.com/Ivonhoe" target="_blank" title="GitHub">
-                  
-                    <i class="fa fa-fw fa-github"></i>
-                  
-                  GitHub
-                </a>
-              </span>
-            
           
+          
+
         </div>
-
-        
-        
-
-        
-        
-
-        
-
-
-      </section>
+      </div>
 
       
       <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
           <div class="post-toc">
 
             
-              
+            
+            
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#0x01_前言"><span class="nav-number">1.</span> <span class="nav-text">0x01 前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#关于Small插件化的其他文档"><span class="nav-number">2.</span> <span class="nav-text">关于Small插件化的其他文档</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x02_重新审视插件化框架的利弊"><span class="nav-number">3.</span> <span class="nav-text">0x02 重新审视插件化框架的利弊</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1_插件化方案想要解决的核心问题"><span class="nav-number">3.1.</span> <span class="nav-text">2.1 插件化方案想要解决的核心问题</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2_Small插件化方案带来的新问题"><span class="nav-number">3.2.</span> <span class="nav-text">2.2 Small插件化方案带来的新问题</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3_重新思考插件化框架给安卓app的收益"><span class="nav-number">3.3.</span> <span class="nav-text">2.3 重新思考插件化框架给安卓app的收益</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3_implementation、api和compile的差异"><span class="nav-number">3.4.</span> <span class="nav-text">2.3 implementation、api和compile的差异</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x04_总结"><span class="nav-number">4.</span> <span class="nav-text">0x04 总结</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x05_转载请标明出处病已blog_https://ivonhoe-github-io/"><span class="nav-number">5.</span> <span class="nav-text">0x05 转载请标明出处病已blog https://ivonhoe.github.io/</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#0x01-前言"><span class="nav-number">1.</span> <span class="nav-text">0x01 前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#关于Small插件化的其他文档"><span class="nav-number">2.</span> <span class="nav-text">关于Small插件化的其他文档</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x02-重新审视插件化框架的利弊"><span class="nav-number">3.</span> <span class="nav-text">0x02 重新审视插件化框架的利弊</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-插件化方案想要解决的核心问题"><span class="nav-number">3.1.</span> <span class="nav-text">2.1 插件化方案想要解决的核心问题</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-Small插件化方案带来的新问题"><span class="nav-number">3.2.</span> <span class="nav-text">2.2 Small插件化方案带来的新问题</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-重新思考插件化框架给安卓app的收益"><span class="nav-number">3.3.</span> <span class="nav-text">2.3 重新思考插件化框架给安卓app的收益</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-implementation、api和compile的差异"><span class="nav-number">3.4.</span> <span class="nav-text">2.3 implementation、api和compile的差异</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x04-总结"><span class="nav-number">4.</span> <span class="nav-text">0x04 总结</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x05-转载请标明出处病已blog-https-ivonhoe-github-io"><span class="nav-number">5.</span> <span class="nav-text">0x05 转载请标明出处病已blog https://ivonhoe.github.io/</span></a></li></ol></div>
             
 
           </div>
-        </section>
+        </div>
       <!--/noindex-->
       
 
@@ -666,6 +847,7 @@
 
     </div>
   </aside>
+  
 
 
         
@@ -674,30 +856,39 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright" >
-  
-  &copy; 
-  <span itemprop="copyrightYear">2019</span>
-  <span class="with-love">
-    <i class="fa fa-heart"></i>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">病已</span>
+
+  
+
+  
 </div>
 
 
-<div class="powered-by">
-  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
-</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
 
-<div class="theme-info">
-  主题 -
-  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
-    NexT.Mist
-  </a>
-</div>
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.1.2</div>
+
+
 
 
         
+
+
+
+
+
+
+
 
         
       </div>
@@ -710,11 +901,16 @@
       </div>
     
 
+    
+
+    
+
+    
   </div>
 
   
 
-<script type="text/javascript">
+<script>
   if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
     window.Promise = null;
   }
@@ -728,7 +924,6 @@
 
 
 
-  
 
 
 
@@ -737,53 +932,9 @@
 
 
 
-  
-  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
-
-  
-  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
-
-  
-  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
-
-  
-  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
-
-  
-  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
-
-  
-  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
-
-
-  
-
-
-  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
-
-  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
 
 
 
-  
-  
-
-  
-  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
-<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
-
-
-
-  
-
-
-  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
-
-
-
-  
-
-  
 
 
 
@@ -791,19 +942,57 @@
 
 
   
+  <script src="/lib/jquery/index.js?v=3.4.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.2"></script>
+
+  <script src="/js/motion.js?v=7.1.2"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/affix.js?v=7.1.2"></script>
+
+  <script src="/js/schemes/pisces.js?v=7.1.2"></script>
 
 
 
 
-	
-
-
+  
+  <script src="/js/scrollspy.js?v=7.1.2"></script>
+<script src="/js/post-details.js?v=7.1.2"></script>
 
 
 
   
 
 
+  <script src="/js/next-boot.js?v=7.1.2"></script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
 
 
   
@@ -812,119 +1001,88 @@
 
 
   
-
-
-
-
-
   
-
-  
-  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
-  <script>AV.initialize("JdLpddsaWqwfJtXPdDK8woaF-gzGzoHsz", "CEmtHXH8f0PtvF0zYtVE0EeY");</script>
   <script>
-    function showTime(Counter) {
-      var query = new AV.Query(Counter);
-      var entries = [];
-      var $visitors = $(".leancloud_visitors");
-
-      $visitors.each(function () {
-        entries.push( $(this).attr("id").trim() );
-      });
-
-      query.containedIn('url', entries);
-      query.find()
-        .done(function (results) {
-          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
-
-          if (results.length === 0) {
-            $visitors.find(COUNT_CONTAINER_REF).text(0);
-            return;
-          }
-
-          for (var i = 0; i < results.length; i++) {
-            var item = results[i];
-            var url = item.get('url');
-            var time = item.get('time');
-            var element = document.getElementById(url);
-
-            $(element).find(COUNT_CONTAINER_REF).text(time);
-          }
-          for(var i = 0; i < entries.length; i++) {
-            var url = entries[i];
-            var element = document.getElementById(url);
-            var countSpan = $(element).find(COUNT_CONTAINER_REF);
-            if( countSpan.text() == '') {
-              countSpan.text(0);
-            }
-          }
-        })
-        .fail(function (object, error) {
-          console.log("Error: " + error.code + " " + error.message);
-        });
-    }
-
+    
     function addCount(Counter) {
-      var $visitors = $(".leancloud_visitors");
+      var $visitors = $('.leancloud_visitors');
       var url = $visitors.attr('id').trim();
       var title = $visitors.attr('data-flag-title').trim();
-      var query = new AV.Query(Counter);
 
-      query.equalTo("url", url);
-      query.find({
-        success: function(results) {
+      Counter('get', '/classes/Counter', { where: JSON.stringify({ url }) })
+        .done(function({ results }) {
           if (results.length > 0) {
             var counter = results[0];
-            counter.fetchWhenSave(true);
-            counter.increment("time");
-            counter.save(null, {
-              success: function(counter) {
+            
+            Counter('put', '/classes/Counter/' + counter.objectId, JSON.stringify({ time: { '__op': 'Increment', 'amount': 1 } }))
+            
+              .done(function() {
                 var $element = $(document.getElementById(url));
-                $element.find('.leancloud-visitors-count').text(counter.get('time'));
-              },
-              error: function(counter, error) {
-                console.log('Failed to save Visitor num, with error message: ' + error.message);
-              }
-            });
+                $element.find('.leancloud-visitors-count').text(counter.time + 1);
+              })
+            
+              .fail(function ({ responseJSON }) {
+                console.log('Failed to save Visitor num, with error message: ' + responseJSON.error);
+              })
           } else {
-            var newcounter = new Counter();
-            /* Set ACL */
-            var acl = new AV.ACL();
-            acl.setPublicReadAccess(true);
-            acl.setPublicWriteAccess(true);
-            newcounter.setACL(acl);
-            /* End Set ACL */
-            newcounter.set("title", title);
-            newcounter.set("url", url);
-            newcounter.set("time", 1);
-            newcounter.save(null, {
-              success: function(newcounter) {
-                var $element = $(document.getElementById(url));
-                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
-              },
-              error: function(newcounter, error) {
-                console.log('Failed to create');
-              }
-            });
+            
+              var $element = $(document.getElementById(url));
+              $element.find('.leancloud-visitors-count').text('Counter not initialized! More info at console err msg.');
+              console.error('ATTENTION! LeanCloud counter has security bug, see how to solve it here: https://github.com/theme-next/hexo-leancloud-counter-security. \n However, you can still use LeanCloud without security, by setting `security` option to `false`.');
+            
           }
-        },
-        error: function(error) {
-          console.log('Error:' + error.code + " " + error.message);
-        }
-      });
+        })
+        .fail(function ({ responseJSON }) {
+          console.log('LeanCloud Counter Error: ' + responseJSON.code + ' ' + responseJSON.error);
+        });
     }
+    
 
     $(function() {
-      var Counter = AV.Object.extend("Counter");
-      if ($('.leancloud_visitors').length == 1) {
-        addCount(Counter);
-      } else if ($('.post-title-link').length > 1) {
-        showTime(Counter);
-      }
+      $.get('https://app-router.leancloud.cn/2/route?appId=' + 'JdLpddsaWqwfJtXPdDK8woaF-gzGzoHsz')
+        .done(function({ api_server }) {
+          var Counter = function(method, url, data) {
+            return $.ajax({
+              method: method,
+              url: 'https://' + api_server + '/1.1' + url,
+              headers: {
+                'X-LC-Id': 'JdLpddsaWqwfJtXPdDK8woaF-gzGzoHsz',
+                'X-LC-Key': 'CEmtHXH8f0PtvF0zYtVE0EeY',
+                'Content-Type': 'application/json',
+              },
+              data: data
+            });
+          };
+          
+            const localhost = /http:\/\/(localhost|127.0.0.1|0.0.0.0)/;
+            if (localhost.test(document.URL)) {
+              return;
+            }
+            addCount(Counter);
+          
+        });
     });
   </script>
 
 
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
 
   
 

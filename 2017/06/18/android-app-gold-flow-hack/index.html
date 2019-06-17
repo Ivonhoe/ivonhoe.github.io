@@ -1,23 +1,4 @@
-<!doctype html>
-
-
-
-  
-
-
-<html class="theme-next mist use-motion" lang="zh-Hans">
-<head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
-
-
-
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
-
-
-
+<!DOCTYPE html>
 
 
 
@@ -31,95 +12,74 @@
 
 
   
-  
-  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
 
 
-
-
-  
-  
-  
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
 
 
 
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
-
-<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
-
-
-  <meta name="keywords" content="Android,移动安全," />
-
-
-
-
-
-  <link rel="alternate" href="/atom.xml" title="病已的博客" type="application/atom+xml" />
-
-
-
-
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
 
 
 
 
 
 
-<meta name="description" content="0x00 前言本文记录了破解某外卖App http请求参数加密过程中遇到的问题和解决思路，实现的目标是希望是能够通过一些手段实现自由调用其服务接口。这篇文章主要讲述什么？
-
-静态分析和动态调试的基本方法和遇到的问题
-如何听过修改android源码实现全局hook">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Android安全之某团请求加密破解">
-<meta property="og:url" content="https://ivonhoe.github.io/2017/06/18/android-app-gold-flow-hack/index.html">
-<meta property="og:site_name" content="病已的博客">
-<meta property="og:description" content="0x00 前言本文记录了破解某外卖App http请求参数加密过程中遇到的问题和解决思路，实现的目标是希望是能够通过一些手段实现自由调用其服务接口。这篇文章主要讲述什么？
-
-静态分析和动态调试的基本方法和遇到的问题
-如何听过修改android源码实现全局hook">
-<meta property="og:image" content="https://ivonhoe.github.io/res/meituan_hack/meituan-1.png">
-<meta property="og:image" content="https://ivonhoe.github.io/res/meituan_hack/meituan_smali1.png">
-<meta property="og:image" content="https://ivonhoe.github.io/res/meituan_hack/meituan_ida.jpeg">
-<meta property="og:image" content="https://ivonhoe.github.io/res/meituan_hack/meituan_hook.png">
-<meta property="og:updated_time" content="2018-09-11T13:26:37.000Z">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Android安全之某团请求加密破解">
-<meta name="twitter:description" content="0x00 前言本文记录了破解某外卖App http请求参数加密过程中遇到的问题和解决思路，实现的目标是希望是能够通过一些手段实现自由调用其服务接口。这篇文章主要讲述什么？
-
-静态分析和动态调试的基本方法和遇到的问题
-如何听过修改android源码实现全局hook">
 
 
 
-<script type="text/javascript" id="hexo.configurations">
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.2">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.1.2">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.1.2">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.1.2">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.1.2" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
   var NexT = window.NexT || {};
   var CONFIG = {
     root: '/',
-    scheme: 'Mist',
-    sidebar: {"position":"right","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
-    fancybox: true,
-    motion: true,
-    duoshuo: {
-      userId: 'undefined',
-      author: '博主'
-    },
+    scheme: 'Gemini',
+    version: '7.1.2',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     algolia: {
       applicationID: '',
       apiKey: '',
@@ -131,34 +91,56 @@
 </script>
 
 
-
-  <link rel="canonical" href="https://ivonhoe.github.io/2017/06/18/android-app-gold-flow-hack/"/>
-
-
-
-
-
-  <title> Android安全之某团请求加密破解 | 病已的博客 </title>
-</head>
-
-<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
-
   
 
 
 
 
-<script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-  ga('create', 'UA-97550712-1', 'auto');
-  ga('send', 'pageview');
+  <meta name="description" content="0x00 前言本文记录了破解某外卖App http请求参数加密过程中遇到的问题和解决思路，实现的目标是希望是能够通过一些手段实现自由调用其服务接口。这篇文章主要讲述什么？  静态分析和动态调试的基本方法和遇到的问题 如何听过修改android源码实现全局hook">
+<meta name="keywords" content="Android,移动安全">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android安全之某团请求加密破解">
+<meta property="og:url" content="https://ivonhoe.github.io/2017/06/18/android-app-gold-flow-hack/index.html">
+<meta property="og:site_name" content="病已的博客">
+<meta property="og:description" content="0x00 前言本文记录了破解某外卖App http请求参数加密过程中遇到的问题和解决思路，实现的目标是希望是能够通过一些手段实现自由调用其服务接口。这篇文章主要讲述什么？  静态分析和动态调试的基本方法和遇到的问题 如何听过修改android源码实现全局hook">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://ivonhoe.github.io/res/meituan_hack/meituan-1.png">
+<meta property="og:image" content="https://ivonhoe.github.io/res/meituan_hack/meituan_smali1.png">
+<meta property="og:image" content="https://ivonhoe.github.io/res/meituan_hack/meituan_ida.jpeg">
+<meta property="og:image" content="https://ivonhoe.github.io/res/meituan_hack/meituan_hook.png">
+<meta property="og:updated_time" content="2018-09-11T13:26:37.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android安全之某团请求加密破解">
+<meta name="twitter:description" content="0x00 前言本文记录了破解某外卖App http请求参数加密过程中遇到的问题和解决思路，实现的目标是希望是能够通过一些手段实现自由调用其服务接口。这篇文章主要讲述什么？  静态分析和动态调试的基本方法和遇到的问题 如何听过修改android源码实现全局hook">
+<meta name="twitter:image" content="https://ivonhoe.github.io/res/meituan_hack/meituan-1.png">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="病已的博客" type="application/atom+xml">
+
+
+
+  
+  
+  <link rel="canonical" href="https://ivonhoe.github.io/2017/06/18/android-app-gold-flow-hack/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
 </script>
 
+  <title>Android安全之某团请求加密破解 | 病已的博客</title>
+  
 
-  <script type="text/javascript">
+
+
+
+
+
+  <script>
     var _hmt = _hmt || [];
     (function() {
       var hm = document.createElement("script");
@@ -174,36 +156,65 @@
 
 
 
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
 
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
 
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
 
   
   
     
   
 
-  <div class="container sidebar-position-right page-post-detail ">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
       <div class="header-inner"><div class="site-brand-wrapper">
-  <div class="site-meta ">
+  <div class="site-meta">
     
 
     <div class="custom-logo-site-title">
-      <a href="/"  class="brand" rel="start">
+      <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
         <span class="site-title">病已的博客</span>
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
+    
       
         <p class="site-subtitle">枕上，马上，厕上</p>
       
+    
+    
   </div>
 
   <div class="site-nav-toggle">
-    <button>
+    <button aria-label="切换导航栏">
       <span class="btn-bar"></span>
       <span class="btn-bar"></span>
       <span class="btn-bar"></span>
@@ -211,55 +222,103 @@
   </div>
 </div>
 
-<nav class="site-nav">
-  
 
+
+<nav class="site-nav">
   
     <ul id="menu" class="menu">
       
         
-        <li class="menu-item menu-item-home">
-          <a href="/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
-            
-            首页
-          </a>
-        </li>
-      
         
-        <li class="menu-item menu-item-categories">
-          <a href="/categories" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
-            
-            分类
-          </a>
-        </li>
-      
         
-        <li class="menu-item menu-item-archives">
-          <a href="/archives" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
-            
-            归档
-          </a>
-        </li>
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
       
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
         
-        <li class="menu-item menu-item-tags">
-          <a href="/tags" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
-            
-            标签
-          </a>
-        </li>
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
       
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
 
       
+      
     </ul>
+  
+
   
 
   
@@ -267,12 +326,30 @@
 
 
 
- </div>
+  
+
+
+
+</div>
     </header>
+
+    
+  
+  
+
+  
+
+  <a href="https://github.com/Ivonhoe" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewbox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a>
+
+
 
     <main id="main" class="main">
       <div class="main-inner">
         <div class="content-wrap">
+          
+            
+
+          
           <div id="content" class="content">
             
 
@@ -285,13 +362,19 @@
   
   
 
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://ivonhoe.github.io/2017/06/18/android-app-gold-flow-hack/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="病已">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/5706813?v=3&s=460">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -303,11 +386,8 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                Android安全之某团请求加密破解
+          <h1 class="post-title" itemprop="name headline">Android安全之某团请求加密破解
+
               
             
           </h1>
@@ -315,6 +395,11 @@
 
         <div class="post-meta">
           <span class="post-time">
+
+            
+            
+            
+
             
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
@@ -322,18 +407,35 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-18T18:13:19+08:00">
-                Jun 18 2017
-              </time>
+
+              
+                
+              
+
+              <time title="创建时间：6月 18 2017 18:13:19" itemprop="dateCreated datePublished" datetime="2017-06-18T18:13:19+08:00">6月 18 2017</time>
             
 
             
+              
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：9月 11 2018 21:26:37" itemprop="dateModified" datetime="2018-09-11T21:26:37+08:00">9月 11 2018</time>
+              
             
           </span>
 
           
-            <span class="post-category" >
+            <span class="post-category">
             
               <span class="post-meta-divider">|</span>
             
@@ -344,11 +446,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Android安全/" itemprop="url" rel="index">
-                    <span itemprop="name">Android安全</span>
-                  </a>
-                </span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Android安全/" itemprop="url" rel="index"><span itemprop="name">Android安全</span></a></span>
 
                 
                 
@@ -358,20 +456,21 @@
 
           
             
+            
           
 
           
           
-             <span id="/2017/06/18/android-app-gold-flow-hack/" class="leancloud_visitors" data-flag-title="Android安全之某团请求加密破解">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数 </span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
+            <span id="/2017/06/18/android-app-gold-flow-hack/" class="leancloud_visitors" data-flag-title="Android安全之某团请求加密破解">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              
+                <span class="post-meta-item-text">阅读次数：</span>
+              
+                <span class="leancloud-visitors-count"></span>
+            </span>
           
 
           
@@ -384,14 +483,16 @@
       </header>
     
 
-
+    
+    
+    
     <div class="post-body" itemprop="articleBody">
 
       
       
 
       
-        <h3 id="0x00_前言">0x00 前言</h3><p>本文记录了破解某外卖App http请求参数加密过程中遇到的问题和解决思路，实现的目标是希望是能够通过一些手段实现自由调用其服务接口。<br>这篇文章主要讲述什么？</p>
+        <h3 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00 前言"></a>0x00 前言</h3><p>本文记录了破解某外卖App http请求参数加密过程中遇到的问题和解决思路，实现的目标是希望是能够通过一些手段实现自由调用其服务接口。<br>这篇文章主要讲述什么？</p>
 <ol>
 <li>静态分析和动态调试的基本方法和遇到的问题</li>
 <li>如何听过修改android源码实现全局hook</li>
@@ -407,31 +508,31 @@
 <li><strong>__skcy:</strong>以上四个参数加上PostContent，调用native方法获取加密后得到该值</li>
 </ul>
 <!-- more -->
-<h3 id="0x01_尝试静态分析">0x01 尝试静态分析</h3><p>首先使用常用的静态分析工具，如apkTools、dex2jar做apk的反编译和转Jar。虽然该App安装包没有加壳，但在反编译过程中依然遇到一些问题。</p>
-<h4 id="1-1、遇到问题">1.1、遇到问题</h4><p>该App针对dex2jar工具做了防范. 原理分析请看<a href="https://ivonhoe.github.io/2017/02/09/%E7%BE%8E%E5%9B%A2%E5%A6%82%E4%BD%95%E9%98%B2dex2jar/">Android安全之应用防dex2jar原理及实现</a></p>
-<h4 id="1-2、解决方案">1.2、解决方案</h4><ul>
+<h3 id="0x01-尝试静态分析"><a href="#0x01-尝试静态分析" class="headerlink" title="0x01 尝试静态分析"></a>0x01 尝试静态分析</h3><p>首先使用常用的静态分析工具，如apkTools、dex2jar做apk的反编译和转Jar。虽然该App安装包没有加壳，但在反编译过程中依然遇到一些问题。</p>
+<h4 id="1-1、遇到问题"><a href="#1-1、遇到问题" class="headerlink" title="1.1、遇到问题"></a>1.1、遇到问题</h4><p>该App针对dex2jar工具做了防范. 原理分析请看<a href="https://ivonhoe.github.io/2017/02/09/%E7%BE%8E%E5%9B%A2%E5%A6%82%E4%BD%95%E9%98%B2dex2jar/">Android安全之应用防dex2jar原理及实现</a></p>
+<h4 id="1-2、解决方案"><a href="#1-2、解决方案" class="headerlink" title="1.2、解决方案"></a>1.2、解决方案</h4><ul>
 <li>将插入的Exist代码删除，再做smali–&gt;dex–&gt;jar处理。</li>
 <li>或者，直接阅读smali代码。</li>
 </ul>
-<h4 id="1-3、分析结果">1.3、分析结果</h4><ul>
+<h4 id="1-3、分析结果"><a href="#1-3、分析结果" class="headerlink" title="1.3、分析结果"></a>1.3、分析结果</h4><ul>
 <li>该App在java层处理Http请求的核心类是<code>CandyPreProcessor.java</code></li>
 <li>该App调用加密so的JNI类是 <code>CandyJni.java</code></li>
 <li>该App执行参数加密的so是<code>libmtguard.so</code></li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public class CandyJni&#10;&#123;&#10;  static&#10;  &#123;&#10;    System.loadLibrary(&#34;mtguard&#34;);&#10;  &#125;&#10;  &#10;  static native String getCandyDataWithKey(Object paramObject, byte[] paramArrayOfByte, String paramString);&#10;&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="0x02_尝试动态调试smali">0x02 尝试动态调试smali</h3><p>这里先使用了源apk包在root手机上进行调试，但没有成功。只能尝试重打包调试。</p>
-<h4 id="2-1、如何使用AS动态调试">2.1、如何使用AS动态调试</h4><p>参考<a href="http://www.52pojie.cn/thread-502219-1-1.html" target="_blank" rel="external">吾爱破解</a>这篇文章，需要下载AS baksmali插件，需要注意的是：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">public class CandyJni</span><br><span class="line">&#123;</span><br><span class="line">  static</span><br><span class="line">  &#123;</span><br><span class="line">    System.loadLibrary(&quot;mtguard&quot;);</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  static native String getCandyDataWithKey(Object paramObject, byte[] paramArrayOfByte, String paramString);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="0x02-尝试动态调试smali"><a href="#0x02-尝试动态调试smali" class="headerlink" title="0x02 尝试动态调试smali"></a>0x02 尝试动态调试smali</h3><p>这里先使用了源apk包在root手机上进行调试，但没有成功。只能尝试重打包调试。</p>
+<h4 id="2-1、如何使用AS动态调试"><a href="#2-1、如何使用AS动态调试" class="headerlink" title="2.1、如何使用AS动态调试"></a>2.1、如何使用AS动态调试</h4><p>参考<a href="http://www.52pojie.cn/thread-502219-1-1.html" target="_blank" rel="noopener">吾爱破解</a>这篇文章，需要下载AS baksmali插件，需要注意的是：</p>
 <ul>
 <li>AS remote debug端口号设置为8700</li>
 <li>AS没有识别安卓代码情况下工具栏没有Android Device monitor的按钮，这时候通过monitor命令启动monitor</li>
 <li>如果monitor启动时提示8700端口已经被占用，可以通过 <code>lsof -n -i4TCP:8700 | grep LISTEN</code> 命令查看8700端口目前对应的进程名</li>
 <li>attach前一定要先在monitor里选中想要调试的进程，再debug</li>
 </ul>
-<h4 id="2-2、重写Java代码，直接调用加密so">2.2、重写Java代码，直接调用加密so</h4><p>动态调试可以比较清楚的看到Java层的内部调用逻辑，通过debug watch功能可以清楚的看到寄存器值，结合反编译和静态分析可以知道调用native方法的入参格式。</p>
+<h4 id="2-2、重写Java代码，直接调用加密so"><a href="#2-2、重写Java代码，直接调用加密so" class="headerlink" title="2.2、重写Java代码，直接调用加密so"></a>2.2、重写Java代码，直接调用加密so</h4><p>动态调试可以比较清楚的看到Java层的内部调用逻辑，通过debug watch功能可以清楚的看到寄存器值，结合反编译和静态分析可以知道调用native方法的入参格式。</p>
 <p>现在的思路是解压出源apk包中的so文件，编写java代码直接调用so文件中的native方法获取计算__skcy参数。但测试的结果是一直返回<code>null</code>。这里猜测在native层中对运行环境做了监测，所以一直返回空值。</p>
 <p>这里该app的参数签名详细过程是，通过<code>__skck、__skts、__skno、__skua(详细规则见上)</code>，调用<code>CandyPreprocessor.java</code>的<code>getParametersSignature()</code>方法获取<code>__skcy</code>参数。Java层核心方法<code>getParametersSignature()</code>如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/**&#10; * @param paramBuilder https://eapi.*****/api/poi/logon/acctdevice?__skck=6a375bce8c66a0dc293860dfa83833ef&#38;__skts=1486970558719&#38;__skua=d41d8cd98f00b204e9800998ecf8427e&#38;__skno=5ed4629c-098c-489c-b598-81841e0479e0&#10; */&#10;String getParametersSignature(Uri.Builder paramBuilder, Context paramContext) &#123;&#10;    if (paramBuilder == null) &#123;&#10;        throw new RuntimeException(&#34;CandyPreprocessor getParametersSignature builder is null&#34;);&#10;    &#125;&#10;    // &#33719;&#21462;&#32593;&#32476;&#25509;&#21475;&#21517;&#31216; https://eapi.waimai.meituan.com/api/poi/logon/acctdevice&#10;    Object localObject = baseString();&#10;    if (TextUtils.isEmpty((CharSequence) localObject)) &#123;&#10;        throw new RuntimeException(&#34;CandyPreprocessor getParametersSignature normalizedURI is null&#34;);&#10;    &#125;&#10;    ArrayList localArrayList = new ArrayList();&#10;    /**&#10;     * 0 = &#123;CandyPreprocessor$MyEntry@5016&#125; &#34;__skck&#34; -&#62; &#34;6a375bce8c66a0dc293860dfa83833ef&#34;&#10;     1 = &#123;CandyPreprocessor$MyEntry@5017&#125; &#34;__skts&#34; -&#62; &#34;1486970558719&#34;&#10;     2 = &#123;CandyPreprocessor$MyEntry@5018&#125; &#34;__skua&#34; -&#62; &#34;d41d8cd98f00b204e9800998ecf8427e&#34;&#10;     3 = &#123;CandyPreprocessor$MyEntry@5019&#125; &#34;__skno&#34; -&#62; &#34;5ed4629c-098c-489c-b598-81841e0479e0&#34;&#10;     */&#10;    // &#33719;&#21462;&#21442;&#25968;key&#21644;&#21442;&#25968;value&#25918;&#21040;&#25968;&#32452;&#20013;&#10;    appendList(localArrayList, paramBuilder, false);&#10;    // add &#34;__sksc&#34; -&#62; &#34;https&#34;&#10;    // &#33719;&#21462;scheme&#25918;&#20837;&#25968;&#32452;&#20013;&#10;    localArrayList.add(new CandyPreprocessor.MyEntry(&#34;__sksc&#34;, this.candyOriginalMaterial.getScheme()));&#10;    // &#23558;post content&#25918;&#20837;&#25968;&#32452;&#20013;&#10;    if (formURLEncoded()) &#123;&#10;        // /?dVersion=23_6.0&#38;utm_medium=android&#38;password=2222&#38;utm_content=867689027084732&#38;appCode=388&#38;acctId=&#38;wmPoiId=&#38;token=&#38;uuid=03EB35F2C93419DC64AFFBC9EF6BB6BADE4DD72DC1E2F4733198E91C91AEAF93&#38;logType=C&#38;appName=%E7%BE%8E%E5%9B%A2%E5%A4%96%E5%8D%96%E5%95%86%E5%AE%B6%E7%89%88&#38;appType=4&#38;dType=PLK-TL01H&#38;userName=1111&#38;utm_term=4.2.0.388&#38;utm_source=&#38;utm_campaign=&#38;wm_appversion=4.2.0.388&#38;&#10;        // post &#30340;&#20869;&#23481;&#20837;&#21442;&#10;        /**&#10;         * 5 = &#123;CandyPreprocessor$MyEntry@5071&#125; &#34;dVersion&#34; -&#62; &#34;23_6.0&#34;&#10;         6 = &#123;CandyPreprocessor$MyEntry@5072&#125; &#34;utm_medium&#34; -&#62; &#34;android&#34;&#10;         7 = &#123;CandyPreprocessor$MyEntry@5073&#125; &#34;password&#34; -&#62; &#34;123&#34;&#10;         8 = &#123;CandyPreprocessor$MyEntry@5074&#125; &#34;utm_content&#34; -&#62; &#34;867689027084732&#34;&#10;         9 = &#123;CandyPreprocessor$MyEntry@5075&#125; &#34;appCode&#34; -&#62; &#34;388&#34;&#10;         10 = &#123;CandyPreprocessor$MyEntry@5076&#125; &#34;acctId&#34; -&#62;&#10;         11 = &#123;CandyPreprocessor$MyEntry@5077&#125; &#34;wmPoiId&#34; -&#62;&#10;         12 = &#123;CandyPreprocessor$MyEntry@5078&#125; &#34;token&#34; -&#62;&#10;         13 = &#123;CandyPreprocessor$MyEntry@5079&#125; &#34;uuid&#34; -&#62; &#34;03EB35F2C93419DC64AFFBC9EF6BB6BADE4DD72DC1E2F4733198E91C91AEAF93&#34;&#10;         14 = &#123;CandyPreprocessor$MyEntry@5080&#125; &#34;logType&#34; -&#62; &#34;C&#34;&#10;         15 = &#123;CandyPreprocessor$MyEntry@5081&#125; &#34;appName&#34; -&#62; &#34;****&#34;&#10;         16 = &#123;CandyPreprocessor$MyEntry@5082&#125; &#34;appType&#34; -&#62; &#34;4&#34;&#10;         17 = &#123;CandyPreprocessor$MyEntry@5083&#125; &#34;dType&#34; -&#62; &#34;PLK-TL01H&#34;&#10;         18 = &#123;CandyPreprocessor$MyEntry@5084&#125; &#34;userName&#34; -&#62; &#34;***&#34;&#10;         19 = &#123;CandyPreprocessor$MyEntry@5085&#125; &#34;utm_term&#34; -&#62; &#34;4.2.0.388&#34;&#10;         20 = &#123;CandyPreprocessor$MyEntry@5086&#125; &#34;utm_source&#34; -&#62;&#10;         21 = &#123;CandyPreprocessor$MyEntry@5087&#125; &#34;utm_campaign&#34; -&#62;&#10;         22 = &#123;CandyPreprocessor$MyEntry@5088&#125; &#34;wm_appversion&#34; -&#62; &#34;4.2.0.388&#34;&#10;         */&#10;        appendList(localArrayList, Uri.parse(&#34;/?&#34; + new String(this.candyOriginalMaterial.getPostContent())).buildUpon(), true);&#10;    &#125;&#10;    // &#29305;&#27530;&#23383;&#31526;&#36716;&#30721;&#10;    List percentParamList = getPercentList(localArrayList);&#10;    // &#20998;&#21035;&#23545;Value&#21644;Key&#20570;&#21319;&#24207;&#25490;&#21015;&#10;    dictionarySort(percentParamList);&#10;    // &#23558;&#25490;&#24207;&#21518;&#30340;&#25968;&#32452;&#65292;&#25340;&#25509;&#25104;&#23383;&#31526;&#20018;__skck=6a375bce8c66a0dc293860dfa83833ef&#38;__skno=5ed4629c-098c-489c-b598-81841e0479e0&#38;__sksc=https&#38;__skts=1486970558719&#38;__skua=d41d8cd98f00b204e9800998ecf8427e&#38;acctId=&#38;appCode=388&#38;appName=%E7%BE%8E%E5%9B%A2%E5%A4%96%E5%8D%96%E5%95%86%E5%AE%B6%E7%89%88&#38;appType=4&#38;dType=PLK-TL01H&#38;dVersion=23_6.0&#38;logType=C&#38;password=2222&#38;token=&#38;userName=1111&#38;utm_campaign=&#38;utm_content=867689027084732&#38;utm_medium=android&#38;utm_source=&#38;utm_term=4.2.0.388&#38;uuid=03EB35F2C93419DC64AFFBC9EF6BB6BADE4DD72DC1E2F4733198E91C91AEAF93&#38;wmPoiId=&#38;wm_appversion=4.2.0.388&#10;    String paramBuilderString = getNormalizedParameters(percentParamList);&#10;    // POST+&#31354;&#26684;+&#34;&#25509;&#21475;&#21517;&#31216;&#34;+&#31354;&#26684;+&#34;&#21442;&#25968;&#20869;&#23481;&#34;&#10;    // POST http://eapi.waimai.meituan.com/api/poi/logon/acctdevice __skck=6a375bce8c66a0dc293860dfa83833ef&#38;__skno=57749130-26d4-4239-8abd-b99c16584908&#38;__sksc=http&#38;__skts=1486995346041&#38;__skua=d41d8cd98f00b204e9800998ecf8427e&#38;acctId=&#38;appCode=388&#38;appName=%E7%BE%8E%E5%9B%A2%E5%A4%96%E5%8D%96%E5%95%86%E5%AE%B6%E7%89%88&#38;appType=4&#38;dType=PLK-TL01H&#38;dVersion=23_6.0&#38;logType=C&#38;password=2222&#38;token=&#38;userName=1111&#38;utm_campaign=&#38;utm_content=867689027084732&#38;utm_medium=android&#38;utm_source=&#38;utm_term=4.2.0.388&#38;uuid=03EB35F2C93419DC64AFFBC9EF6BB6BADE4DD72DC1E2F4733198E91C91AEAF93&#38;wmPoiId=&#38;wm_appversion=4.2.0.388&#10;    paramBuilderString = this.candyOriginalMaterial.getHttpMethod() + &#34; &#34; + (String) localObject + &#34; &#34; + paramBuilderString;&#10;    // JV1EOT1VZGN8USskB3jZYnVGyyQ=&#10;    // &#35843;&#29992;jni&#33719;&#21462;&#21152;&#23494;&#21518;&#30340;&#21442;&#25968;&#20540;__skcy&#10;    localObject = CandyJni.getCandyDataWithKey(paramContext, paramBuilderString.getBytes(), &#34;candyKey&#34;);&#10;&#10;    // TODO for test&#10;    return (String) localObject;&#10; &#125;</span><br></pre></td></tr></table></figure>
-<h4 id="2-3、修改app代码，重打包调用so">2.3、修改app代码，重打包调用so</h4><p>直接调用so的方法失败了，现在尝试反编译APK后，加入包含自己逻辑的smali代码，调用CandyJni的目的。具体的步骤是：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * @param paramBuilder https://eapi.*****/api/poi/logon/acctdevice?__skck=6a375bce8c66a0dc293860dfa83833ef&amp;__skts=1486970558719&amp;__skua=d41d8cd98f00b204e9800998ecf8427e&amp;__skno=5ed4629c-098c-489c-b598-81841e0479e0</span><br><span class="line"> */</span><br><span class="line">String getParametersSignature(Uri.Builder paramBuilder, Context paramContext) &#123;</span><br><span class="line">    if (paramBuilder == null) &#123;</span><br><span class="line">        throw new RuntimeException(&quot;CandyPreprocessor getParametersSignature builder is null&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    // 获取网络接口名称 https://eapi.waimai.meituan.com/api/poi/logon/acctdevice</span><br><span class="line">    Object localObject = baseString();</span><br><span class="line">    if (TextUtils.isEmpty((CharSequence) localObject)) &#123;</span><br><span class="line">        throw new RuntimeException(&quot;CandyPreprocessor getParametersSignature normalizedURI is null&quot;);</span><br><span class="line">    &#125;</span><br><span class="line">    ArrayList localArrayList = new ArrayList();</span><br><span class="line">    /**</span><br><span class="line">     * 0 = &#123;CandyPreprocessor$MyEntry@5016&#125; &quot;__skck&quot; -&gt; &quot;6a375bce8c66a0dc293860dfa83833ef&quot;</span><br><span class="line">     1 = &#123;CandyPreprocessor$MyEntry@5017&#125; &quot;__skts&quot; -&gt; &quot;1486970558719&quot;</span><br><span class="line">     2 = &#123;CandyPreprocessor$MyEntry@5018&#125; &quot;__skua&quot; -&gt; &quot;d41d8cd98f00b204e9800998ecf8427e&quot;</span><br><span class="line">     3 = &#123;CandyPreprocessor$MyEntry@5019&#125; &quot;__skno&quot; -&gt; &quot;5ed4629c-098c-489c-b598-81841e0479e0&quot;</span><br><span class="line">     */</span><br><span class="line">    // 获取参数key和参数value放到数组中</span><br><span class="line">    appendList(localArrayList, paramBuilder, false);</span><br><span class="line">    // add &quot;__sksc&quot; -&gt; &quot;https&quot;</span><br><span class="line">    // 获取scheme放入数组中</span><br><span class="line">    localArrayList.add(new CandyPreprocessor.MyEntry(&quot;__sksc&quot;, this.candyOriginalMaterial.getScheme()));</span><br><span class="line">    // 将post content放入数组中</span><br><span class="line">    if (formURLEncoded()) &#123;</span><br><span class="line">        // /?dVersion=23_6.0&amp;utm_medium=android&amp;password=2222&amp;utm_content=867689027084732&amp;appCode=388&amp;acctId=&amp;wmPoiId=&amp;token=&amp;uuid=03EB35F2C93419DC64AFFBC9EF6BB6BADE4DD72DC1E2F4733198E91C91AEAF93&amp;logType=C&amp;appName=%E7%BE%8E%E5%9B%A2%E5%A4%96%E5%8D%96%E5%95%86%E5%AE%B6%E7%89%88&amp;appType=4&amp;dType=PLK-TL01H&amp;userName=1111&amp;utm_term=4.2.0.388&amp;utm_source=&amp;utm_campaign=&amp;wm_appversion=4.2.0.388&amp;</span><br><span class="line">        // post 的内容入参</span><br><span class="line">        /**</span><br><span class="line">         * 5 = &#123;CandyPreprocessor$MyEntry@5071&#125; &quot;dVersion&quot; -&gt; &quot;23_6.0&quot;</span><br><span class="line">         6 = &#123;CandyPreprocessor$MyEntry@5072&#125; &quot;utm_medium&quot; -&gt; &quot;android&quot;</span><br><span class="line">         7 = &#123;CandyPreprocessor$MyEntry@5073&#125; &quot;password&quot; -&gt; &quot;123&quot;</span><br><span class="line">         8 = &#123;CandyPreprocessor$MyEntry@5074&#125; &quot;utm_content&quot; -&gt; &quot;867689027084732&quot;</span><br><span class="line">         9 = &#123;CandyPreprocessor$MyEntry@5075&#125; &quot;appCode&quot; -&gt; &quot;388&quot;</span><br><span class="line">         10 = &#123;CandyPreprocessor$MyEntry@5076&#125; &quot;acctId&quot; -&gt;</span><br><span class="line">         11 = &#123;CandyPreprocessor$MyEntry@5077&#125; &quot;wmPoiId&quot; -&gt;</span><br><span class="line">         12 = &#123;CandyPreprocessor$MyEntry@5078&#125; &quot;token&quot; -&gt;</span><br><span class="line">         13 = &#123;CandyPreprocessor$MyEntry@5079&#125; &quot;uuid&quot; -&gt; &quot;03EB35F2C93419DC64AFFBC9EF6BB6BADE4DD72DC1E2F4733198E91C91AEAF93&quot;</span><br><span class="line">         14 = &#123;CandyPreprocessor$MyEntry@5080&#125; &quot;logType&quot; -&gt; &quot;C&quot;</span><br><span class="line">         15 = &#123;CandyPreprocessor$MyEntry@5081&#125; &quot;appName&quot; -&gt; &quot;****&quot;</span><br><span class="line">         16 = &#123;CandyPreprocessor$MyEntry@5082&#125; &quot;appType&quot; -&gt; &quot;4&quot;</span><br><span class="line">         17 = &#123;CandyPreprocessor$MyEntry@5083&#125; &quot;dType&quot; -&gt; &quot;PLK-TL01H&quot;</span><br><span class="line">         18 = &#123;CandyPreprocessor$MyEntry@5084&#125; &quot;userName&quot; -&gt; &quot;***&quot;</span><br><span class="line">         19 = &#123;CandyPreprocessor$MyEntry@5085&#125; &quot;utm_term&quot; -&gt; &quot;4.2.0.388&quot;</span><br><span class="line">         20 = &#123;CandyPreprocessor$MyEntry@5086&#125; &quot;utm_source&quot; -&gt;</span><br><span class="line">         21 = &#123;CandyPreprocessor$MyEntry@5087&#125; &quot;utm_campaign&quot; -&gt;</span><br><span class="line">         22 = &#123;CandyPreprocessor$MyEntry@5088&#125; &quot;wm_appversion&quot; -&gt; &quot;4.2.0.388&quot;</span><br><span class="line">         */</span><br><span class="line">        appendList(localArrayList, Uri.parse(&quot;/?&quot; + new String(this.candyOriginalMaterial.getPostContent())).buildUpon(), true);</span><br><span class="line">    &#125;</span><br><span class="line">    // 特殊字符转码</span><br><span class="line">    List percentParamList = getPercentList(localArrayList);</span><br><span class="line">    // 分别对Value和Key做升序排列</span><br><span class="line">    dictionarySort(percentParamList);</span><br><span class="line">    // 将排序后的数组，拼接成字符串__skck=6a375bce8c66a0dc293860dfa83833ef&amp;__skno=5ed4629c-098c-489c-b598-81841e0479e0&amp;__sksc=https&amp;__skts=1486970558719&amp;__skua=d41d8cd98f00b204e9800998ecf8427e&amp;acctId=&amp;appCode=388&amp;appName=%E7%BE%8E%E5%9B%A2%E5%A4%96%E5%8D%96%E5%95%86%E5%AE%B6%E7%89%88&amp;appType=4&amp;dType=PLK-TL01H&amp;dVersion=23_6.0&amp;logType=C&amp;password=2222&amp;token=&amp;userName=1111&amp;utm_campaign=&amp;utm_content=867689027084732&amp;utm_medium=android&amp;utm_source=&amp;utm_term=4.2.0.388&amp;uuid=03EB35F2C93419DC64AFFBC9EF6BB6BADE4DD72DC1E2F4733198E91C91AEAF93&amp;wmPoiId=&amp;wm_appversion=4.2.0.388</span><br><span class="line">    String paramBuilderString = getNormalizedParameters(percentParamList);</span><br><span class="line">    // POST+空格+&quot;接口名称&quot;+空格+&quot;参数内容&quot;</span><br><span class="line">    // POST http://eapi.waimai.meituan.com/api/poi/logon/acctdevice __skck=6a375bce8c66a0dc293860dfa83833ef&amp;__skno=57749130-26d4-4239-8abd-b99c16584908&amp;__sksc=http&amp;__skts=1486995346041&amp;__skua=d41d8cd98f00b204e9800998ecf8427e&amp;acctId=&amp;appCode=388&amp;appName=%E7%BE%8E%E5%9B%A2%E5%A4%96%E5%8D%96%E5%95%86%E5%AE%B6%E7%89%88&amp;appType=4&amp;dType=PLK-TL01H&amp;dVersion=23_6.0&amp;logType=C&amp;password=2222&amp;token=&amp;userName=1111&amp;utm_campaign=&amp;utm_content=867689027084732&amp;utm_medium=android&amp;utm_source=&amp;utm_term=4.2.0.388&amp;uuid=03EB35F2C93419DC64AFFBC9EF6BB6BADE4DD72DC1E2F4733198E91C91AEAF93&amp;wmPoiId=&amp;wm_appversion=4.2.0.388</span><br><span class="line">    paramBuilderString = this.candyOriginalMaterial.getHttpMethod() + &quot; &quot; + (String) localObject + &quot; &quot; + paramBuilderString;</span><br><span class="line">    // JV1EOT1VZGN8USskB3jZYnVGyyQ=</span><br><span class="line">    // 调用jni获取加密后的参数值__skcy</span><br><span class="line">    localObject = CandyJni.getCandyDataWithKey(paramContext, paramBuilderString.getBytes(), &quot;candyKey&quot;);</span><br><span class="line"></span><br><span class="line">    // TODO for test</span><br><span class="line">    return (String) localObject;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<h4 id="2-3、修改app代码，重打包调用so"><a href="#2-3、修改app代码，重打包调用so" class="headerlink" title="2.3、修改app代码，重打包调用so"></a>2.3、修改app代码，重打包调用so</h4><p>直接调用so的方法失败了，现在尝试反编译APK后，加入包含自己逻辑的smali代码，调用CandyJni的目的。具体的步骤是：</p>
 <ul>
 <li>利用上2.2的项目，拷贝和该App CandyJni完全相同的类名，方法名。</li>
 <li>编写CandyHackActivity.Java和CandyHack.java，去调用新项目中的CandyJni，并打包。</li>
@@ -440,78 +541,54 @@
 <li>重打包，签名，安装。</li>
 <li>通过adb命令启动CandyHackActivity。</li>
 </ul>
-<p><img src="/res/meituan_hack/meituan_smali1.png" alt=""></p>
+<p><img src="/res/meituan_hack/meituan_smali1.png" alt></p>
 <p>结果一点不意外，能够成功调用CandyJni中的方法并且有返回值，但是经过测试在相同入参的情况下，和源APK包的加密结果不一致。问题应该出在签名。猜测应该是so中的方法将应用签名作为了一个加密参数。虽然能正常调用，但结果是错的~~</p>
-<h4 id="2-4、尝试IDA_pro反编译so">2.4、尝试IDA pro反编译so</h4><p>一句话，IDA反编译后发现，在function窗口中找不到getCandyDataWithKey或者getCandyData这些在Java层声明的native方法。应该是使用了动态注册的方式注册了native方法，又一次把代码阅读门槛从C升级到了汇编，泪目~~~</p>
+<h4 id="2-4、尝试IDA-pro反编译so"><a href="#2-4、尝试IDA-pro反编译so" class="headerlink" title="2.4、尝试IDA pro反编译so"></a>2.4、尝试IDA pro反编译so</h4><p>一句话，IDA反编译后发现，在function窗口中找不到getCandyDataWithKey或者getCandyData这些在Java层声明的native方法。应该是使用了动态注册的方式注册了native方法，又一次把代码阅读门槛从C升级到了汇编，泪目~~~</p>
 <p><img src="/res/meituan_hack/meituan_ida.jpeg" alt="native方法混淆"></p>
-<h4 id="2-5、总结问题">2.5、总结问题</h4><ul>
+<h4 id="2-5、总结问题"><a href="#2-5、总结问题" class="headerlink" title="2.5、总结问题"></a>2.5、总结问题</h4><ul>
 <li>想要在root机器上动态调试dex，但不进行重打包，就需要绕过他的反调试手段。反调试手段是什么？怎么绕过？我不知道</li>
 <li>想要通过重打包动态调试dex，重打包必须重新签名，重新签名会导致加密算法计算结果出错。</li>
 <li>想要反编译so，需要阅读加密后的C语言和汇编语言。汗！我是菜鸟汇编阅读不来</li>
 </ul>
-<h3 id="0x03_万金流破解思路">0x03 万金流破解思路</h3><p>根据以上分析的过程，发现不管是重打包、借用so、静态分析、动态调试等基础的破解方式，该app都做了相应的防护措施，总的破解思路都是破坏了app原有环境。在一次逛安全论坛的过程中，看到通过修改Android原生代码加载特定so的思路，其实这种破解思路也适用于app的破解。如果在app启动时，让app进程的DexClassLoader能够加载你自己的代码，那么不管在任何的app运行环境中，诸如修改内存变量、调用方法或者是改变原有app系统的处理流程等目的都能够轻松达到。当然前提是运行在自己编译的Android源码或者是已经root的机器上。下面就以这个思路针对该外卖app做具体的破解实操，目标是在pc上能够自由调用该app服务端的http接口。</p>
-<h4 id="3-1-_下载并修改源码">3.1. 下载并修改源码</h4><p>如何下载编译源码这里不废话，没有尝试过的可以参考这篇<a href="http://ivonhoe.github.io/2017/01/20/MacOS%E4%B8%8A%E7%BC%96%E8%AF%91Android%E6%BA%90%E7%A0%81/">《Mac OS上编译Android源码》</a>。<br>在<code>ActivityThread.java</code>的<code>handleBindApplication()</code>方法中增加dex注入的逻辑。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">private void handleBindApplication(AppBindData data) &#123;&#10;    // &#30465;&#30053;&#28304;&#30721;...&#10;    &#10;    //=================&#20840;&#23616;&#27880;&#20837;&#20043;&#20462;&#25913;java&#23618;===================================================&#10;    checkFrameworkInject(data.processName);&#10;    //=============================================================================&#10;&#125;&#10;&#10;private void checkFrameworkInject(String processName) &#123;&#10;    //=================&#20840;&#23616;&#27880;&#20837;&#20043;&#20462;&#25913;java&#23618;===================================================&#10;    Log.e(&#34;frameworkInjector&#34;, &#34;--processName=&#34; + processName);&#10;    invokeJarLoader(processName);&#10;    //=============================================================================&#10;&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="0x03-万金流破解思路"><a href="#0x03-万金流破解思路" class="headerlink" title="0x03 万金流破解思路"></a>0x03 万金流破解思路</h3><p>根据以上分析的过程，发现不管是重打包、借用so、静态分析、动态调试等基础的破解方式，该app都做了相应的防护措施，总的破解思路都是破坏了app原有环境。在一次逛安全论坛的过程中，看到通过修改Android原生代码加载特定so的思路，其实这种破解思路也适用于app的破解。如果在app启动时，让app进程的DexClassLoader能够加载你自己的代码，那么不管在任何的app运行环境中，诸如修改内存变量、调用方法或者是改变原有app系统的处理流程等目的都能够轻松达到。当然前提是运行在自己编译的Android源码或者是已经root的机器上。下面就以这个思路针对该外卖app做具体的破解实操，目标是在pc上能够自由调用该app服务端的http接口。</p>
+<h4 id="3-1-下载并修改源码"><a href="#3-1-下载并修改源码" class="headerlink" title="3.1. 下载并修改源码"></a>3.1. 下载并修改源码</h4><p>如何下载编译源码这里不废话，没有尝试过的可以参考这篇<a href="http://ivonhoe.github.io/2017/01/20/MacOS%E4%B8%8A%E7%BC%96%E8%AF%91Android%E6%BA%90%E7%A0%81/">《Mac OS上编译Android源码》</a>。<br>在<code>ActivityThread.java</code>的<code>handleBindApplication()</code>方法中增加dex注入的逻辑。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">private void handleBindApplication(AppBindData data) &#123;</span><br><span class="line">    // 省略源码...</span><br><span class="line">    </span><br><span class="line">    //=================全局注入之修改java层===================================================</span><br><span class="line">    checkFrameworkInject(data.processName);</span><br><span class="line">    //=============================================================================</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">private void checkFrameworkInject(String processName) &#123;</span><br><span class="line">    //=================全局注入之修改java层===================================================</span><br><span class="line">    Log.e(&quot;frameworkInjector&quot;, &quot;--processName=&quot; + processName);</span><br><span class="line">    invokeJarLoader(processName);</span><br><span class="line">    //=============================================================================</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>从指定路径加载配置文件，配置信息包括要dex注入的进程名，dex路径，dex中main函数信息。<br>当相应的进程启动时，加载指定路径的dex，并运用其中的main函数。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/**&#10;     * &#26681;&#25454;&#37197;&#32622;&#21152;&#36733;jar&#65292;&#25191;&#34892;&#25351;&#23450;&#31867;&#30340;main&#26041;&#27861;&#10;     */&#10;    public void invokeJarLoader(String processName) &#123;&#10;        List&#60;String&#62; config = readHookConfig(&#34;/data/local/jarHookConfig.txt&#34;);&#10;&#10;        if (config == null || config.size() &#60; 3) &#123;&#10;            return;&#10;        &#125;&#10;&#10;        String configProcessName = config.get(0);&#10;        String configJarPath = config.get(1);&#10;        String configClassName = config.get(2);&#10;&#10;        if (processName.equals(configProcessName) &#38;&#38; !TextUtils.isEmpty(configJarPath)&#10;                &#38;&#38; !TextUtils.isEmpty(configClassName)) &#123;&#10;            Log.e(&#34;frameworkInjector&#34;, &#34;targetPackage:&#34; + configProcessName +&#10;                    &#34;,start-load-jarPath&#34; + configJarPath + &#34;, class name:&#34; + configClassName);&#10;            jarInvokeTest(configJarPath, configClassName);&#10;        &#125;&#10;    &#125;&#10;&#10;    public void jarInvokeTest(String jarPath, String className) &#123;&#10;        final File optimizedDexOutputPath = new File(jarPath);&#10;        Context context = getApplication();&#10;        File dexOutputDir = context.getDir(&#34;dex&#34;, 0);&#10;        DexClassLoader cl = new DexClassLoader(&#10;                optimizedDexOutputPath.getAbsolutePath(),&#10;                dexOutputDir.getAbsolutePath(), null, context.getClassLoader());&#10;        Class libProviderClazz = null;&#10;&#10;        try &#123;&#10;            libProviderClazz = cl.loadClass(className);&#10;            Method method = libProviderClazz.getMethod(&#34;main&#34;);&#10;            method.invoke(null, (Object[]) null);&#10;        &#125; catch (ClassNotFoundException e) &#123;&#10;            e.printStackTrace();&#10;        &#125; catch (IllegalAccessException e) &#123;&#10;            e.printStackTrace();&#10;        &#125; catch (NoSuchMethodException e) &#123;&#10;            e.printStackTrace();&#10;        &#125; catch (InvocationTargetException e) &#123;&#10;            e.printStackTrace();&#10;        &#125;&#10;    &#125;</span><br></pre></td></tr></table></figure>
-<h4 id="3-2_生成注入的dex">3.2 生成注入的dex</h4><p>在这里具体的注入代码就不啰嗦了，总的来说你可以针对任何app中的任何方法变量任意操作。如果你想在pc上实现请求的自由收发要稍微复杂些，你需要实现一个简单的Hook socket server（简称HSS），将HSS打包成dex做注入，将参与参数加密的数据发送给HSS，HSS调用app中的加密方法获取加密结果，并将最终的加密结果发送出来就可以啦。具体的实现如下图所示:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line">     * 根据配置加载jar，执行指定类的main方法</span><br><span class="line">     */</span><br><span class="line">    public void invokeJarLoader(String processName) &#123;</span><br><span class="line">        List&lt;String&gt; config = readHookConfig(&quot;/data/local/jarHookConfig.txt&quot;);</span><br><span class="line"></span><br><span class="line">        if (config == null || config.size() &lt; 3) &#123;</span><br><span class="line">            return;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        String configProcessName = config.get(0);</span><br><span class="line">        String configJarPath = config.get(1);</span><br><span class="line">        String configClassName = config.get(2);</span><br><span class="line"></span><br><span class="line">        if (processName.equals(configProcessName) &amp;&amp; !TextUtils.isEmpty(configJarPath)</span><br><span class="line">                &amp;&amp; !TextUtils.isEmpty(configClassName)) &#123;</span><br><span class="line">            Log.e(&quot;frameworkInjector&quot;, &quot;targetPackage:&quot; + configProcessName +</span><br><span class="line">                    &quot;,start-load-jarPath&quot; + configJarPath + &quot;, class name:&quot; + configClassName);</span><br><span class="line">            jarInvokeTest(configJarPath, configClassName);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void jarInvokeTest(String jarPath, String className) &#123;</span><br><span class="line">        final File optimizedDexOutputPath = new File(jarPath);</span><br><span class="line">        Context context = getApplication();</span><br><span class="line">        File dexOutputDir = context.getDir(&quot;dex&quot;, 0);</span><br><span class="line">        DexClassLoader cl = new DexClassLoader(</span><br><span class="line">                optimizedDexOutputPath.getAbsolutePath(),</span><br><span class="line">                dexOutputDir.getAbsolutePath(), null, context.getClassLoader());</span><br><span class="line">        Class libProviderClazz = null;</span><br><span class="line"></span><br><span class="line">        try &#123;</span><br><span class="line">            libProviderClazz = cl.loadClass(className);</span><br><span class="line">            Method method = libProviderClazz.getMethod(&quot;main&quot;);</span><br><span class="line">            method.invoke(null, (Object[]) null);</span><br><span class="line">        &#125; catch (ClassNotFoundException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125; catch (IllegalAccessException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125; catch (NoSuchMethodException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125; catch (InvocationTargetException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<h4 id="3-2-生成注入的dex"><a href="#3-2-生成注入的dex" class="headerlink" title="3.2 生成注入的dex"></a>3.2 生成注入的dex</h4><p>在这里具体的注入代码就不啰嗦了，总的来说你可以针对任何app中的任何方法变量任意操作。如果你想在pc上实现请求的自由收发要稍微复杂些，你需要实现一个简单的Hook socket server（简称HSS），将HSS打包成dex做注入，将参与参数加密的数据发送给HSS，HSS调用app中的加密方法获取加密结果，并将最终的加密结果发送出来就可以啦。具体的实现如下图所示:</p>
 <p><img src="/res/meituan_hack/meituan_hook.png" alt="hook结构图"></p>
-<h3 id="0x04_严重声明">0x04 严重声明</h3><p><strong>本文的意图只有一个，就是通过分析app学习更多的逆向技术，如果有人利用本文知识和技术进行非法操作进行牟利，带来的任何法律责任都将由操作者本人承担，和本文作者无任何关系，最终还是希望大家能够秉着学习的心态阅读此文。</strong></p>
-<h3 id="0x05_参考文档">0x05 参考文档</h3><ul>
-<li><a href="http://www.jianshu.com/p/730c6e3e21f6" target="_blank" rel="external">Smali语法</a></li>
-<li><a href="http://blog.csdn.net/niexinming/article/details/54318634" target="_blank" rel="external">逆向加固的apk详细教程</a></li>
-<li><a href="http://www.52pojie.cn/thread-564459-1-1.html" target="_blank" rel="external">修改源码实现全局(无需root)注入躲开注入检测</a></li>
-<li><a href="http://www.jianshu.com/p/6438f161875a" target="_blank" rel="external">Android动态加载jar</a></li>
-<li><a href="http://www.jianshu.com/p/61cfa1347894" target="_blank" rel="external">Java之jar打包</a></li>
+<h3 id="0x04-严重声明"><a href="#0x04-严重声明" class="headerlink" title="0x04 严重声明"></a>0x04 严重声明</h3><p><strong>本文的意图只有一个，就是通过分析app学习更多的逆向技术，如果有人利用本文知识和技术进行非法操作进行牟利，带来的任何法律责任都将由操作者本人承担，和本文作者无任何关系，最终还是希望大家能够秉着学习的心态阅读此文。</strong></p>
+<h3 id="0x05-参考文档"><a href="#0x05-参考文档" class="headerlink" title="0x05 参考文档"></a>0x05 参考文档</h3><ul>
+<li><a href="http://www.jianshu.com/p/730c6e3e21f6" target="_blank" rel="noopener">Smali语法</a></li>
+<li><a href="http://blog.csdn.net/niexinming/article/details/54318634" target="_blank" rel="noopener">逆向加固的apk详细教程</a></li>
+<li><a href="http://www.52pojie.cn/thread-564459-1-1.html" target="_blank" rel="noopener">修改源码实现全局(无需root)注入躲开注入检测</a></li>
+<li><a href="http://www.jianshu.com/p/6438f161875a" target="_blank" rel="noopener">Android动态加载jar</a></li>
+<li><a href="http://www.jianshu.com/p/61cfa1347894" target="_blank" rel="noopener">Java之jar打包</a></li>
 </ul>
-<h3 id="0x06_转载请标明出处病已blog_https://ivonhoe-github-io/">0x06 转载请标明出处<a href="https://ivonhoe.github.io/">病已blog https://ivonhoe.github.io/</a></h3>
+<h3 id="0x06-转载请标明出处病已blog-https-ivonhoe-github-io"><a href="#0x06-转载请标明出处病已blog-https-ivonhoe-github-io" class="headerlink" title="0x06 转载请标明出处病已blog https://ivonhoe.github.io/"></a>0x06 转载请标明出处<a href="https://ivonhoe.github.io/">病已blog https://ivonhoe.github.io/</a></h3>
       
     </div>
 
-    <div>
-      
-        
+    
 
-      
-    </div>
+    
+    
+    
 
-    <div>
-      
-        
-  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
-    <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
-    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
-      <span>赏</span>
-    </button>
-    <div id="QR" style="display: none;">
-      
-        <div id="wechat" style="display: inline-block">
-          <img id="wechat_qr" src="https://ivonhoe.github.io/res/dex2jar_error/WechatIMG56.png" alt="病已 WeChat Pay"/>
-          <p>微信打赏</p>
-        </div>
-      
-      
-        <div id="alipay" style="display: inline-block">
-          <img id="alipay_qr" src="https://ivonhoe.github.io/res/dex2jar_error/WechatIMG57.jpeg" alt="病已 Alipay"/>
-          <p>支付宝打赏</p>
-        </div>
-      
-    </div>
-  </div>
+    
 
-
+    
       
-    </div>
+    
+    
 
-    <div>
-      
-        
-
-      
-    </div>
+    
 
     <footer class="post-footer">
       
+        
+          
+        
         <div class="post-tags">
           
             <a href="/tags/Android/" rel="tag"># Android</a>
@@ -522,7 +599,7 @@
       
 
       
-        
+      
       
 
       
@@ -550,24 +627,21 @@
       
       
     </footer>
+  </div>
+  
+  
+  
   </article>
 
 
-
-    <div class="post-spread">
-      
-    </div>
   </div>
 
 
           </div>
           
 
+  
 
-          
-  <div class="comments" id="comments">
-    
-  </div>
 
 
         </div>
@@ -589,110 +663,208 @@
 
       
         <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
             文章目录
           </li>
-          <li class="sidebar-nav-overview" data-target="site-overview">
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
             站点概览
           </li>
         </ul>
       
 
-      <section class="site-overview sidebar-panel">
-        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-          <img class="site-author-image" itemprop="image"
-               src="https://avatars1.githubusercontent.com/u/5706813?v=3&s=460"
-               alt="病已" />
-          <p class="site-author-name" itemprop="name">病已</p>
-           
-              <p class="site-description motion-element" itemprop="description"></p>
-          
-        </div>
-        <nav class="site-state motion-element">
-
-          
-            <div class="site-state-item site-state-posts">
-              <a href="/archives">
-                <span class="site-state-item-count">33</span>
-                <span class="site-state-item-name">日志</span>
-              </a>
-            </div>
-          
-
-          
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
-            
-            <div class="site-state-item site-state-categories">
-              <a href="/categories/index.html">
-                <span class="site-state-item-count">8</span>
-                <span class="site-state-item-name">分类</span>
-              </a>
-            </div>
-          
-
-          
-            
-            
-            <div class="site-state-item site-state-tags">
-              <a href="/tags/index.html">
-                <span class="site-state-item-count">39</span>
-                <span class="site-state-item-name">标签</span>
-              </a>
-            </div>
-          
-
-        </nav>
-
-        
-          <div class="feed-link motion-element">
-            <a href="/atom.xml" rel="alternate">
-              <i class="fa fa-rss"></i>
-              RSS
-            </a>
+              <p class="site-author-name" itemprop="name">病已</p>
+              <div class="site-description motion-element" itemprop="description"></div>
           </div>
-        
 
-        <div class="links-of-author motion-element">
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">33</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">8</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">39</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+
+          
+
+          
+          
+
           
             
-              <span class="links-of-author-item">
-                <a href="https://github.com/Ivonhoe" target="_blank" title="GitHub">
-                  
-                    <i class="fa fa-fw fa-github"></i>
-                  
-                  GitHub
-                </a>
-              </span>
-            
           
+          
+
         </div>
-
-        
-        
-
-        
-        
-
-        
-
-
-      </section>
+      </div>
 
       
       <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
           <div class="post-toc">
 
             
-              
+            
+            
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#0x00_前言"><span class="nav-number">1.</span> <span class="nav-text">0x00 前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x01_尝试静态分析"><span class="nav-number">2.</span> <span class="nav-text">0x01 尝试静态分析</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1、遇到问题"><span class="nav-number">2.1.</span> <span class="nav-text">1.1、遇到问题</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-2、解决方案"><span class="nav-number">2.2.</span> <span class="nav-text">1.2、解决方案</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-3、分析结果"><span class="nav-number">2.3.</span> <span class="nav-text">1.3、分析结果</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x02_尝试动态调试smali"><span class="nav-number">3.</span> <span class="nav-text">0x02 尝试动态调试smali</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1、如何使用AS动态调试"><span class="nav-number">3.1.</span> <span class="nav-text">2.1、如何使用AS动态调试</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2、重写Java代码，直接调用加密so"><span class="nav-number">3.2.</span> <span class="nav-text">2.2、重写Java代码，直接调用加密so</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3、修改app代码，重打包调用so"><span class="nav-number">3.3.</span> <span class="nav-text">2.3、修改app代码，重打包调用so</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-4、尝试IDA_pro反编译so"><span class="nav-number">3.4.</span> <span class="nav-text">2.4、尝试IDA pro反编译so</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-5、总结问题"><span class="nav-number">3.5.</span> <span class="nav-text">2.5、总结问题</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x03_万金流破解思路"><span class="nav-number">4.</span> <span class="nav-text">0x03 万金流破解思路</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-_下载并修改源码"><span class="nav-number">4.1.</span> <span class="nav-text">3.1. 下载并修改源码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2_生成注入的dex"><span class="nav-number">4.2.</span> <span class="nav-text">3.2 生成注入的dex</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x04_严重声明"><span class="nav-number">5.</span> <span class="nav-text">0x04 严重声明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x05_参考文档"><span class="nav-number">6.</span> <span class="nav-text">0x05 参考文档</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x06_转载请标明出处病已blog_https://ivonhoe-github-io/"><span class="nav-number">7.</span> <span class="nav-text">0x06 转载请标明出处病已blog https://ivonhoe.github.io/</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#0x00-前言"><span class="nav-number">1.</span> <span class="nav-text">0x00 前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x01-尝试静态分析"><span class="nav-number">2.</span> <span class="nav-text">0x01 尝试静态分析</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1、遇到问题"><span class="nav-number">2.1.</span> <span class="nav-text">1.1、遇到问题</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-2、解决方案"><span class="nav-number">2.2.</span> <span class="nav-text">1.2、解决方案</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-3、分析结果"><span class="nav-number">2.3.</span> <span class="nav-text">1.3、分析结果</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x02-尝试动态调试smali"><span class="nav-number">3.</span> <span class="nav-text">0x02 尝试动态调试smali</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1、如何使用AS动态调试"><span class="nav-number">3.1.</span> <span class="nav-text">2.1、如何使用AS动态调试</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2、重写Java代码，直接调用加密so"><span class="nav-number">3.2.</span> <span class="nav-text">2.2、重写Java代码，直接调用加密so</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3、修改app代码，重打包调用so"><span class="nav-number">3.3.</span> <span class="nav-text">2.3、修改app代码，重打包调用so</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-4、尝试IDA-pro反编译so"><span class="nav-number">3.4.</span> <span class="nav-text">2.4、尝试IDA pro反编译so</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-5、总结问题"><span class="nav-number">3.5.</span> <span class="nav-text">2.5、总结问题</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x03-万金流破解思路"><span class="nav-number">4.</span> <span class="nav-text">0x03 万金流破解思路</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-下载并修改源码"><span class="nav-number">4.1.</span> <span class="nav-text">3.1. 下载并修改源码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-生成注入的dex"><span class="nav-number">4.2.</span> <span class="nav-text">3.2 生成注入的dex</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x04-严重声明"><span class="nav-number">5.</span> <span class="nav-text">0x04 严重声明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x05-参考文档"><span class="nav-number">6.</span> <span class="nav-text">0x05 参考文档</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x06-转载请标明出处病已blog-https-ivonhoe-github-io"><span class="nav-number">7.</span> <span class="nav-text">0x06 转载请标明出处病已blog https://ivonhoe.github.io/</span></a></li></ol></div>
             
 
           </div>
-        </section>
+        </div>
       <!--/noindex-->
       
 
@@ -700,6 +872,7 @@
 
     </div>
   </aside>
+  
 
 
         
@@ -708,30 +881,39 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright" >
-  
-  &copy; 
-  <span itemprop="copyrightYear">2019</span>
-  <span class="with-love">
-    <i class="fa fa-heart"></i>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">病已</span>
+
+  
+
+  
 </div>
 
 
-<div class="powered-by">
-  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
-</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
 
-<div class="theme-info">
-  主题 -
-  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
-    NexT.Mist
-  </a>
-</div>
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.1.2</div>
+
+
 
 
         
+
+
+
+
+
+
+
 
         
       </div>
@@ -744,11 +926,16 @@
       </div>
     
 
+    
+
+    
+
+    
   </div>
 
   
 
-<script type="text/javascript">
+<script>
   if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
     window.Promise = null;
   }
@@ -762,7 +949,6 @@
 
 
 
-  
 
 
 
@@ -771,53 +957,9 @@
 
 
 
-  
-  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
-
-  
-  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
-
-  
-  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
-
-  
-  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
-
-  
-  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
-
-  
-  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
-
-
-  
-
-
-  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
-
-  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
 
 
 
-  
-  
-
-  
-  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
-<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
-
-
-
-  
-
-
-  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
-
-
-
-  
-
-  
 
 
 
@@ -825,19 +967,57 @@
 
 
   
+  <script src="/lib/jquery/index.js?v=3.4.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.2"></script>
+
+  <script src="/js/motion.js?v=7.1.2"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/affix.js?v=7.1.2"></script>
+
+  <script src="/js/schemes/pisces.js?v=7.1.2"></script>
 
 
 
 
-	
-
-
+  
+  <script src="/js/scrollspy.js?v=7.1.2"></script>
+<script src="/js/post-details.js?v=7.1.2"></script>
 
 
 
   
 
 
+  <script src="/js/next-boot.js?v=7.1.2"></script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
 
 
   
@@ -846,119 +1026,88 @@
 
 
   
-
-
-
-
-
   
-
-  
-  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
-  <script>AV.initialize("JdLpddsaWqwfJtXPdDK8woaF-gzGzoHsz", "CEmtHXH8f0PtvF0zYtVE0EeY");</script>
   <script>
-    function showTime(Counter) {
-      var query = new AV.Query(Counter);
-      var entries = [];
-      var $visitors = $(".leancloud_visitors");
-
-      $visitors.each(function () {
-        entries.push( $(this).attr("id").trim() );
-      });
-
-      query.containedIn('url', entries);
-      query.find()
-        .done(function (results) {
-          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
-
-          if (results.length === 0) {
-            $visitors.find(COUNT_CONTAINER_REF).text(0);
-            return;
-          }
-
-          for (var i = 0; i < results.length; i++) {
-            var item = results[i];
-            var url = item.get('url');
-            var time = item.get('time');
-            var element = document.getElementById(url);
-
-            $(element).find(COUNT_CONTAINER_REF).text(time);
-          }
-          for(var i = 0; i < entries.length; i++) {
-            var url = entries[i];
-            var element = document.getElementById(url);
-            var countSpan = $(element).find(COUNT_CONTAINER_REF);
-            if( countSpan.text() == '') {
-              countSpan.text(0);
-            }
-          }
-        })
-        .fail(function (object, error) {
-          console.log("Error: " + error.code + " " + error.message);
-        });
-    }
-
+    
     function addCount(Counter) {
-      var $visitors = $(".leancloud_visitors");
+      var $visitors = $('.leancloud_visitors');
       var url = $visitors.attr('id').trim();
       var title = $visitors.attr('data-flag-title').trim();
-      var query = new AV.Query(Counter);
 
-      query.equalTo("url", url);
-      query.find({
-        success: function(results) {
+      Counter('get', '/classes/Counter', { where: JSON.stringify({ url }) })
+        .done(function({ results }) {
           if (results.length > 0) {
             var counter = results[0];
-            counter.fetchWhenSave(true);
-            counter.increment("time");
-            counter.save(null, {
-              success: function(counter) {
+            
+            Counter('put', '/classes/Counter/' + counter.objectId, JSON.stringify({ time: { '__op': 'Increment', 'amount': 1 } }))
+            
+              .done(function() {
                 var $element = $(document.getElementById(url));
-                $element.find('.leancloud-visitors-count').text(counter.get('time'));
-              },
-              error: function(counter, error) {
-                console.log('Failed to save Visitor num, with error message: ' + error.message);
-              }
-            });
+                $element.find('.leancloud-visitors-count').text(counter.time + 1);
+              })
+            
+              .fail(function ({ responseJSON }) {
+                console.log('Failed to save Visitor num, with error message: ' + responseJSON.error);
+              })
           } else {
-            var newcounter = new Counter();
-            /* Set ACL */
-            var acl = new AV.ACL();
-            acl.setPublicReadAccess(true);
-            acl.setPublicWriteAccess(true);
-            newcounter.setACL(acl);
-            /* End Set ACL */
-            newcounter.set("title", title);
-            newcounter.set("url", url);
-            newcounter.set("time", 1);
-            newcounter.save(null, {
-              success: function(newcounter) {
-                var $element = $(document.getElementById(url));
-                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
-              },
-              error: function(newcounter, error) {
-                console.log('Failed to create');
-              }
-            });
+            
+              var $element = $(document.getElementById(url));
+              $element.find('.leancloud-visitors-count').text('Counter not initialized! More info at console err msg.');
+              console.error('ATTENTION! LeanCloud counter has security bug, see how to solve it here: https://github.com/theme-next/hexo-leancloud-counter-security. \n However, you can still use LeanCloud without security, by setting `security` option to `false`.');
+            
           }
-        },
-        error: function(error) {
-          console.log('Error:' + error.code + " " + error.message);
-        }
-      });
+        })
+        .fail(function ({ responseJSON }) {
+          console.log('LeanCloud Counter Error: ' + responseJSON.code + ' ' + responseJSON.error);
+        });
     }
+    
 
     $(function() {
-      var Counter = AV.Object.extend("Counter");
-      if ($('.leancloud_visitors').length == 1) {
-        addCount(Counter);
-      } else if ($('.post-title-link').length > 1) {
-        showTime(Counter);
-      }
+      $.get('https://app-router.leancloud.cn/2/route?appId=' + 'JdLpddsaWqwfJtXPdDK8woaF-gzGzoHsz')
+        .done(function({ api_server }) {
+          var Counter = function(method, url, data) {
+            return $.ajax({
+              method: method,
+              url: 'https://' + api_server + '/1.1' + url,
+              headers: {
+                'X-LC-Id': 'JdLpddsaWqwfJtXPdDK8woaF-gzGzoHsz',
+                'X-LC-Key': 'CEmtHXH8f0PtvF0zYtVE0EeY',
+                'Content-Type': 'application/json',
+              },
+              data: data
+            });
+          };
+          
+            const localhost = /http:\/\/(localhost|127.0.0.1|0.0.0.0)/;
+            if (localhost.test(document.URL)) {
+              return;
+            }
+            addCount(Counter);
+          
+        });
     });
   </script>
 
 
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
 
   
 

@@ -1,23 +1,4 @@
-<!doctype html>
-
-
-
-  
-
-
-<html class="theme-next mist use-motion" lang="zh-Hans">
-<head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
-
-
-
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
-
-
-
+<!DOCTYPE html>
 
 
 
@@ -31,101 +12,74 @@
 
 
   
-  
-  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
 
 
-
-
-  
-  
-  
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
 
 
 
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
-
-<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
-
-
-  <meta name="keywords" content="dump heap,内存," />
-
-
-
-
-
-  <link rel="alternate" href="/atom.xml" title="病已的博客" type="application/atom+xml" />
-
-
-
-
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
 
 
 
 
 
 
-<meta name="description" content="一般情况下如果我想要较详细的分析内存状况，会使用android monitor(下简称monitor)和Memory Analyzer工具(下简称MAT)，但步骤有些麻烦。
-
-使用monitor dump堆文件
-使用hprof-conv工具，将hprof转换成MAT能够识别的格式
-使用MAT分析
-
-需要手动dump hprof再使用hprof-conv工具手动转码，上篇Android Bitmap">
-<meta property="og:type" content="article">
-<meta property="og:title" content="如何使用ddmlib dump出堆文件">
-<meta property="og:url" content="https://ivonhoe.github.io/2017/04/09/how-to-dump-heap/index.html">
-<meta property="og:site_name" content="病已的博客">
-<meta property="og:description" content="一般情况下如果我想要较详细的分析内存状况，会使用android monitor(下简称monitor)和Memory Analyzer工具(下简称MAT)，但步骤有些麻烦。
-
-使用monitor dump堆文件
-使用hprof-conv工具，将hprof转换成MAT能够识别的格式
-使用MAT分析
-
-需要手动dump hprof再使用hprof-conv工具手动转码，上篇Android Bitmap">
-<meta property="og:image" content="https://ivonhoe.github.io/res/hprof/hprof-1.png">
-<meta property="og:updated_time" content="2018-10-16T10:01:03.000Z">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="如何使用ddmlib dump出堆文件">
-<meta name="twitter:description" content="一般情况下如果我想要较详细的分析内存状况，会使用android monitor(下简称monitor)和Memory Analyzer工具(下简称MAT)，但步骤有些麻烦。
-
-使用monitor dump堆文件
-使用hprof-conv工具，将hprof转换成MAT能够识别的格式
-使用MAT分析
-
-需要手动dump hprof再使用hprof-conv工具手动转码，上篇Android Bitmap">
 
 
 
-<script type="text/javascript" id="hexo.configurations">
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.2">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.1.2">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.1.2">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.1.2">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.1.2" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
   var NexT = window.NexT || {};
   var CONFIG = {
     root: '/',
-    scheme: 'Mist',
-    sidebar: {"position":"right","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
-    fancybox: true,
-    motion: true,
-    duoshuo: {
-      userId: 'undefined',
-      author: '博主'
-    },
+    scheme: 'Gemini',
+    version: '7.1.2',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     algolia: {
       applicationID: '',
       apiKey: '',
@@ -137,34 +91,53 @@
 </script>
 
 
-
-  <link rel="canonical" href="https://ivonhoe.github.io/2017/04/09/how-to-dump-heap/"/>
-
-
-
-
-
-  <title> 如何使用ddmlib dump出堆文件 | 病已的博客 </title>
-</head>
-
-<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
-
   
 
 
 
 
-<script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-  ga('create', 'UA-97550712-1', 'auto');
-  ga('send', 'pageview');
+  <meta name="description" content="一般情况下如果我想要较详细的分析内存状况，会使用android monitor(下简称monitor)和Memory Analyzer工具(下简称MAT)，但步骤有些麻烦。  使用monitor dump堆文件 使用hprof-conv工具，将hprof转换成MAT能够识别的格式 使用MAT分析  需要手动dump hprof再使用hprof-conv工具手动转码，上篇Android Bitmap">
+<meta name="keywords" content="内存,dump heap">
+<meta property="og:type" content="article">
+<meta property="og:title" content="如何使用ddmlib dump出堆文件">
+<meta property="og:url" content="https://ivonhoe.github.io/2017/04/09/how-to-dump-heap/index.html">
+<meta property="og:site_name" content="病已的博客">
+<meta property="og:description" content="一般情况下如果我想要较详细的分析内存状况，会使用android monitor(下简称monitor)和Memory Analyzer工具(下简称MAT)，但步骤有些麻烦。  使用monitor dump堆文件 使用hprof-conv工具，将hprof转换成MAT能够识别的格式 使用MAT分析  需要手动dump hprof再使用hprof-conv工具手动转码，上篇Android Bitmap">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://ivonhoe.github.io/res/hprof/hprof-1.png">
+<meta property="og:updated_time" content="2018-10-16T10:01:03.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="如何使用ddmlib dump出堆文件">
+<meta name="twitter:description" content="一般情况下如果我想要较详细的分析内存状况，会使用android monitor(下简称monitor)和Memory Analyzer工具(下简称MAT)，但步骤有些麻烦。  使用monitor dump堆文件 使用hprof-conv工具，将hprof转换成MAT能够识别的格式 使用MAT分析  需要手动dump hprof再使用hprof-conv工具手动转码，上篇Android Bitmap">
+<meta name="twitter:image" content="https://ivonhoe.github.io/res/hprof/hprof-1.png">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="病已的博客" type="application/atom+xml">
+
+
+
+  
+  
+  <link rel="canonical" href="https://ivonhoe.github.io/2017/04/09/how-to-dump-heap/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
 </script>
 
+  <title>如何使用ddmlib dump出堆文件 | 病已的博客</title>
+  
 
-  <script type="text/javascript">
+
+
+
+
+
+  <script>
     var _hmt = _hmt || [];
     (function() {
       var hm = document.createElement("script");
@@ -180,36 +153,65 @@
 
 
 
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
 
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
 
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
 
   
   
     
   
 
-  <div class="container sidebar-position-right page-post-detail ">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
       <div class="header-inner"><div class="site-brand-wrapper">
-  <div class="site-meta ">
+  <div class="site-meta">
     
 
     <div class="custom-logo-site-title">
-      <a href="/"  class="brand" rel="start">
+      <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
         <span class="site-title">病已的博客</span>
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
+    
       
         <p class="site-subtitle">枕上，马上，厕上</p>
       
+    
+    
   </div>
 
   <div class="site-nav-toggle">
-    <button>
+    <button aria-label="切换导航栏">
       <span class="btn-bar"></span>
       <span class="btn-bar"></span>
       <span class="btn-bar"></span>
@@ -217,55 +219,103 @@
   </div>
 </div>
 
-<nav class="site-nav">
-  
 
+
+<nav class="site-nav">
   
     <ul id="menu" class="menu">
       
         
-        <li class="menu-item menu-item-home">
-          <a href="/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
-            
-            首页
-          </a>
-        </li>
-      
         
-        <li class="menu-item menu-item-categories">
-          <a href="/categories" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
-            
-            分类
-          </a>
-        </li>
-      
         
-        <li class="menu-item menu-item-archives">
-          <a href="/archives" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
-            
-            归档
-          </a>
-        </li>
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
       
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
         
-        <li class="menu-item menu-item-tags">
-          <a href="/tags" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
-            
-            标签
-          </a>
-        </li>
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
       
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
 
       
+      
     </ul>
+  
+
   
 
   
@@ -273,12 +323,30 @@
 
 
 
- </div>
+  
+
+
+
+</div>
     </header>
+
+    
+  
+  
+
+  
+
+  <a href="https://github.com/Ivonhoe" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewbox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a>
+
+
 
     <main id="main" class="main">
       <div class="main-inner">
         <div class="content-wrap">
+          
+            
+
+          
           <div id="content" class="content">
             
 
@@ -291,13 +359,19 @@
   
   
 
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://ivonhoe.github.io/2017/04/09/how-to-dump-heap/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="病已">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/5706813?v=3&s=460">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -309,11 +383,8 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                如何使用ddmlib dump出堆文件
+          <h1 class="post-title" itemprop="name headline">如何使用ddmlib dump出堆文件
+
               
             
           </h1>
@@ -321,6 +392,11 @@
 
         <div class="post-meta">
           <span class="post-time">
+
+            
+            
+            
+
             
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
@@ -328,18 +404,35 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-09T19:03:01+08:00">
-                Apr 9 2017
-              </time>
+
+              
+                
+              
+
+              <time title="创建时间：4月 9 2017 19:03:01" itemprop="dateCreated datePublished" datetime="2017-04-09T19:03:01+08:00">4月 9 2017</time>
             
 
             
+              
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：10月 16 2018 18:01:03" itemprop="dateModified" datetime="2018-10-16T18:01:03+08:00">10月 16 2018</time>
+              
             
           </span>
 
           
-            <span class="post-category" >
+            <span class="post-category">
             
               <span class="post-meta-divider">|</span>
             
@@ -350,11 +443,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Android性能优化/" itemprop="url" rel="index">
-                    <span itemprop="name">Android性能优化</span>
-                  </a>
-                </span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Android性能优化/" itemprop="url" rel="index"><span itemprop="name">Android性能优化</span></a></span>
 
                 
                 
@@ -364,20 +453,21 @@
 
           
             
+            
           
 
           
           
-             <span id="/2017/04/09/how-to-dump-heap/" class="leancloud_visitors" data-flag-title="如何使用ddmlib dump出堆文件">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数 </span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
+            <span id="/2017/04/09/how-to-dump-heap/" class="leancloud_visitors" data-flag-title="如何使用ddmlib dump出堆文件">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              
+                <span class="post-meta-item-text">阅读次数：</span>
+              
+                <span class="leancloud-visitors-count"></span>
+            </span>
           
 
           
@@ -390,7 +480,9 @@
       </header>
     
 
-
+    
+    
+    
     <div class="post-body" itemprop="articleBody">
 
       
@@ -403,75 +495,51 @@
 <li>使用hprof-conv工具，将hprof转换成MAT能够识别的格式</li>
 <li>使用MAT分析</li>
 </ol>
-<p>需要手动dump hprof再使用hprof-conv工具手动转码，上篇<a href="https://ivonhoe.github.io/2017/03/22/Bitmap&amp;Memory/">Android Bitmap的内存大小是如何计算的？</a>说到使用square的<a href="https://github.com/square/haha" target="_blank" rel="external">haha</a>来做内存堆中Bitmap的分析。所以在思考如何一键完成内存dump和analyze的过程，当然也可以任意其他Java对象做分析。<br>如何完成dump和转码，思路还是Read the fucking source code，看下monitor是如何dump hprof文件的。打开Android sdk目录，monitor和其依赖的jar分别在<code>/tools</code>和’/tools/lib’目录，核心代码在<code>ddmlib.jar</code>中，Java swring代码在<code>ddms.jar</code>和<code>ddmuilib.jar</code>中，ddmlib需要依赖<code>common.jar</code>和<code>guava.jar</code>。</p>
+<p>需要手动dump hprof再使用hprof-conv工具手动转码，上篇<a href="https://ivonhoe.github.io/2017/03/22/Bitmap&amp;Memory/">Android Bitmap的内存大小是如何计算的？</a>说到使用square的<a href="https://github.com/square/haha" target="_blank" rel="noopener">haha</a>来做内存堆中Bitmap的分析。所以在思考如何一键完成内存dump和analyze的过程，当然也可以任意其他Java对象做分析。<br>如何完成dump和转码，思路还是Read the fucking source code，看下monitor是如何dump hprof文件的。打开Android sdk目录，monitor和其依赖的jar分别在<code>/tools</code>和’/tools/lib’目录，核心代码在<code>ddmlib.jar</code>中，Java swring代码在<code>ddms.jar</code>和<code>ddmuilib.jar</code>中，ddmlib需要依赖<code>common.jar</code>和<code>guava.jar</code>。</p>
 <a id="more"></a>
-<p><img src="/res/hprof/hprof-1.png" alt=""></p>
-<h3 id="如何使用ddmlib获取adb连接的设备">如何使用ddmlib获取adb连接的设备</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public static void main(String[] args) &#123;&#10;        IDevice device;&#10;        // &#36825;&#37324;&#38656;&#35201;&#20256;&#21442;true&#65292;&#19981;&#28982;&#24453;&#20250;&#20250;&#25343;&#19981;&#21040;&#25163;&#26426;&#19978;&#30340;client&#10;        AndroidDebugBridge.init(true);&#10;        AndroidDebugBridge bridge = AndroidDebugBridge.createBridge(&#10;                &#34;/Users/Ivonhoe/Library/Android/sdk/platform-tools/adb&#34;, false);&#10;        waitForDevice(bridge);&#10;        IDevice devices[] = bridge.getDevices();&#10;        device = devices[0];&#10;    &#125;&#10;&#10;    private static void waitForDevice(AndroidDebugBridge bridge) &#123;&#10;        int count = 0;&#10;        while (!bridge.hasInitialDeviceList()) &#123;&#10;            try &#123;&#10;                Thread.sleep(100);&#10;                count++;&#10;            &#125; catch (InterruptedException ignored) &#123;&#10;            &#125;&#10;            if (count &#62; 300) &#123;&#10;                System.err.print(&#34;Time out&#34;);&#10;                break;&#10;            &#125;&#10;        &#125;&#10;    &#125;</span><br></pre></td></tr></table></figure>
-<h3 id="如何dump_hprof">如何dump hprof</h3><p><strong>这里不说看ddms源码的过程了，主要还是通过关键字搜索跟一下dump操作的处理逻辑</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/**&#10; * &#35774;&#32622;HprofDumpHandler&#65292;&#23545;dump&#20107;&#20214;&#20570;&#30417;&#21548;&#22788;&#29702;dump&#25104;&#21151;&#25110;&#32773;&#22833;&#36133;&#30340;&#22238;&#35843;&#65292;&#10; * &#24182;&#20445;&#23384;hprof&#25991;&#20214;&#25968;&#25454;&#10; *&#10; * @param device&#10; */&#10;public HprofDump(Device device) &#123;&#10;    mDevice = device;&#10;&#10;    ClientData.IHprofDumpHandler hprofDumpHandler = new ClientData.IHprofDumpHandler() &#123;&#10;&#10;        @Override&#10;        public void onSuccess(String remoteFilePath, Client client) &#123;&#10;            String hprofPath = getHprofPath(client.getClientData().getClientDescription());&#10;            mDevice.pull(hprofPath, remoteFilePath);&#10;&#10;            conversionAndRemoveHprof(hprofPath);&#10;&#10;            isDumping = false;&#10;        &#125;&#10;&#10;        @Override&#10;        public void onSuccess(byte[] bytes, Client client) &#123;&#10;            String hprofPath = getHprofPath(client.getClientData().getClientDescription());&#10;            Utilities.saveFile(bytes, hprofPath);&#10;&#10;            conversionAndRemoveHprof(hprofPath);&#10;&#10;            isDumping = false;&#10;        &#125;&#10;&#10;        @Override&#10;        public void onEndFailure(Client client, String s) &#123;&#10;            isDumping = false;&#10;        &#125;&#10;    &#125;;&#10;    ClientData.setHprofDumpHandler(hprofDumpHandler);&#10;&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="/res/hprof/hprof-1.png" alt></p>
+<h3 id="如何使用ddmlib获取adb连接的设备"><a href="#如何使用ddmlib获取adb连接的设备" class="headerlink" title="如何使用ddmlib获取adb连接的设备"></a>如何使用ddmlib获取adb连接的设备</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">public static void main(String[] args) &#123;</span><br><span class="line">        IDevice device;</span><br><span class="line">        // 这里需要传参true，不然待会会拿不到手机上的client</span><br><span class="line">        AndroidDebugBridge.init(true);</span><br><span class="line">        AndroidDebugBridge bridge = AndroidDebugBridge.createBridge(</span><br><span class="line">                &quot;/Users/Ivonhoe/Library/Android/sdk/platform-tools/adb&quot;, false);</span><br><span class="line">        waitForDevice(bridge);</span><br><span class="line">        IDevice devices[] = bridge.getDevices();</span><br><span class="line">        device = devices[0];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private static void waitForDevice(AndroidDebugBridge bridge) &#123;</span><br><span class="line">        int count = 0;</span><br><span class="line">        while (!bridge.hasInitialDeviceList()) &#123;</span><br><span class="line">            try &#123;</span><br><span class="line">                Thread.sleep(100);</span><br><span class="line">                count++;</span><br><span class="line">            &#125; catch (InterruptedException ignored) &#123;</span><br><span class="line">            &#125;</span><br><span class="line">            if (count &gt; 300) &#123;</span><br><span class="line">                System.err.print(&quot;Time out&quot;);</span><br><span class="line">                break;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<h3 id="如何dump-hprof"><a href="#如何dump-hprof" class="headerlink" title="如何dump hprof"></a>如何dump hprof</h3><p><strong>这里不说看ddms源码的过程了，主要还是通过关键字搜索跟一下dump操作的处理逻辑</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * 设置HprofDumpHandler，对dump事件做监听处理dump成功或者失败的回调，</span><br><span class="line"> * 并保存hprof文件数据</span><br><span class="line"> *</span><br><span class="line"> * @param device</span><br><span class="line"> */</span><br><span class="line">public HprofDump(Device device) &#123;</span><br><span class="line">    mDevice = device;</span><br><span class="line"></span><br><span class="line">    ClientData.IHprofDumpHandler hprofDumpHandler = new ClientData.IHprofDumpHandler() &#123;</span><br><span class="line"></span><br><span class="line">        @Override</span><br><span class="line">        public void onSuccess(String remoteFilePath, Client client) &#123;</span><br><span class="line">            String hprofPath = getHprofPath(client.getClientData().getClientDescription());</span><br><span class="line">            mDevice.pull(hprofPath, remoteFilePath);</span><br><span class="line"></span><br><span class="line">            conversionAndRemoveHprof(hprofPath);</span><br><span class="line"></span><br><span class="line">            isDumping = false;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        @Override</span><br><span class="line">        public void onSuccess(byte[] bytes, Client client) &#123;</span><br><span class="line">            String hprofPath = getHprofPath(client.getClientData().getClientDescription());</span><br><span class="line">            Utilities.saveFile(bytes, hprofPath);</span><br><span class="line"></span><br><span class="line">            conversionAndRemoveHprof(hprofPath);</span><br><span class="line"></span><br><span class="line">            isDumping = false;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        @Override</span><br><span class="line">        public void onEndFailure(Client client, String s) &#123;</span><br><span class="line">            isDumping = false;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">    ClientData.setHprofDumpHandler(hprofDumpHandler);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p><strong>这里默认选择栈顶进程做dump操作，通过adb shell dumpsys activity top命令获取栈顶TASK的ApplicationId，通过IDevice接口的getClient方法获取Client对象，执行dumpHprof操作</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/**&#10; * dump&#26632;&#39030;&#36827;&#31243;&#30340;hprof&#10; */&#10;public void dumpTopTaskHprof() &#123;&#10;    if (isDumping) &#123;&#10;        return;&#10;    &#125;&#10;&#10;    IDevice iDevice = mDevice.getIDevice();&#10;&#10;    /**&#10;     * &#36825;&#37324;&#33258;&#21160;&#36873;&#25321;&#25163;&#26426;&#19978;&#26632;&#39030;&#36827;&#31243;&#20570;dump&#25805;&#20316;&#65292;&#33719;&#21462;applicationName&#10;     */&#10;    String topApp = getTopApplication();&#10;    Client client = iDevice.getClient(topApp);&#10;&#10;    if (client == null) &#123;&#10;        throw new RuntimeException(&#34;Can not dump app:&#34; + topApp);&#10;    &#125;&#10;    client.dumpHprof();&#10;    isDumping = true;&#10;&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * dump栈顶进程的hprof</span><br><span class="line"> */</span><br><span class="line">public void dumpTopTaskHprof() &#123;</span><br><span class="line">    if (isDumping) &#123;</span><br><span class="line">        return;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    IDevice iDevice = mDevice.getIDevice();</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 这里自动选择手机上栈顶进程做dump操作，获取applicationName</span><br><span class="line">     */</span><br><span class="line">    String topApp = getTopApplication();</span><br><span class="line">    Client client = iDevice.getClient(topApp);</span><br><span class="line"></span><br><span class="line">    if (client == null) &#123;</span><br><span class="line">        throw new RuntimeException(&quot;Can not dump app:&quot; + topApp);</span><br><span class="line">    &#125;</span><br><span class="line">    client.dumpHprof();</span><br><span class="line">    isDumping = true;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p><strong>在IHprofDumpHandler的回调中, 保存hprof文件，做格式转换，分析Bitmap对象的状况。BitmapAnalyzer.java的代码在上文说过。</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">private void conversionAndRemoveHprof(String hprofPath) &#123;&#10;    String convHprofPath = getConvHprofPath(hprofPath);&#10;    hprofConv(hprofPath, convHprofPath);&#10;    removeFile(hprofPath);&#10;&#10;    analyzerBitmap(convHprofPath);&#10;&#125;&#10;&#10;private void hprofConv(String hprofPath, String convHprofPath) &#123;&#10;    String adbPath = Adb.instance().getAdbPath();&#10;    String hprofConvPath = adbPath.replace(&#34;adb&#34;, &#34;hprof-conv&#34;);&#10;    ShellCommand.exec(hprofConvPath + &#34; &#34; + hprofPath + &#34; &#34; + convHprofPath);&#10;&#125;&#10;&#10;private void analyzerBitmap(String hprofPath) &#123;&#10;    String[] args = new String[2];&#10;    args[0] = hprofPath;&#10;    args[1] = &#34;bitmap&#34;;&#10;    BitmapAnalyzer.main(args);&#10;&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="转载请标明出处病已blog_https://ivonhoe-github-io/">转载请标明出处<a href="https://ivonhoe.github.io/">病已blog https://ivonhoe.github.io/</a></h3>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">private void conversionAndRemoveHprof(String hprofPath) &#123;</span><br><span class="line">    String convHprofPath = getConvHprofPath(hprofPath);</span><br><span class="line">    hprofConv(hprofPath, convHprofPath);</span><br><span class="line">    removeFile(hprofPath);</span><br><span class="line"></span><br><span class="line">    analyzerBitmap(convHprofPath);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">private void hprofConv(String hprofPath, String convHprofPath) &#123;</span><br><span class="line">    String adbPath = Adb.instance().getAdbPath();</span><br><span class="line">    String hprofConvPath = adbPath.replace(&quot;adb&quot;, &quot;hprof-conv&quot;);</span><br><span class="line">    ShellCommand.exec(hprofConvPath + &quot; &quot; + hprofPath + &quot; &quot; + convHprofPath);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">private void analyzerBitmap(String hprofPath) &#123;</span><br><span class="line">    String[] args = new String[2];</span><br><span class="line">    args[0] = hprofPath;</span><br><span class="line">    args[1] = &quot;bitmap&quot;;</span><br><span class="line">    BitmapAnalyzer.main(args);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="转载请标明出处病已blog-https-ivonhoe-github-io"><a href="#转载请标明出处病已blog-https-ivonhoe-github-io" class="headerlink" title="转载请标明出处病已blog https://ivonhoe.github.io/"></a>转载请标明出处<a href="https://ivonhoe.github.io/">病已blog https://ivonhoe.github.io/</a></h3>
       
     </div>
 
-    <div>
-      
-        
+    
 
-      
-    </div>
+    
+    
+    
 
-    <div>
-      
-        
-  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
-    <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
-    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
-      <span>赏</span>
-    </button>
-    <div id="QR" style="display: none;">
-      
-        <div id="wechat" style="display: inline-block">
-          <img id="wechat_qr" src="https://ivonhoe.github.io/res/dex2jar_error/WechatIMG56.png" alt="病已 WeChat Pay"/>
-          <p>微信打赏</p>
-        </div>
-      
-      
-        <div id="alipay" style="display: inline-block">
-          <img id="alipay_qr" src="https://ivonhoe.github.io/res/dex2jar_error/WechatIMG57.jpeg" alt="病已 Alipay"/>
-          <p>支付宝打赏</p>
-        </div>
-      
-    </div>
-  </div>
+    
 
-
+    
       
-    </div>
+    
+    
 
-    <div>
-      
-        
-
-      
-    </div>
+    
 
     <footer class="post-footer">
       
+        
+          
+        
         <div class="post-tags">
           
-            <a href="/tags/dump-heap/" rel="tag"># dump heap</a>
-          
             <a href="/tags/内存/" rel="tag"># 内存</a>
+          
+            <a href="/tags/dump-heap/" rel="tag"># dump heap</a>
           
         </div>
       
 
       
-        
+      
       
 
       
@@ -499,24 +567,21 @@
       
       
     </footer>
+  </div>
+  
+  
+  
   </article>
 
 
-
-    <div class="post-spread">
-      
-    </div>
   </div>
 
 
           </div>
           
 
+  
 
-          
-  <div class="comments" id="comments">
-    
-  </div>
 
 
         </div>
@@ -538,110 +603,208 @@
 
       
         <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
             文章目录
           </li>
-          <li class="sidebar-nav-overview" data-target="site-overview">
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
             站点概览
           </li>
         </ul>
       
 
-      <section class="site-overview sidebar-panel">
-        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-          <img class="site-author-image" itemprop="image"
-               src="https://avatars1.githubusercontent.com/u/5706813?v=3&s=460"
-               alt="病已" />
-          <p class="site-author-name" itemprop="name">病已</p>
-           
-              <p class="site-description motion-element" itemprop="description"></p>
-          
-        </div>
-        <nav class="site-state motion-element">
-
-          
-            <div class="site-state-item site-state-posts">
-              <a href="/archives">
-                <span class="site-state-item-count">33</span>
-                <span class="site-state-item-name">日志</span>
-              </a>
-            </div>
-          
-
-          
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
-            
-            <div class="site-state-item site-state-categories">
-              <a href="/categories/index.html">
-                <span class="site-state-item-count">8</span>
-                <span class="site-state-item-name">分类</span>
-              </a>
-            </div>
-          
-
-          
-            
-            
-            <div class="site-state-item site-state-tags">
-              <a href="/tags/index.html">
-                <span class="site-state-item-count">39</span>
-                <span class="site-state-item-name">标签</span>
-              </a>
-            </div>
-          
-
-        </nav>
-
-        
-          <div class="feed-link motion-element">
-            <a href="/atom.xml" rel="alternate">
-              <i class="fa fa-rss"></i>
-              RSS
-            </a>
+              <p class="site-author-name" itemprop="name">病已</p>
+              <div class="site-description motion-element" itemprop="description"></div>
           </div>
-        
 
-        <div class="links-of-author motion-element">
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">33</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">8</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">39</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+
+          
+
+          
+          
+
           
             
-              <span class="links-of-author-item">
-                <a href="https://github.com/Ivonhoe" target="_blank" title="GitHub">
-                  
-                    <i class="fa fa-fw fa-github"></i>
-                  
-                  GitHub
-                </a>
-              </span>
-            
           
+          
+
         </div>
-
-        
-        
-
-        
-        
-
-        
-
-
-      </section>
+      </div>
 
       
       <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
           <div class="post-toc">
 
             
-              
+            
+            
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#如何使用ddmlib获取adb连接的设备"><span class="nav-number">1.</span> <span class="nav-text">如何使用ddmlib获取adb连接的设备</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#如何dump_hprof"><span class="nav-number">2.</span> <span class="nav-text">如何dump hprof</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#转载请标明出处病已blog_https://ivonhoe-github-io/"><span class="nav-number">3.</span> <span class="nav-text">转载请标明出处病已blog https://ivonhoe.github.io/</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#如何使用ddmlib获取adb连接的设备"><span class="nav-number">1.</span> <span class="nav-text">如何使用ddmlib获取adb连接的设备</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#如何dump-hprof"><span class="nav-number">2.</span> <span class="nav-text">如何dump hprof</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#转载请标明出处病已blog-https-ivonhoe-github-io"><span class="nav-number">3.</span> <span class="nav-text">转载请标明出处病已blog https://ivonhoe.github.io/</span></a></li></ol></div>
             
 
           </div>
-        </section>
+        </div>
       <!--/noindex-->
       
 
@@ -649,6 +812,7 @@
 
     </div>
   </aside>
+  
 
 
         
@@ -657,30 +821,39 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright" >
-  
-  &copy; 
-  <span itemprop="copyrightYear">2019</span>
-  <span class="with-love">
-    <i class="fa fa-heart"></i>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">病已</span>
+
+  
+
+  
 </div>
 
 
-<div class="powered-by">
-  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
-</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
 
-<div class="theme-info">
-  主题 -
-  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
-    NexT.Mist
-  </a>
-</div>
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.1.2</div>
+
+
 
 
         
+
+
+
+
+
+
+
 
         
       </div>
@@ -693,11 +866,16 @@
       </div>
     
 
+    
+
+    
+
+    
   </div>
 
   
 
-<script type="text/javascript">
+<script>
   if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
     window.Promise = null;
   }
@@ -711,7 +889,6 @@
 
 
 
-  
 
 
 
@@ -720,53 +897,9 @@
 
 
 
-  
-  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
-
-  
-  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
-
-  
-  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
-
-  
-  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
-
-  
-  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
-
-  
-  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
-
-
-  
-
-
-  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
-
-  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
 
 
 
-  
-  
-
-  
-  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
-<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
-
-
-
-  
-
-
-  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
-
-
-
-  
-
-  
 
 
 
@@ -774,19 +907,57 @@
 
 
   
+  <script src="/lib/jquery/index.js?v=3.4.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.2"></script>
+
+  <script src="/js/motion.js?v=7.1.2"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/affix.js?v=7.1.2"></script>
+
+  <script src="/js/schemes/pisces.js?v=7.1.2"></script>
 
 
 
 
-	
-
-
+  
+  <script src="/js/scrollspy.js?v=7.1.2"></script>
+<script src="/js/post-details.js?v=7.1.2"></script>
 
 
 
   
 
 
+  <script src="/js/next-boot.js?v=7.1.2"></script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
 
 
   
@@ -795,119 +966,88 @@
 
 
   
-
-
-
-
-
   
-
-  
-  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
-  <script>AV.initialize("JdLpddsaWqwfJtXPdDK8woaF-gzGzoHsz", "CEmtHXH8f0PtvF0zYtVE0EeY");</script>
   <script>
-    function showTime(Counter) {
-      var query = new AV.Query(Counter);
-      var entries = [];
-      var $visitors = $(".leancloud_visitors");
-
-      $visitors.each(function () {
-        entries.push( $(this).attr("id").trim() );
-      });
-
-      query.containedIn('url', entries);
-      query.find()
-        .done(function (results) {
-          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
-
-          if (results.length === 0) {
-            $visitors.find(COUNT_CONTAINER_REF).text(0);
-            return;
-          }
-
-          for (var i = 0; i < results.length; i++) {
-            var item = results[i];
-            var url = item.get('url');
-            var time = item.get('time');
-            var element = document.getElementById(url);
-
-            $(element).find(COUNT_CONTAINER_REF).text(time);
-          }
-          for(var i = 0; i < entries.length; i++) {
-            var url = entries[i];
-            var element = document.getElementById(url);
-            var countSpan = $(element).find(COUNT_CONTAINER_REF);
-            if( countSpan.text() == '') {
-              countSpan.text(0);
-            }
-          }
-        })
-        .fail(function (object, error) {
-          console.log("Error: " + error.code + " " + error.message);
-        });
-    }
-
+    
     function addCount(Counter) {
-      var $visitors = $(".leancloud_visitors");
+      var $visitors = $('.leancloud_visitors');
       var url = $visitors.attr('id').trim();
       var title = $visitors.attr('data-flag-title').trim();
-      var query = new AV.Query(Counter);
 
-      query.equalTo("url", url);
-      query.find({
-        success: function(results) {
+      Counter('get', '/classes/Counter', { where: JSON.stringify({ url }) })
+        .done(function({ results }) {
           if (results.length > 0) {
             var counter = results[0];
-            counter.fetchWhenSave(true);
-            counter.increment("time");
-            counter.save(null, {
-              success: function(counter) {
+            
+            Counter('put', '/classes/Counter/' + counter.objectId, JSON.stringify({ time: { '__op': 'Increment', 'amount': 1 } }))
+            
+              .done(function() {
                 var $element = $(document.getElementById(url));
-                $element.find('.leancloud-visitors-count').text(counter.get('time'));
-              },
-              error: function(counter, error) {
-                console.log('Failed to save Visitor num, with error message: ' + error.message);
-              }
-            });
+                $element.find('.leancloud-visitors-count').text(counter.time + 1);
+              })
+            
+              .fail(function ({ responseJSON }) {
+                console.log('Failed to save Visitor num, with error message: ' + responseJSON.error);
+              })
           } else {
-            var newcounter = new Counter();
-            /* Set ACL */
-            var acl = new AV.ACL();
-            acl.setPublicReadAccess(true);
-            acl.setPublicWriteAccess(true);
-            newcounter.setACL(acl);
-            /* End Set ACL */
-            newcounter.set("title", title);
-            newcounter.set("url", url);
-            newcounter.set("time", 1);
-            newcounter.save(null, {
-              success: function(newcounter) {
-                var $element = $(document.getElementById(url));
-                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
-              },
-              error: function(newcounter, error) {
-                console.log('Failed to create');
-              }
-            });
+            
+              var $element = $(document.getElementById(url));
+              $element.find('.leancloud-visitors-count').text('Counter not initialized! More info at console err msg.');
+              console.error('ATTENTION! LeanCloud counter has security bug, see how to solve it here: https://github.com/theme-next/hexo-leancloud-counter-security. \n However, you can still use LeanCloud without security, by setting `security` option to `false`.');
+            
           }
-        },
-        error: function(error) {
-          console.log('Error:' + error.code + " " + error.message);
-        }
-      });
+        })
+        .fail(function ({ responseJSON }) {
+          console.log('LeanCloud Counter Error: ' + responseJSON.code + ' ' + responseJSON.error);
+        });
     }
+    
 
     $(function() {
-      var Counter = AV.Object.extend("Counter");
-      if ($('.leancloud_visitors').length == 1) {
-        addCount(Counter);
-      } else if ($('.post-title-link').length > 1) {
-        showTime(Counter);
-      }
+      $.get('https://app-router.leancloud.cn/2/route?appId=' + 'JdLpddsaWqwfJtXPdDK8woaF-gzGzoHsz')
+        .done(function({ api_server }) {
+          var Counter = function(method, url, data) {
+            return $.ajax({
+              method: method,
+              url: 'https://' + api_server + '/1.1' + url,
+              headers: {
+                'X-LC-Id': 'JdLpddsaWqwfJtXPdDK8woaF-gzGzoHsz',
+                'X-LC-Key': 'CEmtHXH8f0PtvF0zYtVE0EeY',
+                'Content-Type': 'application/json',
+              },
+              data: data
+            });
+          };
+          
+            const localhost = /http:\/\/(localhost|127.0.0.1|0.0.0.0)/;
+            if (localhost.test(document.URL)) {
+              return;
+            }
+            addCount(Counter);
+          
+        });
     });
   </script>
 
 
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
 
   
 

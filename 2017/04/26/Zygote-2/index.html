@@ -1,23 +1,4 @@
-<!doctype html>
-
-
-
-  
-
-
-<html class="theme-next mist use-motion" lang="zh-Hans">
-<head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
-
-
-
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
-
-
-
+<!DOCTYPE html>
 
 
 
@@ -31,88 +12,74 @@
 
 
   
-  
-  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
 
 
-
-
-  
-  
-  
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
 
 
 
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
-
-<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
-
-
-  <meta name="keywords" content="Copy-on-write,Zygote,性能优化," />
-
-
-
-
-
-  <link rel="alternate" href="/atom.xml" title="病已的博客" type="application/atom+xml" />
-
-
-
-
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
 
 
 
 
 
 
-<meta name="description" content="一、分析一个Hello World App中bitmap对象的分布使用BitmapAnalyzer分析一个Android Hello World App时你会dump出400+张图片，什么是BitmapAnalyzer？BitmapAnalyzer是一个自动分析Android dump heap中bitmap对象的工具，详细请看《Android Bitmap的内存大小是如何计算的？》这篇文章的介绍">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Android性能优化之系统资源预加载的思考">
-<meta property="og:url" content="https://ivonhoe.github.io/2017/04/26/Zygote-2/index.html">
-<meta property="og:site_name" content="病已的博客">
-<meta property="og:description" content="一、分析一个Hello World App中bitmap对象的分布使用BitmapAnalyzer分析一个Android Hello World App时你会dump出400+张图片，什么是BitmapAnalyzer？BitmapAnalyzer是一个自动分析Android dump heap中bitmap对象的工具，详细请看《Android Bitmap的内存大小是如何计算的？》这篇文章的介绍">
-<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/695750-211010ed47103e96.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/695750-8d0e4feb9a25e8b4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/695750-04d96b82a7dbce97.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/695750-4eebdbaf6e95eff4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/695750-14ca03d88be43c61.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/695750-5f0921dc8e336f51.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:updated_time" content="2018-10-16T10:01:47.000Z">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Android性能优化之系统资源预加载的思考">
-<meta name="twitter:description" content="一、分析一个Hello World App中bitmap对象的分布使用BitmapAnalyzer分析一个Android Hello World App时你会dump出400+张图片，什么是BitmapAnalyzer？BitmapAnalyzer是一个自动分析Android dump heap中bitmap对象的工具，详细请看《Android Bitmap的内存大小是如何计算的？》这篇文章的介绍">
 
 
 
-<script type="text/javascript" id="hexo.configurations">
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.2">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.1.2">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.1.2">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.1.2">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.1.2" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
   var NexT = window.NexT || {};
   var CONFIG = {
     root: '/',
-    scheme: 'Mist',
-    sidebar: {"position":"right","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
-    fancybox: true,
-    motion: true,
-    duoshuo: {
-      userId: 'undefined',
-      author: '博主'
-    },
+    scheme: 'Gemini',
+    version: '7.1.2',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     algolia: {
       applicationID: '',
       apiKey: '',
@@ -124,34 +91,58 @@
 </script>
 
 
-
-  <link rel="canonical" href="https://ivonhoe.github.io/2017/04/26/Zygote-2/"/>
-
-
-
-
-
-  <title> Android性能优化之系统资源预加载的思考 | 病已的博客 </title>
-</head>
-
-<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
-
   
 
 
 
 
-<script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-  ga('create', 'UA-97550712-1', 'auto');
-  ga('send', 'pageview');
+  <meta name="description" content="一、分析一个Hello World App中bitmap对象的分布使用BitmapAnalyzer分析一个Android Hello World App时你会dump出400+张图片，什么是BitmapAnalyzer？BitmapAnalyzer是一个自动分析Android dump heap中bitmap对象的工具，详细请看《Android Bitmap的内存大小是如何计算的？》这篇文章的介绍">
+<meta name="keywords" content="性能优化,Zygote,Copy-on-write">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android性能优化之系统资源预加载的思考">
+<meta property="og:url" content="https://ivonhoe.github.io/2017/04/26/Zygote-2/index.html">
+<meta property="og:site_name" content="病已的博客">
+<meta property="og:description" content="一、分析一个Hello World App中bitmap对象的分布使用BitmapAnalyzer分析一个Android Hello World App时你会dump出400+张图片，什么是BitmapAnalyzer？BitmapAnalyzer是一个自动分析Android dump heap中bitmap对象的工具，详细请看《Android Bitmap的内存大小是如何计算的？》这篇文章的介绍">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/695750-211010ed47103e96.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/695750-8d0e4feb9a25e8b4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/695750-04d96b82a7dbce97.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/695750-4eebdbaf6e95eff4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/695750-14ca03d88be43c61.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/695750-5f0921dc8e336f51.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2018-10-16T10:01:47.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android性能优化之系统资源预加载的思考">
+<meta name="twitter:description" content="一、分析一个Hello World App中bitmap对象的分布使用BitmapAnalyzer分析一个Android Hello World App时你会dump出400+张图片，什么是BitmapAnalyzer？BitmapAnalyzer是一个自动分析Android dump heap中bitmap对象的工具，详细请看《Android Bitmap的内存大小是如何计算的？》这篇文章的介绍">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/695750-211010ed47103e96.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="病已的博客" type="application/atom+xml">
+
+
+
+  
+  
+  <link rel="canonical" href="https://ivonhoe.github.io/2017/04/26/Zygote-2/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
 </script>
 
+  <title>Android性能优化之系统资源预加载的思考 | 病已的博客</title>
+  
 
-  <script type="text/javascript">
+
+
+
+
+
+  <script>
     var _hmt = _hmt || [];
     (function() {
       var hm = document.createElement("script");
@@ -167,36 +158,65 @@
 
 
 
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
 
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
 
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
 
   
   
     
   
 
-  <div class="container sidebar-position-right page-post-detail ">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
       <div class="header-inner"><div class="site-brand-wrapper">
-  <div class="site-meta ">
+  <div class="site-meta">
     
 
     <div class="custom-logo-site-title">
-      <a href="/"  class="brand" rel="start">
+      <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
         <span class="site-title">病已的博客</span>
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
+    
       
         <p class="site-subtitle">枕上，马上，厕上</p>
       
+    
+    
   </div>
 
   <div class="site-nav-toggle">
-    <button>
+    <button aria-label="切换导航栏">
       <span class="btn-bar"></span>
       <span class="btn-bar"></span>
       <span class="btn-bar"></span>
@@ -204,55 +224,103 @@
   </div>
 </div>
 
-<nav class="site-nav">
-  
 
+
+<nav class="site-nav">
   
     <ul id="menu" class="menu">
       
         
-        <li class="menu-item menu-item-home">
-          <a href="/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
-            
-            首页
-          </a>
-        </li>
-      
         
-        <li class="menu-item menu-item-categories">
-          <a href="/categories" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
-            
-            分类
-          </a>
-        </li>
-      
         
-        <li class="menu-item menu-item-archives">
-          <a href="/archives" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
-            
-            归档
-          </a>
-        </li>
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
       
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
         
-        <li class="menu-item menu-item-tags">
-          <a href="/tags" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
-            
-            标签
-          </a>
-        </li>
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
       
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
 
       
+      
     </ul>
+  
+
   
 
   
@@ -260,12 +328,30 @@
 
 
 
- </div>
+  
+
+
+
+</div>
     </header>
+
+    
+  
+  
+
+  
+
+  <a href="https://github.com/Ivonhoe" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewbox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a>
+
+
 
     <main id="main" class="main">
       <div class="main-inner">
         <div class="content-wrap">
+          
+            
+
+          
           <div id="content" class="content">
             
 
@@ -278,13 +364,19 @@
   
   
 
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://ivonhoe.github.io/2017/04/26/Zygote-2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="病已">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/5706813?v=3&s=460">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -296,11 +388,8 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                Android性能优化之系统资源预加载的思考
+          <h1 class="post-title" itemprop="name headline">Android性能优化之系统资源预加载的思考
+
               
             
           </h1>
@@ -308,6 +397,11 @@
 
         <div class="post-meta">
           <span class="post-time">
+
+            
+            
+            
+
             
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
@@ -315,18 +409,35 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-26T00:49:27+08:00">
-                Apr 26 2017
-              </time>
+
+              
+                
+              
+
+              <time title="创建时间：4月 26 2017 0:49:27" itemprop="dateCreated datePublished" datetime="2017-04-26T00:49:27+08:00">4月 26 2017</time>
             
 
             
+              
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：10月 16 2018 18:01:47" itemprop="dateModified" datetime="2018-10-16T18:01:47+08:00">10月 16 2018</time>
+              
             
           </span>
 
           
-            <span class="post-category" >
+            <span class="post-category">
             
               <span class="post-meta-divider">|</span>
             
@@ -337,11 +448,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Android性能优化/" itemprop="url" rel="index">
-                    <span itemprop="name">Android性能优化</span>
-                  </a>
-                </span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Android性能优化/" itemprop="url" rel="index"><span itemprop="name">Android性能优化</span></a></span>
 
                 
                 
@@ -351,20 +458,21 @@
 
           
             
+            
           
 
           
           
-             <span id="/2017/04/26/Zygote-2/" class="leancloud_visitors" data-flag-title="Android性能优化之系统资源预加载的思考">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数 </span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
+            <span id="/2017/04/26/Zygote-2/" class="leancloud_visitors" data-flag-title="Android性能优化之系统资源预加载的思考">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              
+                <span class="post-meta-item-text">阅读次数：</span>
+              
+                <span class="leancloud-visitors-count"></span>
+            </span>
           
 
           
@@ -377,30 +485,32 @@
       </header>
     
 
-
+    
+    
+    
     <div class="post-body" itemprop="articleBody">
 
       
       
 
       
-        <h3 id="一、分析一个Hello_World_App中bitmap对象的分布">一、分析一个Hello World App中bitmap对象的分布</h3><p>使用BitmapAnalyzer分析一个Android Hello World App时你会dump出400+张图片，什么是BitmapAnalyzer？BitmapAnalyzer是一个自动分析Android dump heap中bitmap对象的工具，详细请看<a href="https://ivonhoe.github.io/2017/03/22/Bitmap&amp;Memory/">《Android Bitmap的内存大小是如何计算的？》</a>这篇文章的介绍。</p>
+        <h3 id="一、分析一个Hello-World-App中bitmap对象的分布"><a href="#一、分析一个Hello-World-App中bitmap对象的分布" class="headerlink" title="一、分析一个Hello World App中bitmap对象的分布"></a>一、分析一个Hello World App中bitmap对象的分布</h3><p>使用BitmapAnalyzer分析一个Android Hello World App时你会dump出400+张图片，什么是BitmapAnalyzer？BitmapAnalyzer是一个自动分析Android dump heap中bitmap对象的工具，详细请看<a href="https://ivonhoe.github.io/2017/03/22/Bitmap&amp;Memory/">《Android Bitmap的内存大小是如何计算的？》</a>这篇文章的介绍。</p>
 <p><img src="http://upload-images.jianshu.io/upload_images/695750-211010ed47103e96.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="hprof-3.png"></p>
 <p>分析仔细看一下可以发现，上图中sPreloadedDrawables数组所引用的预加载Drawable就会占用10M以上的内存空间。这些都是Android系统的主题资源图片，为什么会有这么多主题资源被加载？不需要的无用的系统资源能否避免被加载？那么要如何做到？</p>
 <a id="more"></a>
-<h3 id="二、为什么有这么多系统资源被加载？">二、为什么有这么多系统资源被加载？</h3><p>使用Android Studio(简称AS)的monitor工具dump内存如上图所示，hprof中的内存信息分为三类，分别是App heap，Image heap，Zygote heap。App heap很好理解，就是应用进程独占的内存空间，在应用中创建的对象都会在App heap上。而在Dalvik虚拟机上运行的app，只有App heap和Zygote heap，并没有Image heap。<a href="https://developer.android.com/studio/profile/am-hprof.html#why" target="_blank" rel="external">Android官网文档</a>的三者的解释是：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">App heap - The heap used by the current app.&#10;&#10;Image heap - The memory mapped copy of the current app on disk.&#10;&#10;Zygote heap - The common set of libraries and runtime classes and data that all apps are forked from. The zygote space is created during device startup and is never allocated into.</span><br></pre></td></tr></table></figure>
+<h3 id="二、为什么有这么多系统资源被加载？"><a href="#二、为什么有这么多系统资源被加载？" class="headerlink" title="二、为什么有这么多系统资源被加载？"></a>二、为什么有这么多系统资源被加载？</h3><p>使用Android Studio(简称AS)的monitor工具dump内存如上图所示，hprof中的内存信息分为三类，分别是App heap，Image heap，Zygote heap。App heap很好理解，就是应用进程独占的内存空间，在应用中创建的对象都会在App heap上。而在Dalvik虚拟机上运行的app，只有App heap和Zygote heap，并没有Image heap。<a href="https://developer.android.com/studio/profile/am-hprof.html#why" target="_blank" rel="noopener">Android官网文档</a>的三者的解释是：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">App heap - The heap used by the current app.</span><br><span class="line"></span><br><span class="line">Image heap - The memory mapped copy of the current app on disk.</span><br><span class="line"></span><br><span class="line">Zygote heap - The common set of libraries and runtime classes and data that all apps are forked from. The zygote space is created during device startup and is never allocated into.</span><br></pre></td></tr></table></figure>
 <p>Zygote机制总的来说是<code>app_process</code>启动Zygote并创建第一个虚拟机进程，Zygote启动时会预加载所有需要的Java classes和”必要的”资源文件，这些资源文件就包括我们在hprof文件中看到的被sPreloadedDrawables所直接引用的Bitmap资源。应用进程都是从Zygote中fork出来的，所以所有的应用进程都会包含上面提到的资源文件。这些资源的拷贝可以看成浅拷贝，并不是真正的内存copy，而是作为进程间的共享内存使用。详细的可以查看<a href="https://ivonhoe.github.io/2017/04/25/Zygote/">《Zygote》</a>这篇文章。</p>
 <p><img src="http://upload-images.jianshu.io/upload_images/695750-8d0e4feb9a25e8b4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="hprof-2.png"></p>
-<h3 id="三、强制清除未使用的系统资源图片会怎样？">三、强制清除未使用的系统资源图片会怎样？</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">private void clearPreloadedDrawables() &#123;&#10;    try &#123;&#10;        Field mFieldPreloadedDrawables = getField(Resources.class, &#34;sPreloadedDrawables&#34;);&#10;        if (mFieldPreloadedDrawables != null) &#123;&#10;            mFieldPreloadedDrawables.setAccessible(true);&#10;&#10;            boolean access = mFieldPreloadedDrawables.isAccessible();&#10;            if (!access) &#123;&#10;                mFieldPreloadedDrawables.setAccessible(true);&#10;            &#125;&#10;&#10;            if (Build.VERSION.SDK_INT &#60;= 17) &#123;&#10;                LongSparseArray&#60;Drawable.ConstantState&#62; dArray = (LongSparseArray&#60;Drawable.ConstantState&#62;) mFieldPreloadedDrawables.get(getResources());&#10;                if (dArray != null) &#123;&#10;                    dArray.clear();&#10;                &#125;&#10;&#10;                // dArray.put(1, createDrawableConstant());&#10;            &#125; else if (Build.VERSION.SDK_INT &#62;= 18) &#123;&#10;                LongSparseArray&#60;Drawable.ConstantState&#62;[] dArray = (LongSparseArray&#60;Drawable.ConstantState&#62;[]) mFieldPreloadedDrawables.get(getResources());&#10;                if (dArray != null) &#123;&#10;                    for (int i = 0; i &#60; dArray.length; i++) &#123;&#10;                        if (dArray[i] != null) &#123;&#10;                            dArray[i].clear();&#10;                            // dArray[i].put(1, createDrawableConstant());&#10;                        &#125;&#10;                    &#125;&#10;                &#125;&#10;            &#125;&#10;&#10;            mFieldPreloadedDrawables.setAccessible(true);&#10;        &#125;&#10;    &#125; catch (Exception e) &#123;&#10;        e.printStackTrace();&#10;    &#125;&#10;&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="三、强制清除未使用的系统资源图片会怎样？"><a href="#三、强制清除未使用的系统资源图片会怎样？" class="headerlink" title="三、强制清除未使用的系统资源图片会怎样？"></a>三、强制清除未使用的系统资源图片会怎样？</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">private void clearPreloadedDrawables() &#123;</span><br><span class="line">    try &#123;</span><br><span class="line">        Field mFieldPreloadedDrawables = getField(Resources.class, &quot;sPreloadedDrawables&quot;);</span><br><span class="line">        if (mFieldPreloadedDrawables != null) &#123;</span><br><span class="line">            mFieldPreloadedDrawables.setAccessible(true);</span><br><span class="line"></span><br><span class="line">            boolean access = mFieldPreloadedDrawables.isAccessible();</span><br><span class="line">            if (!access) &#123;</span><br><span class="line">                mFieldPreloadedDrawables.setAccessible(true);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            if (Build.VERSION.SDK_INT &lt;= 17) &#123;</span><br><span class="line">                LongSparseArray&lt;Drawable.ConstantState&gt; dArray = (LongSparseArray&lt;Drawable.ConstantState&gt;) mFieldPreloadedDrawables.get(getResources());</span><br><span class="line">                if (dArray != null) &#123;</span><br><span class="line">                    dArray.clear();</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                // dArray.put(1, createDrawableConstant());</span><br><span class="line">            &#125; else if (Build.VERSION.SDK_INT &gt;= 18) &#123;</span><br><span class="line">                LongSparseArray&lt;Drawable.ConstantState&gt;[] dArray = (LongSparseArray&lt;Drawable.ConstantState&gt;[]) mFieldPreloadedDrawables.get(getResources());</span><br><span class="line">                if (dArray != null) &#123;</span><br><span class="line">                    for (int i = 0; i &lt; dArray.length; i++) &#123;</span><br><span class="line">                        if (dArray[i] != null) &#123;</span><br><span class="line">                            dArray[i].clear();</span><br><span class="line">                            // dArray[i].put(1, createDrawableConstant());</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            mFieldPreloadedDrawables.setAccessible(true);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; catch (Exception e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>当通过上述clearPreloadedDrawables函数清除sPreloadDrawable对这些资源的强引用，然后使用Android Studio的monitor工具发现，gc以后App heap发生了断崖式的内存回收，并且使用<code>adb shell dumpsys meminfo</code>命令可以发现Heap Alloc和Heap Size都发生了显著的减小，但Pss total并没有显著变化。这里的理解是PSS = Private RAM + 按比例计算的Shared RAM，这两部分都没有发生显著变化，所以PSS Total没有变化。</p>
 <p><img src="http://upload-images.jianshu.io/upload_images/695750-04d96b82a7dbce97.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="hprof-7.png"></p>
 <p><img src="http://upload-images.jianshu.io/upload_images/695750-4eebdbaf6e95eff4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="hprof-5.png"></p>
 <p>那请问，上面👆的内存清理有意义吗？Heap allocated较少了10M，但PSS并没有明显的变化，给我的感觉就像大家在吃大锅饭，我只吃了1碗，别人吃了10碗，付钱的时候却是AA，甚至可能我付的还更多一些。你说你是不是萨？</p>
-<h3 id="四、Copy-On-Write(COW)">四、Copy-On-Write(COW)</h3><p>Zygote heap是系统共享内存heap，这里我尝试修改<code>sPreloadDrawable</code>对应数据时，如下图所示，系统默认预加载399张资源图片，当手动插入一张新的图片到缓存后，缓存大小变成了400。但让我觉得诡异的是，不是说Android系统使用COW机制吗？为啥插入前后sPreloadDrawable相关的内存地址根本没有变化？<br><img src="http://upload-images.jianshu.io/upload_images/695750-14ca03d88be43c61.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="hprof-4.png"></p>
+<h3 id="四、Copy-On-Write-COW"><a href="#四、Copy-On-Write-COW" class="headerlink" title="四、Copy-On-Write(COW)"></a>四、Copy-On-Write(COW)</h3><p>Zygote heap是系统共享内存heap，这里我尝试修改<code>sPreloadDrawable</code>对应数据时，如下图所示，系统默认预加载399张资源图片，当手动插入一张新的图片到缓存后，缓存大小变成了400。但让我觉得诡异的是，不是说Android系统使用COW机制吗？为啥插入前后sPreloadDrawable相关的内存地址根本没有变化？<br><img src="http://upload-images.jianshu.io/upload_images/695750-14ca03d88be43c61.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="hprof-4.png"></p>
 <p><img src="http://upload-images.jianshu.io/upload_images/695750-5f0921dc8e336f51.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="hprof-8.jpg"></p>
 <p>我的理解是在fork子进程的时候并不会真正拷贝父进程内存数据，而是子进程的虚拟内存空间指向父进程的物理内存空间。子进程和父进程的虚拟空间不同，但物理空间是同一个。当子进程需要重写共享内存数据时，系统才会为子进程分配响应的物理内存。这里的虚拟内存空间对应用程序来说就是逻辑地址，对于CPU来说就是线性地址。</p>
-<h3 id="五、总结">五、总结</h3><p>回到之前思考的几个问题：</p>
+<h3 id="五、总结"><a href="#五、总结" class="headerlink" title="五、总结"></a>五、总结</h3><p>回到之前思考的几个问题：</p>
 <ul>
 <li><p>为什么会有这么多主题资源被加载？<br>这些主题资源是系统启动时Zygote预加载的系统资源，Zygote认为这些资源每个App都会用到，特别是5.0+的系统会达到400+的默认theme图片，占用10M+的内存空间，不过这些内存是系统共享的你用或不用他们都在那里。改变应用的主题样式并不会改变sPreloadDrawable的加载内容。</p>
 </li>
@@ -411,73 +521,49 @@
 </li>
 </ul>
 <p>临帖顿首，不知所言，2017.4.26日夜。</p>
-<h3 id="参考">参考</h3><p><a href="https://developer.android.com/studio/profile/investigate-ram.html" target="_blank" rel="external"></a></p>
-<p><a href="https://developer.android.com/studio/profile/am-hprof.html#why" target="_blank" rel="external">HPROF Viewer and Analyzer</a></p>
-<p><a href="http://www.jianshu.com/p/d061fa36a0d9" target="_blank" rel="external">Manage Your App’s Memory</a></p>
-<p><a href="http://wiki.jikexueyuan.com/project/deep-android-v1/zygote.html" target="_blank" rel="external">深入理解 Zygote</a></p>
-<p><a href="http://www.cnblogs.com/biyeymyhjob/archive/2012/07/20/2601655.html" target="_blank" rel="external">Linux写时拷贝技术(copy-on-write)</a></p>
-<p><a href="http://luodw.cc/2016/02/17/address/" target="_blank" rel="external">linux虚拟地址转物理地址</a></p>
-<h3 id="转载请标明出处病已blog_https://ivonhoe-github-io/">转载请标明出处<a href="https://ivonhoe.github.io/">病已blog https://ivonhoe.github.io/</a></h3>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><p><a href="https://developer.android.com/studio/profile/investigate-ram.html" target="_blank" rel="noopener"></a></p>
+<p><a href="https://developer.android.com/studio/profile/am-hprof.html#why" target="_blank" rel="noopener">HPROF Viewer and Analyzer</a></p>
+<p><a href="http://www.jianshu.com/p/d061fa36a0d9" target="_blank" rel="noopener">Manage Your App’s Memory</a></p>
+<p><a href="http://wiki.jikexueyuan.com/project/deep-android-v1/zygote.html" target="_blank" rel="noopener">深入理解 Zygote</a></p>
+<p><a href="http://www.cnblogs.com/biyeymyhjob/archive/2012/07/20/2601655.html" target="_blank" rel="noopener">Linux写时拷贝技术(copy-on-write)</a></p>
+<p><a href="http://luodw.cc/2016/02/17/address/" target="_blank" rel="noopener">linux虚拟地址转物理地址</a></p>
+<h3 id="转载请标明出处病已blog-https-ivonhoe-github-io"><a href="#转载请标明出处病已blog-https-ivonhoe-github-io" class="headerlink" title="转载请标明出处病已blog https://ivonhoe.github.io/"></a>转载请标明出处<a href="https://ivonhoe.github.io/">病已blog https://ivonhoe.github.io/</a></h3>
       
     </div>
 
-    <div>
-      
-        
+    
 
-      
-    </div>
+    
+    
+    
 
-    <div>
-      
-        
-  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
-    <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
-    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
-      <span>赏</span>
-    </button>
-    <div id="QR" style="display: none;">
-      
-        <div id="wechat" style="display: inline-block">
-          <img id="wechat_qr" src="https://ivonhoe.github.io/res/dex2jar_error/WechatIMG56.png" alt="病已 WeChat Pay"/>
-          <p>微信打赏</p>
-        </div>
-      
-      
-        <div id="alipay" style="display: inline-block">
-          <img id="alipay_qr" src="https://ivonhoe.github.io/res/dex2jar_error/WechatIMG57.jpeg" alt="病已 Alipay"/>
-          <p>支付宝打赏</p>
-        </div>
-      
-    </div>
-  </div>
+    
 
-
+    
       
-    </div>
+    
+    
 
-    <div>
-      
-        
-
-      
-    </div>
+    
 
     <footer class="post-footer">
       
+        
+          
+        
         <div class="post-tags">
           
-            <a href="/tags/Copy-on-write/" rel="tag"># Copy-on-write</a>
+            <a href="/tags/性能优化/" rel="tag"># 性能优化</a>
           
             <a href="/tags/Zygote/" rel="tag"># Zygote</a>
           
-            <a href="/tags/性能优化/" rel="tag"># 性能优化</a>
+            <a href="/tags/Copy-on-write/" rel="tag"># Copy-on-write</a>
           
         </div>
       
 
       
-        
+      
       
 
       
@@ -505,24 +591,21 @@
       
       
     </footer>
+  </div>
+  
+  
+  
   </article>
 
 
-
-    <div class="post-spread">
-      
-    </div>
   </div>
 
 
           </div>
           
 
+  
 
-          
-  <div class="comments" id="comments">
-    
-  </div>
 
 
         </div>
@@ -544,110 +627,208 @@
 
       
         <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
             文章目录
           </li>
-          <li class="sidebar-nav-overview" data-target="site-overview">
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
             站点概览
           </li>
         </ul>
       
 
-      <section class="site-overview sidebar-panel">
-        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-          <img class="site-author-image" itemprop="image"
-               src="https://avatars1.githubusercontent.com/u/5706813?v=3&s=460"
-               alt="病已" />
-          <p class="site-author-name" itemprop="name">病已</p>
-           
-              <p class="site-description motion-element" itemprop="description"></p>
-          
-        </div>
-        <nav class="site-state motion-element">
-
-          
-            <div class="site-state-item site-state-posts">
-              <a href="/archives">
-                <span class="site-state-item-count">33</span>
-                <span class="site-state-item-name">日志</span>
-              </a>
-            </div>
-          
-
-          
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
-            
-            <div class="site-state-item site-state-categories">
-              <a href="/categories/index.html">
-                <span class="site-state-item-count">8</span>
-                <span class="site-state-item-name">分类</span>
-              </a>
-            </div>
-          
-
-          
-            
-            
-            <div class="site-state-item site-state-tags">
-              <a href="/tags/index.html">
-                <span class="site-state-item-count">39</span>
-                <span class="site-state-item-name">标签</span>
-              </a>
-            </div>
-          
-
-        </nav>
-
-        
-          <div class="feed-link motion-element">
-            <a href="/atom.xml" rel="alternate">
-              <i class="fa fa-rss"></i>
-              RSS
-            </a>
+              <p class="site-author-name" itemprop="name">病已</p>
+              <div class="site-description motion-element" itemprop="description"></div>
           </div>
-        
 
-        <div class="links-of-author motion-element">
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">33</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">8</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">39</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+
+          
+
+          
+          
+
           
             
-              <span class="links-of-author-item">
-                <a href="https://github.com/Ivonhoe" target="_blank" title="GitHub">
-                  
-                    <i class="fa fa-fw fa-github"></i>
-                  
-                  GitHub
-                </a>
-              </span>
-            
           
+          
+
         </div>
-
-        
-        
-
-        
-        
-
-        
-
-
-      </section>
+      </div>
 
       
       <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
           <div class="post-toc">
 
             
-              
+            
+            
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#一、分析一个Hello_World_App中bitmap对象的分布"><span class="nav-number">1.</span> <span class="nav-text">一、分析一个Hello World App中bitmap对象的分布</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二、为什么有这么多系统资源被加载？"><span class="nav-number">2.</span> <span class="nav-text">二、为什么有这么多系统资源被加载？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#三、强制清除未使用的系统资源图片会怎样？"><span class="nav-number">3.</span> <span class="nav-text">三、强制清除未使用的系统资源图片会怎样？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#四、Copy-On-Write(COW)"><span class="nav-number">4.</span> <span class="nav-text">四、Copy-On-Write(COW)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#五、总结"><span class="nav-number">5.</span> <span class="nav-text">五、总结</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考"><span class="nav-number">6.</span> <span class="nav-text">参考</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#转载请标明出处病已blog_https://ivonhoe-github-io/"><span class="nav-number">7.</span> <span class="nav-text">转载请标明出处病已blog https://ivonhoe.github.io/</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#一、分析一个Hello-World-App中bitmap对象的分布"><span class="nav-number">1.</span> <span class="nav-text">一、分析一个Hello World App中bitmap对象的分布</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二、为什么有这么多系统资源被加载？"><span class="nav-number">2.</span> <span class="nav-text">二、为什么有这么多系统资源被加载？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#三、强制清除未使用的系统资源图片会怎样？"><span class="nav-number">3.</span> <span class="nav-text">三、强制清除未使用的系统资源图片会怎样？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#四、Copy-On-Write-COW"><span class="nav-number">4.</span> <span class="nav-text">四、Copy-On-Write(COW)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#五、总结"><span class="nav-number">5.</span> <span class="nav-text">五、总结</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考"><span class="nav-number">6.</span> <span class="nav-text">参考</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#转载请标明出处病已blog-https-ivonhoe-github-io"><span class="nav-number">7.</span> <span class="nav-text">转载请标明出处病已blog https://ivonhoe.github.io/</span></a></li></ol></div>
             
 
           </div>
-        </section>
+        </div>
       <!--/noindex-->
       
 
@@ -655,6 +836,7 @@
 
     </div>
   </aside>
+  
 
 
         
@@ -663,30 +845,39 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright" >
-  
-  &copy; 
-  <span itemprop="copyrightYear">2019</span>
-  <span class="with-love">
-    <i class="fa fa-heart"></i>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">病已</span>
+
+  
+
+  
 </div>
 
 
-<div class="powered-by">
-  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
-</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
 
-<div class="theme-info">
-  主题 -
-  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
-    NexT.Mist
-  </a>
-</div>
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.1.2</div>
+
+
 
 
         
+
+
+
+
+
+
+
 
         
       </div>
@@ -699,11 +890,16 @@
       </div>
     
 
+    
+
+    
+
+    
   </div>
 
   
 
-<script type="text/javascript">
+<script>
   if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
     window.Promise = null;
   }
@@ -717,7 +913,6 @@
 
 
 
-  
 
 
 
@@ -726,53 +921,9 @@
 
 
 
-  
-  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
-
-  
-  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
-
-  
-  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
-
-  
-  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
-
-  
-  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
-
-  
-  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
-
-
-  
-
-
-  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
-
-  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
 
 
 
-  
-  
-
-  
-  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
-<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
-
-
-
-  
-
-
-  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
-
-
-
-  
-
-  
 
 
 
@@ -780,19 +931,57 @@
 
 
   
+  <script src="/lib/jquery/index.js?v=3.4.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.2"></script>
+
+  <script src="/js/motion.js?v=7.1.2"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/affix.js?v=7.1.2"></script>
+
+  <script src="/js/schemes/pisces.js?v=7.1.2"></script>
 
 
 
 
-	
-
-
+  
+  <script src="/js/scrollspy.js?v=7.1.2"></script>
+<script src="/js/post-details.js?v=7.1.2"></script>
 
 
 
   
 
 
+  <script src="/js/next-boot.js?v=7.1.2"></script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
 
 
   
@@ -801,119 +990,88 @@
 
 
   
-
-
-
-
-
   
-
-  
-  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
-  <script>AV.initialize("JdLpddsaWqwfJtXPdDK8woaF-gzGzoHsz", "CEmtHXH8f0PtvF0zYtVE0EeY");</script>
   <script>
-    function showTime(Counter) {
-      var query = new AV.Query(Counter);
-      var entries = [];
-      var $visitors = $(".leancloud_visitors");
-
-      $visitors.each(function () {
-        entries.push( $(this).attr("id").trim() );
-      });
-
-      query.containedIn('url', entries);
-      query.find()
-        .done(function (results) {
-          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
-
-          if (results.length === 0) {
-            $visitors.find(COUNT_CONTAINER_REF).text(0);
-            return;
-          }
-
-          for (var i = 0; i < results.length; i++) {
-            var item = results[i];
-            var url = item.get('url');
-            var time = item.get('time');
-            var element = document.getElementById(url);
-
-            $(element).find(COUNT_CONTAINER_REF).text(time);
-          }
-          for(var i = 0; i < entries.length; i++) {
-            var url = entries[i];
-            var element = document.getElementById(url);
-            var countSpan = $(element).find(COUNT_CONTAINER_REF);
-            if( countSpan.text() == '') {
-              countSpan.text(0);
-            }
-          }
-        })
-        .fail(function (object, error) {
-          console.log("Error: " + error.code + " " + error.message);
-        });
-    }
-
+    
     function addCount(Counter) {
-      var $visitors = $(".leancloud_visitors");
+      var $visitors = $('.leancloud_visitors');
       var url = $visitors.attr('id').trim();
       var title = $visitors.attr('data-flag-title').trim();
-      var query = new AV.Query(Counter);
 
-      query.equalTo("url", url);
-      query.find({
-        success: function(results) {
+      Counter('get', '/classes/Counter', { where: JSON.stringify({ url }) })
+        .done(function({ results }) {
           if (results.length > 0) {
             var counter = results[0];
-            counter.fetchWhenSave(true);
-            counter.increment("time");
-            counter.save(null, {
-              success: function(counter) {
+            
+            Counter('put', '/classes/Counter/' + counter.objectId, JSON.stringify({ time: { '__op': 'Increment', 'amount': 1 } }))
+            
+              .done(function() {
                 var $element = $(document.getElementById(url));
-                $element.find('.leancloud-visitors-count').text(counter.get('time'));
-              },
-              error: function(counter, error) {
-                console.log('Failed to save Visitor num, with error message: ' + error.message);
-              }
-            });
+                $element.find('.leancloud-visitors-count').text(counter.time + 1);
+              })
+            
+              .fail(function ({ responseJSON }) {
+                console.log('Failed to save Visitor num, with error message: ' + responseJSON.error);
+              })
           } else {
-            var newcounter = new Counter();
-            /* Set ACL */
-            var acl = new AV.ACL();
-            acl.setPublicReadAccess(true);
-            acl.setPublicWriteAccess(true);
-            newcounter.setACL(acl);
-            /* End Set ACL */
-            newcounter.set("title", title);
-            newcounter.set("url", url);
-            newcounter.set("time", 1);
-            newcounter.save(null, {
-              success: function(newcounter) {
-                var $element = $(document.getElementById(url));
-                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
-              },
-              error: function(newcounter, error) {
-                console.log('Failed to create');
-              }
-            });
+            
+              var $element = $(document.getElementById(url));
+              $element.find('.leancloud-visitors-count').text('Counter not initialized! More info at console err msg.');
+              console.error('ATTENTION! LeanCloud counter has security bug, see how to solve it here: https://github.com/theme-next/hexo-leancloud-counter-security. \n However, you can still use LeanCloud without security, by setting `security` option to `false`.');
+            
           }
-        },
-        error: function(error) {
-          console.log('Error:' + error.code + " " + error.message);
-        }
-      });
+        })
+        .fail(function ({ responseJSON }) {
+          console.log('LeanCloud Counter Error: ' + responseJSON.code + ' ' + responseJSON.error);
+        });
     }
+    
 
     $(function() {
-      var Counter = AV.Object.extend("Counter");
-      if ($('.leancloud_visitors').length == 1) {
-        addCount(Counter);
-      } else if ($('.post-title-link').length > 1) {
-        showTime(Counter);
-      }
+      $.get('https://app-router.leancloud.cn/2/route?appId=' + 'JdLpddsaWqwfJtXPdDK8woaF-gzGzoHsz')
+        .done(function({ api_server }) {
+          var Counter = function(method, url, data) {
+            return $.ajax({
+              method: method,
+              url: 'https://' + api_server + '/1.1' + url,
+              headers: {
+                'X-LC-Id': 'JdLpddsaWqwfJtXPdDK8woaF-gzGzoHsz',
+                'X-LC-Key': 'CEmtHXH8f0PtvF0zYtVE0EeY',
+                'Content-Type': 'application/json',
+              },
+              data: data
+            });
+          };
+          
+            const localhost = /http:\/\/(localhost|127.0.0.1|0.0.0.0)/;
+            if (localhost.test(document.URL)) {
+              return;
+            }
+            addCount(Counter);
+          
+        });
     });
   </script>
 
 
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
 
   
 

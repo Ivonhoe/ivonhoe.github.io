@@ -1,23 +1,4 @@
-<!doctype html>
-
-
-
-  
-
-
-<html class="theme-next mist use-motion" lang="zh-Hans">
-<head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
-
-
-
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
-
-
-
+<!DOCTYPE html>
 
 
 
@@ -31,97 +12,74 @@
 
 
   
-  
-  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
 
 
-
-
-  
-  
-  
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
 
 
 
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
-
-<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
-
-
-  <meta name="keywords" content="Android,动画," />
-
-
-
-
-
-  <link rel="alternate" href="/atom.xml" title="病已的博客" type="application/atom+xml" />
-
-
-
-
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
 
 
 
 
 
 
-<meta name="description" content="说在开始这篇文档记录了一下自己在实际工作中实现的一些Android动画效果时的开发思路，总结了我自己如何看待Android动画问题，希望能给大家的动画开发提供一些思路和帮助。
-一、Android动画基础1.1 动画类型
-Frame Animation：帧动画，顺序播放事先做好的图像，是一种画面转换动画
-Tween Animation:补间动画（或者叫渐变动画），通过对场景里的对象不断做图像变换(平">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Android动画总结">
-<meta property="og:url" content="https://ivonhoe.github.io/2015/02/09/Android动画总结/index.html">
-<meta property="og:site_name" content="病已的博客">
-<meta property="og:description" content="说在开始这篇文档记录了一下自己在实际工作中实现的一些Android动画效果时的开发思路，总结了我自己如何看待Android动画问题，希望能给大家的动画开发提供一些思路和帮助。
-一、Android动画基础1.1 动画类型
-Frame Animation：帧动画，顺序播放事先做好的图像，是一种画面转换动画
-Tween Animation:补间动画（或者叫渐变动画），通过对场景里的对象不断做图像变换(平">
-<meta property="og:image" content="https://ivonhoe.github.io/res/android_animation/android_animation_animation_class.png">
-<meta property="og:image" content="https://ivonhoe.github.io/res/android_animation/jiasu_jiansu.png">
-<meta property="og:image" content="https://ivonhoe.github.io/res/android_animation/android_animation_interpolator_class.png">
-<meta property="og:image" content="https://ivonhoe.github.io/res/android_animation/xiangsi.jpg">
-<meta property="og:image" content="https://ivonhoe.github.io/android_animation/tubiaodonghua.jpg">
-<meta property="og:image" content="https://ivonhoe.github.io/android_animation/guangbixiaoguo.jpg">
-<meta property="og:updated_time" content="2018-09-11T13:27:09.000Z">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Android动画总结">
-<meta name="twitter:description" content="说在开始这篇文档记录了一下自己在实际工作中实现的一些Android动画效果时的开发思路，总结了我自己如何看待Android动画问题，希望能给大家的动画开发提供一些思路和帮助。
-一、Android动画基础1.1 动画类型
-Frame Animation：帧动画，顺序播放事先做好的图像，是一种画面转换动画
-Tween Animation:补间动画（或者叫渐变动画），通过对场景里的对象不断做图像变换(平">
 
 
 
-<script type="text/javascript" id="hexo.configurations">
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.2">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.1.2">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.1.2">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.1.2">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.1.2" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
   var NexT = window.NexT || {};
   var CONFIG = {
     root: '/',
-    scheme: 'Mist',
-    sidebar: {"position":"right","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
-    fancybox: true,
-    motion: true,
-    duoshuo: {
-      userId: 'undefined',
-      author: '博主'
-    },
+    scheme: 'Gemini',
+    version: '7.1.2',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     algolia: {
       applicationID: '',
       apiKey: '',
@@ -133,34 +91,58 @@ Tween Animation:补间动画（或者叫渐变动画），通过对场景里的�
 </script>
 
 
-
-  <link rel="canonical" href="https://ivonhoe.github.io/2015/02/09/Android动画总结/"/>
-
-
-
-
-
-  <title> Android动画总结 | 病已的博客 </title>
-</head>
-
-<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
-
   
 
 
 
 
-<script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-  ga('create', 'UA-97550712-1', 'auto');
-  ga('send', 'pageview');
+  <meta name="description" content="说在开始这篇文档记录了一下自己在实际工作中实现的一些Android动画效果时的开发思路，总结了我自己如何看待Android动画问题，希望能给大家的动画开发提供一些思路和帮助。 一、Android动画基础1.1 动画类型 Frame Animation：帧动画，顺序播放事先做好的图像，是一种画面转换动画 Tween Animation:补间动画（或者叫渐变动画），通过对场景里的对象不断做图像变换(平">
+<meta name="keywords" content="Android,动画">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android动画总结">
+<meta property="og:url" content="https://ivonhoe.github.io/2015/02/09/Android动画总结/index.html">
+<meta property="og:site_name" content="病已的博客">
+<meta property="og:description" content="说在开始这篇文档记录了一下自己在实际工作中实现的一些Android动画效果时的开发思路，总结了我自己如何看待Android动画问题，希望能给大家的动画开发提供一些思路和帮助。 一、Android动画基础1.1 动画类型 Frame Animation：帧动画，顺序播放事先做好的图像，是一种画面转换动画 Tween Animation:补间动画（或者叫渐变动画），通过对场景里的对象不断做图像变换(平">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://ivonhoe.github.io/res/android_animation/android_animation_animation_class.png">
+<meta property="og:image" content="https://ivonhoe.github.io/res/android_animation/jiasu_jiansu.png">
+<meta property="og:image" content="https://ivonhoe.github.io/res/android_animation/android_animation_interpolator_class.png">
+<meta property="og:image" content="https://ivonhoe.github.io/res/android_animation/xiangsi.jpg">
+<meta property="og:image" content="https://ivonhoe.github.io/android_animation/tubiaodonghua.jpg">
+<meta property="og:image" content="https://ivonhoe.github.io/android_animation/guangbixiaoguo.jpg">
+<meta property="og:updated_time" content="2018-09-11T13:27:09.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android动画总结">
+<meta name="twitter:description" content="说在开始这篇文档记录了一下自己在实际工作中实现的一些Android动画效果时的开发思路，总结了我自己如何看待Android动画问题，希望能给大家的动画开发提供一些思路和帮助。 一、Android动画基础1.1 动画类型 Frame Animation：帧动画，顺序播放事先做好的图像，是一种画面转换动画 Tween Animation:补间动画（或者叫渐变动画），通过对场景里的对象不断做图像变换(平">
+<meta name="twitter:image" content="https://ivonhoe.github.io/res/android_animation/android_animation_animation_class.png">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="病已的博客" type="application/atom+xml">
+
+
+
+  
+  
+  <link rel="canonical" href="https://ivonhoe.github.io/2015/02/09/Android动画总结/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
 </script>
 
+  <title>Android动画总结 | 病已的博客</title>
+  
 
-  <script type="text/javascript">
+
+
+
+
+
+  <script>
     var _hmt = _hmt || [];
     (function() {
       var hm = document.createElement("script");
@@ -176,36 +158,65 @@ Tween Animation:补间动画（或者叫渐变动画），通过对场景里的�
 
 
 
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
 
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
 
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
 
   
   
     
   
 
-  <div class="container sidebar-position-right page-post-detail ">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
       <div class="header-inner"><div class="site-brand-wrapper">
-  <div class="site-meta ">
+  <div class="site-meta">
     
 
     <div class="custom-logo-site-title">
-      <a href="/"  class="brand" rel="start">
+      <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
         <span class="site-title">病已的博客</span>
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
+    
       
         <p class="site-subtitle">枕上，马上，厕上</p>
       
+    
+    
   </div>
 
   <div class="site-nav-toggle">
-    <button>
+    <button aria-label="切换导航栏">
       <span class="btn-bar"></span>
       <span class="btn-bar"></span>
       <span class="btn-bar"></span>
@@ -213,55 +224,103 @@ Tween Animation:补间动画（或者叫渐变动画），通过对场景里的�
   </div>
 </div>
 
-<nav class="site-nav">
-  
 
+
+<nav class="site-nav">
   
     <ul id="menu" class="menu">
       
         
-        <li class="menu-item menu-item-home">
-          <a href="/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
-            
-            首页
-          </a>
-        </li>
-      
         
-        <li class="menu-item menu-item-categories">
-          <a href="/categories" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
-            
-            分类
-          </a>
-        </li>
-      
         
-        <li class="menu-item menu-item-archives">
-          <a href="/archives" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
-            
-            归档
-          </a>
-        </li>
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
       
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
         
-        <li class="menu-item menu-item-tags">
-          <a href="/tags" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
-            
-            标签
-          </a>
-        </li>
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
       
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
 
       
+      
     </ul>
+  
+
   
 
   
@@ -269,12 +328,30 @@ Tween Animation:补间动画（或者叫渐变动画），通过对场景里的�
 
 
 
- </div>
+  
+
+
+
+</div>
     </header>
+
+    
+  
+  
+
+  
+
+  <a href="https://github.com/Ivonhoe" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewbox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a>
+
+
 
     <main id="main" class="main">
       <div class="main-inner">
         <div class="content-wrap">
+          
+            
+
+          
           <div id="content" class="content">
             
 
@@ -287,13 +364,19 @@ Tween Animation:补间动画（或者叫渐变动画），通过对场景里的�
   
   
 
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://ivonhoe.github.io/2015/02/09/Android动画总结/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="病已">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/5706813?v=3&s=460">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -305,11 +388,8 @@ Tween Animation:补间动画（或者叫渐变动画），通过对场景里的�
 
         
         
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                Android动画总结
+          <h1 class="post-title" itemprop="name headline">Android动画总结
+
               
             
           </h1>
@@ -317,6 +397,11 @@ Tween Animation:补间动画（或者叫渐变动画），通过对场景里的�
 
         <div class="post-meta">
           <span class="post-time">
+
+            
+            
+            
+
             
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
@@ -324,18 +409,35 @@ Tween Animation:补间动画（或者叫渐变动画），通过对场景里的�
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-02-09T19:40:53+08:00">
-                Feb 9 2015
-              </time>
+
+              
+                
+              
+
+              <time title="创建时间：2月 9 2015 19:40:53" itemprop="dateCreated datePublished" datetime="2015-02-09T19:40:53+08:00">2月 9 2015</time>
             
 
             
+              
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：9月 11 2018 21:27:09" itemprop="dateModified" datetime="2018-09-11T21:27:09+08:00">9月 11 2018</time>
+              
             
           </span>
 
           
-            <span class="post-category" >
+            <span class="post-category">
             
               <span class="post-meta-divider">|</span>
             
@@ -346,11 +448,7 @@ Tween Animation:补间动画（或者叫渐变动画），通过对场景里的�
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Android动画/" itemprop="url" rel="index">
-                    <span itemprop="name">Android动画</span>
-                  </a>
-                </span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Android动画/" itemprop="url" rel="index"><span itemprop="name">Android动画</span></a></span>
 
                 
                 
@@ -360,20 +458,21 @@ Tween Animation:补间动画（或者叫渐变动画），通过对场景里的�
 
           
             
+            
           
 
           
           
-             <span id="/2015/02/09/Android动画总结/" class="leancloud_visitors" data-flag-title="Android动画总结">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数 </span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
+            <span id="/2015/02/09/Android动画总结/" class="leancloud_visitors" data-flag-title="Android动画总结">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              
+                <span class="post-meta-item-text">阅读次数：</span>
+              
+                <span class="leancloud-visitors-count"></span>
+            </span>
           
 
           
@@ -386,41 +485,43 @@ Tween Animation:补间动画（或者叫渐变动画），通过对场景里的�
       </header>
     
 
-
+    
+    
+    
     <div class="post-body" itemprop="articleBody">
 
       
       
 
       
-        <h3 id="说在开始">说在开始</h3><p>这篇文档记录了一下自己在实际工作中实现的一些Android动画效果时的开发思路，总结了我自己如何看待Android动画问题，希望能给大家的动画开发提供一些思路和帮助。</p>
-<h3 id="一、Android动画基础">一、Android动画基础</h3><h4 id="1-1_动画类型">1.1 动画类型</h4><ul>
+        <h3 id="说在开始"><a href="#说在开始" class="headerlink" title="说在开始"></a>说在开始</h3><p>这篇文档记录了一下自己在实际工作中实现的一些Android动画效果时的开发思路，总结了我自己如何看待Android动画问题，希望能给大家的动画开发提供一些思路和帮助。</p>
+<h3 id="一、Android动画基础"><a href="#一、Android动画基础" class="headerlink" title="一、Android动画基础"></a>一、Android动画基础</h3><h4 id="1-1-动画类型"><a href="#1-1-动画类型" class="headerlink" title="1.1 动画类型"></a>1.1 动画类型</h4><ul>
 <li><strong>Frame Animation：</strong><br>帧动画，顺序播放事先做好的图像，是一种画面转换动画</li>
 <li><strong>Tween Animation:</strong><br>补间动画（或者叫渐变动画），通过对场景里的对象不断做图像变换(平移、缩放、旋转)产生动画效果<a id="more"></a></li>
 <li><strong>Property Animation:</strong><br>属性动画，通过动态地改变对象的属性从而达到动画效果，属性动画为API 11新特性</li>
 </ul>
-<h4 id="1-2_帧动画：">1.2 帧动画：</h4><p>是指顺序执行预先设置好的一组图片，类似电影胶片的形式，设置每一帧drawable，在java代码中加载资源生成一个AnimationDrawable对象。例如：在xml中配置spin_animation.xml在文件夹res/drawable/中：</p>
-<pre><code><span class="pi">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span> 
-<span class="tag">&lt;<span class="title">animation-list</span>  
-  <span class="attribute">xmlns:android</span>=<span class="value">"http://schemas.android.com/apk/res/android"</span>  
-  <span class="attribute">android:oneshot</span>=<span class="value">"false"</span>  &gt;</span>  
-       <span class="tag">&lt;<span class="title">item</span> <span class="attribute">android:drawable</span>=<span class="value">"@drawable/p1"</span> <span class="attribute">android:duration</span>=<span class="value">"1000"</span>&gt;</span><span class="tag">&lt;/<span class="title">item</span>&gt;</span>  
-       <span class="tag">&lt;<span class="title">item</span> <span class="attribute">android:drawable</span>=<span class="value">"@drawable/p2"</span> <span class="attribute">android:duration</span>=<span class="value">"1000"</span>&gt;</span><span class="tag">&lt;/<span class="title">item</span>&gt;</span>  
-       <span class="tag">&lt;<span class="title">item</span> <span class="attribute">android:drawable</span>=<span class="value">"@drawable/p3"</span> <span class="attribute">android:duration</span>=<span class="value">"1000"</span>&gt;</span><span class="tag">&lt;/<span class="title">item</span>&gt;</span>  
-       <span class="tag">&lt;<span class="title">item</span> <span class="attribute">android:drawable</span>=<span class="value">"@drawable/p4"</span> <span class="attribute">android:duration</span>=<span class="value">"1000"</span>&gt;</span><span class="tag">&lt;/<span class="title">item</span>&gt;</span>  
-<span class="tag">&lt;/<span class="title">animation-list</span>&gt;</span>
+<h4 id="1-2-帧动画："><a href="#1-2-帧动画：" class="headerlink" title="1.2 帧动画："></a>1.2 帧动画：</h4><p>是指顺序执行预先设置好的一组图片，类似电影胶片的形式，设置每一帧drawable，在java代码中加载资源生成一个AnimationDrawable对象。例如：在xml中配置spin_animation.xml在文件夹res/drawable/中：</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt; 
+&lt;animation-list  
+  xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;  
+  android:oneshot=&quot;false&quot;  &gt;  
+       &lt;item android:drawable=&quot;@drawable/p1&quot; android:duration=&quot;1000&quot;&gt;&lt;/item&gt;  
+       &lt;item android:drawable=&quot;@drawable/p2&quot; android:duration=&quot;1000&quot;&gt;&lt;/item&gt;  
+       &lt;item android:drawable=&quot;@drawable/p3&quot; android:duration=&quot;1000&quot;&gt;&lt;/item&gt;  
+       &lt;item android:drawable=&quot;@drawable/p4&quot; android:duration=&quot;1000&quot;&gt;&lt;/item&gt;  
+&lt;/animation-list&gt;
 </code></pre><p>加载资源并应用：</p>
-<pre><code>// <span class="operator"><span class="keyword">Load</span> the ImageView that will host the animation <span class="keyword">and</span>
-// <span class="keyword">set</span> its background <span class="keyword">to</span> our AnimationDrawable <span class="keyword">XML</span> <span class="keyword">resource</span>.
-ImageView img = (ImageView)findViewById(R.<span class="keyword">id</span>.spinning_wheel_image);</span>
+<pre><code>// Load the ImageView that will host the animation and
+// set its background to our AnimationDrawable XML resource.
+ImageView img = (ImageView)findViewById(R.id.spinning_wheel_image);
 img.setBackgroundResource(R.drawable.spin_animation);
 
 // Get the background, which has been compiled to an AnimationDrawable object.
 AnimationDrawable frameAnimation = (AnimationDrawable) img.getBackground();
 
-// <span class="operator"><span class="keyword">Start</span> the animation (looped playback <span class="keyword">by</span> <span class="keyword">default</span>).
-frameAnimation.<span class="keyword">start</span>();</span>
-</code></pre><h4 id="1-3_补间动画：">1.3 补间动画：</h4><p>补间动画有四种动画形式，分别是:</p>
+// Start the animation (looped playback by default).
+frameAnimation.start();
+</code></pre><h4 id="1-3-补间动画："><a href="#1-3-补间动画：" class="headerlink" title="1.3 补间动画："></a>1.3 补间动画：</h4><p>补间动画有四种动画形式，分别是:</p>
 <ul>
 <li>alpha 渐变透明度动画效果</li>
 <li>scale 渐变尺寸伸缩动画效果</li>
@@ -428,51 +529,51 @@ frameAnimation.<span class="keyword">start</span>();</span>
 <li>rotate 画面旋转动画效果</li>
 </ul>
 <p>可以和帧动画一样在xml中配置动画，例如旋转动画rotate.xml，设置起始和终止的角度，动画中心的相对位置，动画时长等。</p>
-<pre><code><span class="pi">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span> 
-<span class="tag">&lt;<span class="title">set</span> <span class="attribute">xmlns:android</span>=<span class="value">"http://schemas.android.com/apk/res/android"</span>  
-    <span class="attribute">android:fillAfter</span> = "<span class="attribute">false</span>"  
-    <span class="attribute">android:zAdjustment</span>=<span class="value">"bottom"</span> &gt;</span>  
-    <span class="tag">&lt;<span class="title">rotate</span>  
-        <span class="attribute">android:fromDegrees</span>=<span class="value">"0"</span>  
-        <span class="attribute">android:toDegrees</span>=<span class="value">"360"</span>  
-        <span class="attribute">android:pivotX</span>=<span class="value">"50%"</span>  
-        <span class="attribute">android:pivotY</span>=<span class="value">"50%"</span>  
-        <span class="attribute">android:duration</span>=<span class="value">"4000"</span> /&gt;</span>  
-<span class="tag">&lt;/<span class="title">set</span>&gt;</span>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt; 
+&lt;set xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;  
+    android:fillAfter = &quot;false&quot;  
+    android:zAdjustment=&quot;bottom&quot; &gt;  
+    &lt;rotate  
+        android:fromDegrees=&quot;0&quot;  
+        android:toDegrees=&quot;360&quot;  
+        android:pivotX=&quot;50%&quot;  
+        android:pivotY=&quot;50%&quot;  
+        android:duration=&quot;4000&quot; /&gt;  
+&lt;/set&gt;
 </code></pre><p>使用AnimationUtils加载动画的xml文件生成Animation的实例，也可以在JAVA代码中构造补间动画</p>
-<pre><code><span class="comment">// 加载xml构造Animation</span>
+<pre><code>// 加载xml构造Animation
 Animation anim = AnimationUtils.loadAnimation(mContext, R.anim.rotate);
-<span class="comment">// 不通过xml构造</span>
-Animation rotate = <span class="keyword">new</span> RotateAnimation(<span class="number">0.0f</span>, +<span class="number">360</span>,  Animation.RELATIVE_TO_SELF, <span class="number">0.5f</span>, 
-                   Animation.RELATIVE_TO_SELF, <span class="number">0.5f</span>);
+// 不通过xml构造
+Animation rotate = new RotateAnimation(0.0f, +360,  Animation.RELATIVE_TO_SELF, 0.5f, 
+                   Animation.RELATIVE_TO_SELF, 0.5f);
 </code></pre><p><img src="/res/android_animation/android_animation_animation_class.png" alt="Animation类图"></p>
-<h4 id="1-4_属性动画：">1.4 属性动画：</h4><p>补间动画只能应用于视图(View)对象，动画的方式也仅限于上面所说的四种方式，而属性动画可以应用于所有的Object对象，它通过改变对象的属性值完成动画效果，当然前提是需要有该属性的get和set方法，通过在动画的过程中调用get和set方法改变对象的属性值来完成动画效果。例如通过ObjectAnimator指定要改变的对象和属性名称：</p>
-<pre><code>ObjectAnimator animator = ObjectAnimator.ofInt(testObject, <span class="string">"data"</span>, <span class="number">0</span>, <span class="number">10</span>);
+<h4 id="1-4-属性动画："><a href="#1-4-属性动画：" class="headerlink" title="1.4 属性动画："></a>1.4 属性动画：</h4><p>补间动画只能应用于视图(View)对象，动画的方式也仅限于上面所说的四种方式，而属性动画可以应用于所有的Object对象，它通过改变对象的属性值完成动画效果，当然前提是需要有该属性的get和set方法，通过在动画的过程中调用get和set方法改变对象的属性值来完成动画效果。例如通过ObjectAnimator指定要改变的对象和属性名称：</p>
+<pre><code>ObjectAnimator animator = ObjectAnimator.ofInt(testObject, &quot;data&quot;, 0, 10);
 animator.start();
 
-<span class="keyword">private</span> <span class="keyword">class</span> TestObject {
-    <span class="keyword">private</span> <span class="keyword">int</span> data;
-    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getData</span><span class="params">()</span> </span>{
-        <span class="keyword">return</span> data;
+private class TestObject {
+    private int data;
+    public int getData() {
+        return data;
     }
-    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setData</span><span class="params">(<span class="keyword">int</span> data)</span> </span>{
-        <span class="keyword">this</span>.data = data;
+    public void setData(int data) {
+        this.data = data;
     }
 }
 </code></pre><p>当然也通过ValueAnimator，不需要指定属性名更灵活，设置AnimatorUpdateListener，在动画更新的回调中完成想要的动作，例如，在从0到10的变化过程中，去更新视图的位置？或者其他想要的任何可能操作。</p>
-<pre><code>ValueAnimator animator = ValueAnimator.ofInt(<span class="number">0</span>, <span class="number">10</span>);
-animator.addUpdateListener(<span class="keyword">new</span> ValueAnimator.AnimatorUpdateListener() {
-    @<span class="function">Override
-    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onAnimationUpdate</span><span class="params">(ValueAnimator animation)</span> </span>{
-    <span class="keyword">int</span> factor = (Integer) animation.getAnimatedValue();
+<pre><code>ValueAnimator animator = ValueAnimator.ofInt(0, 10);
+animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+    @Override
+    public void onAnimationUpdate(ValueAnimator animation) {
+    int factor = (Integer) animation.getAnimatedValue();
     }
 });
-</code></pre><h4 id="1-5_动画插值：">1.5 动画插值：</h4><p>插值器的作用是根据时间运行的百分比来计算出当前属性改变的百分比，反映的是时间和动画进度（或属性变化）的关系，通过动画当前运行的时间，计算出当前动画的变化量。例如系统预制的线性插值器（LinearInterpolator），时间和动画进度的函数关系是y = x的直线方程，就表示当前动画是均速变化的。而当时间和动画进度的函数关系式表达为y=x^2的时候，那表示动画的变化率随着时间的增加而增加的，在视觉上就表现为加速动画。在理论上就可以通过动画插值器实现不同快慢效果的动画。</p>
+</code></pre><h4 id="1-5-动画插值："><a href="#1-5-动画插值：" class="headerlink" title="1.5 动画插值："></a>1.5 动画插值：</h4><p>插值器的作用是根据时间运行的百分比来计算出当前属性改变的百分比，反映的是时间和动画进度（或属性变化）的关系，通过动画当前运行的时间，计算出当前动画的变化量。例如系统预制的线性插值器（LinearInterpolator），时间和动画进度的函数关系是y = x的直线方程，就表示当前动画是均速变化的。而当时间和动画进度的函数关系式表达为y=x^2的时候，那表示动画的变化率随着时间的增加而增加的，在视觉上就表现为加速动画。在理论上就可以通过动画插值器实现不同快慢效果的动画。</p>
 <p><img src="/res/android_animation/jiasu_jiansu.png" alt="加速减速插值器，曲线的斜率是先变大后变小，说明速度是先加速后减速的"></p>
 <p>在系统预制的插值器有：AccelerateInterpolator（加速插值器），AccelerateDecelerateInterpolator（加速减速插值器）， LinearInterpolator（线性插值器），BounceInterpolator（弹跳插值器），AnticipateInterpolator（回荡秋千插值器），AnticipateOvershootInterpolator， CycleInterpolator（正弦周期变化插值器），OvershootInterpolator ，我们也可以通过实现TimeTimeInterpolator或者Interpolatorr接口实现自定义的插值器。</p>
 <p><img src="/res/android_animation/android_animation_interpolator_class.png" alt="Interpolator类图"></p>
-<h4 id="1-6_动画估值器">1.6 动画估值器</h4><p>估值器的作用是，根据插值器结果（当前属性变化的百分比）计算出当前属性的值，系统预置的有IntEvaluator（针对整型属性）、FloatEvaluator（针对浮点型属性）和ArgbEvaluator（针对Color属性）。满足的关系是：</p>
-<h3 id="二、桌面文件夹伸缩动画">二、桌面文件夹伸缩动画</h3><h4 id="2-1_IOS文件夹动画原理">2.1 IOS文件夹动画原理</h4><p>类似IOS的文件夹视图展开动画，简单说就是针对文件夹视图的一个伸缩动画，而视觉效果上的动画目标就是如何让文件夹的桌面图标和文件夹打开后的视图看起来是一个进行放大缩小的整体，处理伸缩动画的关键：<br>1.伸缩的前后比例（多少）<br>2.伸缩视图的中心坐标（相对于哪一点做伸缩）<br>针对伸缩的比例，应该是文件夹展开前后文件夹内应用图标大小确定的。针对如何确定伸缩视图的中心坐标，就需要首先确定坐标系，就是中心点是相对哪个坐标系确定的！伸缩动画坐标系的的原点在哪里？</p>
+<h4 id="1-6-动画估值器"><a href="#1-6-动画估值器" class="headerlink" title="1.6 动画估值器"></a>1.6 动画估值器</h4><p>估值器的作用是，根据插值器结果（当前属性变化的百分比）计算出当前属性的值，系统预置的有IntEvaluator（针对整型属性）、FloatEvaluator（针对浮点型属性）和ArgbEvaluator（针对Color属性）。满足的关系是：</p>
+<h3 id="二、桌面文件夹伸缩动画"><a href="#二、桌面文件夹伸缩动画" class="headerlink" title="二、桌面文件夹伸缩动画"></a>二、桌面文件夹伸缩动画</h3><h4 id="2-1-IOS文件夹动画原理"><a href="#2-1-IOS文件夹动画原理" class="headerlink" title="2.1 IOS文件夹动画原理"></a>2.1 IOS文件夹动画原理</h4><p>类似IOS的文件夹视图展开动画，简单说就是针对文件夹视图的一个伸缩动画，而视觉效果上的动画目标就是如何让文件夹的桌面图标和文件夹打开后的视图看起来是一个进行放大缩小的整体，处理伸缩动画的关键：<br>1.伸缩的前后比例（多少）<br>2.伸缩视图的中心坐标（相对于哪一点做伸缩）<br>针对伸缩的比例，应该是文件夹展开前后文件夹内应用图标大小确定的。针对如何确定伸缩视图的中心坐标，就需要首先确定坐标系，就是中心点是相对哪个坐标系确定的！伸缩动画坐标系的的原点在哪里？</p>
 <ul>
 <li>伸缩动画的坐标系是由当前缩放视图确定的，当前视图的左上角为坐标系的原点，即（0，0）点。</li>
 <li>原点的水平向右方向为横坐标的正方向，平行手机屏幕垂直向下方向未纵坐标的正方向。</li>
@@ -480,70 +581,46 @@ animator.addUpdateListener(<span class="keyword">new</span> ValueAnimator.Animat
 <p>确定了伸缩的坐标系，现在的问题就是如何确定伸缩中心点的坐标，在我们学习数学的过程中，老师教我们如何把实际问题抽象成数学问题，就像小学时经典的船在顺流和逆流中航形的问题一样。面对视图的缩放，我们能够想到的应该就是多边形的相似问题，看待现在的文件夹视图，可以抽象成一个矩形，在以矩形的左上角确定的坐标系里，从一个Size放大（或缩小）到另一个Size，在矩形长和宽变化比例相同的情况下，变化前后的矩形就是两个相似矩形，这样就可以很容易的画出下图.</p>
 <p><img src="/res/android_animation/xiangsi.jpg" alt="相似矩形"></p>
 <p>针对相似多边形对应点连线或者反向延长线相交于一点的原理，我们很容易得出下面的关系，即伸缩前后大小、伸缩比例和伸缩点坐标的关系式：</p>
-<pre><code>h2 = <span class="built_in">offset</span> / (<span class="number">1</span>-<span class="built_in">scale</span>)
+<pre><code>h2 = offset / (1-scale)
 </code></pre><p>通过上面的公式，就很容易计算出文件夹视图伸缩动画的pivotX和pivotY的值计算代码：</p>
-<pre><code><span class="comment">// set scale pivotX and pivotY</span>
-<span class="built_in">int</span> leftOffset = folderIconRect.left - folderViewLeft;
-<span class="built_in">int</span> topOffset = folderIconRect.top - folderViewTop;
-<span class="built_in">float</span> <span class="variable">height</span> = folderHeight * mFolderScale;
-<span class="built_in">float</span> delta = ((<span class="built_in">float</span>) folderHeight) / (folderHeight - <span class="variable">height</span>);
-<span class="built_in">float</span> folderPivotX = leftOffset * delta;
-<span class="built_in">float</span> folderPivotY = topOffset * delta;
+<pre><code>// set scale pivotX and pivotY
+int leftOffset = folderIconRect.left - folderViewLeft;
+int topOffset = folderIconRect.top - folderViewTop;
+float height = folderHeight * mFolderScale;
+float delta = ((float) folderHeight) / (folderHeight - height);
+float folderPivotX = leftOffset * delta;
+float folderPivotY = topOffset * delta;
 </code></pre><p>但是这对展开动画仅仅解决缩放动画的问题还原因不够，因为缩放动画只是针对文件夹的视图，而针对文件夹内每个应用图标视图也应该有相应的动画，为什么？因为按照文件夹的位置进行的缩放动画，无法保证文件夹内的应用图标和文件夹图标上应用的缩略图完全重合。联想到学习过的中学物理知识，这个场景就好像你一定能够想到了分运动和合运动，火车在轨道上行驶，人在火车内行走，问人相对与地面的运动是什么样子的？整体文件夹的视图相对于它的伸缩中心点进行伸缩，文件夹视图内的应用图标相对于文件夹视图进行位移，效果又会是什么样子的？想明白这个，相信你一定能感受到选择一个正确的坐标系是多么重要。</p>
 <p><img src="/android_animation/tubiaodonghua.jpg" alt="文件夹内图标动画效果"></p>
 <p>抽象出了运动的理论，那计算的思路就是计算出每个应用缩略图标相对于文件夹图标的位置，计算出文件夹展开后每个应用图标相对于文件夹视图的相对位置，接合每个应用图标的伸缩比例，就能得到每个应用图标在文件夹视图的缩放过程中需要完成的位移，简单来说就是Folder的视图在缩放，Folder里的App图标在Folder视图上做相应的位移，结果你会发现是这样：</p>
 <p><img src="/android_animation/guangbixiaoguo.jpg" alt="关闭效果"></p>
 <p>处理完文件夹视图的问题，相信这个问题已经解决大半了，剩下的就是桌面上其他图标的移动，简单来说还是缩放动画，只需要让每个图标的缩放点和Folder视图的缩放点相对于屏幕坐标系重合就可以了。</p>
-<h4 id="2-2_总结">2.2 总结</h4><p>1.处理动画问题首先确定动画起始和终止的状态，根据状态确定动画类型。<br>2.确定动画坐标系。动画坐标系如何确定取决与动画改变的属性，对于缩放动画，缩放改变是视图本身，那缩放动画的坐标系一定是相对于视图自己建立的，左上角是原点。而对于位移动画，改变translationX和X的值都能实现位置上的改变，但是他们表示的含义不一样，translationX是相对于视图本身而言的，X是相对于父布局而言的，那他们建立的坐标系肯定也不一样。<br>3.根据建立坐标系完成动画，把复杂的合运动分解成在不同坐标系上的分运动简单求解。</p>
-<h3 id="三、参考文档">三、参考文档</h3><p><a href="http://blog.csdn.net/lmj623565791/article/details/38067475" target="_blank" rel="external">Android 属性动画（Property Animation） 完全解析 （上）</a><br><a href="http://blog.csdn.net/lmj623565791/article/details/38092093" target="_blank" rel="external">Android 属性动画（Property Animation） 完全解析 （下）</a><br><a href="http://www.uml.org.cn/mobiledev/201301081.asp" target="_blank" rel="external">Android Project Butter分析</a><br><a href="http://developer.android.com/reference/android/view/Choreographer.html" target="_blank" rel="external">http://developer.android.com/reference/android/view/Choreographer.html</a><br><a href="http://developer.android.com/reference/android/view/Choreographer.FrameCallback.html" target="_blank" rel="external">http://developer.android.com/reference/android/view/Choreographer.FrameCallback.html</a><br><a href="https://github.com/samchen2009/android_uml" target="_blank" rel="external">https://github.com/samchen2009/android_uml</a></p>
-<h3 id="转载请标明出处病已blog_https://ivonhoe-github-io/">转载请标明出处<a href="https://ivonhoe.github.io/">病已blog https://ivonhoe.github.io/</a></h3>
+<h4 id="2-2-总结"><a href="#2-2-总结" class="headerlink" title="2.2 总结"></a>2.2 总结</h4><p>1.处理动画问题首先确定动画起始和终止的状态，根据状态确定动画类型。<br>2.确定动画坐标系。动画坐标系如何确定取决与动画改变的属性，对于缩放动画，缩放改变是视图本身，那缩放动画的坐标系一定是相对于视图自己建立的，左上角是原点。而对于位移动画，改变translationX和X的值都能实现位置上的改变，但是他们表示的含义不一样，translationX是相对于视图本身而言的，X是相对于父布局而言的，那他们建立的坐标系肯定也不一样。<br>3.根据建立坐标系完成动画，把复杂的合运动分解成在不同坐标系上的分运动简单求解。</p>
+<h3 id="三、参考文档"><a href="#三、参考文档" class="headerlink" title="三、参考文档"></a>三、参考文档</h3><p><a href="http://blog.csdn.net/lmj623565791/article/details/38067475" target="_blank" rel="noopener">Android 属性动画（Property Animation） 完全解析 （上）</a><br><a href="http://blog.csdn.net/lmj623565791/article/details/38092093" target="_blank" rel="noopener">Android 属性动画（Property Animation） 完全解析 （下）</a><br><a href="http://www.uml.org.cn/mobiledev/201301081.asp" target="_blank" rel="noopener">Android Project Butter分析</a><br><a href="http://developer.android.com/reference/android/view/Choreographer.html" target="_blank" rel="noopener">http://developer.android.com/reference/android/view/Choreographer.html</a><br><a href="http://developer.android.com/reference/android/view/Choreographer.FrameCallback.html" target="_blank" rel="noopener">http://developer.android.com/reference/android/view/Choreographer.FrameCallback.html</a><br><a href="https://github.com/samchen2009/android_uml" target="_blank" rel="noopener">https://github.com/samchen2009/android_uml</a></p>
+<h3 id="转载请标明出处病已blog-https-ivonhoe-github-io"><a href="#转载请标明出处病已blog-https-ivonhoe-github-io" class="headerlink" title="转载请标明出处病已blog https://ivonhoe.github.io/"></a>转载请标明出处<a href="https://ivonhoe.github.io/">病已blog https://ivonhoe.github.io/</a></h3>
       
     </div>
 
-    <div>
-      
-        
+    
 
-      
-    </div>
+    
+    
+    
 
-    <div>
-      
-        
-  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
-    <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
-    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
-      <span>赏</span>
-    </button>
-    <div id="QR" style="display: none;">
-      
-        <div id="wechat" style="display: inline-block">
-          <img id="wechat_qr" src="https://ivonhoe.github.io/res/dex2jar_error/WechatIMG56.png" alt="病已 WeChat Pay"/>
-          <p>微信打赏</p>
-        </div>
-      
-      
-        <div id="alipay" style="display: inline-block">
-          <img id="alipay_qr" src="https://ivonhoe.github.io/res/dex2jar_error/WechatIMG57.jpeg" alt="病已 Alipay"/>
-          <p>支付宝打赏</p>
-        </div>
-      
-    </div>
-  </div>
+    
 
-
+    
       
-    </div>
+    
+    
 
-    <div>
-      
-        
-
-      
-    </div>
+    
 
     <footer class="post-footer">
       
+        
+          
+        
         <div class="post-tags">
           
             <a href="/tags/Android/" rel="tag"># Android</a>
@@ -554,7 +631,7 @@ animator.addUpdateListener(<span class="keyword">new</span> ValueAnimator.Animat
       
 
       
-        
+      
       
 
       
@@ -578,24 +655,21 @@ animator.addUpdateListener(<span class="keyword">new</span> ValueAnimator.Animat
       
       
     </footer>
+  </div>
+  
+  
+  
   </article>
 
 
-
-    <div class="post-spread">
-      
-    </div>
   </div>
 
 
           </div>
           
 
+  
 
-          
-  <div class="comments" id="comments">
-    
-  </div>
 
 
         </div>
@@ -617,110 +691,208 @@ animator.addUpdateListener(<span class="keyword">new</span> ValueAnimator.Animat
 
       
         <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
             文章目录
           </li>
-          <li class="sidebar-nav-overview" data-target="site-overview">
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
             站点概览
           </li>
         </ul>
       
 
-      <section class="site-overview sidebar-panel">
-        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-          <img class="site-author-image" itemprop="image"
-               src="https://avatars1.githubusercontent.com/u/5706813?v=3&s=460"
-               alt="病已" />
-          <p class="site-author-name" itemprop="name">病已</p>
-           
-              <p class="site-description motion-element" itemprop="description"></p>
-          
-        </div>
-        <nav class="site-state motion-element">
-
-          
-            <div class="site-state-item site-state-posts">
-              <a href="/archives">
-                <span class="site-state-item-count">33</span>
-                <span class="site-state-item-name">日志</span>
-              </a>
-            </div>
-          
-
-          
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
-            
-            <div class="site-state-item site-state-categories">
-              <a href="/categories/index.html">
-                <span class="site-state-item-count">8</span>
-                <span class="site-state-item-name">分类</span>
-              </a>
-            </div>
-          
-
-          
-            
-            
-            <div class="site-state-item site-state-tags">
-              <a href="/tags/index.html">
-                <span class="site-state-item-count">39</span>
-                <span class="site-state-item-name">标签</span>
-              </a>
-            </div>
-          
-
-        </nav>
-
-        
-          <div class="feed-link motion-element">
-            <a href="/atom.xml" rel="alternate">
-              <i class="fa fa-rss"></i>
-              RSS
-            </a>
+              <p class="site-author-name" itemprop="name">病已</p>
+              <div class="site-description motion-element" itemprop="description"></div>
           </div>
-        
 
-        <div class="links-of-author motion-element">
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">33</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">8</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">39</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+
+          
+
+          
+          
+
           
             
-              <span class="links-of-author-item">
-                <a href="https://github.com/Ivonhoe" target="_blank" title="GitHub">
-                  
-                    <i class="fa fa-fw fa-github"></i>
-                  
-                  GitHub
-                </a>
-              </span>
-            
           
+          
+
         </div>
-
-        
-        
-
-        
-        
-
-        
-
-
-      </section>
+      </div>
 
       
       <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
           <div class="post-toc">
 
             
-              
+            
+            
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#说在开始"><span class="nav-number">1.</span> <span class="nav-text">说在开始</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#一、Android动画基础"><span class="nav-number">2.</span> <span class="nav-text">一、Android动画基础</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1_动画类型"><span class="nav-number">2.1.</span> <span class="nav-text">1.1 动画类型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-2_帧动画："><span class="nav-number">2.2.</span> <span class="nav-text">1.2 帧动画：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-3_补间动画："><span class="nav-number">2.3.</span> <span class="nav-text">1.3 补间动画：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-4_属性动画："><span class="nav-number">2.4.</span> <span class="nav-text">1.4 属性动画：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-5_动画插值："><span class="nav-number">2.5.</span> <span class="nav-text">1.5 动画插值：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-6_动画估值器"><span class="nav-number">2.6.</span> <span class="nav-text">1.6 动画估值器</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二、桌面文件夹伸缩动画"><span class="nav-number">3.</span> <span class="nav-text">二、桌面文件夹伸缩动画</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1_IOS文件夹动画原理"><span class="nav-number">3.1.</span> <span class="nav-text">2.1 IOS文件夹动画原理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2_总结"><span class="nav-number">3.2.</span> <span class="nav-text">2.2 总结</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#三、参考文档"><span class="nav-number">4.</span> <span class="nav-text">三、参考文档</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#转载请标明出处病已blog_https://ivonhoe-github-io/"><span class="nav-number">5.</span> <span class="nav-text">转载请标明出处病已blog https://ivonhoe.github.io/</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#说在开始"><span class="nav-number">1.</span> <span class="nav-text">说在开始</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#一、Android动画基础"><span class="nav-number">2.</span> <span class="nav-text">一、Android动画基础</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1-动画类型"><span class="nav-number">2.1.</span> <span class="nav-text">1.1 动画类型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-2-帧动画："><span class="nav-number">2.2.</span> <span class="nav-text">1.2 帧动画：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-3-补间动画："><span class="nav-number">2.3.</span> <span class="nav-text">1.3 补间动画：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-4-属性动画："><span class="nav-number">2.4.</span> <span class="nav-text">1.4 属性动画：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-5-动画插值："><span class="nav-number">2.5.</span> <span class="nav-text">1.5 动画插值：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-6-动画估值器"><span class="nav-number">2.6.</span> <span class="nav-text">1.6 动画估值器</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二、桌面文件夹伸缩动画"><span class="nav-number">3.</span> <span class="nav-text">二、桌面文件夹伸缩动画</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-IOS文件夹动画原理"><span class="nav-number">3.1.</span> <span class="nav-text">2.1 IOS文件夹动画原理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-总结"><span class="nav-number">3.2.</span> <span class="nav-text">2.2 总结</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#三、参考文档"><span class="nav-number">4.</span> <span class="nav-text">三、参考文档</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#转载请标明出处病已blog-https-ivonhoe-github-io"><span class="nav-number">5.</span> <span class="nav-text">转载请标明出处病已blog https://ivonhoe.github.io/</span></a></li></ol></div>
             
 
           </div>
-        </section>
+        </div>
       <!--/noindex-->
       
 
@@ -728,6 +900,7 @@ animator.addUpdateListener(<span class="keyword">new</span> ValueAnimator.Animat
 
     </div>
   </aside>
+  
 
 
         
@@ -736,30 +909,39 @@ animator.addUpdateListener(<span class="keyword">new</span> ValueAnimator.Animat
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright" >
-  
-  &copy; 
-  <span itemprop="copyrightYear">2019</span>
-  <span class="with-love">
-    <i class="fa fa-heart"></i>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">病已</span>
+
+  
+
+  
 </div>
 
 
-<div class="powered-by">
-  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
-</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
 
-<div class="theme-info">
-  主题 -
-  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
-    NexT.Mist
-  </a>
-</div>
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.1.2</div>
+
+
 
 
         
+
+
+
+
+
+
+
 
         
       </div>
@@ -772,11 +954,16 @@ animator.addUpdateListener(<span class="keyword">new</span> ValueAnimator.Animat
       </div>
     
 
+    
+
+    
+
+    
   </div>
 
   
 
-<script type="text/javascript">
+<script>
   if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
     window.Promise = null;
   }
@@ -790,7 +977,6 @@ animator.addUpdateListener(<span class="keyword">new</span> ValueAnimator.Animat
 
 
 
-  
 
 
 
@@ -799,53 +985,9 @@ animator.addUpdateListener(<span class="keyword">new</span> ValueAnimator.Animat
 
 
 
-  
-  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
-
-  
-  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
-
-  
-  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
-
-  
-  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
-
-  
-  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
-
-  
-  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
-
-
-  
-
-
-  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
-
-  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
 
 
 
-  
-  
-
-  
-  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
-<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
-
-
-
-  
-
-
-  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
-
-
-
-  
-
-  
 
 
 
@@ -853,19 +995,57 @@ animator.addUpdateListener(<span class="keyword">new</span> ValueAnimator.Animat
 
 
   
+  <script src="/lib/jquery/index.js?v=3.4.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.2"></script>
+
+  <script src="/js/motion.js?v=7.1.2"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/affix.js?v=7.1.2"></script>
+
+  <script src="/js/schemes/pisces.js?v=7.1.2"></script>
 
 
 
 
-	
-
-
+  
+  <script src="/js/scrollspy.js?v=7.1.2"></script>
+<script src="/js/post-details.js?v=7.1.2"></script>
 
 
 
   
 
 
+  <script src="/js/next-boot.js?v=7.1.2"></script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
 
 
   
@@ -874,119 +1054,88 @@ animator.addUpdateListener(<span class="keyword">new</span> ValueAnimator.Animat
 
 
   
-
-
-
-
-
   
-
-  
-  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
-  <script>AV.initialize("JdLpddsaWqwfJtXPdDK8woaF-gzGzoHsz", "CEmtHXH8f0PtvF0zYtVE0EeY");</script>
   <script>
-    function showTime(Counter) {
-      var query = new AV.Query(Counter);
-      var entries = [];
-      var $visitors = $(".leancloud_visitors");
-
-      $visitors.each(function () {
-        entries.push( $(this).attr("id").trim() );
-      });
-
-      query.containedIn('url', entries);
-      query.find()
-        .done(function (results) {
-          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
-
-          if (results.length === 0) {
-            $visitors.find(COUNT_CONTAINER_REF).text(0);
-            return;
-          }
-
-          for (var i = 0; i < results.length; i++) {
-            var item = results[i];
-            var url = item.get('url');
-            var time = item.get('time');
-            var element = document.getElementById(url);
-
-            $(element).find(COUNT_CONTAINER_REF).text(time);
-          }
-          for(var i = 0; i < entries.length; i++) {
-            var url = entries[i];
-            var element = document.getElementById(url);
-            var countSpan = $(element).find(COUNT_CONTAINER_REF);
-            if( countSpan.text() == '') {
-              countSpan.text(0);
-            }
-          }
-        })
-        .fail(function (object, error) {
-          console.log("Error: " + error.code + " " + error.message);
-        });
-    }
-
+    
     function addCount(Counter) {
-      var $visitors = $(".leancloud_visitors");
+      var $visitors = $('.leancloud_visitors');
       var url = $visitors.attr('id').trim();
       var title = $visitors.attr('data-flag-title').trim();
-      var query = new AV.Query(Counter);
 
-      query.equalTo("url", url);
-      query.find({
-        success: function(results) {
+      Counter('get', '/classes/Counter', { where: JSON.stringify({ url }) })
+        .done(function({ results }) {
           if (results.length > 0) {
             var counter = results[0];
-            counter.fetchWhenSave(true);
-            counter.increment("time");
-            counter.save(null, {
-              success: function(counter) {
+            
+            Counter('put', '/classes/Counter/' + counter.objectId, JSON.stringify({ time: { '__op': 'Increment', 'amount': 1 } }))
+            
+              .done(function() {
                 var $element = $(document.getElementById(url));
-                $element.find('.leancloud-visitors-count').text(counter.get('time'));
-              },
-              error: function(counter, error) {
-                console.log('Failed to save Visitor num, with error message: ' + error.message);
-              }
-            });
+                $element.find('.leancloud-visitors-count').text(counter.time + 1);
+              })
+            
+              .fail(function ({ responseJSON }) {
+                console.log('Failed to save Visitor num, with error message: ' + responseJSON.error);
+              })
           } else {
-            var newcounter = new Counter();
-            /* Set ACL */
-            var acl = new AV.ACL();
-            acl.setPublicReadAccess(true);
-            acl.setPublicWriteAccess(true);
-            newcounter.setACL(acl);
-            /* End Set ACL */
-            newcounter.set("title", title);
-            newcounter.set("url", url);
-            newcounter.set("time", 1);
-            newcounter.save(null, {
-              success: function(newcounter) {
-                var $element = $(document.getElementById(url));
-                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
-              },
-              error: function(newcounter, error) {
-                console.log('Failed to create');
-              }
-            });
+            
+              var $element = $(document.getElementById(url));
+              $element.find('.leancloud-visitors-count').text('Counter not initialized! More info at console err msg.');
+              console.error('ATTENTION! LeanCloud counter has security bug, see how to solve it here: https://github.com/theme-next/hexo-leancloud-counter-security. \n However, you can still use LeanCloud without security, by setting `security` option to `false`.');
+            
           }
-        },
-        error: function(error) {
-          console.log('Error:' + error.code + " " + error.message);
-        }
-      });
+        })
+        .fail(function ({ responseJSON }) {
+          console.log('LeanCloud Counter Error: ' + responseJSON.code + ' ' + responseJSON.error);
+        });
     }
+    
 
     $(function() {
-      var Counter = AV.Object.extend("Counter");
-      if ($('.leancloud_visitors').length == 1) {
-        addCount(Counter);
-      } else if ($('.post-title-link').length > 1) {
-        showTime(Counter);
-      }
+      $.get('https://app-router.leancloud.cn/2/route?appId=' + 'JdLpddsaWqwfJtXPdDK8woaF-gzGzoHsz')
+        .done(function({ api_server }) {
+          var Counter = function(method, url, data) {
+            return $.ajax({
+              method: method,
+              url: 'https://' + api_server + '/1.1' + url,
+              headers: {
+                'X-LC-Id': 'JdLpddsaWqwfJtXPdDK8woaF-gzGzoHsz',
+                'X-LC-Key': 'CEmtHXH8f0PtvF0zYtVE0EeY',
+                'Content-Type': 'application/json',
+              },
+              data: data
+            });
+          };
+          
+            const localhost = /http:\/\/(localhost|127.0.0.1|0.0.0.0)/;
+            if (localhost.test(document.URL)) {
+              return;
+            }
+            addCount(Counter);
+          
+        });
     });
   </script>
 
 
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
 
   
 

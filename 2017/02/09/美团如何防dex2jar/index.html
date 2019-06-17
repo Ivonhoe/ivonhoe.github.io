@@ -1,23 +1,4 @@
-<!doctype html>
-
-
-
-  
-
-
-<html class="theme-next mist use-motion" lang="zh-Hans">
-<head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
-
-
-
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
-
-
-
+<!DOCTYPE html>
 
 
 
@@ -31,96 +12,74 @@
 
 
   
-  
-  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
 
 
-
-
-  
-  
-  
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
 
 
 
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
-
-<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
-
-
-  <meta name="keywords" content="Gradle,dex2jar,移动安全," />
-
-
-
-
-
-  <link rel="alternate" href="/atom.xml" title="病已的博客" type="application/atom+xml" />
-
-
-
-
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
 
 
 
 
 
 
-<meta name="description" content="一、反编译某平台代码最近在看某外卖平台的代码，发现某外卖平台最新版本版本无法正常的通过dex2jar工具将dex转换出Java源代码，在转换过程中会提示出错，如图：
-
-查看转换出的Java源代码，会发现很多类方法提示下图所示异常，很多方法中都会抛出RuntimeException：can not merge I and Z:
-1public class AsyncTaskService exten">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Android安全之应用防dex2jar原理及实现">
-<meta property="og:url" content="https://ivonhoe.github.io/2017/02/09/美团如何防dex2jar/index.html">
-<meta property="og:site_name" content="病已的博客">
-<meta property="og:description" content="一、反编译某平台代码最近在看某外卖平台的代码，发现某外卖平台最新版本版本无法正常的通过dex2jar工具将dex转换出Java源代码，在转换过程中会提示出错，如图：
-
-查看转换出的Java源代码，会发现很多类方法提示下图所示异常，很多方法中都会抛出RuntimeException：can not merge I and Z:
-1public class AsyncTaskService exten">
-<meta property="og:image" content="https://ivonhoe.github.io/res/dex2jar_error/dex2jar_error1.png">
-<meta property="og:image" content="https://ivonhoe.github.io/res/dex2jar_error/dex2jar_error2.png">
-<meta property="og:image" content="https://ivonhoe.github.io/res/dexguard/dexguard4.jpeg">
-<meta property="og:image" content="https://ivonhoe.github.io/res/dexguard/dexguard6.png">
-<meta property="og:image" content="https://ivonhoe.github.io/res/dexguard/dexguard3.png">
-<meta property="og:updated_time" content="2018-09-11T13:25:23.000Z">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Android安全之应用防dex2jar原理及实现">
-<meta name="twitter:description" content="一、反编译某平台代码最近在看某外卖平台的代码，发现某外卖平台最新版本版本无法正常的通过dex2jar工具将dex转换出Java源代码，在转换过程中会提示出错，如图：
-
-查看转换出的Java源代码，会发现很多类方法提示下图所示异常，很多方法中都会抛出RuntimeException：can not merge I and Z:
-1public class AsyncTaskService exten">
 
 
 
-<script type="text/javascript" id="hexo.configurations">
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.2">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.1.2">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.1.2">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.1.2">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.1.2" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
   var NexT = window.NexT || {};
   var CONFIG = {
     root: '/',
-    scheme: 'Mist',
-    sidebar: {"position":"right","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
-    fancybox: true,
-    motion: true,
-    duoshuo: {
-      userId: 'undefined',
-      author: '博主'
-    },
+    scheme: 'Gemini',
+    version: '7.1.2',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     algolia: {
       applicationID: '',
       apiKey: '',
@@ -132,34 +91,57 @@
 </script>
 
 
-
-  <link rel="canonical" href="https://ivonhoe.github.io/2017/02/09/美团如何防dex2jar/"/>
-
-
-
-
-
-  <title> Android安全之应用防dex2jar原理及实现 | 病已的博客 </title>
-</head>
-
-<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
-
   
 
 
 
 
-<script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-  ga('create', 'UA-97550712-1', 'auto');
-  ga('send', 'pageview');
+  <meta name="description" content="一、反编译某平台代码最近在看某外卖平台的代码，发现某外卖平台最新版本版本无法正常的通过dex2jar工具将dex转换出Java源代码，在转换过程中会提示出错，如图：  查看转换出的Java源代码，会发现很多类方法提示下图所示异常，很多方法中都会抛出RuntimeException：can not merge I and Z: 12345678910public class AsyncTaskSer">
+<meta name="keywords" content="移动安全,dex2jar,Gradle">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android安全之应用防dex2jar原理及实现">
+<meta property="og:url" content="https://ivonhoe.github.io/2017/02/09/美团如何防dex2jar/index.html">
+<meta property="og:site_name" content="病已的博客">
+<meta property="og:description" content="一、反编译某平台代码最近在看某外卖平台的代码，发现某外卖平台最新版本版本无法正常的通过dex2jar工具将dex转换出Java源代码，在转换过程中会提示出错，如图：  查看转换出的Java源代码，会发现很多类方法提示下图所示异常，很多方法中都会抛出RuntimeException：can not merge I and Z: 12345678910public class AsyncTaskSer">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://ivonhoe.github.io/res/dex2jar_error/dex2jar_error1.png">
+<meta property="og:image" content="https://ivonhoe.github.io/res/dex2jar_error/dex2jar_error2.png">
+<meta property="og:image" content="https://ivonhoe.github.io/res/dexguard/dexguard4.jpeg">
+<meta property="og:image" content="https://ivonhoe.github.io/res/dexguard/dexguard6.png">
+<meta property="og:image" content="https://ivonhoe.github.io/res/dexguard/dexguard3.png">
+<meta property="og:updated_time" content="2018-09-11T13:25:23.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android安全之应用防dex2jar原理及实现">
+<meta name="twitter:description" content="一、反编译某平台代码最近在看某外卖平台的代码，发现某外卖平台最新版本版本无法正常的通过dex2jar工具将dex转换出Java源代码，在转换过程中会提示出错，如图：  查看转换出的Java源代码，会发现很多类方法提示下图所示异常，很多方法中都会抛出RuntimeException：can not merge I and Z: 12345678910public class AsyncTaskSer">
+<meta name="twitter:image" content="https://ivonhoe.github.io/res/dex2jar_error/dex2jar_error1.png">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="病已的博客" type="application/atom+xml">
+
+
+
+  
+  
+  <link rel="canonical" href="https://ivonhoe.github.io/2017/02/09/美团如何防dex2jar/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
 </script>
 
+  <title>Android安全之应用防dex2jar原理及实现 | 病已的博客</title>
+  
 
-  <script type="text/javascript">
+
+
+
+
+
+  <script>
     var _hmt = _hmt || [];
     (function() {
       var hm = document.createElement("script");
@@ -175,36 +157,65 @@
 
 
 
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
 
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
 
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
 
   
   
     
   
 
-  <div class="container sidebar-position-right page-post-detail ">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
       <div class="header-inner"><div class="site-brand-wrapper">
-  <div class="site-meta ">
+  <div class="site-meta">
     
 
     <div class="custom-logo-site-title">
-      <a href="/"  class="brand" rel="start">
+      <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
         <span class="site-title">病已的博客</span>
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
+    
       
         <p class="site-subtitle">枕上，马上，厕上</p>
       
+    
+    
   </div>
 
   <div class="site-nav-toggle">
-    <button>
+    <button aria-label="切换导航栏">
       <span class="btn-bar"></span>
       <span class="btn-bar"></span>
       <span class="btn-bar"></span>
@@ -212,55 +223,103 @@
   </div>
 </div>
 
-<nav class="site-nav">
-  
 
+
+<nav class="site-nav">
   
     <ul id="menu" class="menu">
       
         
-        <li class="menu-item menu-item-home">
-          <a href="/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
-            
-            首页
-          </a>
-        </li>
-      
         
-        <li class="menu-item menu-item-categories">
-          <a href="/categories" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
-            
-            分类
-          </a>
-        </li>
-      
         
-        <li class="menu-item menu-item-archives">
-          <a href="/archives" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
-            
-            归档
-          </a>
-        </li>
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
       
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
         
-        <li class="menu-item menu-item-tags">
-          <a href="/tags" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
-            
-            标签
-          </a>
-        </li>
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
       
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
 
       
+      
     </ul>
+  
+
   
 
   
@@ -268,12 +327,30 @@
 
 
 
- </div>
+  
+
+
+
+</div>
     </header>
+
+    
+  
+  
+
+  
+
+  <a href="https://github.com/Ivonhoe" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewbox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a>
+
+
 
     <main id="main" class="main">
       <div class="main-inner">
         <div class="content-wrap">
+          
+            
+
+          
           <div id="content" class="content">
             
 
@@ -286,13 +363,19 @@
   
   
 
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://ivonhoe.github.io/2017/02/09/美团如何防dex2jar/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="病已">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://avatars1.githubusercontent.com/u/5706813?v=3&s=460">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -304,11 +387,8 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                Android安全之应用防dex2jar原理及实现
+          <h1 class="post-title" itemprop="name headline">Android安全之应用防dex2jar原理及实现
+
               
             
           </h1>
@@ -316,6 +396,11 @@
 
         <div class="post-meta">
           <span class="post-time">
+
+            
+            
+            
+
             
               <span class="post-meta-item-icon">
                 <i class="fa fa-calendar-o"></i>
@@ -323,18 +408,35 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-02-09T21:55:01+08:00">
-                Feb 9 2017
-              </time>
+
+              
+                
+              
+
+              <time title="创建时间：2月 9 2017 21:55:01" itemprop="dateCreated datePublished" datetime="2017-02-09T21:55:01+08:00">2月 9 2017</time>
             
 
             
+              
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：9月 11 2018 21:25:23" itemprop="dateModified" datetime="2018-09-11T21:25:23+08:00">9月 11 2018</time>
+              
             
           </span>
 
           
-            <span class="post-category" >
+            <span class="post-category">
             
               <span class="post-meta-divider">|</span>
             
@@ -345,11 +447,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Android安全/" itemprop="url" rel="index">
-                    <span itemprop="name">Android安全</span>
-                  </a>
-                </span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Android安全/" itemprop="url" rel="index"><span itemprop="name">Android安全</span></a></span>
 
                 
                 
@@ -359,20 +457,21 @@
 
           
             
+            
           
 
           
           
-             <span id="/2017/02/09/美团如何防dex2jar/" class="leancloud_visitors" data-flag-title="Android安全之应用防dex2jar原理及实现">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">阅读次数 </span>
-               
-                 <span class="leancloud-visitors-count"></span>
-             </span>
+            <span id="/2017/02/09/美团如何防dex2jar/" class="leancloud_visitors" data-flag-title="Android安全之应用防dex2jar原理及实现">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              
+                <span class="post-meta-item-text">阅读次数：</span>
+              
+                <span class="leancloud-visitors-count"></span>
+            </span>
           
 
           
@@ -385,133 +484,111 @@
       </header>
     
 
-
+    
+    
+    
     <div class="post-body" itemprop="articleBody">
 
       
       
 
       
-        <h3 id="一、反编译某平台代码">一、反编译某平台代码</h3><p>最近在看某外卖平台的代码，发现某外卖平台最新版本版本无法正常的通过dex2jar工具将dex转换出Java源代码，在转换过程中会提示出错，如图：</p>
+        <h3 id="一、反编译某平台代码"><a href="#一、反编译某平台代码" class="headerlink" title="一、反编译某平台代码"></a>一、反编译某平台代码</h3><p>最近在看某外卖平台的代码，发现某外卖平台最新版本版本无法正常的通过dex2jar工具将dex转换出Java源代码，在转换过程中会提示出错，如图：</p>
 <p><img src="https://ivonhoe.github.io/res/dex2jar_error/dex2jar_error1.png" alt="dex2jar异常图"></p>
 <p>查看转换出的Java源代码，会发现很多类方法提示下图所示异常，很多方法中都会抛出<code>RuntimeException：can not merge I and Z</code>:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public class AsyncTaskService extends IntentService &#123; &#10;  &#10;  protected void onHandleIntent(Intent paramIntent)&#123;&#10;    throw new RuntimeException(&#34;d2j fail translate: java.lang.RuntimeException: can not merge I and Z\n\tat...);&#10;  &#125;&#10;  &#10;  public int onStartCommand(Intent paramIntent, int paramInt1, int paramInt2)&#123;&#10;    throw new RuntimeException(&#34;d2j fail translate: java.lang.RuntimeException: can not merge I and Z\n\tat...&#34;);&#10;  &#125;&#10;&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">public class AsyncTaskService extends IntentService &#123; </span><br><span class="line">  </span><br><span class="line">  protected void onHandleIntent(Intent paramIntent)&#123;</span><br><span class="line">    throw new RuntimeException(&quot;d2j fail translate: java.lang.RuntimeException: can not merge I and Z\n\tat...);</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  public int onStartCommand(Intent paramIntent, int paramInt1, int paramInt2)&#123;</span><br><span class="line">    throw new RuntimeException(&quot;d2j fail translate: java.lang.RuntimeException: can not merge I and Z\n\tat...&quot;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <a id="more"></a>
 <p>查看日志文件会发现很多类似的错误信息，可以看到方法内<code>RuntimeException</code>栈信息和反编译的错误信息是相同的，都提示<code>can not merge I and Z</code>。</p>
 <p><img src="https://ivonhoe.github.io/res/dex2jar_error/dex2jar_error2.png" alt="dex2jar日志"></p>
-<h3 id="二、为什么？">二、为什么？</h3><p>本来以为这是dex2jar工具低版本的一个bug，但更新了dex2jar以后，依然还是会出现上述错误。<br><code>java.lang.RuntimeException: can not merge I and Z</code>这个异常，在<a href="https://sourceforge.net/p/dex2jar/tickets/238/" target="_blank" rel="external">sourceforge</a>上解释的比较清楚，其实是一个dex2jar工具检查出的一个参数异常”，<strong>The problem is caused by strict type calculation, because in java syntaxt, a boolean can not assign to an inteager. so dex2jar forbid merge type Z and I.</strong> 你用布尔类型入参调用一个参数为整型的函数，当然会检查出错，为啥这么说，我使用apktool工具，看了一下apk的smali代码。发现报错的函数的最前面都含有一段奇怪smali的代码：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">invoke-static &#123;&#125;, Lpnf/this/object/does/not/Exist;-&#62;a()Z&#10;&#10;move-result v0&#10;&#10;invoke-static &#123;v0&#125;, Lpnf/this/object/does/not/Exist;-&#62;b(I)V</span><br></pre></td></tr></table></figure>
+<h3 id="二、为什么？"><a href="#二、为什么？" class="headerlink" title="二、为什么？"></a>二、为什么？</h3><p>本来以为这是dex2jar工具低版本的一个bug，但更新了dex2jar以后，依然还是会出现上述错误。<br><code>java.lang.RuntimeException: can not merge I and Z</code>这个异常，在<a href="https://sourceforge.net/p/dex2jar/tickets/238/" target="_blank" rel="noopener">sourceforge</a>上解释的比较清楚，其实是一个dex2jar工具检查出的一个参数异常”，<strong>The problem is caused by strict type calculation, because in java syntaxt, a boolean can not assign to an inteager. so dex2jar forbid merge type Z and I.</strong> 你用布尔类型入参调用一个参数为整型的函数，当然会检查出错，为啥这么说，我使用apktool工具，看了一下apk的smali代码。发现报错的函数的最前面都含有一段奇怪smali的代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">invoke-static &#123;&#125;, Lpnf/this/object/does/not/Exist;-&gt;a()Z</span><br><span class="line"></span><br><span class="line">move-result v0</span><br><span class="line"></span><br><span class="line">invoke-static &#123;v0&#125;, Lpnf/this/object/does/not/Exist;-&gt;b(I)V</span><br></pre></td></tr></table></figure>
 <p>看上面的代码，<code>pnf.this.object.does.not.Exist.a()</code>方法返回一个boolean类型数据，放入v0寄存器，作为<code>pnf.this.object.does.not.Exist.b(int)</code>函数的入参。正常情况下这样的语法错误在java代码编译时就不会通过的。看到这里你会不会想，如果我不想别人直接看到我的Java代码，是不是可以通过在核心函数中插入上面这段有语法错误的代码，以达到dex2jar工具检查出错的目的呢？从而将代码被阅读的门槛从java提高到smali。</p>
-<h3 id="三、手动代码注入">三、手动代码注入</h3><p>为了验证上面的猜想，这里我通过反编译一个apk，手动插入有语法错误的smali代码，以验证防dex2jar的思路，具体步骤如下：</p>
+<h3 id="三、手动代码注入"><a href="#三、手动代码注入" class="headerlink" title="三、手动代码注入"></a>三、手动代码注入</h3><p>为了验证上面的猜想，这里我通过反编译一个apk，手动插入有语法错误的smali代码，以验证防dex2jar的思路，具体步骤如下：</p>
 <ul>
 <li>1.反编译一个apk。</li>
 <li>2.修改smali代码，插入上面这三句有语法错误的代码。</li>
 <li>3.重打包，使用dex2jar工具转换新包的dex，看是否能正常转换出Java源代码。并检查运行时是否出错。</li>
 </ul>
 <p>我这里用一个Hello World应用来测试，使用apktool反编译出smali代码，并在Application的onCreate方法中插入这段有语法错误的代码。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># virtual methods&#10;.method public onCreate()V&#10;    .locals 3&#10;&#10;    invoke-super &#123;p0&#125;, Lcn/trinea/android/lib/h/c;-&#62;onCreate()V&#10;&#10;    invoke-virtual &#123;p0&#125;, Lcn/trinea/android/developertools/MyApplication;-&#62;getApplicationContext()Landroid/content/Context;&#10;&#10;    move-result-object v0&#10;&#10;    invoke-static &#123;&#125;, Lpnf/object/does/not/Exist;-&#62;a()Z&#10;&#10;    move-result v3&#10;&#10;    invoke-static &#123;v3&#125;, Lpnf/object/does/not/Exist;-&#62;b(I)V&#10;&#10;    return-void&#10;.end method</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"># virtual methods</span><br><span class="line">.method public onCreate()V</span><br><span class="line">    .locals 3</span><br><span class="line"></span><br><span class="line">    invoke-super &#123;p0&#125;, Lcn/trinea/android/lib/h/c;-&gt;onCreate()V</span><br><span class="line"></span><br><span class="line">    invoke-virtual &#123;p0&#125;, Lcn/trinea/android/developertools/MyApplication;-&gt;getApplicationContext()Landroid/content/Context;</span><br><span class="line"></span><br><span class="line">    move-result-object v0</span><br><span class="line"></span><br><span class="line">    invoke-static &#123;&#125;, Lpnf/object/does/not/Exist;-&gt;a()Z</span><br><span class="line"></span><br><span class="line">    move-result v3</span><br><span class="line"></span><br><span class="line">    invoke-static &#123;v3&#125;, Lpnf/object/does/not/Exist;-&gt;b(I)V</span><br><span class="line"></span><br><span class="line">    return-void</span><br><span class="line">.end method</span><br></pre></td></tr></table></figure>
 <p>这里不要忘了，你可能需要另外编译出Exist.smali这个文件，不然运行时一定会爆出ClassNotFound异常。将下面的Exist.java<strong>编译出Exist.smali</strong>放入相应的包路径，重打包就可以了。Java代码如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public class Exist &#123;&#10;    public static boolean a() &#123;&#10;        return false;&#10;    &#125;&#10;&#10;    public static void b(int test) &#123;&#10;&#10;    &#125;&#10;&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">public class Exist &#123;</span><br><span class="line">    public static boolean a() &#123;</span><br><span class="line">        return false;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void b(int test) &#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>最后，验证下果然重新打包后的apk，确实不能正常转换出Java源代码，这里就不贴图了，因为转换出错日志是一样的。并且运行时也不会出错。接下来会写一个Gradle编译插件，针对特定的函数，插入代码，防止dex2jar工具查看Java源代码。</p>
-<h3 id="四、实现思路">四、实现思路</h3><p>Android客户端在防止其Java代码被dex2jar转换时其实就是借助dex2jar的语法检查机制，将有语法错误的字节码插入到想要保护的Java函数中里面，以达到dex2jar转换出错的目的。接下来我就大致记录下如何开发Gradle编译插件，在编译过程中实现上述防护思路，先看下Android APK打包流程：</p>
+<h3 id="四、实现思路"><a href="#四、实现思路" class="headerlink" title="四、实现思路"></a>四、实现思路</h3><p>Android客户端在防止其Java代码被dex2jar转换时其实就是借助dex2jar的语法检查机制，将有语法错误的字节码插入到想要保护的Java函数中里面，以达到dex2jar转换出错的目的。接下来我就大致记录下如何开发Gradle编译插件，在编译过程中实现上述防护思路，先看下Android APK打包流程：</p>
 <!--more-->
 <p><img src="https://ivonhoe.github.io/res/dexguard/dexguard4.jpeg" alt="Android apk打包流程"></p>
 <p>Android APK打包流程如上图所示，Java代码先通过Java Compiler生成.class文件，再通过dx工具生成dex文件，最后使用apkbuilder工具完成代码与资源文件的打包，并使用jarsigner签名，最后可能还有使用zipalign对签名后的apk做对齐处理。</p>
 <p>如果需要完成对特定函数的代码注入，可以在Java代码编译生成class文件后，在dex文件生成前，针对class字节码进行操作，以本例为例需要动态生成Exsit类文件的字节码。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">// &#21160;&#24577;&#29983;&#25104;Exist.class&#10;public class Exist &#123;&#10;    public static boolean a() &#123;&#10;        return false;&#10;    &#125;&#10;&#10;    public static void b(int test) &#123;&#10;    &#125;&#10;&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">// 动态生成Exist.class</span><br><span class="line">public class Exist &#123;</span><br><span class="line">    public static boolean a() &#123;</span><br><span class="line">        return false;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void b(int test) &#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>将下列Java代码转换成字节码插入需要保护的函数中。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">// &#25554;&#20837;&#21040;&#29305;&#23450;&#30340;Java&#20989;&#25968;&#20869;&#10;Exist.b(Exist.a());</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">// 插入到特定的Java函数内</span><br><span class="line">Exist.b(Exist.a());</span><br></pre></td></tr></table></figure>
 <p>并将修改后的.class文件放入dex打包目录中，完成dex打包，具体流程如下图所示：</p>
-<p><img src="https://ivonhoe.github.io/res/dexguard/dexguard6.png" alt=""></p>
-<p>Gradle提供了叫<code>Transform</code>的API，允许三方插件在class文件转换为dex文件前操作编译好的class文件，这个API的目标就是简化class文件的自定义的操作而不用对Task进行处理，并且可以更加灵活地进行操作。详细的可以参考<a href="http://blog.csdn.net/sbsujjbcy/article/details/50839263" target="_blank" rel="external">区长的博客</a>。</p>
-<h3 id="五、使用ASM操作Java字节码">五、使用ASM操作Java字节码</h3><p>ASM 是一个 Java 字节码操控框架。它能被用来动态生成类或者增强既有类的功能。ASM 可以直<br>接产生二进制 class 文件，也可以在类被加载入 Java 虚拟机之前动态改变类行为。这里推荐一个IDEA插件:<code>ASM ByteCode Outline</code>。可以查看.class文件的字节码，并可以生成成ASM框架代码。安装<code>ASM Bytecode Outline</code>插件后，可以在<code>Intellij IDEA</code>-&gt;<code>Code</code>-&gt;<code>Show Bytecode Outline</code>查看类文件对应个字节码和ASM框架代码，利用ASM框架代码就可以生成相应的.class文件了。</p>
-<p><img src="https://ivonhoe.github.io/res/dexguard/dexguard3.png" alt=""></p>
+<p><img src="https://ivonhoe.github.io/res/dexguard/dexguard6.png" alt></p>
+<p>Gradle提供了叫<code>Transform</code>的API，允许三方插件在class文件转换为dex文件前操作编译好的class文件，这个API的目标就是简化class文件的自定义的操作而不用对Task进行处理，并且可以更加灵活地进行操作。详细的可以参考<a href="http://blog.csdn.net/sbsujjbcy/article/details/50839263" target="_blank" rel="noopener">区长的博客</a>。</p>
+<h3 id="五、使用ASM操作Java字节码"><a href="#五、使用ASM操作Java字节码" class="headerlink" title="五、使用ASM操作Java字节码"></a>五、使用ASM操作Java字节码</h3><p>ASM 是一个 Java 字节码操控框架。它能被用来动态生成类或者增强既有类的功能。ASM 可以直<br>接产生二进制 class 文件，也可以在类被加载入 Java 虚拟机之前动态改变类行为。这里推荐一个IDEA插件:<code>ASM ByteCode Outline</code>。可以查看.class文件的字节码，并可以生成成ASM框架代码。安装<code>ASM Bytecode Outline</code>插件后，可以在<code>Intellij IDEA</code>-&gt;<code>Code</code>-&gt;<code>Show Bytecode Outline</code>查看类文件对应个字节码和ASM框架代码，利用ASM框架代码就可以生成相应的.class文件了。</p>
+<p><img src="https://ivonhoe.github.io/res/dexguard/dexguard3.png" alt></p>
 <p>生成Exist字节码的具体实现，生成Exist.java的构造函数：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ClassWriter cw = new ClassWriter(0);&#10;FieldVisitor fv;&#10;MethodVisitor mv;&#10;AnnotationVisitor av0;&#10;&#10;cw.visit(51, ACC_PUBLIC + ACC_SUPER, &#34;ivonhoe/dexguard/java/Exist&#34;, null, &#34;java/lang/Object&#34;, null);&#10;&#10;cw.visitSource(&#34;Exist.java&#34;, null);&#10;&#10;mv = cw.visitMethod(ACC_PUBLIC, &#34;&#60;init&#62;&#34;, &#34;()V&#34;, null, null);&#10;mv.visitCode();&#10;Label l0 = new Label();&#10;mv.visitLabel(l0);&#10;mv.visitLineNumber(7, l0);&#10;mv.visitVarInsn(ALOAD, 0);&#10;mv.visitMethodInsn(INVOKESPECIAL, &#34;java/lang/Object&#34;, &#34;&#60;init&#62;&#34;, &#34;()V&#34;, false);&#10;mv.visitInsn(RETURN);&#10;Label l1 = new Label();&#10;mv.visitLabel(l1);&#10;mv.visitLocalVariable(&#34;this&#34;, &#34;Livonhoe/dexguard/java/Exist;&#34;, null, l0, l1, 0);&#10;mv.visitMaxs(1, 1);&#10;mv.visitEnd();</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">ClassWriter cw = new ClassWriter(0);</span><br><span class="line">FieldVisitor fv;</span><br><span class="line">MethodVisitor mv;</span><br><span class="line">AnnotationVisitor av0;</span><br><span class="line"></span><br><span class="line">cw.visit(51, ACC_PUBLIC + ACC_SUPER, &quot;ivonhoe/dexguard/java/Exist&quot;, null, &quot;java/lang/Object&quot;, null);</span><br><span class="line"></span><br><span class="line">cw.visitSource(&quot;Exist.java&quot;, null);</span><br><span class="line"></span><br><span class="line">mv = cw.visitMethod(ACC_PUBLIC, &quot;&lt;init&gt;&quot;, &quot;()V&quot;, null, null);</span><br><span class="line">mv.visitCode();</span><br><span class="line">Label l0 = new Label();</span><br><span class="line">mv.visitLabel(l0);</span><br><span class="line">mv.visitLineNumber(7, l0);</span><br><span class="line">mv.visitVarInsn(ALOAD, 0);</span><br><span class="line">mv.visitMethodInsn(INVOKESPECIAL, &quot;java/lang/Object&quot;, &quot;&lt;init&gt;&quot;, &quot;()V&quot;, false);</span><br><span class="line">mv.visitInsn(RETURN);</span><br><span class="line">Label l1 = new Label();</span><br><span class="line">mv.visitLabel(l1);</span><br><span class="line">mv.visitLocalVariable(&quot;this&quot;, &quot;Livonhoe/dexguard/java/Exist;&quot;, null, l0, l1, 0);</span><br><span class="line">mv.visitMaxs(1, 1);</span><br><span class="line">mv.visitEnd();</span><br></pre></td></tr></table></figure>
 <p>声明一个函数名为a，返回值为boolean类型的无参函数：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mv = cw.visitMethod(ACC_PUBLIC + ACC_STATIC, &#34;a&#34;, &#34;()Z&#34;, null, null);&#10;mv.visitCode();&#10;l0 = new Label();&#10;mv.visitLabel(l0);&#10;mv.visitLineNumber(10, l0);&#10;mv.visitInsn(ICONST_0);&#10;mv.visitInsn(IRETURN);&#10;mv.visitMaxs(1, 0);&#10;mv.visitEnd();</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">mv = cw.visitMethod(ACC_PUBLIC + ACC_STATIC, &quot;a&quot;, &quot;()Z&quot;, null, null);</span><br><span class="line">mv.visitCode();</span><br><span class="line">l0 = new Label();</span><br><span class="line">mv.visitLabel(l0);</span><br><span class="line">mv.visitLineNumber(10, l0);</span><br><span class="line">mv.visitInsn(ICONST_0);</span><br><span class="line">mv.visitInsn(IRETURN);</span><br><span class="line">mv.visitMaxs(1, 0);</span><br><span class="line">mv.visitEnd();</span><br></pre></td></tr></table></figure>
 <p>声明一个函数名为b，参数为int型，返回类型为void的函数</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">MV = CW.VISITmETHOD(acc_public + acc_static, &#34;b&#34;, &#34;(i)v&#34;, NULL, NULL);&#10;MV.VISITcODE();&#10;L0 = NEW lABEL();&#10;MV.VISITlABEL(L0);&#10;MV.VISITlINEnUMBER(14, L0);&#10;MV.VISITiNSN(return);&#10;L1 = NEW lABEL();&#10;MV.VISITlABEL(L1);&#10;MV.VISITlOCALvARIABLE(&#34;TEST&#34;, &#34;i&#34;, NULL, L0, L1, 0);&#10;MV.VISITmAXS(0, 1);&#10;MV.VISITeND();</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">MV = CW.VISITmETHOD(acc_public + acc_static, &quot;b&quot;, &quot;(i)v&quot;, NULL, NULL);</span><br><span class="line">MV.VISITcODE();</span><br><span class="line">L0 = NEW lABEL();</span><br><span class="line">MV.VISITlABEL(L0);</span><br><span class="line">MV.VISITlINEnUMBER(14, L0);</span><br><span class="line">MV.VISITiNSN(return);</span><br><span class="line">L1 = NEW lABEL();</span><br><span class="line">MV.VISITlABEL(L1);</span><br><span class="line">MV.VISITlOCALvARIABLE(&quot;TEST&quot;, &quot;i&quot;, NULL, L0, L1, 0);</span><br><span class="line">MV.VISITmAXS(0, 1);</span><br><span class="line">MV.VISITeND();</span><br></pre></td></tr></table></figure>
 <p>在指定函数内，插入<code>Exist.b(Exist.a());</code>对应的字节码的具体实现，绕过Java编译器的语法检查：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">static class InjectClassVisitor extends ClassVisitor &#123;&#10;&#10;        private String methodName;&#10;&#10;        InjectClassVisitor(int i, ClassVisitor classVisitor, String method) &#123;&#10;            super(i, classVisitor)&#10;&#10;            this.methodName = method;&#10;        &#125;&#10;&#10;        @Override&#10;        public MethodVisitor visitMethod(int access, String name, String desc,&#10;                                         String signature, String[] exceptions) &#123;&#10;&#10;            MethodVisitor mv = super.visitMethod(access, name, desc, signature, exceptions);&#10;            mv = new MethodVisitor(Opcodes.ASM4, mv) &#123;&#10;&#10;                @Override&#10;                void visitCode() &#123;&#10;                    // &#22312;&#26041;&#27861;&#20307;&#24320;&#22987;&#35843;&#29992;&#26102;&#10;                    if (name.equals(methodName)) &#123;&#10;                        mv.visitMethodInsn(INVOKESTATIC, &#34;ivonhoe/dexguard/java/Exist&#34;, &#34;a&#34;, &#34;()Z&#34;, false);&#10;                        mv.visitMethodInsn(INVOKESTATIC, &#34;ivonhoe/dexguard/java/Exist&#34;, &#34;b&#34;, &#34;(I)V&#34;, false);&#10;                    &#125;&#10;                    super.visitCode()&#10;                &#125;&#10;&#10;                @Override&#10;                public void visitMaxs(int maxStack, int maxLocal) &#123;&#10;                    if (name.equals(methodName)) &#123;&#10;                        super.visitMaxs(maxStack + 1, maxLocal);&#10;                    &#125; else &#123;&#10;                        super.visitMaxs(maxStack, maxLocal);&#10;                    &#125;&#10;                &#125;&#10;            &#125;&#10;            return mv;&#10;        &#125;&#10;    &#125;</span><br></pre></td></tr></table></figure>
-<h3 id="六、总结">六、总结</h3><p>看到这里可能你会有一个疑惑，为什么有语法错误的代码，在运行时不会出错，个人理解不单单是因为bool类型在内存中是以<code>0或1</code>表示，也因为<code>int</code>和<code>bool</code>在Android虚拟机中都存储在32位寄存器中，如果使用<code>int</code>和<code>long</code>类型的参数互换，在dx阶段的编译就会报错。下面是插件源码，有兴趣的同学可以尝试一下~</p>
-<h4 id="插件源码">插件源码</h4><p>详细的Gradle源码和实例可参考<a href="https://github.com/Ivonhoe/dexguard" target="_blank" rel="external">https://github.com/Ivonhoe/dexguard</a></p>
-<h4 id="使用方法">使用方法</h4><ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">static class InjectClassVisitor extends ClassVisitor &#123;</span><br><span class="line"></span><br><span class="line">        private String methodName;</span><br><span class="line"></span><br><span class="line">        InjectClassVisitor(int i, ClassVisitor classVisitor, String method) &#123;</span><br><span class="line">            super(i, classVisitor)</span><br><span class="line"></span><br><span class="line">            this.methodName = method;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        @Override</span><br><span class="line">        public MethodVisitor visitMethod(int access, String name, String desc,</span><br><span class="line">                                         String signature, String[] exceptions) &#123;</span><br><span class="line"></span><br><span class="line">            MethodVisitor mv = super.visitMethod(access, name, desc, signature, exceptions);</span><br><span class="line">            mv = new MethodVisitor(Opcodes.ASM4, mv) &#123;</span><br><span class="line"></span><br><span class="line">                @Override</span><br><span class="line">                void visitCode() &#123;</span><br><span class="line">                    // 在方法体开始调用时</span><br><span class="line">                    if (name.equals(methodName)) &#123;</span><br><span class="line">                        mv.visitMethodInsn(INVOKESTATIC, &quot;ivonhoe/dexguard/java/Exist&quot;, &quot;a&quot;, &quot;()Z&quot;, false);</span><br><span class="line">                        mv.visitMethodInsn(INVOKESTATIC, &quot;ivonhoe/dexguard/java/Exist&quot;, &quot;b&quot;, &quot;(I)V&quot;, false);</span><br><span class="line">                    &#125;</span><br><span class="line">                    super.visitCode()</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                @Override</span><br><span class="line">                public void visitMaxs(int maxStack, int maxLocal) &#123;</span><br><span class="line">                    if (name.equals(methodName)) &#123;</span><br><span class="line">                        super.visitMaxs(maxStack + 1, maxLocal);</span><br><span class="line">                    &#125; else &#123;</span><br><span class="line">                        super.visitMaxs(maxStack, maxLocal);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            return mv;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<h3 id="六、总结"><a href="#六、总结" class="headerlink" title="六、总结"></a>六、总结</h3><p>看到这里可能你会有一个疑惑，为什么有语法错误的代码，在运行时不会出错，个人理解不单单是因为bool类型在内存中是以<code>0或1</code>表示，也因为<code>int</code>和<code>bool</code>在Android虚拟机中都存储在32位寄存器中，如果使用<code>int</code>和<code>long</code>类型的参数互换，在dx阶段的编译就会报错。下面是插件源码，有兴趣的同学可以尝试一下~</p>
+<h4 id="插件源码"><a href="#插件源码" class="headerlink" title="插件源码"></a>插件源码</h4><p>详细的Gradle源码和实例可参考<a href="https://github.com/Ivonhoe/dexguard" target="_blank" rel="noopener">https://github.com/Ivonhoe/dexguard</a></p>
+<h4 id="使用方法"><a href="#使用方法" class="headerlink" title="使用方法"></a>使用方法</h4><ul>
 <li>在root project的build.gradle中添加依赖<code>classpath &#39;ivonhoe.gradle.dexguard:dexguard-gradle:0.0.2-SNAPSHOT&#39;</code></li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">buildscript &#123;&#10;    repositories &#123;&#10;        maven &#123; url &#39;https://raw.githubusercontent.com/Ivonhoe/mvn-repo/master/&#39; &#125;&#10;        mavenCentral()&#10;    &#125;&#10;    dependencies &#123;&#10;        classpath &#39;com.android.tools.build:gradle:2.3.0&#39;&#10;        classpath &#39;ivonhoe.gradle.dexguard:dexguard-gradle:0.0.2-SNAPSHOT&#39;&#10;    &#125;&#10;&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">buildscript &#123;</span><br><span class="line">    repositories &#123;</span><br><span class="line">        maven &#123; url &apos;https://raw.githubusercontent.com/Ivonhoe/mvn-repo/master/&apos; &#125;</span><br><span class="line">        mavenCentral()</span><br><span class="line">    &#125;</span><br><span class="line">    dependencies &#123;</span><br><span class="line">        classpath &apos;com.android.tools.build:gradle:2.3.0&apos;</span><br><span class="line">        classpath &apos;ivonhoe.gradle.dexguard:dexguard-gradle:0.0.2-SNAPSHOT&apos;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <ul>
 <li>在app项目的build.gradle中添加插件，map.txt中配置需要保护的方法名</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apply plugin: &#39;ivonhoe.dexguard&#39;&#10;dexguard &#123;&#10;    guardConfig = &#34;$&#123;rootDir&#125;/map.txt&#34;&#10;&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="七、参考文档">七、参考文档</h3><ul>
-<li><a href="https://sourceforge.net/p/dex2jar/tickets/238/" target="_blank" rel="external">#238 java.lang.RuntimeException: can not merge I and Z</a></li>
-<li><a href="http://www.jianshu.com/p/730c6e3e21f6" target="_blank" rel="external">Smali语法</a></li>
-<li><a href="http://blog.csdn.net/sbsujjbcy/article/details/50839263" target="_blank" rel="external">Android 热修复使用Gradle Plugin1.5改造Nuwa插件</a></li>
-<li><a href="http://www.wangyuwei.me/2017/01/20/ASM-%E6%93%8D%E4%BD%9C%E5%AD%97%E8%8A%82%E7%A0%81%E5%88%9D%E6%8E%A2/" target="_blank" rel="external">ASM-操作字节码初探</a></li>
-<li><a href="https://www.diycode.cc/topics/581" target="_blank" rel="external">手摸手增加字节码往方法体内插代码</a></li>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">apply plugin: &apos;ivonhoe.dexguard&apos;</span><br><span class="line">dexguard &#123;</span><br><span class="line">    guardConfig = &quot;$&#123;rootDir&#125;/map.txt&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="七、参考文档"><a href="#七、参考文档" class="headerlink" title="七、参考文档"></a>七、参考文档</h3><ul>
+<li><a href="https://sourceforge.net/p/dex2jar/tickets/238/" target="_blank" rel="noopener">#238 java.lang.RuntimeException: can not merge I and Z</a></li>
+<li><a href="http://www.jianshu.com/p/730c6e3e21f6" target="_blank" rel="noopener">Smali语法</a></li>
+<li><a href="http://blog.csdn.net/sbsujjbcy/article/details/50839263" target="_blank" rel="noopener">Android 热修复使用Gradle Plugin1.5改造Nuwa插件</a></li>
+<li><a href="http://www.wangyuwei.me/2017/01/20/ASM-%E6%93%8D%E4%BD%9C%E5%AD%97%E8%8A%82%E7%A0%81%E5%88%9D%E6%8E%A2/" target="_blank" rel="noopener">ASM-操作字节码初探</a></li>
+<li><a href="https://www.diycode.cc/topics/581" target="_blank" rel="noopener">手摸手增加字节码往方法体内插代码</a></li>
 </ul>
-<h3 id="转载请标明出处病已blog_https://ivonhoe-github-io/">转载请标明出处<a href="https://ivonhoe.github.io/">病已blog https://ivonhoe.github.io/</a></h3>
+<h3 id="转载请标明出处病已blog-https-ivonhoe-github-io"><a href="#转载请标明出处病已blog-https-ivonhoe-github-io" class="headerlink" title="转载请标明出处病已blog https://ivonhoe.github.io/"></a>转载请标明出处<a href="https://ivonhoe.github.io/">病已blog https://ivonhoe.github.io/</a></h3>
       
     </div>
 
-    <div>
-      
-        
+    
 
-      
-    </div>
+    
+    
+    
 
-    <div>
-      
-        
-  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
-    <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
-    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
-      <span>赏</span>
-    </button>
-    <div id="QR" style="display: none;">
-      
-        <div id="wechat" style="display: inline-block">
-          <img id="wechat_qr" src="https://ivonhoe.github.io/res/dex2jar_error/WechatIMG56.png" alt="病已 WeChat Pay"/>
-          <p>微信打赏</p>
-        </div>
-      
-      
-        <div id="alipay" style="display: inline-block">
-          <img id="alipay_qr" src="https://ivonhoe.github.io/res/dex2jar_error/WechatIMG57.jpeg" alt="病已 Alipay"/>
-          <p>支付宝打赏</p>
-        </div>
-      
-    </div>
-  </div>
+    
 
-
+    
       
-    </div>
+    
+    
 
-    <div>
-      
-        
-
-      
-    </div>
+    
 
     <footer class="post-footer">
       
+        
+          
+        
         <div class="post-tags">
           
-            <a href="/tags/Gradle/" rel="tag"># Gradle</a>
+            <a href="/tags/移动安全/" rel="tag"># 移动安全</a>
           
             <a href="/tags/dex2jar/" rel="tag"># dex2jar</a>
           
-            <a href="/tags/移动安全/" rel="tag"># 移动安全</a>
+            <a href="/tags/Gradle/" rel="tag"># Gradle</a>
           
         </div>
       
 
       
-        
+      
       
 
       
@@ -539,24 +616,21 @@
       
       
     </footer>
+  </div>
+  
+  
+  
   </article>
 
 
-
-    <div class="post-spread">
-      
-    </div>
   </div>
 
 
           </div>
           
 
+  
 
-          
-  <div class="comments" id="comments">
-    
-  </div>
 
 
         </div>
@@ -578,110 +652,208 @@
 
       
         <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
             文章目录
           </li>
-          <li class="sidebar-nav-overview" data-target="site-overview">
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
             站点概览
           </li>
         </ul>
       
 
-      <section class="site-overview sidebar-panel">
-        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-          <img class="site-author-image" itemprop="image"
-               src="https://avatars1.githubusercontent.com/u/5706813?v=3&s=460"
-               alt="病已" />
-          <p class="site-author-name" itemprop="name">病已</p>
-           
-              <p class="site-description motion-element" itemprop="description"></p>
-          
-        </div>
-        <nav class="site-state motion-element">
-
-          
-            <div class="site-state-item site-state-posts">
-              <a href="/archives">
-                <span class="site-state-item-count">33</span>
-                <span class="site-state-item-name">日志</span>
-              </a>
-            </div>
-          
-
-          
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
-            
-            <div class="site-state-item site-state-categories">
-              <a href="/categories/index.html">
-                <span class="site-state-item-count">8</span>
-                <span class="site-state-item-name">分类</span>
-              </a>
-            </div>
-          
-
-          
-            
-            
-            <div class="site-state-item site-state-tags">
-              <a href="/tags/index.html">
-                <span class="site-state-item-count">39</span>
-                <span class="site-state-item-name">标签</span>
-              </a>
-            </div>
-          
-
-        </nav>
-
-        
-          <div class="feed-link motion-element">
-            <a href="/atom.xml" rel="alternate">
-              <i class="fa fa-rss"></i>
-              RSS
-            </a>
+              <p class="site-author-name" itemprop="name">病已</p>
+              <div class="site-description motion-element" itemprop="description"></div>
           </div>
-        
 
-        <div class="links-of-author motion-element">
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">33</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">8</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">39</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+
+          
+
+          
+          
+
           
             
-              <span class="links-of-author-item">
-                <a href="https://github.com/Ivonhoe" target="_blank" title="GitHub">
-                  
-                    <i class="fa fa-fw fa-github"></i>
-                  
-                  GitHub
-                </a>
-              </span>
-            
           
+          
+
         </div>
-
-        
-        
-
-        
-        
-
-        
-
-
-      </section>
+      </div>
 
       
       <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
           <div class="post-toc">
 
             
-              
+            
+            
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#一、反编译某平台代码"><span class="nav-number">1.</span> <span class="nav-text">一、反编译某平台代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二、为什么？"><span class="nav-number">2.</span> <span class="nav-text">二、为什么？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#三、手动代码注入"><span class="nav-number">3.</span> <span class="nav-text">三、手动代码注入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#四、实现思路"><span class="nav-number">4.</span> <span class="nav-text">四、实现思路</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#五、使用ASM操作Java字节码"><span class="nav-number">5.</span> <span class="nav-text">五、使用ASM操作Java字节码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#六、总结"><span class="nav-number">6.</span> <span class="nav-text">六、总结</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#插件源码"><span class="nav-number">6.1.</span> <span class="nav-text">插件源码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#使用方法"><span class="nav-number">6.2.</span> <span class="nav-text">使用方法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#七、参考文档"><span class="nav-number">7.</span> <span class="nav-text">七、参考文档</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#转载请标明出处病已blog_https://ivonhoe-github-io/"><span class="nav-number">8.</span> <span class="nav-text">转载请标明出处病已blog https://ivonhoe.github.io/</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#一、反编译某平台代码"><span class="nav-number">1.</span> <span class="nav-text">一、反编译某平台代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二、为什么？"><span class="nav-number">2.</span> <span class="nav-text">二、为什么？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#三、手动代码注入"><span class="nav-number">3.</span> <span class="nav-text">三、手动代码注入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#四、实现思路"><span class="nav-number">4.</span> <span class="nav-text">四、实现思路</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#五、使用ASM操作Java字节码"><span class="nav-number">5.</span> <span class="nav-text">五、使用ASM操作Java字节码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#六、总结"><span class="nav-number">6.</span> <span class="nav-text">六、总结</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#插件源码"><span class="nav-number">6.1.</span> <span class="nav-text">插件源码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#使用方法"><span class="nav-number">6.2.</span> <span class="nav-text">使用方法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#七、参考文档"><span class="nav-number">7.</span> <span class="nav-text">七、参考文档</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#转载请标明出处病已blog-https-ivonhoe-github-io"><span class="nav-number">8.</span> <span class="nav-text">转载请标明出处病已blog https://ivonhoe.github.io/</span></a></li></ol></div>
             
 
           </div>
-        </section>
+        </div>
       <!--/noindex-->
       
 
@@ -689,6 +861,7 @@
 
     </div>
   </aside>
+  
 
 
         
@@ -697,30 +870,39 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright" >
-  
-  &copy; 
-  <span itemprop="copyrightYear">2019</span>
-  <span class="with-love">
-    <i class="fa fa-heart"></i>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">病已</span>
+
+  
+
+  
 </div>
 
 
-<div class="powered-by">
-  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
-</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
 
-<div class="theme-info">
-  主题 -
-  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
-    NexT.Mist
-  </a>
-</div>
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.1.2</div>
+
+
 
 
         
+
+
+
+
+
+
+
 
         
       </div>
@@ -733,11 +915,16 @@
       </div>
     
 
+    
+
+    
+
+    
   </div>
 
   
 
-<script type="text/javascript">
+<script>
   if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
     window.Promise = null;
   }
@@ -751,7 +938,6 @@
 
 
 
-  
 
 
 
@@ -760,53 +946,9 @@
 
 
 
-  
-  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
-
-  
-  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
-
-  
-  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
-
-  
-  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
-
-  
-  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
-
-  
-  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
-
-
-  
-
-
-  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
-
-  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
 
 
 
-  
-  
-
-  
-  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
-<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
-
-
-
-  
-
-
-  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
-
-
-
-  
-
-  
 
 
 
@@ -814,19 +956,57 @@
 
 
   
+  <script src="/lib/jquery/index.js?v=3.4.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.2"></script>
+
+  <script src="/js/motion.js?v=7.1.2"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/affix.js?v=7.1.2"></script>
+
+  <script src="/js/schemes/pisces.js?v=7.1.2"></script>
 
 
 
 
-	
-
-
+  
+  <script src="/js/scrollspy.js?v=7.1.2"></script>
+<script src="/js/post-details.js?v=7.1.2"></script>
 
 
 
   
 
 
+  <script src="/js/next-boot.js?v=7.1.2"></script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
 
 
   
@@ -835,119 +1015,88 @@
 
 
   
-
-
-
-
-
   
-
-  
-  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
-  <script>AV.initialize("JdLpddsaWqwfJtXPdDK8woaF-gzGzoHsz", "CEmtHXH8f0PtvF0zYtVE0EeY");</script>
   <script>
-    function showTime(Counter) {
-      var query = new AV.Query(Counter);
-      var entries = [];
-      var $visitors = $(".leancloud_visitors");
-
-      $visitors.each(function () {
-        entries.push( $(this).attr("id").trim() );
-      });
-
-      query.containedIn('url', entries);
-      query.find()
-        .done(function (results) {
-          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
-
-          if (results.length === 0) {
-            $visitors.find(COUNT_CONTAINER_REF).text(0);
-            return;
-          }
-
-          for (var i = 0; i < results.length; i++) {
-            var item = results[i];
-            var url = item.get('url');
-            var time = item.get('time');
-            var element = document.getElementById(url);
-
-            $(element).find(COUNT_CONTAINER_REF).text(time);
-          }
-          for(var i = 0; i < entries.length; i++) {
-            var url = entries[i];
-            var element = document.getElementById(url);
-            var countSpan = $(element).find(COUNT_CONTAINER_REF);
-            if( countSpan.text() == '') {
-              countSpan.text(0);
-            }
-          }
-        })
-        .fail(function (object, error) {
-          console.log("Error: " + error.code + " " + error.message);
-        });
-    }
-
+    
     function addCount(Counter) {
-      var $visitors = $(".leancloud_visitors");
+      var $visitors = $('.leancloud_visitors');
       var url = $visitors.attr('id').trim();
       var title = $visitors.attr('data-flag-title').trim();
-      var query = new AV.Query(Counter);
 
-      query.equalTo("url", url);
-      query.find({
-        success: function(results) {
+      Counter('get', '/classes/Counter', { where: JSON.stringify({ url }) })
+        .done(function({ results }) {
           if (results.length > 0) {
             var counter = results[0];
-            counter.fetchWhenSave(true);
-            counter.increment("time");
-            counter.save(null, {
-              success: function(counter) {
+            
+            Counter('put', '/classes/Counter/' + counter.objectId, JSON.stringify({ time: { '__op': 'Increment', 'amount': 1 } }))
+            
+              .done(function() {
                 var $element = $(document.getElementById(url));
-                $element.find('.leancloud-visitors-count').text(counter.get('time'));
-              },
-              error: function(counter, error) {
-                console.log('Failed to save Visitor num, with error message: ' + error.message);
-              }
-            });
+                $element.find('.leancloud-visitors-count').text(counter.time + 1);
+              })
+            
+              .fail(function ({ responseJSON }) {
+                console.log('Failed to save Visitor num, with error message: ' + responseJSON.error);
+              })
           } else {
-            var newcounter = new Counter();
-            /* Set ACL */
-            var acl = new AV.ACL();
-            acl.setPublicReadAccess(true);
-            acl.setPublicWriteAccess(true);
-            newcounter.setACL(acl);
-            /* End Set ACL */
-            newcounter.set("title", title);
-            newcounter.set("url", url);
-            newcounter.set("time", 1);
-            newcounter.save(null, {
-              success: function(newcounter) {
-                var $element = $(document.getElementById(url));
-                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
-              },
-              error: function(newcounter, error) {
-                console.log('Failed to create');
-              }
-            });
+            
+              var $element = $(document.getElementById(url));
+              $element.find('.leancloud-visitors-count').text('Counter not initialized! More info at console err msg.');
+              console.error('ATTENTION! LeanCloud counter has security bug, see how to solve it here: https://github.com/theme-next/hexo-leancloud-counter-security. \n However, you can still use LeanCloud without security, by setting `security` option to `false`.');
+            
           }
-        },
-        error: function(error) {
-          console.log('Error:' + error.code + " " + error.message);
-        }
-      });
+        })
+        .fail(function ({ responseJSON }) {
+          console.log('LeanCloud Counter Error: ' + responseJSON.code + ' ' + responseJSON.error);
+        });
     }
+    
 
     $(function() {
-      var Counter = AV.Object.extend("Counter");
-      if ($('.leancloud_visitors').length == 1) {
-        addCount(Counter);
-      } else if ($('.post-title-link').length > 1) {
-        showTime(Counter);
-      }
+      $.get('https://app-router.leancloud.cn/2/route?appId=' + 'JdLpddsaWqwfJtXPdDK8woaF-gzGzoHsz')
+        .done(function({ api_server }) {
+          var Counter = function(method, url, data) {
+            return $.ajax({
+              method: method,
+              url: 'https://' + api_server + '/1.1' + url,
+              headers: {
+                'X-LC-Id': 'JdLpddsaWqwfJtXPdDK8woaF-gzGzoHsz',
+                'X-LC-Key': 'CEmtHXH8f0PtvF0zYtVE0EeY',
+                'Content-Type': 'application/json',
+              },
+              data: data
+            });
+          };
+          
+            const localhost = /http:\/\/(localhost|127.0.0.1|0.0.0.0)/;
+            if (localhost.test(document.URL)) {
+              return;
+            }
+            addCount(Counter);
+          
+        });
     });
   </script>
 
 
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
 
   
 
