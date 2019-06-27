@@ -1,0 +1,1585 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.2">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.1.2">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.1.2">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.1.2">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.1.2" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.1.2',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="0x01 前言这里说的Android虚拟机指运行在Android平台上的虚拟机，即日常遇到的Dalvik和ART虚拟机。这篇文章记录了自己对Android虚拟机几个问题的理解。只是个人学习和理解过程的记录，如有不当之处万望指正，邮箱yangfan3687@163.com。也希望在面对下面这些所谓JVM常见问题时能给你带来不一样的思考。  问题1：如何理解JVM内存模型？ 问题2：什么是GC ROO">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android虚拟机的几个问题探究">
+<meta property="og:url" content="https://ivonhoe.github.io/2019/06/27/android-vm-1/index.html">
+<meta property="og:site_name" content="病已的博客">
+<meta property="og:description" content="0x01 前言这里说的Android虚拟机指运行在Android平台上的虚拟机，即日常遇到的Dalvik和ART虚拟机。这篇文章记录了自己对Android虚拟机几个问题的理解。只是个人学习和理解过程的记录，如有不当之处万望指正，邮箱yangfan3687@163.com。也希望在面对下面这些所谓JVM常见问题时能给你带来不一样的思考。  问题1：如何理解JVM内存模型？ 问题2：什么是GC ROO">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://ivonhoe.github.io/res/android-vm-1/jvm-memory-model.png">
+<meta property="og:updated_time" content="2019-06-27T14:28:32.545Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android虚拟机的几个问题探究">
+<meta name="twitter:description" content="0x01 前言这里说的Android虚拟机指运行在Android平台上的虚拟机，即日常遇到的Dalvik和ART虚拟机。这篇文章记录了自己对Android虚拟机几个问题的理解。只是个人学习和理解过程的记录，如有不当之处万望指正，邮箱yangfan3687@163.com。也希望在面对下面这些所谓JVM常见问题时能给你带来不一样的思考。  问题1：如何理解JVM内存模型？ 问题2：什么是GC ROO">
+<meta name="twitter:image" content="https://ivonhoe.github.io/res/android-vm-1/jvm-memory-model.png">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="病已的博客" type="application/atom+xml">
+
+
+
+  
+  
+  <link rel="canonical" href="https://ivonhoe.github.io/2019/06/27/android-vm-1/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Android虚拟机的几个问题探究 | 病已的博客</title>
+  
+
+
+
+
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?666a58de875adc9dd40d5de65ceac026";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">病已的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">枕上，马上，厕上</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+  
+  
+
+  
+
+  <a href="https://github.com/Ivonhoe" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewbox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a>
+
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://ivonhoe.github.io/2019/06/27/android-vm-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="病已">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="病已的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Android虚拟机的几个问题探究
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：6月 27 2019 22:17:52 / 修改时间：22:28:32" itemprop="dateCreated datePublished" datetime="2019-06-27T22:17:52+08:00">6月 27 2019</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/学习总结/" itemprop="url" rel="index"><span itemprop="name">学习总结</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2019/06/27/android-vm-1/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2019/06/27/android-vm-1/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+            <span id="/2019/06/27/android-vm-1/" class="leancloud_visitors" data-flag-title="Android虚拟机的几个问题探究">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              
+                <span class="post-meta-item-text">阅读次数：</span>
+              
+                <span class="leancloud-visitors-count"></span>
+            </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="0x01-前言"><a href="#0x01-前言" class="headerlink" title="0x01 前言"></a>0x01 前言</h3><p>这里说的Android虚拟机指运行在Android平台上的虚拟机，即日常遇到的Dalvik和ART虚拟机。这篇文章记录了自己对Android虚拟机几个问题的理解。只是个人学习和理解过程的记录，如有不当之处万望指正，邮箱<a href="mailto:yangfan3687@163.com" target="_blank" rel="noopener">yangfan3687@163.com</a>。也希望在面对下面这些所谓JVM常见问题时能给你带来不一样的思考。</p>
+<ul>
+<li>问题1：如何理解JVM内存模型？</li>
+<li>问题2：什么是GC ROOTS？</li>
+<li>问题3：Android虚拟机有没有分代回收？</li>
+</ul>
+<a id="more"></a>
+<h3 id="0x02-堆转储HPROF协议"><a href="#0x02-堆转储HPROF协议" class="headerlink" title="0x02 堆转储HPROF协议"></a>0x02 堆转储HPROF协议</h3><p>在看JVM内存模型时，不妨先了解一下堆转储文件的协议。通过HPROF的问题格式可以大致了解JVM在内存中的划分情况。</p>
+<h4 id="2-1-HPROF文件格式"><a href="#2-1-HPROF文件格式" class="headerlink" title="2.1 HPROF文件格式"></a>2.1 HPROF文件格式</h4><p>总的来说，HPROF文件分为两个大的部分，分别是Hprof Header和Hprof Body。其中Header部分又包括以下几个部分：</p>
+<ul>
+<li>fixed header：包含文件描述以’/0’结尾，id字段的长度信息等</li>
+<li>string table：包含所有用到的字符串，包括类目、方法名、常量名等。</li>
+<li>class table：包含所有的类信息</li>
+<li>stack frame：包含所有线程的栈帧信息</li>
+<li>stack trace：包含所有线程的虚拟机栈情况</li>
+</ul>
+<p>Body部分就是完整的jvm堆信息，将堆上的对象引用状况表述到文件中。其中在表述类对象是静态方法和静态成员变量时稍复杂，详细格式请查看 3.2 ~ 3.4。以下是HPROF文件格式的详细说明：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left"></th>
+<th style="text-align:center"></th>
+<th style="text-align:center"></th>
+<th style="text-align:center"></th>
+<th style="text-align:center"></th>
+<th style="text-align:center"></th>
+<th style="text-align:center"></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">“JAVA PROFILE 1.0.3/0”(Magic Code)</td>
+<td style="text-align:center">4byte mIdSize (储存id的字节长度)</td>
+<td style="text-align:center">8byte (Time Stamp)</td>
+</tr>
+<tr>
+<td style="text-align:left">0x01(string table)</td>
+<td style="text-align:center">4 byte</td>
+<td style="text-align:center">4 byte(字符串length)</td>
+<td style="text-align:center">mIdSize byte</td>
+<td style="text-align:center">strlen(length) byte</td>
+</tr>
+<tr>
+<td style="text-align:left">……</td>
+<td style="text-align:center">……</td>
+<td style="text-align:center">……</td>
+<td style="text-align:center">……</td>
+<td style="text-align:center">……</td>
+</tr>
+<tr>
+<td style="text-align:left">0x02（class table)</td>
+<td style="text-align:center">4 byte</td>
+<td style="text-align:center">4 byte (length)</td>
+<td style="text-align:center">4byte（class serial number）</td>
+<td style="text-align:center">mIdSize byte</td>
+<td style="text-align:center">4 byte（Stack trace serial number）</td>
+<td style="text-align:center">4 byte（class name string id）</td>
+</tr>
+<tr>
+<td style="text-align:left">……</td>
+<td style="text-align:center">……</td>
+<td style="text-align:center">……</td>
+<td style="text-align:center">……</td>
+<td style="text-align:center">……</td>
+</tr>
+<tr>
+<td style="text-align:left">0x04（stack frame)</td>
+<td style="text-align:center">4 byte</td>
+<td style="text-align:center">4 byte (length)</td>
+<td style="text-align:center">mIdSize byte</td>
+<td style="text-align:center">mIdSize byte (methodName string id)</td>
+<td style="text-align:center">mIdSize byte (methodSignature string id)</td>
+<td style="text-align:center">mIdSize byte (sourceFile string id )</td>
+<td>mIdSize byte (serial)</td>
+<td>mIdSize byte (lineNumber )</td>
+</tr>
+<tr>
+<td style="text-align:left">……</td>
+<td style="text-align:center">……</td>
+<td style="text-align:center">……</td>
+<td style="text-align:center">……</td>
+<td style="text-align:center">……</td>
+</tr>
+<tr>
+<td style="text-align:left">0x05（stack trace)</td>
+<td style="text-align:center">4 byte</td>
+<td style="text-align:center">4 byte (length)</td>
+<td style="text-align:center">4 byte serialNumber</td>
+<td style="text-align:center">4 byte threadSerialNumber</td>
+<td style="text-align:center">4 byte numFrames</td>
+<td style="text-align:center">numFrames * mIdSize byte stack frame id</td>
+</tr>
+<tr>
+<td style="text-align:left">……</td>
+<td style="text-align:center">……</td>
+<td style="text-align:center">……</td>
+<td style="text-align:center">……</td>
+<td style="text-align:center">……</td>
+</tr>
+<tr>
+<td style="text-align:left">0x0C（HEAP DUMP)</td>
+<td style="text-align:center">4 byte</td>
+<td style="text-align:center">mIdSize byte (length)</td>
+</tr>
+<tr>
+<td style="text-align:left">0xFF（ROOT_UNKNOWN)</td>
+<td style="text-align:center">mIdSize byte string id</td>
+</tr>
+<tr>
+<td style="text-align:left">0x01（ROOT_JNI_GLOBAL)</td>
+<td style="text-align:center">mIdSize byte string id</td>
+<td style="text-align:center">mIdSize byte jni global id</td>
+</tr>
+<tr>
+<td style="text-align:left">0x02（ROOT_JNI_LOCAL)</td>
+<td style="text-align:center">mIdSize byte string id</td>
+<td style="text-align:center">4 byte thread serial number</td>
+<td style="text-align:center">4 byte stack frame number</td>
+</tr>
+<tr>
+<td style="text-align:left">0x03（ROOT_JAVA_FRAME)</td>
+<td style="text-align:center">mIdSize byte string id</td>
+<td style="text-align:center">4 byte thread serial number</td>
+<td style="text-align:center">4 byte stack frame number</td>
+</tr>
+<tr>
+<td style="text-align:left">0x04（ROOT_NATIVE_STACK)</td>
+<td style="text-align:center">mIdSize byte string id</td>
+<td style="text-align:center">4 thread serial number</td>
+</tr>
+<tr>
+<td style="text-align:left">0x05（ROOT_STICKY_CLASS)</td>
+<td style="text-align:center">mIdSize byte string id</td>
+</tr>
+<tr>
+<td style="text-align:left">0x06（ROOT_THREAD_BLOCK)</td>
+<td style="text-align:center">mIdSize byte string id</td>
+<td style="text-align:center">4 thread serial number</td>
+</tr>
+<tr>
+<td style="text-align:left">0x07（ROOT_MONITOR_USED)</td>
+<td style="text-align:center">mIdSize byte string id</td>
+</tr>
+<tr>
+<td style="text-align:left">0x08（ROOT_THREAD_OBJECT)</td>
+<td style="text-align:center">mIdSize byte string id</td>
+<td style="text-align:center">4 byte thread serial number</td>
+<td style="text-align:center">4 byte stackSerialNumber</td>
+</tr>
+<tr>
+<td style="text-align:left">0x20（ROOT_CLASS_DUMP)</td>
+<td style="text-align:center">mIdSize byte string id</td>
+</tr>
+<tr>
+<td style="text-align:left">0x21（ROOT_INSTANCE_DUMP)</td>
+<td style="text-align:center">mIdSize byte string id</td>
+<td style="text-align:center">mIdSize byte stackId</td>
+<td style="text-align:center">mIdSize byte class id</td>
+<td style="text-align:center">4 byte remaining</td>
+</tr>
+<tr>
+<td style="text-align:left">0x22(ROOT_OBJECT_ARRAY_DUMP)</td>
+<td style="text-align:center">mIdSize byte string id</td>
+<td style="text-align:center">mIdSize byte stack id</td>
+<td style="text-align:center">num elements</td>
+<td style="text-align:center">mIdSize byte class id</td>
+<td style="text-align:center">mIdSize * num elements(skip)</td>
+</tr>
+<tr>
+<td style="text-align:left">0x23(ROOT_PRIMITIVE_ARRAY_DUMP)</td>
+<td style="text-align:center">mIdSize byte string id</td>
+<td style="text-align:center">mIdSize byte stack id</td>
+<td style="text-align:center">4 byte num elements</td>
+<td style="text-align:center">4 byte primitive type</td>
+<td style="text-align:center">mIdSize * num elements(skip)</td>
+</tr>
+<tr>
+<td style="text-align:left">0xC3(ROOT_PRIMITIVE_ARRAY_NODATA)</td>
+<td style="text-align:center">mIdSize byte string id</td>
+<td style="text-align:center">mIdSize byte stack id</td>
+<td style="text-align:center">4 byte num elements</td>
+<td style="text-align:center">4 byte primitive type</td>
+<td style="text-align:center">4 * num elements(skip)</td>
+</tr>
+<tr>
+<td style="text-align:left">0xfe(ROOT_HEAP_DUMP_INFO)</td>
+<td style="text-align:center">mIdSize byte heap id</td>
+<td style="text-align:center">mIdSize byte heap name id(string id)</td>
+</tr>
+<tr>
+<td style="text-align:left">0x89(ROOT_INTERNED_STRING)</td>
+<td style="text-align:center">mIdSize byte string id</td>
+</tr>
+<tr>
+<td style="text-align:left">0x8a(ROOT_FINALIZING)</td>
+<td style="text-align:center">mIdSize byte string id</td>
+</tr>
+<tr>
+<td style="text-align:left">0x8b(ROOT_DEBUGGER)</td>
+<td style="text-align:center">mIdSize byte string id</td>
+</tr>
+<tr>
+<td style="text-align:left">0x8c(ROOT_REFERENCE_CLEANUP)</td>
+<td style="text-align:center">mIdSize byte string id</td>
+</tr>
+<tr>
+<td style="text-align:left">0x8d(ROOT_VM_INTERNAL)</td>
+<td style="text-align:center">mIdSize byte string id</td>
+</tr>
+<tr>
+<td style="text-align:left">0x8e(ROOT_JNI_MONITOR)</td>
+<td style="text-align:center">mIdSize byte string id</td>
+<td style="text-align:center">4 byte thread serial number</td>
+<td style="text-align:center">4 byte stack frame number</td>
+</tr>
+<tr>
+<td style="text-align:left">0x90(ROOT_UNREACHABLE)</td>
+<td style="text-align:center">mIdSize byte    string id</td>
+</tr>
+<tr>
+<td style="text-align:left">0x1C（HEAP DUMP SEGMENT)</td>
+<td style="text-align:center">4 byte</td>
+<td style="text-align:center">mIdSize byte (length)</td>
+</tr>
+</tbody>
+</table>
+<h4 id="2-2-ROOT-CLASS-DUMP的格式"><a href="#2-2-ROOT-CLASS-DUMP的格式" class="headerlink" title="2.2 ROOT_CLASS_DUMP的格式"></a>2.2 ROOT_CLASS_DUMP的格式</h4><table>
+<thead>
+<tr>
+<th style="text-align:left"></th>
+<th style="text-align:center"></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">0x20(ROOT_CLASS_DUMP)</td>
+<td style="text-align:center">1</td>
+</tr>
+<tr>
+<td style="text-align:left">id</td>
+<td style="text-align:center">4</td>
+</tr>
+<tr>
+<td style="text-align:left">stack serial number</td>
+<td style="text-align:center">4</td>
+</tr>
+<tr>
+<td style="text-align:left">super class id</td>
+<td style="text-align:center">4</td>
+</tr>
+<tr>
+<td style="text-align:left">class loader id</td>
+<td style="text-align:center">4</td>
+</tr>
+<tr>
+<td style="text-align:left">signeres id</td>
+<td style="text-align:center">4</td>
+</tr>
+<tr>
+<td style="text-align:left">protection domain id</td>
+<td style="text-align:center">4</td>
+</tr>
+<tr>
+<td style="text-align:left">reserved</td>
+<td style="text-align:center">4</td>
+</tr>
+<tr>
+<td style="text-align:left">reserved</td>
+<td style="text-align:center">4</td>
+</tr>
+<tr>
+<td style="text-align:left">instance size</td>
+<td style="text-align:center">4</td>
+</tr>
+<tr>
+<td style="text-align:left">const pool num entries</td>
+<td style="text-align:center">2</td>
+</tr>
+<tr>
+<td style="text-align:left">2 * num entries</td>
+</tr>
+<tr>
+<td style="text-align:left">static fields num entries</td>
+<td style="text-align:center">2</td>
+</tr>
+<tr>
+<td style="text-align:left">static fields</td>
+<td style="text-align:center">static fields num entries * (static fields)，下面会再单独列出来</td>
+</tr>
+<tr>
+<td style="text-align:left">instance fields num entries</td>
+<td style="text-align:center">2</td>
+</tr>
+<tr>
+<td style="text-align:left">instance fields</td>
+<td style="text-align:center">instance fields num entries * (instance fields)</td>
+</tr>
+</tbody>
+</table>
+<h4 id="2-3-0x20-ROOT-CLASS-DUMP-Static-Fields"><a href="#2-3-0x20-ROOT-CLASS-DUMP-Static-Fields" class="headerlink" title="2.3 0x20(ROOT_CLASS_DUMP).Static Fields"></a>2.3 0x20(ROOT_CLASS_DUMP).Static Fields</h4><table>
+<thead>
+<tr>
+<th style="text-align:left"></th>
+<th style="text-align:center"></th>
+<th style="text-align:center"></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">4</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">4</td>
+</tr>
+<tr>
+<td style="text-align:left">static fields id</td>
+<td style="text-align:center">static fields type</td>
+<td style="text-align:center">type size</td>
+</tr>
+</tbody>
+</table>
+<h4 id="2-4-0x20-ROOT-CLASS-DUMP-Instance-Fields"><a href="#2-4-0x20-ROOT-CLASS-DUMP-Instance-Fields" class="headerlink" title="2.4 0x20(ROOT_CLASS_DUMP).Instance Fields"></a>2.4 0x20(ROOT_CLASS_DUMP).Instance Fields</h4><table>
+<thead>
+<tr>
+<th style="text-align:left"></th>
+<th style="text-align:center"></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">4</td>
+<td style="text-align:center">1</td>
+</tr>
+<tr>
+<td style="text-align:left">instance id</td>
+<td style="text-align:center">instance type</td>
+</tr>
+</tbody>
+</table>
+<h4 id="2-5-HEAP-DUMP和HEAP-DUMP-SEGMENT的区别"><a href="#2-5-HEAP-DUMP和HEAP-DUMP-SEGMENT的区别" class="headerlink" title="2.5 HEAP DUMP和HEAP DUMP SEGMENT的区别"></a>2.5 HEAP DUMP和HEAP DUMP SEGMENT的区别</h4><p>如果你仔细研究了上面的内容的话，可能你就会有这样一个问题，HEAP DUMP和HEAP DUMP SEGMENT有什么区别？为什么要有两个标记？<br>其实堆转储的hprof文件格式中，原本是使用4字节32位存储堆对象的 “HEAP DUMP” (0x0C)的区块长度，但同时也就限制了HEAP DUMP的大小必须在4GB以内。在出现这个问题的情况下，在HPROF文件中新增了”HEAP DUMP SEGMENT” (0x1C)的格式，用来将超过4GB的JVM堆对象信息分别存储到文件的多个区块中。</p>
+<p><a href="https://www.ibm.com/developerworks/community/blogs/kevgrig/entry/be_careful_with_hprof_heapdumps_bigger_than_4gb?lang=en_us" target="_blank" rel="noopener">Be Careful with HPROF Heapdumps Bigger than 4GB </a> @2013-04-16</p>
+<h3 id="0x03-理解JVM内存模型"><a href="#0x03-理解JVM内存模型" class="headerlink" title="0x03 理解JVM内存模型"></a>0x03 理解JVM内存模型</h3><p><img src="/res/android-vm-1/jvm-memory-model.png" alt="jvm-memory-model.png"></p>
+<ol>
+<li><p><strong>程序计数器</strong><br>在一个确定的时刻都只会执行一条线程中的指令，一条线程中有多个指令，为了线程切换可以恢复到正确执行位置，每个线程都需有独立的一个程序计数器，不同线程之间的程序计数器互不影响，独立存储。如果线程执行的是个java方法，那么计数器记录虚拟机字节码指令的地址。如果为native【底层方法】，那么计数器为空。这块内存区域是虚拟机规范中唯一没有OutOfMemoryError的区域。</p>
+</li>
+<li><p><strong>Java虚拟机栈</strong><br>线程私有，每个方法被执行的时候都会创建一个栈帧用于存储局部变量表，操作栈，动态链接，方法出口等信息。每一个方法被调用的过程就对应一个栈帧在虚拟机栈中从入栈到出栈的过程。</p>
+</li>
+<li><p><strong>本地方法栈</strong><br>线程私有，本地方法栈的功能和特点类似于虚拟机栈，不同的是，本地方法栈服务的对象是JVM执行的native方法，而虚拟机栈服务的是JVM执行的java方法。我们常见的HotSpot虚拟机选择合并了虚拟机栈和本地方法栈。</p>
+</li>
+<li><p><strong>Java堆</strong><br>所有线程共享的内存区域，所有对象实例及数组都要在堆上分配内存。</p>
+</li>
+<li><p><strong>方法区</strong><br>所有线程共享的内存区域，为了区分堆，又被称为非堆。用于存储已被虚拟机加载的类信息、常量、静态变量，如static修饰的变量加载类的时候就被加载到方法区中。</p>
+</li>
+</ol>
+<p>在谈到JVM内存结构时，从HPROF文件的header和body部分就有体现，从数据上划分结构就可以分为方法区（包括运行时常量池，也就是header中string table的部分）、java堆（body部分）、虚拟机栈、本地方法栈和程序计数器。其中方法区和java堆部分是所有线程共享的数据区，其他则为线程独有的数据区。<strong>为什么会有这样的结构划分和设计？</strong><br>先看设计内存的目的，是因为随着CPU运转速度越来越快，磁盘远远跟不上CPU的读写速度，才设计了内存。但是随着CPU的发展，内存的读写速度也远远跟不上CPU的读写速度，为了解决这一纠纷，CPU厂商在每颗CPU上加入了高速缓存来缓解这种症状。基于高速缓存的存储交互很好的解决了处理器与内存之间的矛盾，也引入了新的问题：缓存一致性问题。在多处理器系统中，每个处理器有自己的高速缓存，而他们又共享同一块内存。回到JVM的内存模型中， Java中通过多线程机制使得多个任务同时执行处理，所有的线程共享JVM内存区域main memory，而每个线程又单独的有自己的工作内存，当线程与内存区域进行交互时，数据从主存拷贝到工作内存，进而交由线程处理。这样也就说的通了，为啥在JVM中有的区域是线程共享的，有的区域是线程独享的。</p>
+<h3 id="0x04-什么是GC和GC-ROOTS？"><a href="#0x04-什么是GC和GC-ROOTS？" class="headerlink" title="0x04 什么是GC和GC_ROOTS？"></a>0x04 什么是GC和GC_ROOTS？</h3><h4 id="4-1-什么是GC"><a href="#4-1-什么是GC" class="headerlink" title="4.1 什么是GC"></a>4.1 什么是GC</h4><p>垃圾回收(Garbage Collection，简称GC)，是垃圾回收器提供的一种用于在空闲时间不定时回收无任何对象引用的对象占据的内存空间的一种机制。这种机制也不单单只有Java虚拟机才有，ObjectC和C#都有自己相应的垃圾回收机制，垃圾回收机制是帮助程序员自动管理对象内存空间的机制。</p>
+<h4 id="4-2-什么是GC-ROOTS"><a href="#4-2-什么是GC-ROOTS" class="headerlink" title="4.2 什么是GC ROOTS"></a>4.2 什么是GC ROOTS</h4><p>常见的垃圾回收方式，引用计数算法和根搜索算法。<br><strong>引用计数</strong>就像是每个对象有个账本，当一个对象被另一个对象引用时该对象的引用计数器+1，当引用失效时引用计数器-1，任何引用计数为0的对象可以被当作垃圾收集。引用计数有一个先天的缺陷，那就是多个对象相互持有引用形成一个引用环是，那么环中的所有对象引用计数都不为0，这时这些对象都不能被垃圾回收器回收。<br><strong>根节点搜索</strong>指的是从根节点集合出发找到所有引用链可达对象，当一个对象到根节点集合（GC ROOTS）没有任何引用链存在时就证明此对象是不可用的。从对比JVM规范的垃圾回收根节点(来自：<a href="http://help.eclipse.org/luna/index.jsp?topic=%2Forg.eclipse.mat.ui.help%2Fconcepts%2Fgcroots.html&amp;cp=37_2_3" target="_blank" rel="noopener">Garbage Collection Roots</a>)、HPROF文件协议中的GC ROOTS tag类型和square haha库源码中对GC ROOTS的类型定义，参照下表。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">JVM规范名称</th>
+<th style="text-align:center">HPROF中的TAG</th>
+<th style="text-align:center">haha库中的RootType枚举类型</th>
+<th style="text-align:center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">System Class</td>
+<td style="text-align:center">0x05</td>
+<td style="text-align:center">RootType.SYSTEM_CLASS</td>
+<td style="text-align:center">被bootstrap/system class加载器加载的类，例如所有rt.jar中包名为 java.util.*的类</td>
+</tr>
+<tr>
+<td style="text-align:left">JNI Local</td>
+<td style="text-align:center">0x02</td>
+<td style="text-align:center">RootType.NATIVE_LOCAL</td>
+<td style="text-align:center">native代码中的本地变量，例如user defined JNI code or JVM internal code</td>
+</tr>
+<tr>
+<td style="text-align:left">JNI Global</td>
+<td style="text-align:center">0x01</td>
+<td style="text-align:center">RootType.NATIVE_STATIC</td>
+<td style="text-align:center">native中的全局变量，例如user defined JNI code or JVM internal code</td>
+</tr>
+<tr>
+<td style="text-align:left">Thread Block</td>
+<td style="text-align:center">0x06</td>
+<td style="text-align:center">RootType.THREAD_BLOCK</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:left">Thread</td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:left">Busy Monitor</td>
+<td style="text-align:center">0x07</td>
+<td style="text-align:center">RootType.BUSY_MONITOR</td>
+<td style="text-align:center">所有调用 wait()、 notify()方法的， 或者同步的。For example, by calling synchronized(Object) or by entering a synchronized method. Static method means class, non-static method means object.</td>
+</tr>
+<tr>
+<td style="text-align:left">Java Local</td>
+<td style="text-align:center">0x03</td>
+<td style="text-align:center">RootType.JAVA_LOCAL</td>
+<td style="text-align:center">本地变量，例如线程栈帧中的参数和方法</td>
+</tr>
+<tr>
+<td style="text-align:left">Native Stack</td>
+<td style="text-align:center">0x04</td>
+<td style="text-align:center">RootType.NATIVE_STACK</td>
+<td style="text-align:center">In or out parameters in native code, such as user defined JNI code or JVM internal code. This is often the case as many methods have native parts and the objects handled as method parameters become GC roots. For example, parameters used for file/network I/O methods or reflection</td>
+</tr>
+<tr>
+<td style="text-align:left">Finalizable</td>
+<td style="text-align:center">0x8a</td>
+<td style="text-align:center">RootType.FINALIZING</td>
+<td style="text-align:center">在finalizer等待队列里的对象</td>
+</tr>
+<tr>
+<td style="text-align:left">Unfinalized</td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:left">Unreachable</td>
+<td style="text-align:center">0x90</td>
+<td style="text-align:center">RootType.UNREACHABLE</td>
+<td style="text-align:center">从其他根节点都无法到达的对象</td>
+</tr>
+<tr>
+<td style="text-align:left">Java Stack Frame</td>
+<td style="text-align:center">0x03</td>
+<td style="text-align:center">RootType.JAVA_LOCAL</td>
+<td style="text-align:center">A Java stack frame, holding local variables. Only generated when the dump is parsed with the preference set to treat Java stack frames as objects.</td>
+</tr>
+<tr>
+<td style="text-align:left">Unknown</td>
+<td style="text-align:center">0xff</td>
+<td style="text-align:center">RootType.UNKNOWN</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:center">0x89</td>
+<td style="text-align:center">RootType.INTERNED_STRING</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:center">0x8b</td>
+<td style="text-align:center">RootType.DEBUGGER</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:center">0x8c</td>
+<td style="text-align:center">RootType.REFERENCE_CLEANUP</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:center">0x8d</td>
+<td style="text-align:center">RootType.VM_INTERNAL</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:center">0x8e</td>
+<td style="text-align:center">RootType.NATIVE_MONITOR</td>
+</tr>
+</tbody>
+</table>
+<p>对照上面这个表总结起来，所谓JVM GC Roots是进行垃圾回收时根节点的集合。大致包含以下几个方面：</p>
+<ul>
+<li>所有Java线程当前活跃的栈帧所指向GC堆里的对象的引用，换句话说，当前所有正在被调用的方法的引用类型的参数/局部变量/临时值。</li>
+<li>VM的一些静态数据结构里指向GC堆里的对象的引用，例如说HotSpot VM里的Universe里有很多这样的引用。</li>
+<li>所有当前被加载的Java类</li>
+<li>JNI handles，包括global handles和local handles</li>
+<li>Java类的引用类型静态变量</li>
+<li>Java类的运行时常量池里的引用类型常量（String或Class类型）</li>
+<li>String常量池（StringTable）里的引用</li>
+</ul>
+<p>按照根搜索GC的思想，从根节点出发的找到的对象就被认定为存活的，其他的对象都是“无用的”，但是GC ROOTS的集合不应该是一成不变的，特别是面对分代GC时。为啥这样说呢？分代GC是一种部分收集（partial collection）的做法。在执行部分收集时，从GC堆的非收集部分指向收集部分的引用，也必须作为GC roots的一部分。具体到分两代的分代式GC来说，如果第0代叫做young gen，第1代叫做old gen，那么如果有minor GC / young GC只收集young gen里的垃圾，则young gen属于“收集部分”，而old gen属于“非收集部分”，那么从old gen指向young gen的引用就必须作为minor GC / young GC的GC ROOTS的一部分。所以针对一次GC来说，GC ROOTS的类型类型范围未必只有jvm规范定义中所列举的那几种情况。</p>
+<h3 id="0x05-Android虚拟机有分代GC吗？"><a href="#0x05-Android虚拟机有分代GC吗？" class="headerlink" title="0x05 Android虚拟机有分代GC吗？"></a>0x05 Android虚拟机有分代GC吗？</h3><p>Android Q开始google才为ART虚拟机添加分代收集机制。</p>
+<h3 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h3><p><a href="https://www.cnblogs.com/kingszelda/p/7226080.html" target="_blank" rel="noopener">JVM内存模型与GC算法</a><br><a href="https://my.oschina.net/u/217380/blog/1507542" target="_blank" rel="noopener">Android Hprof 协议</a><br><a href="https://www.zhihu.com/question/53613423/answer/135743258" target="_blank" rel="noopener">java的gc为什么要分代？RednaxelaFX的回答</a><br><a href="https://cloud.tencent.com/developer/article/1405124" target="_blank" rel="noopener">Android Q Beta 正式发布 | 精于形，安于内</a><br><a href="https://www.cnblogs.com/dingyingsi/p/3760447.html" target="_blank" rel="noopener">https://www.cnblogs.com/dingyingsi/p/3760447.html</a></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/01/29/android-corner-shadow/" rel="next" title="Android系统上绘制圆角和阴影的几种姿势">
+                <i class="fa fa-chevron-left"></i> Android系统上绘制圆角和阴影的几种姿势
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">病已</p>
+              <div class="site-description motion-element" itemprop="description"></div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">34</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">8</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">39</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/ivonhoe" title="GitHub &rarr; https://github.com/ivonhoe" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:yangfan3687@163.com" title="E-Mail &rarr; mailto:yangfan3687@163.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#0x01-前言"><span class="nav-number">1.</span> <span class="nav-text">0x01 前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x02-堆转储HPROF协议"><span class="nav-number">2.</span> <span class="nav-text">0x02 堆转储HPROF协议</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-HPROF文件格式"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 HPROF文件格式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-ROOT-CLASS-DUMP的格式"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 ROOT_CLASS_DUMP的格式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-0x20-ROOT-CLASS-DUMP-Static-Fields"><span class="nav-number">2.3.</span> <span class="nav-text">2.3 0x20(ROOT_CLASS_DUMP).Static Fields</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-4-0x20-ROOT-CLASS-DUMP-Instance-Fields"><span class="nav-number">2.4.</span> <span class="nav-text">2.4 0x20(ROOT_CLASS_DUMP).Instance Fields</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-5-HEAP-DUMP和HEAP-DUMP-SEGMENT的区别"><span class="nav-number">2.5.</span> <span class="nav-text">2.5 HEAP DUMP和HEAP DUMP SEGMENT的区别</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x03-理解JVM内存模型"><span class="nav-number">3.</span> <span class="nav-text">0x03 理解JVM内存模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x04-什么是GC和GC-ROOTS？"><span class="nav-number">4.</span> <span class="nav-text">0x04 什么是GC和GC_ROOTS？</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#4-1-什么是GC"><span class="nav-number">4.1.</span> <span class="nav-text">4.1 什么是GC</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-2-什么是GC-ROOTS"><span class="nav-number">4.2.</span> <span class="nav-text">4.2 什么是GC ROOTS</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x05-Android虚拟机有分代GC吗？"><span class="nav-number">5.</span> <span class="nav-text">0x05 Android虚拟机有分代GC吗？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考文档"><span class="nav-number">6.</span> <span class="nav-text">参考文档</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">病已</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.1.2</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=3.4.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.2"></script>
+
+  <script src="/js/motion.js?v=7.1.2"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/affix.js?v=7.1.2"></script>
+
+  <script src="/js/schemes/pisces.js?v=7.1.2"></script>
+
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.1.2"></script>
+<script src="/js/post-details.js?v=7.1.2"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.1.2"></script>
+
+
+  
+
+  
+
+  
+
+  
+  
+
+<script src="//cdn1.lncld.net/static/js/3.11.1/av-min.js"></script>
+
+
+
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+
+<script>
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: 'JdLpddsaWqwfJtXPdDK8woaF-gzGzoHsz',
+    appKey: 'CEmtHXH8f0PtvF0zYtVE0EeY',
+    placeholder: 'Just go go',
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: false,
+    lang: '' || 'zh-cn'
+  });
+</script>
+
+
+
+
+  
+
+
+  
+
+
+
+
+  
+  
+  <script>
+    
+    function addCount(Counter) {
+      var $visitors = $('.leancloud_visitors');
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+
+      Counter('get', '/classes/Counter', { where: JSON.stringify({ url }) })
+        .done(function({ results }) {
+          if (results.length > 0) {
+            var counter = results[0];
+            
+            Counter('put', '/classes/Counter/' + counter.objectId, JSON.stringify({ time: { '__op': 'Increment', 'amount': 1 } }))
+            
+              .done(function() {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.time + 1);
+              })
+            
+              .fail(function ({ responseJSON }) {
+                console.log('Failed to save Visitor num, with error message: ' + responseJSON.error);
+              })
+          } else {
+            
+              var $element = $(document.getElementById(url));
+              $element.find('.leancloud-visitors-count').text('Counter not initialized! More info at console err msg.');
+              console.error('ATTENTION! LeanCloud counter has security bug, see how to solve it here: https://github.com/theme-next/hexo-leancloud-counter-security. \n However, you can still use LeanCloud without security, by setting `security` option to `false`.');
+            
+          }
+        })
+        .fail(function ({ responseJSON }) {
+          console.log('LeanCloud Counter Error: ' + responseJSON.code + ' ' + responseJSON.error);
+        });
+    }
+    
+
+    $(function() {
+      $.get('https://app-router.leancloud.cn/2/route?appId=' + 'JdLpddsaWqwfJtXPdDK8woaF-gzGzoHsz')
+        .done(function({ api_server }) {
+          var Counter = function(method, url, data) {
+            return $.ajax({
+              method: method,
+              url: 'https://' + api_server + '/1.1' + url,
+              headers: {
+                'X-LC-Id': 'JdLpddsaWqwfJtXPdDK8woaF-gzGzoHsz',
+                'X-LC-Key': 'CEmtHXH8f0PtvF0zYtVE0EeY',
+                'Content-Type': 'application/json',
+              },
+              data: data
+            });
+          };
+          
+            const localhost = /http:\/\/(localhost|127.0.0.1|0.0.0.0)/;
+            if (localhost.test(document.URL)) {
+              return;
+            }
+            addCount(Counter);
+          
+        });
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
