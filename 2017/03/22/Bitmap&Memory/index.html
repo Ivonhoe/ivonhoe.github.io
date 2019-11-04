@@ -97,7 +97,7 @@
 
 
   <meta name="description" content="一、前言本来只想说下Bitmap和内存的基本关系，但发现如果真的想把这看似简单的事情说清楚，实际上未必那么简单，你不信？不妨先尝试下回答下面几个问题！  问1：什么是dpi？什么是dp？答：你在侮辱我？我拒绝回答！（：无辜脸 问2：以Nexus6为例，分辨率1440*2560，5.96英寸，ppi是什么？dpi是什么？1dp是多少像素？ 问3：还以Nexus6为例，一张180*180的图片，放置在">
-<meta name="keywords" content="Bitmap,Drawable,内存">
+<meta name="keywords" content="Drawable,Bitmap,内存">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Android Bitmap的内存大小是如何计算的？">
 <meta property="og:url" content="https://ivonhoe.github.io/2017/03/22/Bitmap&Memory/index.html">
@@ -603,9 +603,9 @@
         
         <div class="post-tags">
           
-            <a href="/tags/Bitmap/" rel="tag"># Bitmap</a>
-          
             <a href="/tags/Drawable/" rel="tag"># Drawable</a>
+          
+            <a href="/tags/Bitmap/" rel="tag"># Bitmap</a>
           
             <a href="/tags/内存/" rel="tag"># 内存</a>
           
@@ -1083,7 +1083,7 @@
     avatar: 'mm',
     meta: guest,
     pageSize: '10' || 10,
-    visitor: false,
+    visitor: true,
     lang: '' || 'zh-cn'
   });
 </script>
@@ -1100,70 +1100,6 @@
 
 
   
-  
-  <script>
-    
-    function addCount(Counter) {
-      var $visitors = $('.leancloud_visitors');
-      var url = $visitors.attr('id').trim();
-      var title = $visitors.attr('data-flag-title').trim();
-
-      Counter('get', '/classes/Counter', { where: JSON.stringify({ url }) })
-        .done(function({ results }) {
-          if (results.length > 0) {
-            var counter = results[0];
-            
-            Counter('put', '/classes/Counter/' + counter.objectId, JSON.stringify({ time: { '__op': 'Increment', 'amount': 1 } }))
-            
-              .done(function() {
-                var $element = $(document.getElementById(url));
-                $element.find('.leancloud-visitors-count').text(counter.time + 1);
-              })
-            
-              .fail(function ({ responseJSON }) {
-                console.log('Failed to save Visitor num, with error message: ' + responseJSON.error);
-              })
-          } else {
-            
-              var $element = $(document.getElementById(url));
-              $element.find('.leancloud-visitors-count').text('Counter not initialized! More info at console err msg.');
-              console.error('ATTENTION! LeanCloud counter has security bug, see how to solve it here: https://github.com/theme-next/hexo-leancloud-counter-security. \n However, you can still use LeanCloud without security, by setting `security` option to `false`.');
-            
-          }
-        })
-        .fail(function ({ responseJSON }) {
-          console.log('LeanCloud Counter Error: ' + responseJSON.code + ' ' + responseJSON.error);
-        });
-    }
-    
-
-    $(function() {
-      $.get('https://app-router.leancloud.cn/2/route?appId=' + 'JdLpddsaWqwfJtXPdDK8woaF-gzGzoHsz')
-        .done(function({ api_server }) {
-          var Counter = function(method, url, data) {
-            return $.ajax({
-              method: method,
-              url: 'https://' + api_server + '/1.1' + url,
-              headers: {
-                'X-LC-Id': 'JdLpddsaWqwfJtXPdDK8woaF-gzGzoHsz',
-                'X-LC-Key': 'CEmtHXH8f0PtvF0zYtVE0EeY',
-                'Content-Type': 'application/json',
-              },
-              data: data
-            });
-          };
-          
-            const localhost = /http:\/\/(localhost|127.0.0.1|0.0.0.0)/;
-            if (localhost.test(document.URL)) {
-              return;
-            }
-            addCount(Counter);
-          
-        });
-    });
-  </script>
-
-
 
   
 
