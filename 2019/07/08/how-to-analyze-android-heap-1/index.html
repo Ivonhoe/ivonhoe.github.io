@@ -1,0 +1,1103 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.2">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.1.2">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.1.2">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.1.2">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.1.2" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.1.2',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="0x01 前言对内存问题的分析中一个必不可少的环节应该就是对hprof的分析了，常见的MAT和Leakcanry都是针对hprof文件的分析工具。这篇文章就记录下做内存分析的一般工具和分析步骤。">
+<meta name="keywords" content="性能优化">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android内存分析的一般方法">
+<meta property="og:url" content="https://ivonhoe.github.io/2019/07/08/how-to-analyze-android-heap-1/index.html">
+<meta property="og:site_name" content="病已的博客">
+<meta property="og:description" content="0x01 前言对内存问题的分析中一个必不可少的环节应该就是对hprof的分析了，常见的MAT和Leakcanry都是针对hprof文件的分析工具。这篇文章就记录下做内存分析的一般工具和分析步骤。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://ivonhoe.github.io/res/hprof/analyze_hprof_1.png">
+<meta property="og:updated_time" content="2020-02-08T15:14:13.746Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android内存分析的一般方法">
+<meta name="twitter:description" content="0x01 前言对内存问题的分析中一个必不可少的环节应该就是对hprof的分析了，常见的MAT和Leakcanry都是针对hprof文件的分析工具。这篇文章就记录下做内存分析的一般工具和分析步骤。">
+<meta name="twitter:image" content="https://ivonhoe.github.io/res/hprof/analyze_hprof_1.png">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="病已的博客" type="application/atom+xml">
+
+
+
+  
+  
+  <link rel="canonical" href="https://ivonhoe.github.io/2019/07/08/how-to-analyze-android-heap-1/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Android内存分析的一般方法 | 病已的博客</title>
+  
+
+
+
+
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?666a58de875adc9dd40d5de65ceac026";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">病已的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">枕上，马上，厕上</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+  
+  
+
+  
+
+  <a href="https://github.com/Ivonhoe" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewbox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a>
+
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://ivonhoe.github.io/2019/07/08/how-to-analyze-android-heap-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="病已">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="病已的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Android内存分析的一般方法
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：7月 8 2019 23:04:56" itemprop="dateCreated datePublished" datetime="2019-07-08T23:04:56+08:00">7月 8 2019</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2月 8 2020 23:14:13" itemprop="dateModified" datetime="2020-02-08T23:14:13+08:00">2月 8 2020</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Android性能优化/" itemprop="url" rel="index"><span itemprop="name">Android性能优化</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2019/07/08/how-to-analyze-android-heap-1/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2019/07/08/how-to-analyze-android-heap-1/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+            <span id="/2019/07/08/how-to-analyze-android-heap-1/" class="leancloud_visitors" data-flag-title="Android内存分析的一般方法">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              
+                <span class="post-meta-item-text">阅读次数：</span>
+              
+                <span class="leancloud-visitors-count"></span>
+            </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="0x01-前言"><a href="#0x01-前言" class="headerlink" title="0x01 前言"></a>0x01 前言</h3><p>对内存问题的分析中一个必不可少的环节应该就是对hprof的分析了，常见的MAT和Leakcanry都是针对hprof文件的分析工具。这篇文章就记录下做内存分析的一般工具和分析步骤。</p>
+<a id="more"></a>
+<h3 id="0x02-使用dumpsys分析内存"><a href="#0x02-使用dumpsys分析内存" class="headerlink" title="0x02 使用dumpsys分析内存"></a>0x02 使用dumpsys分析内存</h3><p><code>adb shell dumpsys meminfo $applicationId [-d]</code></p>
+<p><img src="/res/hprof/analyze_hprof_1.png" alt></p>
+<p><strong>私有内存 Private (Clean and Dirty)</strong><br>这是仅属于你的进程的内存，这是你的进程被销毁时系统可以回收的RAM。通常情况下最重要的部分是Private Dirty RAM。</p>
+<p><strong>按比例分配占用内存 PSS</strong><br>这表示您的应用的 RAM 使用情况，考虑了在各进程之间共享 RAM 页的情况。您的进程独有的任何 RAM 页会直接影响其 PSS 值，而与其他进程共享的 RAM 页仅影响与共享量成比例的 PSS 值。例如，两个进程之间共享的 RAM 页会将其一半的大小贡献给每个进程的 PSS。</p>
+<p>通常情况下，仅需关注 Pss Total 和 Private Dirty 列。一些情况下，Private Clean 和 Heap Alloc 列提供的数据也需要关注。</p>
+<p><strong>Dalvik Heap</strong></p>
+<blockquote>
+<p>PSS Total: 包括所有 Zygote 按比例分配的内存。<br>Private Dirty:  数值是仅分配到您应用的堆的实际 RAM，是由自己的分配和任何 Zygote 分配页组成，这些分配页自从 Zygote 派生应用进程以来已被修改(COW)。</p>
+</blockquote>
+<p><strong>.so mmap 和 .dex mmap</strong></p>
+<blockquote>
+<p>Pss Total: 包括应用之间共享的平台代码<br>Private Clean: 是应用自己的代码</p>
+</blockquote>
+<p><strong>.oat mmap</strong></p>
+<blockquote>
+<p>这是代码映像占用的 RAM 量，根据多个应用通常使用的预加载类计算。此映像在所有应用之间共享，不受特定应用影响</p>
+</blockquote>
+<p><strong>EGL mtrack 和 GL mtrack</strong></p>
+<blockquote>
+<p>EGL mtrack: gralloc分配的内存，主要是窗口系统，SurfaceView/TextureView和其他的由gralloc分配的GraphicBuffer总和<br>GL mtrack: 驱动上报的GL内存使用情况。 主要是GL texture大小，GL command buffer，固定的全局驱动程序RAM开销等的总和</p>
+</blockquote>
+<p>这里有一个小技巧，应用开发者调用startTrimMemory会帮助app或者系统更多的释放内存，减少内存压力，但是调用的位置和时机要慎重，因为清除了缓存，在下一次绘制（vsync的下一个信号到来）的时候绘制效率不会很高。详细原理可参考：<a href="https://cloud.tencent.com/developer/article/1070616" target="_blank" rel="noopener">https://cloud.tencent.com/developer/article/1070616</a></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 清除GPU绘图缓存</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">cleanGraphicsCache</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    Object instance = ReflectUtils.getStaticMethod(<span class="string">"android.view.WindowManagerGlobal"</span>,</span><br><span class="line">            <span class="string">"getInstance"</span>, <span class="keyword">null</span>, <span class="keyword">null</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        Class threadClazz = Class.forName(<span class="string">"android.view.WindowManagerGlobal"</span>);</span><br><span class="line">        Method m1 = threadClazz.getDeclaredMethod(<span class="string">"trimMemory"</span>, <span class="keyword">int</span>.class);</span><br><span class="line">        m1.invoke(instance, TRIM_MEMORY_COMPLETE);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (ClassNotFoundException e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125; <span class="keyword">catch</span> (NoSuchMethodException e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125; <span class="keyword">catch</span> (IllegalAccessException e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125; <span class="keyword">catch</span> (InvocationTargetException e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>TOATAL</strong></p>
+<blockquote>
+<p>进程占用的按比例分配占用内存 (PSS) 总量。等于上方所有 PSS 字段的总和。表示您的进程占用的内存量占整体内存的比重，可以直接与其他进程和可用总 RAM 比较。<br>Private Dirty 和 Private Clean 是进程中的总分配，未与其他进程共享。它们（尤其是 Private Dirty）等于你的进程被破坏后将释放回系统中的 RAM 量。Dirty RAM 是因为已被修改而必须保持在 RAM 中的 RAM 页（因为没有交换）；Clean RAM 是已从某个持久性文件（例如正在执行的代码）映射的 RAM 页，如果一段时间不用，可以移出分页。</p>
+</blockquote>
+<p><strong>ViewRootImpl</strong><br>根视图数量，每一个根视图关联一个window，由此可确定涉及对话框或其他window的内存泄露。</p>
+<p><strong>AppContexts 和 Activities</strong><br>Context和Activity对象数量，用于快速确定Activity的泄露情况。</p>
+<h3 id="0x03-使用堆转储工具"><a href="#0x03-使用堆转储工具" class="headerlink" title="0x03 使用堆转储工具"></a>0x03 使用堆转储工具</h3><p>将android app的内存信息转换成hprof格式的磁盘文件，这个过程就叫堆转储。堆转储的目标当然是为了获取当前Java虚拟机的内存信息以供排查内存问题。在android平台上常见的三种堆转储方法。</p>
+<ol>
+<li>使用sdk自带的DDMS工具完成堆转储</li>
+<li>使用Android Studio提供的Android Profiler工具完成堆转储</li>
+<li>使用Android sdk提供的api堆转储，以下代码为api实例</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    String state = android.os.Environment.getExternalStorageState();</span><br><span class="line">    <span class="comment">// 判断SdCard是否存在并且是可用的</span></span><br><span class="line">    <span class="keyword">if</span> (android.os.Environment.MEDIA_MOUNTED.equals(state)) &#123;</span><br><span class="line">        String dumpDir = Hprof.getDumpDir(context);</span><br><span class="line">        android.os.Debug.dumpHprofData(dumpDir);</span><br><span class="line">        Logger.d(String.format(<span class="string">"create dumpfile %s done!"</span>, dumpDir));</span><br><span class="line">        <span class="keyword">return</span> dumpDir;</span><br><span class="line">    &#125;</span><br><span class="line">&#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">    e.printStackTrace();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="0x04-使用hprof文件分析工具"><a href="#0x04-使用hprof文件分析工具" class="headerlink" title="0x04 使用hprof文件分析工具"></a>0x04 使用hprof文件分析工具</h3><p>Memory Analyzer Tool（简称MAT） 使用方法可参考： <a href="http://www.androidperformance.com/2015/04/11/AndroidMemory-Usage-Of-MAT-Pro/" target="_blank" rel="noopener">Android内存优化之二：MAT使用进阶</a>。<br>这里补充的是，MAT支持使用OQL（对象查询语言）查询堆文件信息，你可以像类似使用SQL查询数据库一样查询堆文件上的内存对象的信息，举个例子，我想知道当前内存中有多少个Activity？</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> instanceof android.app.Activity</span><br></pre></td></tr></table></figure>
+<p><a href="/res/jvm-2/mat-1.png"></a></p>
+<p>查询大小大于100kb大小的Bitmap对象，图略<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> instanceof android.graphics.Bitmap s <span class="keyword">where</span> s.@retainedHeapSize &gt;<span class="number">100000</span></span><br></pre></td></tr></table></figure></p>
+<p>关于OQL详情参考：<a href="http://help.eclipse.org/kepler/index.jsp，搜索OQL" target="_blank" rel="noopener">http://help.eclipse.org/kepler/index.jsp，搜索OQL</a></p>
+<h3 id="0x05-使用Leakcanary监控泄露"><a href="#0x05-使用Leakcanary监控泄露" class="headerlink" title="0x05 使用Leakcanary监控泄露"></a>0x05 使用Leakcanary监控泄露</h3><p>LeakCanary是内存泄露检测工具，<a href="https://www.liaohuqiu.net/cn/posts/leak-canary-read-me/" target="_blank" rel="noopener">LeakCanary 中文使用说明</a>和LeakCanary的开源地址：<a href="https://github.com/square/leakcanary" target="_blank" rel="noopener">https://github.com/square/leakcanary</a></p>
+<p><strong>如何监控内存泄露的发生？</strong><br>利用弱引用。当JVM进行垃圾回收时，无论内存是否充足，如果该对象只有弱引用存在，那么该对象会被垃圾回收器回收。所以Leakcanary在进行内存泄露的监控时，利用弱引用的上述特性，在对象生命周期结束后主动gc并检查该对象的弱引用是否被回收，如果弱引用没有被正常回收，说明在对象生命周期结束以后，该对象还被其他对象持有他的非弱引用。该对象还有到达GC ROOTS的可达路径。如果在对象生命周期结束后弱引用不存在了，说明该对象已经被JVM的垃圾回收器正常回收了，该对象的内存空间也被正常回收。所以Leakcanary设计成是对有明确生命周期的对象的自动监控，比如Activity对象，也可以是你想要跟踪的有明确生命周期的对象。</p>
+<p><strong>如何判断弱引用被回收？</strong><br>利用ReferenceQueue。当垃圾回收器准备回收一个被引用包装的对象时，该引用会被加入到关联的ReferenceQueue。程序可以通过判断引用队列中是否已经加入引用,来了解被引用的对象是否被GC回收。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">Retryable.<span class="function">Result <span class="title">ensureGone</span><span class="params">(<span class="keyword">final</span> KeyedWeakReference reference, <span class="keyword">final</span> <span class="keyword">long</span> watchStartNanoTime)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">long</span> gcStartNanoTime = System.nanoTime();</span><br><span class="line">    <span class="comment">//计算watch方法到gc垃圾回收的时长</span></span><br><span class="line">    <span class="keyword">long</span> watchDurationMs = NANOSECONDS.toMillis(gcStartNanoTime - watchStartNanoTime);</span><br><span class="line">    <span class="comment">//尝试移除已经到达引用队列的弱引用</span></span><br><span class="line">    removeWeaklyReachableReferences();</span><br><span class="line">    <span class="comment">//判断是否在debug</span></span><br><span class="line">    <span class="keyword">if</span> (debuggerControl.isDebuggerAttached()) &#123;</span><br><span class="line">      <span class="comment">// The debugger can create false leaks. (debug可以创造错误的内存泄露)</span></span><br><span class="line">      <span class="keyword">return</span> RETRY;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (gone(reference)) &#123;<span class="comment">//若当前对象已经可达了，即不会造成你内存泄露</span></span><br><span class="line">      <span class="keyword">return</span> DONE;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//手动gc，确保引用对象是否真的被回收了。因为在dump内存信息之前提示内存泄露的时候，希望系统经过充分gc垃圾回收，而不存在任何的误判，对leakcanary容错性的考虑</span></span><br><span class="line">    gcTrigger.runGc();</span><br><span class="line">    <span class="comment">//清除已经到达引用队列的弱引用</span></span><br><span class="line">    removeWeaklyReachableReferences();</span><br><span class="line">    <span class="keyword">if</span> (!gone(reference)) &#123;<span class="comment">//此时对象还没到达对列，代表已经内存泄露了</span></span><br><span class="line">      <span class="keyword">long</span> startDumpHeap = System.nanoTime();</span><br><span class="line">      <span class="keyword">long</span> gcDurationMs = NANOSECONDS.toMillis(startDumpHeap - gcStartNanoTime);</span><br><span class="line">      <span class="comment">//dump出内存泄露的heap文件,这里可能触发GC</span></span><br><span class="line">      File heapDumpFile = heapDumper.dumpHeap();</span><br><span class="line">      <span class="keyword">if</span> (heapDumpFile == RETRY_LATER) &#123;</span><br><span class="line">        <span class="comment">// Could not dump the heap.(不能dump heap堆文件)</span></span><br><span class="line">        <span class="keyword">return</span> RETRY;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="comment">//dump heap文件的时间计算</span></span><br><span class="line">      <span class="keyword">long</span> heapDumpDurationMs = NANOSECONDS.toMillis(System.nanoTime() - startDumpHeap);</span><br><span class="line">      <span class="comment">//真正分析内存泄露以及路径</span></span><br><span class="line">      HeapDump heapDump = heapDumpBuilder.heapDumpFile(heapDumpFile).referenceKey(reference.key)</span><br><span class="line">          .referenceName(reference.name)</span><br><span class="line">          .watchDurationMs(watchDurationMs)</span><br><span class="line">          .gcDurationMs(gcDurationMs)</span><br><span class="line">          .heapDumpDurationMs(heapDumpDurationMs)</span><br><span class="line">          .build();</span><br><span class="line">      heapdumpListener.analyze(heapDump);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> DONE;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p><strong>如何分析对象的被引用情况？</strong><br>遍历对象树。</p>
+<h3 id="0x06-使用三方库手动分析hprof文件"><a href="#0x06-使用三方库手动分析hprof文件" class="headerlink" title="0x06 使用三方库手动分析hprof文件"></a>0x06 使用三方库手动分析hprof文件</h3><p>可使用square提供的堆文件分析库(<code>com.squareup.haha:haha:2.0.4</code>)对hprof文件进行解析得到对象树。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">private Snapshot getSnapShot(String hprofPath) &#123;</span><br><span class="line">    File heapDumpFile = new File(hprofPath);</span><br><span class="line">    HprofBuffer hprofBuffer = null;</span><br><span class="line">    try &#123;</span><br><span class="line">        hprofBuffer = new MemoryMappedFileBuffer(heapDumpFile);</span><br><span class="line">        HprofParser parser = new HprofParser(hprofBuffer);</span><br><span class="line">        return parser.parse();</span><br><span class="line">    &#125; catch (IOException e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    return null;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="6-1-对象搜索"><a href="#6-1-对象搜索" class="headerlink" title="6.1 对象搜索"></a>6.1 对象搜索</h4><p>可根据解析获得的Snapshot对象完成对特定类名对象的查找操作。进而批量分析出当前内存中执行类型对象的数量和对象引用情况。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">List&lt;ClassObj&gt; classObjList = snapshot.findAllDescendantClasses(filterKey());</span><br><span class="line">List&lt;Instance&gt; allInstance = new ArrayList&lt;&gt;();</span><br><span class="line">for (ClassObj classObj : classObjList) &#123;</span><br><span class="line">    ClassObj instanceClass = snapshot.findClass(classObj.getClassName());</span><br><span class="line">    for (Instance instance : instanceClass.getInstancesList()) &#123;</span><br><span class="line">        allInstance.add(instance);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="6-2-对象树遍历"><a href="#6-2-对象树遍历" class="headerlink" title="6.2 对象树遍历"></a>6.2 对象树遍历</h4><p>可通过解析到的snapshot对象获取Root节点，自定义对象数爬虫，从Root节点遍历整个对象树，查找出异常对象的分布。如希望查找出当前对象树中，找到最大的组件类型有哪些：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mDistanceVisitor = new RetainedSizeVisitor();</span><br><span class="line">snapshot.computeDominators();</span><br><span class="line">// 找到最大的组件类型</span><br><span class="line">mDistanceVisitor.doVisit(snapshot.getGCRoots());</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * @author Ivonhoe on 2018/9/26.</span><br><span class="line"> */</span><br><span class="line">public class RetainedSizeVisitor extends NonRecursiveVisitor &#123;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * App space中retained size最大的对象</span><br><span class="line">     */</span><br><span class="line">    private FixedSizePriorityQueue mMaxRetainedQueue;</span><br><span class="line"></span><br><span class="line">    private List&lt;HeapInstanceEntry&gt; maxInstance;</span><br><span class="line"></span><br><span class="line">    public RetainedSizeVisitor() &#123;</span><br><span class="line">        mMaxRetainedQueue = new FixedSizePriorityQueue(30);</span><br><span class="line">        maxInstance = new ArrayList&lt;&gt;();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void visitRootObj(RootObj root) &#123;</span><br><span class="line">        super.visitRootObj(root);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    protected void defaultAction(Instance instance) &#123;</span><br><span class="line">        super.defaultAction(instance);</span><br><span class="line"></span><br><span class="line">        findTopNRetainedSizeInstanceInAppSpace(instance);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 找到retained大小最大的n个对象</span><br><span class="line">     */</span><br><span class="line">    private void findTopNRetainedSizeInstanceInAppSpace(Instance child) &#123;</span><br><span class="line">        if (child != null &amp;&amp; !(child instanceof ClassObj) &amp;&amp; child.getHeap().getId() == &apos;A&apos;) &#123;</span><br><span class="line">            mMaxRetainedQueue.add(child);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public void doVisit(Iterable&lt;? extends Instance&gt; startNodes) &#123;</span><br><span class="line">        super.doVisit(startNodes);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private static class FixedSizePriorityQueue &#123;</span><br><span class="line">        private PriorityQueue&lt;Instance&gt; queue;</span><br><span class="line">        private int maxSize; //堆的最大容量</span><br><span class="line"></span><br><span class="line">        public FixedSizePriorityQueue(int maxSize) &#123;</span><br><span class="line">            if (maxSize &lt;= 0) throw new IllegalArgumentException();</span><br><span class="line">            this.maxSize = maxSize;</span><br><span class="line">            this.queue = new PriorityQueue(maxSize, new Comparator&lt;Instance&gt;() &#123;</span><br><span class="line">                @Override</span><br><span class="line">                public int compare(Instance o1, Instance o2) &#123;</span><br><span class="line">                    return ((Long) o1.getTotalRetainedSize()).compareTo(o2.getTotalRetainedSize());</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        public void add(Instance e) &#123;</span><br><span class="line">            if (queue.size() &lt; maxSize) &#123; //未达到最大容量，直接添加</span><br><span class="line">                queue.add(e);</span><br><span class="line">            &#125; else &#123; //队列已满</span><br><span class="line">                Instance peek = queue.peek();</span><br><span class="line">                if (peek != null &amp;&amp; (e.getTotalRetainedSize() &gt; peek.getTotalRetainedSize())) &#123;</span><br><span class="line">                    queue.poll();</span><br><span class="line">                    queue.add(e);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h3><p><a href="https://developer.android.com/studio/command-line/dumpsys#meminfo" target="_blank" rel="noopener">https://developer.android.com/studio/command-line/dumpsys#meminfo</a><br><a href="https://cloud.tencent.com/developer/article/1070616" target="_blank" rel="noopener">https://cloud.tencent.com/developer/article/1070616</a><br><a href="https://cloud.tencent.com/developer/article/1070616" target="_blank" rel="noopener">https://cloud.tencent.com/developer/article/1070616</a><br><a href="http://gityuan.com/2016/01/02/memory-analysis-command/" target="_blank" rel="noopener">http://gityuan.com/2016/01/02/memory-analysis-command/</a><br><a href="https://blog.csdn.net/msf568834002/article/details/78881341" target="_blank" rel="noopener">https://blog.csdn.net/msf568834002/article/details/78881341</a></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        
+          
+        
+        <div class="post-tags">
+          
+            <a href="/tags/性能优化/" rel="tag"># 性能优化</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/06/27/android-vm-1/" rel="next" title="Android虚拟机的几个问题探究">
+                <i class="fa fa-chevron-left"></i> Android虚拟机的几个问题探究
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">病已</p>
+              <div class="site-description motion-element" itemprop="description"></div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">35</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">8</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">39</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/ivonhoe" title="GitHub &rarr; https://github.com/ivonhoe" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:yangfan3687@163.com" title="E-Mail &rarr; mailto:yangfan3687@163.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#0x01-前言"><span class="nav-number">1.</span> <span class="nav-text">0x01 前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x02-使用dumpsys分析内存"><span class="nav-number">2.</span> <span class="nav-text">0x02 使用dumpsys分析内存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x03-使用堆转储工具"><span class="nav-number">3.</span> <span class="nav-text">0x03 使用堆转储工具</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x04-使用hprof文件分析工具"><span class="nav-number">4.</span> <span class="nav-text">0x04 使用hprof文件分析工具</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x05-使用Leakcanary监控泄露"><span class="nav-number">5.</span> <span class="nav-text">0x05 使用Leakcanary监控泄露</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x06-使用三方库手动分析hprof文件"><span class="nav-number">6.</span> <span class="nav-text">0x06 使用三方库手动分析hprof文件</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#6-1-对象搜索"><span class="nav-number">6.1.</span> <span class="nav-text">6.1 对象搜索</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-2-对象树遍历"><span class="nav-number">6.2.</span> <span class="nav-text">6.2 对象树遍历</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考文档"><span class="nav-number">7.</span> <span class="nav-text">参考文档</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">病已</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.1.2</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=3.4.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.2"></script>
+
+  <script src="/js/motion.js?v=7.1.2"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/affix.js?v=7.1.2"></script>
+
+  <script src="/js/schemes/pisces.js?v=7.1.2"></script>
+
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.1.2"></script>
+<script src="/js/post-details.js?v=7.1.2"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.1.2"></script>
+
+
+  
+
+  
+
+  
+
+  
+  
+
+<script src="//cdn1.lncld.net/static/js/3.11.1/av-min.js"></script>
+
+
+
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+
+<script>
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: 'JdLpddsaWqwfJtXPdDK8woaF-gzGzoHsz',
+    appKey: 'CEmtHXH8f0PtvF0zYtVE0EeY',
+    placeholder: 'Just go go',
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: true,
+    lang: '' || 'zh-cn'
+  });
+</script>
+
+
+
+
+  
+
+
+  
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
