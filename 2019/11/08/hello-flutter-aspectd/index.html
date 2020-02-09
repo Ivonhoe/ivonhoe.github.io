@@ -1,0 +1,1109 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.2">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.1.2">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.1.2">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.1.2">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.1.2" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.1.2',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="0x00 前言什么是aspectd？aspectd是闲鱼针对dart的AOP开源框架。https://github.com/alibaba-flutter/aspectd.git阅读本文你将得到什么？  掌握aspectd的环境搭建，并如何在本地成功运行aspectd的demo 掌握有关aop的基础概念 了解aspectd的基础用法和原理">
+<meta name="keywords" content="flutter">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Flutter aspectd入门指引">
+<meta property="og:url" content="https://ivonhoe.github.io/2019/11/08/hello-flutter-aspectd/index.html">
+<meta property="og:site_name" content="病已的博客">
+<meta property="og:description" content="0x00 前言什么是aspectd？aspectd是闲鱼针对dart的AOP开源框架。https://github.com/alibaba-flutter/aspectd.git阅读本文你将得到什么？  掌握aspectd的环境搭建，并如何在本地成功运行aspectd的demo 掌握有关aop的基础概念 了解aspectd的基础用法和原理">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://ivonhoe.github.io/res/aspectd/aspectd_1.jpeg">
+<meta property="og:image" content="https://ivonhoe.github.io/res/aspectd/aspectd_2.jpeg">
+<meta property="og:updated_time" content="2020-02-08T15:25:12.793Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Flutter aspectd入门指引">
+<meta name="twitter:description" content="0x00 前言什么是aspectd？aspectd是闲鱼针对dart的AOP开源框架。https://github.com/alibaba-flutter/aspectd.git阅读本文你将得到什么？  掌握aspectd的环境搭建，并如何在本地成功运行aspectd的demo 掌握有关aop的基础概念 了解aspectd的基础用法和原理">
+<meta name="twitter:image" content="https://ivonhoe.github.io/res/aspectd/aspectd_1.jpeg">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="病已的博客" type="application/atom+xml">
+
+
+
+  
+  
+  <link rel="canonical" href="https://ivonhoe.github.io/2019/11/08/hello-flutter-aspectd/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Flutter aspectd入门指引 | 病已的博客</title>
+  
+
+
+
+
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?666a58de875adc9dd40d5de65ceac026";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">病已的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">枕上，马上，厕上</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+  
+  
+
+  
+
+  <a href="https://github.com/Ivonhoe" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewbox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a>
+
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://ivonhoe.github.io/2019/11/08/hello-flutter-aspectd/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="病已">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="病已的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Flutter aspectd入门指引
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：11月 8 2019 23:16:38" itemprop="dateCreated datePublished" datetime="2019-11-08T23:16:38+08:00">11月 8 2019</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2月 8 2020 23:25:12" itemprop="dateModified" datetime="2020-02-08T23:25:12+08:00">2月 8 2020</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Flutter/" itemprop="url" rel="index"><span itemprop="name">Flutter</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2019/11/08/hello-flutter-aspectd/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2019/11/08/hello-flutter-aspectd/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+            <span id="/2019/11/08/hello-flutter-aspectd/" class="leancloud_visitors" data-flag-title="Flutter aspectd入门指引">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              
+                <span class="post-meta-item-text">阅读次数：</span>
+              
+                <span class="leancloud-visitors-count"></span>
+            </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00 前言"></a>0x00 前言</h3><p>什么是aspectd？aspectd是闲鱼针对dart的AOP开源框架。<a href="https://github.com/alibaba-flutter/aspectd.git" target="_blank" rel="noopener">https://github.com/alibaba-flutter/aspectd.git</a><br>阅读本文你将得到什么？</p>
+<ol>
+<li>掌握aspectd的环境搭建，并如何在本地成功运行aspectd的demo</li>
+<li>掌握有关aop的基础概念</li>
+<li>了解aspectd的基础用法和原理</li>
+</ol>
+<a id="more"></a>
+<h3 id="0x01-准备"><a href="#0x01-准备" class="headerlink" title="0x01 准备"></a>0x01 准备</h3><h4 id="1-1-开发环境"><a href="#1-1-开发环境" class="headerlink" title="1.1 开发环境"></a>1.1 开发环境</h4><p>aspectd的环境搭建需要flutter源码、aspectd源码和dart源码，并需要在系统中设置相应的全局环境变量。</p>
+<h4 id="1-1-1-flutter环境"><a href="#1-1-1-flutter环境" class="headerlink" title="1.1.1 flutter环境"></a>1.1.1 flutter环境</h4><p>下载flutter源码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/flutter/flutter.git</span><br></pre></td></tr></table></figure>
+<h4 id="1-1-2-aspectd下载"><a href="#1-1-2-aspectd下载" class="headerlink" title="1.1.2 aspectd下载"></a>1.1.2 aspectd下载</h4><p>下载aspectd源码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/alibaba-flutter/aspectd.git</span><br></pre></td></tr></table></figure>
+<h4 id="1-1-3-环境变量"><a href="#1-1-3-环境变量" class="headerlink" title="1.1.3 环境变量"></a>1.1.3 环境变量</h4><p>配置flutter镜像、本地flutter源码地址、flutter bin目录、dart bin目录：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">export PUB_HOSTED_URL=https://pub.flutter-io.cn</span><br><span class="line">export FLUTTER_STORAGE_BASE_URL=https://storage.flutter-io.cn</span><br><span class="line">export PATH_TO_FLUTTER_GIT_DIRECTORY=/Users/Ivonhoe/Flutter/flutter</span><br><span class="line">export PATH=$PATH_TO_FLUTTER_GIT_DIRECTORY/bin:$PATH</span><br><span class="line">export PATH=$PATH_TO_FLUTTER_GIT_DIRECTORY/bin/cache/dart-sdk/bin:$PATH</span><br></pre></td></tr></table></figure>
+<h4 id="1-2-安装aspectd"><a href="#1-2-安装aspectd" class="headerlink" title="1.2 安装aspectd"></a>1.2 安装aspectd</h4><p>aspectd需要<br>1.切换到flutter的git目录:<br><code>cd ${path-for-git-flutter}</code><br>2.将aspectd源码中的git patch文件合并到flutter源码工程中，合并git patch:<br><code>git apply --3way ~/Github/aspectd/0001-aspectd.patch</code><br>3.删除原有的的flutter编译工具：<br><code>rm bin/cache/flutter_tools.stamp</code><br>4.重新构建新的flutter编译工具：<br><code>flutter doctor -v</code></p>
+<h4 id="1-3-运行"><a href="#1-3-运行" class="headerlink" title="1.3 运行"></a>1.3 运行</h4><p>到aspectd源码目录的example目录下执行：<br><code>flutter run --debug --verbose</code><br><strong>如果你能一次运行成功并aspectd生效，请直接跳转到第二章！</strong></p>
+<h4 id="1-4-aspectd编译不过或demo没有效果"><a href="#1-4-aspectd编译不过或demo没有效果" class="headerlink" title="1.4 aspectd编译不过或demo没有效果"></a>1.4 aspectd编译不过或demo没有效果</h4><p>编译不过或运行demo没有打印出想要的日志是aspectd使用时最常见的问题。aspectd的基本原理实际上是使用了dart对虚拟语法树操作的api，通过对flutter dill文件进行虚拟语法树遍历，完成对dill文件的转换，进而实现对dart的切面操作。所以在aspectd的编译上需要依赖dart源码中的<code>kernal</code>和<code>front_end</code>，可通过查看aspectd源码根目录中的<code>pubspec.yaml</code>查看依赖库和对应的ref。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">dependency_overrides:</span><br><span class="line">  kernel:</span><br><span class="line">    git:</span><br><span class="line">      url: https://github.com/dart-lang/sdk.git</span><br><span class="line">      ref: 5e39817ec7ab7f56f381c244d105c7e40913a3e0</span><br><span class="line">      path: pkg/kernel</span><br><span class="line">  front_end:</span><br><span class="line">    git:</span><br><span class="line">      url: https://github.com/dart-lang/sdk.git</span><br><span class="line">      ref: 5e39817ec7ab7f56f381c244d105c7e40913a3e0</span><br><span class="line">      path: pkg/front_end</span><br></pre></td></tr></table></figure></p>
+<p>在1.2步骤中，使用git patch命令修改flutter源码引入了<code>aspectd.dart</code>文件，该文件做的核心操作就包括下载aspectd的依赖库、编译aspectd.dart.snapshot和根据注解内容使用aspect.dart.snapshot执行具体的dill transform操作。所以，aspectd是否生效的两个关键点是aspectd依赖库是否下载成功和aspectd.snapshot文件是否编译成功。<br>因为aspect使用依赖github源码指定ref的方式依赖kenerl和front_end库，这个过程需要下载github上dart-lang的所有源码(约900M左右)，在国内的网络环境下很难做到一次成功，这里分享一个绕过因网络不稳定问题导致aspectd不生效的方法。</p>
+<ol>
+<li>手动下载dart源码，<code>git clone https://github.com/dart-lang/sdk.git</code></li>
+<li>将dart源码切换到aspectd项目中<code>pubspec.yaml</code>指定的ref上，如上例中，可执行 <code>git checkout 5e39817ec7ab7f56f381c244d105c7e40913a3e0</code></li>
+<li>将aspect对github源码的依赖改成对本地源码的依赖<br><img src="/res/aspectd/aspectd_1.jpeg" alt></li>
+<li>手动编译aspect.dart.snapshot(在aspectd根目录中)<br><code>dart --snapshot=snapshot/aspectd.dart.snapshot tool/starter.dart</code></li>
+<li>修改flutter源码中的aspectd.dart，强制指定aspect.dart.snapshot的目录。<br><img src="/res/aspectd/aspectd_2.jpeg" alt></li>
+<li>删除flutter_tools.stamp重新编译运行<code>flutter run --debug -v</code>即可生效</li>
+</ol>
+<h4 id="1-5-常见问题解决"><a href="#1-5-常见问题解决" class="headerlink" title="1.5 常见问题解决"></a>1.5 常见问题解决</h4><ul>
+<li><p>等待另一个flutter命令释放锁<br><code>Waiting for another flutter command to release the startup lock...</code><br>解决方法，将bin/cache下的lockfile删除后重新执行命令<br><code>rm ${path-for-git-flutter}/bin/cache/lockfile</code></p>
+</li>
+<li><p>如何使用命令行编译工程<br>debug版本：<code>flutter run --debug --verbose</code><br>release版本：<code>flutter run --release --verbose</code></p>
+</li>
+<li><p>pub命令是什么？<br><code>flutter pub get</code><br>pub是dart提供的包管理工具，在flutter源码中的<code>flutter/bin/cache/dart-sdk/bin/pub</code>目录下有pub可执行文件，想要单独执行pub命令可讲该目录加入到系统的环境变量中<br>相当于android gradle的gradle sync<br>相当于ios pod中的pod install<br>相当于js npm中的npm install</p>
+</li>
+</ul>
+<h3 id="0x02-aspectd的注解"><a href="#0x02-aspectd的注解" class="headerlink" title="0x02 aspectd的注解"></a>0x02 aspectd的注解</h3><h4 id="2-1-pragma-‘vm-entry-point’"><a href="#2-1-pragma-‘vm-entry-point’" class="headerlink" title="2.1 @pragma(‘vm:entry-point’)"></a>2.1 @pragma(‘vm:entry-point’)</h4><p>在AOT变一下，如果不能被应用主入口(main)最终可能调用到，那么将被视为无用代码而被丢弃掉。AOP代码因为其注入逻辑的无侵入性，所以不会被main调用，因为使用此注解告诉编译器不要丢弃这段逻辑。</p>
+<h4 id="2-2-Aspect"><a href="#2-2-Aspect" class="headerlink" title="2.2 @Aspect"></a>2.2 @Aspect</h4><p>Aspect注解可以使得像asepctd源码example中<code>aop_impl.dart</code>这样的AOP实现类被方便的识别和提取，也可以起到方便开关的作用，如果想禁用掉这段AOP逻辑，移除@Aspect注解即可</p>
+<h4 id="2-3-Call、-Execute、-Inject"><a href="#2-3-Call、-Execute、-Inject" class="headerlink" title="2.3 @Call、@Execute、@Inject"></a>2.3 @Call、@Execute、@Inject</h4><p>在介绍这几个注解之前需要理解关于AOP的几个概念，aspectd官方介绍文档对aspectd的说明引入了很对对aop设计的说明，比如什么是Advice？什么是Before\Around\After?如果对这些概念没有预先的概念，读aspectd的文档是一头雾水的，至少我是这样！</p>
+<h5 id="2-3-1-什么是Joint-Point（连接点）"><a href="#2-3-1-什么是Joint-Point（连接点）" class="headerlink" title="2.3.1 什么是Joint Point（连接点）"></a>2.3.1 什么是Joint Point（连接点）</h5><p>能够插入切面的一个点。这个点可以是类的某个方法调用前、调用后、方法抛出异常后等。切面代码可以利用这些点插入到应用的正常流程之中，并添加行为</p>
+<h5 id="2-3-2-什么是Pointcut（切点）"><a href="#2-3-2-什么是Pointcut（切点）" class="headerlink" title="2.3.2 什么是Pointcut（切点）"></a>2.3.2 什么是Pointcut（切点）</h5><p>指定一个通知将被引发的一系列连接点的集合。切点是连接点规则的描述。切点和连接点不是一对一的关系，一个切点匹配多个连接点</p>
+<h5 id="2-3-3-什么是Target-Object（目标对象）"><a href="#2-3-3-什么是Target-Object（目标对象）" class="headerlink" title="2.3.3 什么是Target Object（目标对象）"></a>2.3.3 什么是Target Object（目标对象）</h5><p>包含连接点的对象</p>
+<h5 id="2-3-3-什么是Advice（通知）"><a href="#2-3-3-什么是Advice（通知）" class="headerlink" title="2.3.3 什么是Advice（通知）"></a>2.3.3 什么是Advice（通知）</h5><p>在特定的连接点，AOP框架执行的动作。通知有常见的几种类型：</p>
+<ul>
+<li>前置通知Before：在目标方法被调用之前调用通知功能</li>
+<li>后置通知After：目标方法完成之后调用通知，无论该方法是否发生异常</li>
+<li>后置返回通知After-returning：在目标方法成功执行之后调用通知</li>
+<li>后置异常通知After-throwing：在目标方法抛出异常后调用通知</li>
+<li>环绕通知Around：通知包裹了被通知的方法，在被通知的方法调用之前和调用之后执行自定义的行为</li>
+</ul>
+<h5 id="2-3-4-Call、-Execute、-Inject"><a href="#2-3-4-Call、-Execute、-Inject" class="headerlink" title="2.3.4 @Call、@Execute、@Inject"></a>2.3.4 @Call、@Execute、@Inject</h5><p>aspectd只有一种统一的通知类型，就是Around。具体分为两种注解，分别是@Call和@Execute，这两种注解表达的PointCut都是通过包装原有方法实现的。差别是，@Call的PointCut是调用的地方，并不会修改原始方法的内部。@Execute会修改原有方法的内部。举个例子，分别使用@Call和@Execute对<code>test</code>方法执行切面操作</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">void test()&#123;</span><br><span class="line">  print(&quot;print hello world!&quot;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void main()&#123;</span><br><span class="line">  test();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>@Call表达注解的实际代码会变成这样：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">void test()&#123;</span><br><span class="line">  print(&quot;print hello world!&quot;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void invokeCall()&#123;</span><br><span class="line">  // to do somethings</span><br><span class="line">  test();</span><br><span class="line">  // to do somethings</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void main()&#123;</span><br><span class="line">  aop:invokeCall()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>@Execute表达注解的实际代码会变成这样：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">void invokeExecutor()&#123;</span><br><span class="line">  // to do somethings</span><br><span class="line">  print(&quot;print hello world!&quot;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void test()&#123;</span><br><span class="line">  invokeExecutor();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void main()&#123;</span><br><span class="line">  test();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>而@Inject相对于Call/Executor而言，多了一个lineNum的参数，用于指定插入逻辑的具体行号。用于在具体方法中间插入处理逻辑。</p>
+<h3 id="0x03-参考文档"><a href="#0x03-参考文档" class="headerlink" title="0x03 参考文档"></a>0x03 参考文档</h3><p><a href="https://github.com/alibaba-flutter/aspectd/issues/26" target="_blank" rel="noopener">https://github.com/alibaba-flutter/aspectd/issues/26</a></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        
+          
+        
+        <div class="post-tags">
+          
+            <a href="/tags/flutter/" rel="tag"># flutter</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/07/08/how-to-analyze-android-heap-1/" rel="next" title="Android内存分析的一般方法">
+                <i class="fa fa-chevron-left"></i> Android内存分析的一般方法
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">病已</p>
+              <div class="site-description motion-element" itemprop="description"></div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">36</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">9</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">40</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/ivonhoe" title="GitHub &rarr; https://github.com/ivonhoe" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:yangfan3687@163.com" title="E-Mail &rarr; mailto:yangfan3687@163.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#0x00-前言"><span class="nav-number">1.</span> <span class="nav-text">0x00 前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x01-准备"><span class="nav-number">2.</span> <span class="nav-text">0x01 准备</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1-开发环境"><span class="nav-number">2.1.</span> <span class="nav-text">1.1 开发环境</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1-1-flutter环境"><span class="nav-number">2.2.</span> <span class="nav-text">1.1.1 flutter环境</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1-2-aspectd下载"><span class="nav-number">2.3.</span> <span class="nav-text">1.1.2 aspectd下载</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1-3-环境变量"><span class="nav-number">2.4.</span> <span class="nav-text">1.1.3 环境变量</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-2-安装aspectd"><span class="nav-number">2.5.</span> <span class="nav-text">1.2 安装aspectd</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-3-运行"><span class="nav-number">2.6.</span> <span class="nav-text">1.3 运行</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-4-aspectd编译不过或demo没有效果"><span class="nav-number">2.7.</span> <span class="nav-text">1.4 aspectd编译不过或demo没有效果</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-5-常见问题解决"><span class="nav-number">2.8.</span> <span class="nav-text">1.5 常见问题解决</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x02-aspectd的注解"><span class="nav-number">3.</span> <span class="nav-text">0x02 aspectd的注解</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-pragma-‘vm-entry-point’"><span class="nav-number">3.1.</span> <span class="nav-text">2.1 @pragma(‘vm:entry-point’)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-Aspect"><span class="nav-number">3.2.</span> <span class="nav-text">2.2 @Aspect</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-Call、-Execute、-Inject"><span class="nav-number">3.3.</span> <span class="nav-text">2.3 @Call、@Execute、@Inject</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#2-3-1-什么是Joint-Point（连接点）"><span class="nav-number">3.3.1.</span> <span class="nav-text">2.3.1 什么是Joint Point（连接点）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-3-2-什么是Pointcut（切点）"><span class="nav-number">3.3.2.</span> <span class="nav-text">2.3.2 什么是Pointcut（切点）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-3-3-什么是Target-Object（目标对象）"><span class="nav-number">3.3.3.</span> <span class="nav-text">2.3.3 什么是Target Object（目标对象）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-3-3-什么是Advice（通知）"><span class="nav-number">3.3.4.</span> <span class="nav-text">2.3.3 什么是Advice（通知）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-3-4-Call、-Execute、-Inject"><span class="nav-number">3.3.5.</span> <span class="nav-text">2.3.4 @Call、@Execute、@Inject</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x03-参考文档"><span class="nav-number">4.</span> <span class="nav-text">0x03 参考文档</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">病已</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.1.2</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=3.4.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.2"></script>
+
+  <script src="/js/motion.js?v=7.1.2"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/affix.js?v=7.1.2"></script>
+
+  <script src="/js/schemes/pisces.js?v=7.1.2"></script>
+
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.1.2"></script>
+<script src="/js/post-details.js?v=7.1.2"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.1.2"></script>
+
+
+  
+
+  
+
+  
+
+  
+  
+
+<script src="//cdn1.lncld.net/static/js/3.11.1/av-min.js"></script>
+
+
+
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+
+<script>
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: 'JdLpddsaWqwfJtXPdDK8woaF-gzGzoHsz',
+    appKey: 'CEmtHXH8f0PtvF0zYtVE0EeY',
+    placeholder: 'Just go go',
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: true,
+    lang: '' || 'zh-cn'
+  });
+</script>
+
+
+
+
+  
+
+
+  
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
