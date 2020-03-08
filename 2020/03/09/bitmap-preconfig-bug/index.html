@@ -1,0 +1,1090 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
+
+<link rel="stylesheet" href="/css/main.css?v=7.1.2">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.1.2">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.1.2">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.1.2">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.1.2" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.1.2',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="0x00 前言某周六线上运营报障，在部分用户的Android手机上个别地图图标未能正常显示，只有部分手机有问题(7.0及以下版本)有问题，诡异的是只有个别图标(1个)显示有问题，大部分图标显示并没有问题,开发介入验证后发现更诡异的是，只在release版本才有这个问题，开发debug版本上并没有问题。低版本显示有问题还好理解，这应该是一个版本兼容相关的问题。release和debug上个别图标有差">
+<meta name="keywords" content="Bitmap,BitmapFactory">
+<meta property="og:type" content="article">
+<meta property="og:title" content="记一个诡异的臭虫">
+<meta property="og:url" content="https://ivonhoe.github.io/2020/03/09/bitmap-preconfig-bug/index.html">
+<meta property="og:site_name" content="病已的博客">
+<meta property="og:description" content="0x00 前言某周六线上运营报障，在部分用户的Android手机上个别地图图标未能正常显示，只有部分手机有问题(7.0及以下版本)有问题，诡异的是只有个别图标(1个)显示有问题，大部分图标显示并没有问题,开发介入验证后发现更诡异的是，只在release版本才有这个问题，开发debug版本上并没有问题。低版本显示有问题还好理解，这应该是一个版本兼容相关的问题。release和debug上个别图标有差">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://ivonhoe.github.io/res/bitmap_preconfig_bug/923F7833-056A-40DE-849B-205EC24F0F73.png">
+<meta property="og:image" content="https://ivonhoe.github.io/res/bitmap_preconfig_bug/CF7A8756-E61A-4A45-88F7-8356DC3BA452.png">
+<meta property="og:image" content="https://ivonhoe.github.io/res/bitmap_preconfig_bug/3F44D7B5-08AB-4580-BF59-AC7E6E1B9901.png">
+<meta property="og:updated_time" content="2020-03-08T16:53:36.861Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="记一个诡异的臭虫">
+<meta name="twitter:description" content="0x00 前言某周六线上运营报障，在部分用户的Android手机上个别地图图标未能正常显示，只有部分手机有问题(7.0及以下版本)有问题，诡异的是只有个别图标(1个)显示有问题，大部分图标显示并没有问题,开发介入验证后发现更诡异的是，只在release版本才有这个问题，开发debug版本上并没有问题。低版本显示有问题还好理解，这应该是一个版本兼容相关的问题。release和debug上个别图标有差">
+<meta name="twitter:image" content="https://ivonhoe.github.io/res/bitmap_preconfig_bug/923F7833-056A-40DE-849B-205EC24F0F73.png">
+
+
+
+  <link rel="alternate" href="/atom.xml" title="病已的博客" type="application/atom+xml">
+
+
+
+  
+  
+  <link rel="canonical" href="https://ivonhoe.github.io/2020/03/09/bitmap-preconfig-bug/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>记一个诡异的臭虫 | 病已的博客</title>
+  
+
+
+
+
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?666a58de875adc9dd40d5de65ceac026";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">病已的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <p class="site-subtitle">枕上，马上，厕上</p>
+      
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+  
+  
+
+  
+
+  <a href="https://github.com/Ivonhoe" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewbox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a>
+
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://ivonhoe.github.io/2020/03/09/bitmap-preconfig-bug/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="病已">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="病已的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">记一个诡异的臭虫
+
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：3月 9 2020 0:27:32 / 修改时间：0:53:36" itemprop="dateCreated datePublished" datetime="2020-03-09T00:27:32+08:00">3月 9 2020</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Bug总结/" itemprop="url" rel="index"><span itemprop="name">Bug总结</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2020/03/09/bitmap-preconfig-bug/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/03/09/bitmap-preconfig-bug/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+            <span id="/2020/03/09/bitmap-preconfig-bug/" class="leancloud_visitors" data-flag-title="记一个诡异的臭虫">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              
+                <span class="post-meta-item-text">阅读次数：</span>
+              
+                <span class="leancloud-visitors-count"></span>
+            </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00 前言"></a>0x00 前言</h3><p>某周六线上运营报障，在部分用户的Android手机上个别地图图标未能正常显示，只有部分手机有问题(7.0及以下版本)有问题，诡异的是只有个别图标(1个)显示有问题，大部分图标显示并没有问题,开发介入验证后发现更诡异的是，只在release版本才有这个问题，开发debug版本上并没有问题。<br>低版本显示有问题还好理解，这应该是一个版本兼容相关的问题。release和debug上个别图标有差别就有点匪夷所思了，写篇博客记录下。</p>
+<h3 id="0x01-问题说明"><a href="#0x01-问题说明" class="headerlink" title="0x01 问题说明"></a>0x01 问题说明</h3><p>问题日志：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">java.lang.NullPointerException: Attempt to read from field &apos;int android.graphics.Bitmap$Config.nativeInt&apos; on a null object reference</span><br><span class="line">10-19 14:27:36.501 20394-20394/? W/System.err:     at android.graphics.Bitmap.copy(Bitmap.java:557)</span><br><span class="line">10-19 14:27:36.501 20394-20394/? W/System.err:     at com.amap.api.maps.model.BitmapDescriptor.&lt;init&gt;(BitmapDescriptor.java:28)</span><br><span class="line">10-19 14:27:36.501 20394-20394/? W/System.err:     at com.amap.api.maps.model.BitmapDescriptorFactory.fromBitmap(BitmapDescriptorFactory.java:258)</span><br></pre></td></tr></table></figure></p>
+<a id="more"></a>
+<p>问题代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">val opts = BitmapFactory.Options()</span><br><span class="line">opts.inPreferredConfig = Bitmap.Config.RGB_565</span><br><span class="line">opts.inTargetDensity = displayMetrics.densityDpi</span><br><span class="line">opts.inScaled = true</span><br><span class="line">opts.inDensity = DisplayMetrics.DENSITY_XXHIGH//typedValue.density</span><br><span class="line">val var3 = BitmapFactory.decodeStream(var2, null, opts)</span><br></pre></td></tr></table></figure></p>
+<p>根据日志可以看出是Bitmap的config为null引起的空指针问题，在使用BitmapFactory.decodeStream时，正常解析到了Bitmap对象，但是该图片的Config获取为null，进而引发一个空指针异常，导致了后续图片加载的失败。该段代码也很简单，重新写了个demo应用单独运行这段代码，并特别使用了出现线上故障的资源图片，测试的结果依然是debug版本的demo Bitmap.getConfig获取正常，为ARGB.8888。release版本 Bitmap.getConfig获取为null。尝试修改inPreferredConfig为ARGB_8888或删除这个参数。demo运行正常，Bitmap和Bitmap.Config都能正常获取。<br>这是一个和inPreferredConfig参数有关的问题？考虑到该段代码加载的图片资源可能是透明的png，首先需要承认的是使用565模式解析有alpha通道的图片资源是并不科学的，虽然565配置对非透明图片的加载可以省一般的内存空间。但文档不是这么说的呀？<code>inPreferredConfig</code>参数指定的配置并不是一个非强制的选项，而是建议选项，Android在实际解码时会参考此参数的配置，但如果此配置不满足，Android会重新选取一个合适的配置来对图片进行解码。</p>
+<p><img src="/res/bitmap_preconfig_bug/923F7833-056A-40DE-849B-205EC24F0F73.png" alt></p>
+<p>所以基于文档的说明，使用RGB_565的配置decode有alpha通道的图片并不会有什么问题，在<strong>正常情况</strong>下Android系统实际还是会选择ARGB_8888的配置进行加载。现在很明显这不是正常情况。不正常的点在哪里？看起来肯定和这张图片有关，换个图片就能解决这个问题了，不然换个图片？不用<code>inPreferredConfig</code>参数也行，但是为什么？问题到底出在哪里？<br>一头扎进BitmapFactory.cpp中，然而并没有什么明显的线索，头大了~~</p>
+<h3 id="0x03-线索分析"><a href="#0x03-线索分析" class="headerlink" title="0x03 线索分析"></a>0x03 线索分析</h3><p>看了大半天BitmapFactory的源码，对加载流程大致有了了解，但是对解决问题并没有什么思路，和大师交流这个问题时，他的一句话点醒了我。</p>
+<p><img src="/res/bitmap_preconfig_bug/CF7A8756-E61A-4A45-88F7-8356DC3BA452.png" alt></p>
+<p>最最诡异的其实是debug和release差异的问题啊。难道release打包时，资源打包对这个图片动了手脚？所有，手动将release版本的app解压出来，找到有问题的png。果然发现了不一样的地方，使用AS的图片查看器查看png图片，在右上角可以看到，原本在源码中32-bit color的图片在release包中变成了8-bit color。</p>
+<p><img src="/res/bitmap_preconfig_bug/3F44D7B5-08AB-4580-BF59-AC7E6E1B9901.png" alt></p>
+<p>原本2k的图片在从release包里解压出来后只有700B，aapt对资源做了压缩，难道是压缩引起的问题？在编译文件中配置<code>cruncherEnabled false</code>关闭对png的压缩操作。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">aaptOptins&#123;</span><br><span class="line">   cruncherEnabled false</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>问题消失了，实锤！和资源打包时对png的压缩有关~</p>
+<p>什么是alpha通道？</p>
+<h4 id="0x04-调色板模式"><a href="#0x04-调色板模式" class="headerlink" title="0x04 调色板模式"></a>0x04 调色板模式</h4><p>将图像转换为调色板颜色模式时，会给每一个像素分配一个固定的颜色值，这些颜色值储存在简洁的颜色表中，或包含多达256种色的调色板中。因此，调色板颜色模式的图像包含的数据比24位颜色模式的图像小，对于颜色范围有限的图像，通过这个色彩转换模式效果更佳，用户可以设定转换颜色的调色板，从而得到指定颜色的阶数的位图。</p>
+<p>调色板颜色模式也被称为是索引模式，调色板颜色模式只有在图像颜色小于等于256色的时候才有，16位高彩和24位32位真彩是没有调色板色的。它只支持单通道图像(8位/像素)，因此，我们通过限制调色板、索引颜色减小文件大小，同时保持视觉上的品质不变——如用于多媒体动画的应用或网页。只有16位以下的才用调色板，真彩色不用调色板。</p>
+<h3 id="0x05-重新理一下问题"><a href="#0x05-重新理一下问题" class="headerlink" title="0x05 重新理一下问题"></a>0x05 重新理一下问题</h3><h4 id="5-1-问题原因"><a href="#5-1-问题原因" class="headerlink" title="5.1 问题原因"></a>5.1 问题原因</h4><ol>
+<li>android aapt针对色值数量小于256个的资源图片，在 <code>aaptOptins cruncherEnabled</code>为<code>true</code>时进行了png压缩操作。将png图片的32位全彩色模式图片转换成了8bit位索引模式</li>
+<li>android较低版本系统在使用PreConfig=565模式下解析8bit索引模式图片时能够正常返回解析后的Bitmap，但Bitmap Config为空。导致后续的加载错误。</li>
+<li>基于以上两点原因，才出现了在debug模式下打包正常，在release下正常，有的图标正常，个别图标显示不出来的诡异操作。出问题的图片都是被转换成索引模式的图片，理论上可能并不止一个，只是暂时只发现了一个。</li>
+</ol>
+<h4 id="5-2-解决方案"><a href="#5-2-解决方案" class="headerlink" title="5.2 解决方案"></a>5.2 解决方案</h4><p>选择使用ARGB8888或者不设置<code>inPreferredConfig</code>参数进行bitmap decode。其实默认<code>inPreferredConfig</code>值就是<code>ARGB_8888</code>。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public Bitmap.Config inPreferredConfig = Bitmap.Config.ARGB_8888;</span><br></pre></td></tr></table></figure>
+<h4 id="5-3-在使用inPreferredConfig的时候要注意什么？"><a href="#5-3-在使用inPreferredConfig的时候要注意什么？" class="headerlink" title="5.3 在使用inPreferredConfig的时候要注意什么？"></a>5.3 在使用<code>inPreferredConfig</code>的时候要注意什么？</h4><p>参数inpreferredconfig表示图片解码时使用的颜色模式，也就是图片中每个像素颜色的表示方式。参数inpreferredconfig的可选值有四个，分别为ALPHA_8，RGB_565，ARGB_4444，ARGB_8888。它们的含义列举如下。</p>
+<ul>
+<li>ALPHA_8：图片中每个像素用一个字节（8位）存储，该字节存储的是图片8位的透明度值</li>
+<li>RGB_565：图片中每个像素用两个字节（16位）存储，两个字节中高5位表示红色通道，中间6位表示绿色通道，低5位表示蓝色通道</li>
+<li>ARGB_4444：图片中每个像素用两个字节（16位）存储，Alpha，R，G，B四个通道每个通道用4位表示</li>
+<li>ARGB_8888：图片中每个像素用四个字节（32位）存储，Alpha，R，G，B四个通道每个通道用8位表示</li>
+</ul>
+<p>根据Android官方文档的说明，如果inPreferredConfig不为null，解码器会尝试使用此参数指定的颜色模式来对图片进行解码，如果inPreferredConfig为null或者在解码时无法满足此参数指定的颜色模式，解码器会自动根据原始图片的特征以及当前设备的屏幕位深，选取合适的颜色模式来解码，例如，如果图片中包含透明度，那么对该图片解码时使用的配置就需要支持透明度，默认会使用ARGB_8888来解码。<br>inPreferredConfig指定的配置并非是一个强制选项，而是建议的选项，Android在解码时会参考该配置，如果该配置不满足，Android会重新选取一个合适的配置来对图片进行解码。</p>
+<p>详细的验证过程可参考<a href="https://blog.csdn.net/ccpat/article/details/46834089" target="_blank" rel="noopener">https://blog.csdn.net/ccpat/article/details/46834089</a></p>
+<h3 id="0x06-为什么Bitmap-getConfig-返回null？"><a href="#0x06-为什么Bitmap-getConfig-返回null？" class="headerlink" title="0x06 为什么Bitmap.getConfig()返回null？"></a>0x06 为什么Bitmap.getConfig()返回null？</h3><p>从 getConfig 方法的文档可以看到这个描述： If the bitmap’s internal config is in one of the public formats, return that config, otherwise return null.<br>如果位图的内部 config 是公开格式的其中之一就返回这个 config，否则返回 null。<br>这里的内部格式，就是指 SkBitmap::Config 枚举值了，这里的公开格式指的是Java层Bitmap.Config的枚举值。如果这个值并未在 Java 层 Bitmap.Config 中公开，就返回 null，像索引颜色对应的 kIndex8_Config 就会导致 getConfig() 会返回 null。</p>
+<p>可查看源码<code>external/skia/include/core/SkBitmap.h</code>，Skia的颜色配置，其中kIndex8_Config表示每像素8bits，使用 SkColorTable 来描述颜色，这个 SkColorTable 顾名思义就是颜色表了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">enum Config &#123;</span><br><span class="line">    kNo_Config,         </span><br><span class="line">    kA1_Config,         </span><br><span class="line">    kA8_Config,         </span><br><span class="line">    // !&lt; 8 -bits per pixel, using SkColorTable to specify the colors</span><br><span class="line">    kIndex8_Config,</span><br><span class="line">    kRGB_565_Config,    </span><br><span class="line">    kARGB_4444_Config,  </span><br><span class="line">    kARGB_8888_Config,  </span><br><span class="line">    kRLE_Index8_Config,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p><code>external/skia/src/images/SkImageDecoder_libpng.cpp</code>的getBitmapConfig方法，如果当前图片是调色板模式，会执行<code>canUpscalePaletteToConfig</code>方法，该方法返回 false 则 configp 被设置为 kIndex8_Config。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">bool SkPNGImageDecoder::getBitmapConfig(png_structp png_ptr, png_infop info_ptr, SkBitmap::Config* configp, bool* hasAlphap, SkPMColor* theTranspColorp) &#123;</span><br><span class="line">    png_uint_32 origWidth, origHeight;</span><br><span class="line">    int bitDepth, colorType;</span><br><span class="line">    png_get_IHDR(png_ptr, info_ptr, &amp;origWidth, &amp;origHeight, &amp;bitDepth, &amp;colorType, int_p_NULL, int_p_NULL, int_p_NULL);</span><br><span class="line">    // ...</span><br><span class="line">    if (colorType == PNG_COLOR_TYPE_PALETTE) &#123;</span><br><span class="line">        bool paletteHasAlpha = hasTransparencyInPalette(png_ptr, info_ptr);</span><br><span class="line">        *configp = this-&gt;getPrefConfig(kIndex_SrcDepth, paletteHasAlpha);</span><br><span class="line">        // now see if we can upscale to their requested config</span><br><span class="line">        if (!canUpscalePaletteToConfig(*configp, paletteHasAlpha)) &#123;</span><br><span class="line">            *configp = SkBitmap::kIndex8_Config;    // 注意这里</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">    // ...</span><br></pre></td></tr></table></figure>
+<p>当dstConfig为565_config并且图片包含alpha通道时，或者dstConfig不属于kARGB_8888_Config、kARGB_4444_Config 、kRGB_565_Config之一，则<code>canUpscalePaletteToConfig</code>如何才能令其返回<code>false</code>。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">static bool canUpscalePaletteToConfig(SkBitmap::Config dstConfig, bool srcHasAlpha) &#123;</span><br><span class="line">    switch (dstConfig) &#123;</span><br><span class="line">        case SkBitmap::kARGB_8888_Config:</span><br><span class="line">        case SkBitmap::kARGB_4444_Config:</span><br><span class="line">            return true;</span><br><span class="line">        case SkBitmap::kRGB_565_Config:</span><br><span class="line">            // only return true if the src is opaque (since 565 is opaque)</span><br><span class="line">            return !srcHasAlpha;</span><br><span class="line">        default:</span><br><span class="line">            return false;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>再看getPrefConfig的实现，getPrefConfig返回由java层设置的fDefaultPref，当config为kNo_Config时，返回GetDeviceConfig(),其实也是kNo_Config。那么config什么时候为SkBitmap::kNo_Config呢？当Java层设置的inPreferredConfig为null时，fDefaultPref会被赋值为kNo_Config。详情可查看<code>getNativeBitmapConfig</code>方法。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">SkBitmap::Config SkImageDecoder::getPrefConfig(SrcDepth srcDepth, bool srcHasAlpha) const &#123;</span><br><span class="line">    SkBitmap::Config config = SkBitmap::kNo_Config;</span><br><span class="line"></span><br><span class="line">    if (fUsePrefTable) &#123;    // 普通图片解码不会进入这个分支</span><br><span class="line">        switch (srcDepth) &#123;</span><br><span class="line">            // ...</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        config = fDefaultPref;  // 注意这里</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    if (SkBitmap::kNo_Config == config) &#123;</span><br><span class="line">        config = SkImageDecoder::GetDeviceConfig();</span><br><span class="line">    &#125;</span><br><span class="line">    return config;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>综上所述，只要PNG文件本身是索引颜色格式，且在调用BitmapFactory.decodeXXX方法族时，将传入的BitmapFactory.Options.inPreferredConfig置为null即可解码得到索引颜色格式的Bitmap对象，如果这张PNG是带有alpha通道的，inPreferredConfig设置为RGB_565也可以。此时该Bitmap的Config为null。</strong></p>
+<h3 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h3><p><a href="https://www.jianshu.com/p/ecacf2f60cb2" target="_blank" rel="noopener">https://www.jianshu.com/p/ecacf2f60cb2</a><br><a href="https://www.jianshu.com/p/cc17d18c3447" target="_blank" rel="noopener">https://www.jianshu.com/p/cc17d18c3447</a><br><a href="http://www.coreldrawchina.com/X7jiaocheng/cdr-tiaosebanyanse-moshi.html" target="_blank" rel="noopener">http://www.coreldrawchina.com/X7jiaocheng/cdr-tiaosebanyanse-moshi.html</a><br><a href="https://www.jianshu.com/p/f56292504ad3" target="_blank" rel="noopener">https://www.jianshu.com/p/f56292504ad3</a><br><a href="https://blog.csdn.net/ccpat/article/details/46834089" target="_blank" rel="noopener">https://blog.csdn.net/ccpat/article/details/46834089</a><br><a href="https://android.googlesource.com/platform/frameworks/base/+/marshmallow-dev/tools/aapt2/Png.cpp" target="_blank" rel="noopener">https://android.googlesource.com/platform/frameworks/base/+/marshmallow-dev/tools/aapt2/Png.cpp</a></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+        
+          
+        
+        <div class="post-tags">
+          
+            <a href="/tags/Bitmap/" rel="tag"># Bitmap</a>
+          
+            <a href="/tags/BitmapFactory/" rel="tag"># BitmapFactory</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/11/08/hello-flutter-aspectd/" rel="next" title="Flutter aspectd入门指引">
+                <i class="fa fa-chevron-left"></i> Flutter aspectd入门指引
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div class="comments" id="comments">
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">病已</p>
+              <div class="site-description motion-element" itemprop="description"></div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">37</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">9</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">41</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/ivonhoe" title="GitHub &rarr; https://github.com/ivonhoe" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="mailto:yangfan3687@163.com" title="E-Mail &rarr; mailto:yangfan3687@163.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+            </div>
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#0x00-前言"><span class="nav-number">1.</span> <span class="nav-text">0x00 前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x01-问题说明"><span class="nav-number">2.</span> <span class="nav-text">0x01 问题说明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x03-线索分析"><span class="nav-number">3.</span> <span class="nav-text">0x03 线索分析</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#0x04-调色板模式"><span class="nav-number">3.1.</span> <span class="nav-text">0x04 调色板模式</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x05-重新理一下问题"><span class="nav-number">4.</span> <span class="nav-text">0x05 重新理一下问题</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#5-1-问题原因"><span class="nav-number">4.1.</span> <span class="nav-text">5.1 问题原因</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-2-解决方案"><span class="nav-number">4.2.</span> <span class="nav-text">5.2 解决方案</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-3-在使用inPreferredConfig的时候要注意什么？"><span class="nav-number">4.3.</span> <span class="nav-text">5.3 在使用inPreferredConfig的时候要注意什么？</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#0x06-为什么Bitmap-getConfig-返回null？"><span class="nav-number">5.</span> <span class="nav-text">0x06 为什么Bitmap.getConfig()返回null？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考文档"><span class="nav-number">6.</span> <span class="nav-text">参考文档</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">病已</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.1.2</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=3.4.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/utils.js?v=7.1.2"></script>
+
+  <script src="/js/motion.js?v=7.1.2"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/affix.js?v=7.1.2"></script>
+
+  <script src="/js/schemes/pisces.js?v=7.1.2"></script>
+
+
+
+
+  
+  <script src="/js/scrollspy.js?v=7.1.2"></script>
+<script src="/js/post-details.js?v=7.1.2"></script>
+
+
+
+  
+
+
+  <script src="/js/next-boot.js?v=7.1.2"></script>
+
+
+  
+
+  
+
+  
+
+  
+  
+
+<script src="//cdn1.lncld.net/static/js/3.11.1/av-min.js"></script>
+
+
+
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+
+<script>
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: 'JdLpddsaWqwfJtXPdDK8woaF-gzGzoHsz',
+    appKey: 'CEmtHXH8f0PtvF0zYtVE0EeY',
+    placeholder: 'Just go go',
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: true,
+    lang: '' || 'zh-cn'
+  });
+</script>
+
+
+
+
+  
+
+
+  
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
