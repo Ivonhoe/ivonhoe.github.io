@@ -1,697 +1,376 @@
+
+
 <!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
 
 
 
-
-
-
-
-
-
-
-
-
-  
-
-
-<html class="theme-next gemini use-motion" lang="zh-CN">
-<head><meta name="generator" content="Hexo 3.9.0">
+<head>
   <meta charset="UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
-<meta name="theme-color" content="#222">
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
-
-<link rel="stylesheet" href="/css/main.css?v=7.1.2">
-
-
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.1.2">
-
-
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.1.2">
-
-
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.1.2">
-
-
-  <link rel="mask-icon" href="/images/logo.svg?v=7.1.2" color="#222">
-
-
-
-
-
-
-
-<script id="hexo.configurations">
-  var NexT = window.NexT || {};
-  var CONFIG = {
-    root: '/',
-    scheme: 'Gemini',
-    version: '7.1.2',
-    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
-    back2top: true,
-    back2top_sidebar: false,
-    fancybox: false,
-    fastclick: false,
-    lazyload: false,
-    tabs: true,
-    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
-    algolia: {
-      applicationID: '',
-      apiKey: '',
-      indexName: '',
-      hits: {"per_page":10},
-      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
-    }
-  };
-</script>
-
-
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
   
-
-
-
-
-  <meta name="description" content="0x01 动画插值源码想要实现动画无非想做一件事情，就是把动画的对象在合适的时间画出合适的状态，如何控制时间？就是通过补间动画或者属性动画设置动画的时长、起始时间、起始延迟这些属性来控制动画的时间。如何控制动画状态？就可以通过动画插值，插值方法getInterpolation(input),input就是当前动画运行时间的百分比，而函数返回值就是当前动画的进度百分比，通过动画进度和动画的起始状态和">
-<meta name="keywords" content="动画,android">
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="病已">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="0x01 动画插值源码想要实现动画无非想做一件事情，就是把动画的对象在合适的时间画出合适的状态，如何控制时间？就是通过补间动画或者属性动画设置动画的时长、起始时间、起始延迟这些属性来控制动画的时间。如何控制动画状态？就可以通过动画插值，插值方法getInterpolation(input),input就是当前动画运行时间的百分比，而函数返回值就是当前动画的进度百分比，通过动画进度和动画的起始状态和">
 <meta property="og:type" content="article">
 <meta property="og:title" content="动画源码分析（基于Android 5.0）">
 <meta property="og:url" content="https://ivonhoe.github.io/2015/03/03/android-animation-source/index.html">
 <meta property="og:site_name" content="病已的博客">
 <meta property="og:description" content="0x01 动画插值源码想要实现动画无非想做一件事情，就是把动画的对象在合适的时间画出合适的状态，如何控制时间？就是通过补间动画或者属性动画设置动画的时长、起始时间、起始延迟这些属性来控制动画的时间。如何控制动画状态？就可以通过动画插值，插值方法getInterpolation(input),input就是当前动画运行时间的百分比，而函数返回值就是当前动画的进度百分比，通过动画进度和动画的起始状态和">
-<meta property="og:locale" content="zh-CN">
+<meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://ivonhoe.github.io/res/android_animation/choreographer_seq_diag.png">
-<meta property="og:updated_time" content="2018-09-11T13:26:25.000Z">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="动画源码分析（基于Android 5.0）">
-<meta name="twitter:description" content="0x01 动画插值源码想要实现动画无非想做一件事情，就是把动画的对象在合适的时间画出合适的状态，如何控制时间？就是通过补间动画或者属性动画设置动画的时长、起始时间、起始延迟这些属性来控制动画的时间。如何控制动画状态？就可以通过动画插值，插值方法getInterpolation(input),input就是当前动画运行时间的百分比，而函数返回值就是当前动画的进度百分比，通过动画进度和动画的起始状态和">
+<meta property="article:published_time" content="2015-03-03T14:48:07.000Z">
+<meta property="article:modified_time" content="2018-09-11T13:26:25.000Z">
+<meta property="article:author" content="病已">
+<meta property="article:tag" content="动画">
+<meta property="article:tag" content="android">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://ivonhoe.github.io/res/android_animation/choreographer_seq_diag.png">
-
-
-
-  <link rel="alternate" href="/atom.xml" title="病已的博客" type="application/atom+xml">
-
-
-
   
   
-  <link rel="canonical" href="https://ivonhoe.github.io/2015/03/03/android-animation-source/">
+  <title>动画源码分析（基于Android 5.0） - 病已的博客</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
 
 
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
 
-<script id="page.configurations">
-  CONFIG.page = {
-    sidebar: "",
-  };
-</script>
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
 
-  <title>动画源码分析（基于Android 5.0） | 病已的博客</title>
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
   
 
 
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
 
 
 
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
 
-  <script>
-    var _hmt = _hmt || [];
-    (function() {
-      var hm = document.createElement("script");
-      hm.src = "https://hm.baidu.com/hm.js?666a58de875adc9dd40d5de65ceac026";
-      var s = document.getElementsByTagName("script")[0];
-      s.parentNode.insertBefore(hm, s);
-    })();
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"ivonhoe.github.io","root":"/","version":"1.8.14","typing":{"enable":false,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"baidu":"666a58de875adc9dd40d5de65ceac026","google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"JdLpddsaWqwfJtXPdDK8woaF-gzGzoHsz","app_key":"CEmtHXH8f0PtvF0zYtVE0EeY","server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
   </script>
-
-
-
-
-
-
-
-  <noscript>
-  <style>
-  .use-motion .motion-element,
-  .use-motion .brand,
-  .use-motion .menu-item,
-  .sidebar-inner,
-  .use-motion .post-block,
-  .use-motion .pagination,
-  .use-motion .comments,
-  .use-motion .post-header,
-  .use-motion .post-body,
-  .use-motion .collection-title { opacity: initial; }
-
-  .use-motion .logo,
-  .use-motion .site-title,
-  .use-motion .site-subtitle {
-    opacity: initial;
-    top: initial;
-  }
-
-  .use-motion .logo-line-before i { left: initial; }
-  .use-motion .logo-line-after i { right: initial; }
-  </style>
-</noscript>
-
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 6.1.0"><link rel="alternate" href="/atom.xml" title="病已的博客" type="application/atom+xml">
 </head>
 
-<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
 
-  
-  
-    
-  
+<body>
+  <header style="height: 30vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>病已的博客</strong>
+    </a>
 
-  <div class="container sidebar-position-left page-post-detail">
-    <div class="headband"></div>
-
-    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-brand-wrapper">
-  <div class="site-meta">
-    
-
-    <div class="custom-logo-site-title">
-      <a href="/" class="brand" rel="start">
-        <span class="logo-line-before"><i></i></span>
-        <span class="site-title">病已的博客</span>
-        <span class="logo-line-after"><i></i></span>
-      </a>
-    </div>
-    
-      
-        <p class="site-subtitle">枕上，马上，厕上</p>
-      
-    
-    
-  </div>
-
-  <div class="site-nav-toggle">
-    <button aria-label="切换导航栏">
-      <span class="btn-bar"></span>
-      <span class="btn-bar"></span>
-      <span class="btn-bar"></span>
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
     </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
   </div>
-</div>
-
-
-
-<nav class="site-nav">
-  
-    <ul id="menu" class="menu">
-      
-        
-        
-        
-          
-          <li class="menu-item menu-item-home">
-
-    
-    
-    
-      
-    
-
-    
-
-    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
-
-  </li>
-        
-        
-        
-          
-          <li class="menu-item menu-item-categories">
-
-    
-    
-    
-      
-    
-
-    
-
-    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
-
-  </li>
-        
-        
-        
-          
-          <li class="menu-item menu-item-tags">
-
-    
-    
-    
-      
-    
-
-    
-
-    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
-
-  </li>
-        
-        
-        
-          
-          <li class="menu-item menu-item-archives">
-
-    
-    
-    
-      
-    
-
-    
-
-    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
-
-  </li>
-        
-        
-        
-          
-          <li class="menu-item menu-item-about">
-
-    
-    
-    
-      
-    
-
-    
-
-    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
-
-  </li>
-
-      
-      
-    </ul>
-  
-
-  
-
-  
 </nav>
 
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default_post.jpeg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="动画源码分析（基于Android 5.0）">
+              
+                动画源码分析（基于Android 5.0）
+              
+            </span>
 
-
+            
+              <div class="mt-3">
   
-
-
-
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2015-03-03 22:48" pubdate>
+        2015年3月3日 晚上
+      </time>
+    </span>
+  
 </div>
-    </header>
 
-    
+<div class="mt-1">
   
-  
-
-  
-
-  <a href="https://github.com/Ivonhoe" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewbox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a>
-
-
-
-    <main id="main" class="main">
-      <div class="main-inner">
-        <div class="content-wrap">
-          
-            
-
-          
-          <div id="content" class="content">
-            
-
-  <div id="posts" class="posts-expand">
-    
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://ivonhoe.github.io/2015/03/03/android-animation-source/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="病已">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      8.4k 字
     </span>
+  
 
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="病已的博客">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      71 分钟
     </span>
+  
 
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">动画源码分析（基于Android 5.0）
-
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
+  
+  
+</div>
 
             
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：3月 3 2015 22:48:07" itemprop="dateCreated datePublished" datetime="2015-03-03T22:48:07+08:00">3月 3 2015</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：9月 11 2018 21:26:25" itemprop="dateModified" datetime="2018-09-11T21:26:25+08:00">9月 11 2018</time>
-              
-            
-          </span>
+          </div>
 
           
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Android动画/" itemprop="url" rel="index"><span itemprop="name">Android动画</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2015/03/03/android-animation-source/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2015/03/03/android-animation-source/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-            <span id="/2015/03/03/android-animation-source/" class="leancloud_visitors" data-flag-title="动画源码分析（基于Android 5.0）">
-              <span class="post-meta-divider">|</span>
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              
-                <span class="post-meta-item-text">阅读次数：</span>
-              
-                <span class="leancloud-visitors-count"></span>
-            </span>
-          
-
-          
-
-          
-
-          
-
         </div>
-      </header>
-    
+      </div>
+    </div>
+  </header>
 
+  <main>
     
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
       
 
-      
-        <h4 id="0x01-动画插值源码"><a href="#0x01-动画插值源码" class="headerlink" title="0x01 动画插值源码"></a>0x01 动画插值源码</h4><p>想要实现动画无非想做一件事情，就是把动画的对象在合适的时间画出合适的状态，如何控制时间？就是通过补间动画或者属性动画设置动画的时长、起始时间、起始延迟这些属性来控制动画的时间。如何控制动画状态？就可以通过动画插值，插值方法getInterpolation(input),input就是当前动画运行时间的百分比，而函数返回值就是当前动画的进度百分比，通过动画进度和动画的起始状态和结束状态来控制动画对象的当前状态。无论是补间动画或者属性动画都是定义动画状态的起始状态、终止状态、动画多久、如何动画。</p>
-<a id="more"></a>
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">动画源码分析（基于Android 5.0）</h1>
+            
+            <div class="markdown-body">
+              <h4 id="0x01-动画插值源码"><a href="#0x01-动画插值源码" class="headerlink" title="0x01 动画插值源码"></a>0x01 动画插值源码</h4><p>想要实现动画无非想做一件事情，就是把动画的对象在合适的时间画出合适的状态，如何控制时间？就是通过补间动画或者属性动画设置动画的时长、起始时间、起始延迟这些属性来控制动画的时间。如何控制动画状态？就可以通过动画插值，插值方法getInterpolation(input),input就是当前动画运行时间的百分比，而函数返回值就是当前动画的进度百分比，通过动画进度和动画的起始状态和结束状态来控制动画对象的当前状态。无论是补间动画或者属性动画都是定义动画状态的起始状态、终止状态、动画多久、如何动画。</p>
+<span id="more"></span>
+
 <h4 id="0x02-补间动画源码"><a href="#0x02-补间动画源码" class="headerlink" title="0x02 补间动画源码"></a>0x02 补间动画源码</h4><p>先找到动画执行的入口View.startAnimation(animation)，startAnimation执行了invalidate，触发了重绘刷新视图界面。</p>
-<pre><code>public void startAnimation(Animation animation) {
+<div class="code-wrapper"><pre><code class="hljs">public void startAnimation(Animation animation) &#123;
     animation.setStartTime(Animation.START_ON_FIRST_FRAME);
     setAnimation(animation);
     invalidateParentCaches();
     invalidate(true);
-}
-</code></pre><p>invalidate()触发执行View.draw(Canvas canvas, ViewGroup parent, long drawingTime)函数</p>
+&#125;
+</code></pre></div>
+<p>invalidate()触发执行View.draw(Canvas canvas, ViewGroup parent, long drawingTime)函数</p>
 <ul>
-<li>调用动画的 getTransformation 方法，得到当前时间点的矩阵</li>
-<li>将该矩阵设置成 Canvas 的当前矩阵</li>
-<li>调用 canvas 的 drawBitmap 方法，绘制屏幕</li>
-<li>判断 getTransformation 的返回值，若为真，调用 invalidate 方法，刷新屏幕进入下一桢；若为假，说明动画完成。</li>
+<li><p>调用动画的 getTransformation 方法，得到当前时间点的矩阵</p>
+</li>
+<li><p>将该矩阵设置成 Canvas 的当前矩阵</p>
+</li>
+<li><p>调用 canvas 的 drawBitmap 方法，绘制屏幕</p>
+</li>
+<li><p>判断 getTransformation 的返回值，若为真，调用 invalidate 方法，刷新屏幕进入下一桢；若为假，说明动画完成。</p>
+<p>  boolean draw(Canvas canvas, ViewGroup parent, long drawingTime) {<br>  ……<br>  &#x2F;&#x2F; 如果有需要执行的动画<br>  final Animation a &#x3D; getAnimation();<br>  if (a !&#x3D; null) {<br>      &#x2F;&#x2F; 根据动画和当前时间计算Transformation，并返回是否需要再继续做动画<br>      more &#x3D; drawAnimation(parent, drawingTime, a, scalingRequired);<br>      concatMatrix &#x3D; a.willChangeTransformationMatrix();<br>      if (concatMatrix) {<br>          mPrivateFlags3 |&#x3D; PFLAG3_VIEW_IS_ANIMATING_TRANSFORM;<br>      }<br>      &#x2F;&#x2F; 得到动画的变换结果<br>      transformToApply &#x3D; parent.mChildTransformation;<br>  } else {<br>      ……<br>  }<br><br>  ……<br><br>  float alpha &#x3D; useDisplayListProperties ? 1 : getAlpha();<br>  if (transformToApply !&#x3D; null || alpha &lt; 1 || !hasIdentityMatrix() ||<br>          (mPrivateFlags3 &amp; PFLAG3_VIEW_IS_ANIMATING_ALPHA) &#x3D;&#x3D; PFLAG3_VIEW_IS_ANIMATING_ALPHA) {<br>      ……<br>          &#x2F;&#x2F; 根据Transformation值变换canvs<br>          if (transformToApply !&#x3D; null) {<br>              if (concatMatrix) {<br>                  if (useDisplayListProperties) {<br>                      displayList.setAnimationMatrix(transformToApply.getMatrix());<br>                  } else {<br>                      &#x2F;&#x2F; Undo the scroll translation, apply the transformation matrix,<br>                      &#x2F;&#x2F; then redo the scroll translate to get the correct result.<br>                      canvas.translate(-transX, -transY);<br>                      canvas.concat(transformToApply.getMatrix());<br>                      canvas.translate(transX, transY);<br>                  }<br>                  parent.mGroupFlags |&#x3D; ViewGroup.FLAG_CLEAR_TRANSFORMATION;<br>              }<br><br>              float transformAlpha &#x3D; transformToApply.getAlpha();<br>              if (transformAlpha &lt; 1) {<br>                  alpha *&#x3D; transformAlpha;<br>                  parent.mGroupFlags |&#x3D; ViewGroup.FLAG_CLEAR_TRANSFORMATION;<br>              }<br><br>          if (!childHasIdentityMatrix &amp;&amp; !useDisplayListProperties) {<br>              canvas.translate(-transX, -transY);<br>              canvas.concat(getMatrix());<br>              canvas.translate(transX, transY);<br>          }<br>      }<br>      ……<br>  }<br><br>  if (a !&#x3D; null &amp;&amp; !more) {<br>      if (!hardwareAccelerated &amp;&amp; !a.getFillAfter()) {<br>          onSetAlpha(255);<br>      }<br>      parent.finishAnimatingView(this, a);<br>  }<br><br>  &#x2F;&#x2F; 根据动画进度判断是否需要继续重绘<br>  if (more &amp;&amp; hardwareAccelerated) {<br>      &#x2F;&#x2F; invalidation is the trigger to recreate display lists, so if we’re using<br>      &#x2F;&#x2F; display lists to render, force an invalidate to allow the animation to<br>      &#x2F;&#x2F; continue drawing another frame<br>      parent.invalidate(true);<br>      if (a.hasAlpha() &amp;&amp; (mPrivateFlags &amp; PFLAG_ALPHA_SET) &#x3D;&#x3D; PFLAG_ALPHA_SET) {<br>          &#x2F;&#x2F; alpha animations should cause the child to recreate its display list<br>          invalidate(true);<br>      }<br>  }<br><br>  mRecreateDisplayList &#x3D; false;<br><br>  return more;<br>  }</p>
+</li>
 </ul>
-<pre><code>boolean draw(Canvas canvas, ViewGroup parent, long drawingTime) {
-    ......
-    // 如果有需要执行的动画
-    final Animation a = getAnimation();
-    if (a != null) {
-        // 根据动画和当前时间计算Transformation，并返回是否需要再继续做动画
-        more = drawAnimation(parent, drawingTime, a, scalingRequired);
-        concatMatrix = a.willChangeTransformationMatrix();
-        if (concatMatrix) {
-            mPrivateFlags3 |= PFLAG3_VIEW_IS_ANIMATING_TRANSFORM;
-        }
-        // 得到动画的变换结果
-        transformToApply = parent.mChildTransformation;
-    } else {
-        ......
-    }
-
-    ......
-
-    float alpha = useDisplayListProperties ? 1 : getAlpha();
-    if (transformToApply != null || alpha &lt; 1 || !hasIdentityMatrix() ||
-            (mPrivateFlags3 &amp; PFLAG3_VIEW_IS_ANIMATING_ALPHA) == PFLAG3_VIEW_IS_ANIMATING_ALPHA) {
-        ......
-            // 根据Transformation值变换canvs
-            if (transformToApply != null) {
-                if (concatMatrix) {
-                    if (useDisplayListProperties) {
-                        displayList.setAnimationMatrix(transformToApply.getMatrix());
-                    } else {
-                        // Undo the scroll translation, apply the transformation matrix,
-                        // then redo the scroll translate to get the correct result.
-                        canvas.translate(-transX, -transY);
-                        canvas.concat(transformToApply.getMatrix());
-                        canvas.translate(transX, transY);
-                    }
-                    parent.mGroupFlags |= ViewGroup.FLAG_CLEAR_TRANSFORMATION;
-                }
-
-                float transformAlpha = transformToApply.getAlpha();
-                if (transformAlpha &lt; 1) {
-                    alpha *= transformAlpha;
-                    parent.mGroupFlags |= ViewGroup.FLAG_CLEAR_TRANSFORMATION;
-                }
-
-            if (!childHasIdentityMatrix &amp;&amp; !useDisplayListProperties) {
-                canvas.translate(-transX, -transY);
-                canvas.concat(getMatrix());
-                canvas.translate(transX, transY);
-            }
-        }
-        ......
-    }
-
-    if (a != null &amp;&amp; !more) {
-        if (!hardwareAccelerated &amp;&amp; !a.getFillAfter()) {
-            onSetAlpha(255);
-        }
-        parent.finishAnimatingView(this, a);
-    }
-
-    // 根据动画进度判断是否需要继续重绘
-    if (more &amp;&amp; hardwareAccelerated) {
-        // invalidation is the trigger to recreate display lists, so if we&apos;re using
-        // display lists to render, force an invalidate to allow the animation to
-        // continue drawing another frame
-        parent.invalidate(true);
-        if (a.hasAlpha() &amp;&amp; (mPrivateFlags &amp; PFLAG_ALPHA_SET) == PFLAG_ALPHA_SET) {
-            // alpha animations should cause the child to recreate its display list
-            invalidate(true);
-        }
-    }
-
-    mRecreateDisplayList = false;
-
-    return more;
-}
-</code></pre><p>时序图：</p>
-<h4 id="0x03-属性动画源码"><a href="#0x03-属性动画源码" class="headerlink" title="0x03 属性动画源码"></a>0x03 属性动画源码</h4><p>onsync时序图：<br><img src="/res/android_animation/choreographer_seq_diag.png" alt="choreographer onVsync时序图"></p>
+<p>时序图：</p>
+<h4 id="0x03-属性动画源码"><a href="#0x03-属性动画源码" class="headerlink" title="0x03 属性动画源码"></a>0x03 属性动画源码</h4><p>onsync时序图：<br><img src="/res/android_animation/choreographer_seq_diag.png" srcset="/img/loading.gif" lazyload alt="choreographer onVsync时序图"></p>
 <p>从ObjectAnimator的start()方法开始,跳转到父类ValueAnimator的start()方法，为了减少篇幅，这里的代码就不贴出来了，详细的代码可以查看从ObjectAnimator.java。</p>
-<pre><code>@Override
-public void start() {
+<div class="code-wrapper"><pre><code class="hljs">@Override
+public void start() &#123;
     // See if any of the current active/pending animators need to be canceled
     // 这里先判断当前的动画、等待的动画和延迟执行的动画和this去比较，如果动画的目标对象相同并且属性相同就取消相同的动画。
     ......
 
     super.start();
-}
-</code></pre><p>ValueAnimator的start(boolean)方法只是做了两件事：<br>1.把当前的animator加入等待队列中，<br>2.启动animationHandler。AnimationHandler并不是一个Handler，而是Runnable。</p>
-<pre><code>private void start(boolean playBackwards) {
-    if (Looper.myLooper() == null) {
+&#125;
+</code></pre></div>
+<p>ValueAnimator的start(boolean)方法只是做了两件事：<br>1.把当前的animator加入等待队列中，<br>2.启动animationHandler。AnimationHandler并不是一个Handler，而是Runnable。</p>
+<div class="code-wrapper"><pre><code class="hljs">private void start(boolean playBackwards) &#123;
+    if (Looper.myLooper() == null) &#123;
         throw new AndroidRuntimeException(&quot;Animators may only be run on Looper threads&quot;);
-    }
+    &#125;
 
     ......
 
     AnimationHandler animationHandler = getOrCreateAnimationHandler();
     animationHandler.mPendingAnimations.add(this);
-    if (mStartDelay == 0) {
+    if (mStartDelay == 0) &#123;
         // This sets the initial value of the animation, prior to actually starting it running
         setCurrentPlayTime(0);
         mPlayingState = STOPPED;
         mRunning = true;
         notifyStartListeners();
-    }
+    &#125;
     animationHandler.start();
-}
-</code></pre><p>将AnimationHandler对象传递给Choreographer(编舞者)，Choreographer是和线程绑定的单例。告诉编舞者，我是一个CALLBACK_ANIMATION(动画类型)，你自己看着办吧。</p>
-<pre><code>private void scheduleAnimation() {
-    if (!mAnimationScheduled) {
+&#125;
+</code></pre></div>
+<p>将AnimationHandler对象传递给Choreographer(编舞者)，Choreographer是和线程绑定的单例。告诉编舞者，我是一个CALLBACK_ANIMATION(动画类型)，你自己看着办吧。</p>
+<div class="code-wrapper"><pre><code class="hljs">private void scheduleAnimation() &#123;
+    if (!mAnimationScheduled) &#123;
         mChoreographer.postCallback(Choreographer.CALLBACK_ANIMATION, this, null);
         mAnimationScheduled = true;
-    }
-}
-</code></pre><p>编舞者根据callbackType(就是上面的CALLBACK_ANIMATION类型)，把当前的action(就是animationHandler)加入相应类型的Callback队列等待被执行。并且安排下一帧的时间。</p>
-<pre><code>private void postCallbackDelayedInternal(int callbackType,
-        Object action, Object token, long delayMillis) {
+    &#125;
+&#125;
+</code></pre></div>
+<p>编舞者根据callbackType(就是上面的CALLBACK_ANIMATION类型)，把当前的action(就是animationHandler)加入相应类型的Callback队列等待被执行。并且安排下一帧的时间。</p>
+<div class="code-wrapper"><pre><code class="hljs">private void postCallbackDelayedInternal(int callbackType,
+        Object action, Object token, long delayMillis) &#123;
 
-    synchronized (mLock) {
+    synchronized (mLock) &#123;
         final long now = SystemClock.uptimeMillis();
         final long dueTime = now + delayMillis;
         // 加入相应类型的Callback队列等待被执行
         mCallbackQueues[callbackType].addCallbackLocked(dueTime, action, token);
 
-        if (dueTime &lt;= now) {
+        if (dueTime &lt;= now) &#123;
             scheduleFrameLocked(now);
-        } else {
+        &#125; else &#123;
             Message msg = mHandler.obtainMessage(MSG_DO_SCHEDULE_CALLBACK, action);
             msg.arg1 = callbackType;
             msg.setAsynchronous(true);
             mHandler.sendMessageAtTime(msg, dueTime);
-        }
-    }
-}
-</code></pre><p>如果使用Vsync，通过FrameDisplayEventReceiver的scheduleVsync方法，申请一次VSYNC中断，这样就可以在中断处理的onVsync函数去进行绘制。如果不需要直接发送MSG_DO_FRAME消息。</p>
-<pre><code>private void scheduleFrameLocked(long now) {
-    if (!mFrameScheduled) {
+        &#125;
+    &#125;
+&#125;
+</code></pre></div>
+<p>如果使用Vsync，通过FrameDisplayEventReceiver的scheduleVsync方法，申请一次VSYNC中断，这样就可以在中断处理的onVsync函数去进行绘制。如果不需要直接发送MSG_DO_FRAME消息。</p>
+<div class="code-wrapper"><pre><code class="hljs">private void scheduleFrameLocked(long now) &#123;
+    if (!mFrameScheduled) &#123;
         mFrameScheduled = true;
-        if (USE_VSYNC) {
+        if (USE_VSYNC) &#123;
             // If running on the Looper thread, then schedule the vsync immediately,
             // otherwise post a message to schedule the vsync from the UI thread
             // as soon as possible.
             // 如果使用VSYNC就申请一次中断请求
-            if (isRunningOnLooperThreadLocked()) {
+            if (isRunningOnLooperThreadLocked()) &#123;
                 scheduleVsyncLocked();
-            } else {
+            &#125; else &#123;
                 Message msg = mHandler.obtainMessage(MSG_DO_SCHEDULE_VSYNC);
                 msg.setAsynchronous(true);
                 mHandler.sendMessageAtFrontOfQueue(msg);
-            }
-        } else {
+            &#125;
+        &#125; else &#123;
             final long nextFrameTime = Math.max(
                     mLastFrameTimeNanos / TimeUtils.NANOS_PER_MS + sFrameDelay, now);
             // 如果不是要VSYNC，就直接触发MSG_DO_FRAME
             Message msg = mHandler.obtainMessage(MSG_DO_FRAME);
             msg.setAsynchronous(true);
             mHandler.sendMessageAtTime(msg, nextFrameTime);
-        }
-    }
-}
-</code></pre><p>上面注册一个了reciver，在VSYNC发生的时候接受到消息，就会触发onVsync方法,执行当前的FrameDisplayEventReceiver Runnable。</p>
-<pre><code>public void onVsync(long timestampNanos, int builtInDisplayId, int frame) {
+        &#125;
+    &#125;
+&#125;
+</code></pre></div>
+<p>上面注册一个了reciver，在VSYNC发生的时候接受到消息，就会触发onVsync方法,执行当前的FrameDisplayEventReceiver Runnable。</p>
+<div class="code-wrapper"><pre><code class="hljs">public void onVsync(long timestampNanos, int builtInDisplayId, int frame) &#123;
     ......
     Message msg = Message.obtain(mHandler, this);
     msg.setAsynchronous(true);
     mHandler.sendMessageAtTime(msg, timestampNanos / TimeUtils.NANOS_PER_MS);
-}
+&#125;
 
 @Override
-public void run() {
+public void run() &#123;
     mHavePendingVsync = false;
     doFrame(mTimestampNanos, mFrame);
-}
-</code></pre><p>我们看doFrame方法做了什么？调用doCallbacks方法，获取当前类型的等待序列中在当前时间的callback，得到action并执行run方法，在这里callback的action就是AnimationHandler。</p>
-<pre><code>void doFrame(long frameTimeNanos, int frame) {
+&#125;
+</code></pre></div>
+<p>我们看doFrame方法做了什么？调用doCallbacks方法，获取当前类型的等待序列中在当前时间的callback，得到action并执行run方法，在这里callback的action就是AnimationHandler。</p>
+<div class="code-wrapper"><pre><code class="hljs">void doFrame(long frameTimeNanos, int frame) &#123;
     ......
     // 优先级最高，和输入事件处理有关
     doCallbacks(Choreographer.CALLBACK_INPUT, frameTimeNanos);
@@ -699,596 +378,294 @@ public void run() {
     doCallbacks(Choreographer.CALLBACK_ANIMATION, frameTimeNanos);
     // 优先级最低，和UI等控件绘制有关
     doCallbacks(Choreographer.CALLBACK_TRAVERSAL, frameTimeNanos);
-}
+&#125;
 
 
-void doCallbacks(int callbackType, long frameTimeNanos) {
+void doCallbacks(int callbackType, long frameTimeNanos) &#123;
     CallbackRecord callbacks;
-    synchronized (mLock) {
-        // We use &quot;now&quot; to determine when callbacks become due because it&apos;s possible
+    synchronized (mLock) &#123;
+        // We use &quot;now&quot; to determine when callbacks become due because it&#39;s possible
         // for earlier processing phases in a frame to post callbacks that should run
         // in a following phase, such as an input event that causes an animation to start.
         final long now = SystemClock.uptimeMillis();
         callbacks = mCallbackQueues[callbackType].extractDueCallbacksLocked(now);
-        if (callbacks == null) {
+        if (callbacks == null) &#123;
             return;
-        }
+        &#125;
         mCallbacksRunning = true;
-    }
-    try {
-        for (CallbackRecord c = callbacks; c != null; c = c.next) {
+    &#125;
+    try &#123;
+        for (CallbackRecord c = callbacks; c != null; c = c.next) &#123;
             // 在这里回调callback的action
             c.run(frameTimeNanos);
-        }
-    }
+        &#125;
+    &#125;
     ......
-}
-</code></pre><p>终于回调了AnimationHandler的run方法，代码很多，起始无非就是让应该启动的animation启动起来，该延迟的放在延迟队列，正在做动画的调用doAnimationFrame方法，动画播放结束的就结束动画。当然如果还需要继续动画那就继续调用scheduleAnimation方法，告诉编舞者，还有呢，继续在下个帧时间执行我。当然所有时间控制是根据VSYNC回调上来的时间和每个动画的时间信息共同控制的。</p>
-<pre><code>private void doAnimationFrame(long frameTime) {
-    ......
-    for (int i = 0; i &lt; numAnims; ++i) {
-        ValueAnimator anim = mTmpAnimations.get(i);
-        if (mAnimations.contains(anim) &amp;&amp; anim.doAnimationFrame(frameTime)) {
-            mEndingAnims.add(anim);
-        }
-    }
-    ......
-    // If there are still active or delayed animations, schedule a future call to
-    // onAnimate to process the next frame of the animations.
-    if (!mAnimations.isEmpty() || !mDelayedAnims.isEmpty()) {
-        scheduleAnimation();
-    }
-}
-</code></pre><h4 id="0x04-动画源码总结"><a href="#0x04-动画源码总结" class="headerlink" title="0x04 动画源码总结"></a>0x04 动画源码总结</h4><p>1.针对视图来说，Animation和Scroller相似，都是如何控制视图的重绘，它们都指示定义了在某一个特定时刻我应该画成什么样子。<br>2.Choreographer实际上是视图所有重绘进度的实际控制者，因为它在控制着时间节奏，告诉应用们什么时间可以画，视图不需要自己控制刷新时间。<br>3.回头看Animation的源码分析，视图的重绘最终是触发ViewRootImpl的invalidate函数，该函数将最终调用ViewRootImpl的scheduleTraversals。同样是通过mChoreographer只是类型变成了CALLBACK_TRAVERSAL，代码如下所示：</p>
-<pre><code>void scheduleTraversals() {
-    if (!mTraversalScheduled) {
+&#125;
+</code></pre></div>
+<p>终于回调了AnimationHandler的run方法，代码很多，起始无非就是让应该启动的animation启动起来，该延迟的放在延迟队列，正在做动画的调用doAnimationFrame方法，动画播放结束的就结束动画。当然如果还需要继续动画那就继续调用scheduleAnimation方法，告诉编舞者，还有呢，继续在下个帧时间执行我。当然所有时间控制是根据VSYNC回调上来的时间和每个动画的时间信息共同控制的。</p>
+<div class="code-wrapper"><pre><code class="hljs">    private void doAnimationFrame(long frameTime) &#123;
+        ......
+        for (int i = 0; i &lt; numAnims; ++i) &#123;
+            ValueAnimator anim = mTmpAnimations.get(i);
+            if (mAnimations.contains(anim) &amp;&amp; anim.doAnimationFrame(frameTime)) &#123;
+                mEndingAnims.add(anim);
+            &#125;
+        &#125;
+        ......
+        // If there are still active or delayed animations, schedule a future call to
+        // onAnimate to process the next frame of the animations.
+        if (!mAnimations.isEmpty() || !mDelayedAnims.isEmpty()) &#123;
+            scheduleAnimation();
+        &#125;
+    &#125;
+</code></pre></div>
+<h4 id="0x04-动画源码总结"><a href="#0x04-动画源码总结" class="headerlink" title="0x04 动画源码总结"></a>0x04 动画源码总结</h4><p>1.针对视图来说，Animation和Scroller相似，都是如何控制视图的重绘，它们都指示定义了在某一个特定时刻我应该画成什么样子。<br>2.Choreographer实际上是视图所有重绘进度的实际控制者，因为它在控制着时间节奏，告诉应用们什么时间可以画，视图不需要自己控制刷新时间。<br>3.回头看Animation的源码分析，视图的重绘最终是触发ViewRootImpl的invalidate函数，该函数将最终调用ViewRootImpl的scheduleTraversals。同样是通过mChoreographer只是类型变成了CALLBACK_TRAVERSAL，代码如下所示：</p>
+<div class="code-wrapper"><pre><code class="hljs">void scheduleTraversals() &#123;
+    if (!mTraversalScheduled) &#123;
         mTraversalScheduled = true;
         mTraversalBarrier = mHandler.getLooper().postSyncBarrier();
         mChoreographer.postCallback(
                 Choreographer.CALLBACK_TRAVERSAL, mTraversalRunnable, null);
-        if (!mUnbufferedInputDispatch) {
+        if (!mUnbufferedInputDispatch) &#123;
             scheduleConsumeBatchedInput();
-        }
+        &#125;
         notifyRendererOfFramePending();
-    }
-}
-</code></pre><p>4.Asynchronous Message和Synchronization Barrier我还没有理解，当你觉得自己明白了的时候，其实你还有很多不知道，当你觉得你不明白的时候，那是你真的不知道。不知道还是不知道！！</p>
+    &#125;
+&#125;
+</code></pre></div>
+<p>4.Asynchronous Message和Synchronization Barrier我还没有理解，当你觉得自己明白了的时候，其实你还有很多不知道，当你觉得你不明白的时候，那是你真的不知道。不知道还是不知道！！</p>
 <h3 id="0x05-转载请标明出处病已blog-https-ivonhoe-github-io"><a href="#0x05-转载请标明出处病已blog-https-ivonhoe-github-io" class="headerlink" title="0x05 转载请标明出处病已blog https://ivonhoe.github.io/"></a>0x05 转载请标明出处<a href="https://ivonhoe.github.io/">病已blog https://ivonhoe.github.io/</a></h3>
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-        
-          
-        
-        <div class="post-tags">
-          
-            <a href="/tags/动画/" rel="tag"># 动画</a>
-          
-            <a href="/tags/android/" rel="tag"># android</a>
-          
-        </div>
-      
-
-      
-      
-      
-
-      
-        <div class="post-nav">
-          <div class="post-nav-next post-nav-item">
-            
-              <a href="/2015/02/09/Android动画总结/" rel="next" title="Android动画总结">
-                <i class="fa fa-chevron-left"></i> Android动画总结
-              </a>
-            
-          </div>
-
-          <span class="post-nav-divider"></span>
-
-          <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2015/04/08/-翻译-Context-什么是Context？/" rel="prev" title="[译]Context?什么是Context？">
-                [译]Context?什么是Context？ <i class="fa fa-chevron-right"></i>
-              </a>
-            
-          </div>
-        </div>
-      
-
-      
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-  </div>
-
-
-          </div>
-          
-
-  
-    <div class="comments" id="comments">
-    </div>
-
-  
-
-
-
-        </div>
-        
-          
-  
-  <div class="sidebar-toggle">
-    <div class="sidebar-toggle-line-wrap">
-      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
-    </div>
-  </div>
-
-  <aside id="sidebar" class="sidebar">
-    <div class="sidebar-inner">
-
-      
-
-      
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            站点概览
-          </li>
-        </ul>
-      
-
-      <div class="site-overview-wrap sidebar-panel">
-        <div class="site-overview">
-          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-            
-              <p class="site-author-name" itemprop="name">病已</p>
-              <div class="site-description motion-element" itemprop="description"></div>
-          </div>
-
-          
-            <nav class="site-state motion-element">
-              
-                <div class="site-state-item site-state-posts">
-                
-                  <a href="/archives/">
-                
-                    <span class="site-state-item-count">38</span>
-                    <span class="site-state-item-name">日志</span>
-                  </a>
-                </div>
-              
-
-              
-                
-                
-                <div class="site-state-item site-state-categories">
-                  
-                    
-                      <a href="/categories/">
-                    
-                  
-                    
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                    <span class="site-state-item-count">9</span>
-                    <span class="site-state-item-name">分类</span>
-                  </a>
-                </div>
-              
-
-              
-                
-                
-                <div class="site-state-item site-state-tags">
-                  
-                    
-                      <a href="/tags/">
-                    
-                  
-                    
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                    <span class="site-state-item-count">41</span>
-                    <span class="site-state-item-name">标签</span>
-                  </a>
-                </div>
-              
-            </nav>
-          
-
-          
-            <div class="feed-link motion-element">
-              <a href="/atom.xml" rel="alternate">
-                <i class="fa fa-rss"></i>
-                RSS
-              </a>
             </div>
-          
-
-          
-
-          
-            <div class="links-of-author motion-element">
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/Android%E5%8A%A8%E7%94%BB/">Android动画</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E5%8A%A8%E7%94%BB/">动画</a>
+                    
+                      <a class="hover-with-bg" href="/tags/android/">android</a>
+                    
+                  </div>
+                
+              </div>
               
-                <span class="links-of-author-item">
+                <p class="note note-warning">
                   
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
                   
-                    
-                  
-                  
-                    
-                  
-                  <a href="https://github.com/ivonhoe" title="GitHub &rarr; https://github.com/ivonhoe" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
-                </span>
+                </p>
               
-                <span class="links-of-author-item">
-                  
-                  
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
                     
-                  
-                  
                     
-                  
-                  <a href="mailto:yangfan3687@163.com" title="E-Mail &rarr; mailto:yangfan3687@163.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
-                </span>
+                      <a href="/2015/04/08/-%E7%BF%BB%E8%AF%91-Context-%E4%BB%80%E4%B9%88%E6%98%AFContext%EF%BC%9F/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">[译]Context?什么是Context？</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2015/02/09/Android%E5%8A%A8%E7%94%BB%E6%80%BB%E7%BB%93/">
+                        <span class="hidden-mobile">Android动画总结</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
               
             </div>
-          
 
-          
-
-          
-          
-
-          
             
-          
-          
+              <!-- Comments -->
+              <article class="comments" id="comments" lazyload>
+                
+                  
+                
+                
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/valine@1/dist/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"JdLpddsaWqwfJtXPdDK8woaF-gzGzoHsz","appKey":"CEmtHXH8f0PtvF0zYtVE0EeY","path":"window.location.pathname","placeholder":null,"avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          Fluid.plugins.initFancyBox('#valine .vcontent img:not(.vemoji)');
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
 
+
+              </article>
+            
+          </article>
         </div>
       </div>
-
-      
-      <!--noindex-->
-        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-            
-            
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#0x01-动画插值源码"><span class="nav-number">1.</span> <span class="nav-text">0x01 动画插值源码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x02-补间动画源码"><span class="nav-number">2.</span> <span class="nav-text">0x02 补间动画源码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x03-属性动画源码"><span class="nav-number">3.</span> <span class="nav-text">0x03 属性动画源码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x04-动画源码总结"><span class="nav-number">4.</span> <span class="nav-text">0x04 动画源码总结</span></a></li></ol><li class="nav-item nav-level-3"><a class="nav-link" href="#0x05-转载请标明出处病已blog-https-ivonhoe-github-io"><span class="nav-number"></span> <span class="nav-text">0x05 转载请标明出处病已blog https://ivonhoe.github.io/</span></a></li></div>
-            
-
-          </div>
-        </div>
-      <!--/noindex-->
-      
-
-      
-
     </div>
-  </aside>
-  
-
-
-        
-      </div>
-    </main>
-
-    <footer id="footer" class="footer">
-      <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
-  <span class="with-love" id="animate">
-    <i class="fa fa-user"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">病已</span>
-
-  
-
-  
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
 </div>
 
-
-  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
-
-
-
-  <span class="post-meta-divider">|</span>
-
-
-
-  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.1.2</div>
-
-
-
-
-        
-
-
-
-
-
-
-
-
-        
       </div>
-    </footer>
-
-    
-      <div class="back-to-top">
-        <i class="fa fa-arrow-up"></i>
-        
-      </div>
-    
-
-    
-
-    
-
     
   </div>
+</div>
 
-  
-
-<script>
-  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
-    window.Promise = null;
-  }
-</script>
+<!-- Custom -->
 
 
+    
 
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
 
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
 
+    
+  </main>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-  <script src="/lib/jquery/index.js?v=3.4.1"></script>
-
-  
-  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
-
-  
-  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
-
-
-  
-
-
-  <script src="/js/utils.js?v=7.1.2"></script>
-
-  <script src="/js/motion.js?v=7.1.2"></script>
-
-
-
-  
-  
-
-
-  <script src="/js/affix.js?v=7.1.2"></script>
-
-  <script src="/js/schemes/pisces.js?v=7.1.2"></script>
-
-
-
-
-  
-  <script src="/js/scrollspy.js?v=7.1.2"></script>
-<script src="/js/post-details.js?v=7.1.2"></script>
-
-
-
-  
-
-
-  <script src="/js/next-boot.js?v=7.1.2"></script>
-
-
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
   
 
   
 
   
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
 
   
+    <script  src="/js/img-lazyload.js" ></script>
   
-
-<script src="//cdn1.lncld.net/static/js/3.11.1/av-min.js"></script>
-
-
-
-<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
-
-<script>
-  var GUEST = ['nick', 'mail', 'link'];
-  var guest = 'nick,mail,link';
-  guest = guest.split(',').filter(function(item) {
-    return GUEST.indexOf(item) > -1;
-  });
-  new Valine({
-    el: '#comments',
-    verify: false,
-    notify: false,
-    appId: 'JdLpddsaWqwfJtXPdDK8woaF-gzGzoHsz',
-    appKey: 'CEmtHXH8f0PtvF0zYtVE0EeY',
-    placeholder: 'Just go go',
-    avatar: 'mm',
-    meta: guest,
-    pageSize: '10' || 10,
-    visitor: true,
-    lang: '' || 'zh-cn'
-  });
-</script>
-
 
 
 
   
 
 
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
   
 
 
 
 
-  
+  <script defer src="/js/leancloud.js" ></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   
-
-  
-
-  
-
-  
-
+    <!-- Baidu Analytics -->
+    <script defer>
+      var _hmt = _hmt || [];
+      (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?666a58de875adc9dd40d5de65ceac026";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();
+    </script>
   
 
   
@@ -1301,11 +678,13 @@ void doCallbacks(int callbackType, long frameTimeNanos) {
 
   
 
-  
 
-  
 
-  
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
 
 </body>
 </html>

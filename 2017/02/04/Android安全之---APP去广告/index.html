@@ -1,109 +1,28 @@
+
+
 <!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
 
 
 
-
-
-
-
-
-
-
-
-
-  
-
-
-<html class="theme-next gemini use-motion" lang="zh-CN">
-<head><meta name="generator" content="Hexo 3.9.0">
+<head>
   <meta charset="UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
-<meta name="theme-color" content="#222">
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
-
-<link rel="stylesheet" href="/css/main.css?v=7.1.2">
-
-
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.1.2">
-
-
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.1.2">
-
-
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.1.2">
-
-
-  <link rel="mask-icon" href="/images/logo.svg?v=7.1.2" color="#222">
-
-
-
-
-
-
-
-<script id="hexo.configurations">
-  var NexT = window.NexT || {};
-  var CONFIG = {
-    root: '/',
-    scheme: 'Gemini',
-    version: '7.1.2',
-    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
-    back2top: true,
-    back2top_sidebar: false,
-    fancybox: false,
-    fastclick: false,
-    lazyload: false,
-    tabs: true,
-    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
-    algolia: {
-      applicationID: '',
-      apiKey: '',
-      indexName: '',
-      hits: {"per_page":10},
-      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
-    }
-  };
-</script>
-
-
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
   
-
-
-
-
-  <meta name="description" content="一、工具介绍 apktool：google提供Android apk编译与反编译工具，https://ibotpeaches.github.io/Apktool/ dex2jar：dex文件转jar文件工具，https://github.com/pxb1988/dex2jar jd-gui：查看jar文件，http://jd.benow.ca/ keytool：制作和管理数字证书 jarsigne">
-<meta name="keywords" content="Android,移动安全,去广告">
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="病已">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="一、工具介绍 apktool：google提供Android apk编译与反编译工具，https:&#x2F;&#x2F;ibotpeaches.github.io&#x2F;Apktool&#x2F; dex2jar：dex文件转jar文件工具，https:&#x2F;&#x2F;github.com&#x2F;pxb1988&#x2F;dex2jar jd-gui：查看jar文件，http:&#x2F;&#x2F;jd.benow.ca&#x2F; keytool：制作和管理数字证书 jarsigne">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Android安全之APP去广告">
-<meta property="og:url" content="https://ivonhoe.github.io/2017/02/04/Android安全之---APP去广告/index.html">
+<meta property="og:url" content="https://ivonhoe.github.io/2017/02/04/Android%E5%AE%89%E5%85%A8%E4%B9%8B---APP%E5%8E%BB%E5%B9%BF%E5%91%8A/index.html">
 <meta property="og:site_name" content="病已的博客">
-<meta property="og:description" content="一、工具介绍 apktool：google提供Android apk编译与反编译工具，https://ibotpeaches.github.io/Apktool/ dex2jar：dex文件转jar文件工具，https://github.com/pxb1988/dex2jar jd-gui：查看jar文件，http://jd.benow.ca/ keytool：制作和管理数字证书 jarsigne">
-<meta property="og:locale" content="zh-CN">
+<meta property="og:description" content="一、工具介绍 apktool：google提供Android apk编译与反编译工具，https:&#x2F;&#x2F;ibotpeaches.github.io&#x2F;Apktool&#x2F; dex2jar：dex文件转jar文件工具，https:&#x2F;&#x2F;github.com&#x2F;pxb1988&#x2F;dex2jar jd-gui：查看jar文件，http:&#x2F;&#x2F;jd.benow.ca&#x2F; keytool：制作和管理数字证书 jarsigne">
+<meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://ivonhoe.github.io/res/dev-tool/dev-tool1.png">
 <meta property="og:image" content="https://ivonhoe.github.io/res/dev-tool/dev-tool2.png">
 <meta property="og:image" content="https://ivonhoe.github.io/res/dev-tool/dev-tool3.png">
@@ -113,970 +32,493 @@
 <meta property="og:image" content="https://ivonhoe.github.io/res/dev-tool/dev-tool11.png">
 <meta property="og:image" content="https://ivonhoe.github.io/res/dev-tool/dev-tool10.png">
 <meta property="og:image" content="https://ivonhoe.github.io/res/dev-tool/dev-tool7.png">
-<meta property="og:updated_time" content="2018-09-11T13:26:57.000Z">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Android安全之APP去广告">
-<meta name="twitter:description" content="一、工具介绍 apktool：google提供Android apk编译与反编译工具，https://ibotpeaches.github.io/Apktool/ dex2jar：dex文件转jar文件工具，https://github.com/pxb1988/dex2jar jd-gui：查看jar文件，http://jd.benow.ca/ keytool：制作和管理数字证书 jarsigne">
+<meta property="article:published_time" content="2017-02-04T05:27:20.000Z">
+<meta property="article:modified_time" content="2018-09-11T13:26:57.000Z">
+<meta property="article:author" content="病已">
+<meta property="article:tag" content="Android">
+<meta property="article:tag" content="移动安全">
+<meta property="article:tag" content="去广告">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://ivonhoe.github.io/res/dev-tool/dev-tool1.png">
-
-
-
-  <link rel="alternate" href="/atom.xml" title="病已的博客" type="application/atom+xml">
-
-
-
   
   
-  <link rel="canonical" href="https://ivonhoe.github.io/2017/02/04/Android安全之---APP去广告/">
+  <title>Android安全之APP去广告 - 病已的博客</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
 
 
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
 
-<script id="page.configurations">
-  CONFIG.page = {
-    sidebar: "",
-  };
-</script>
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
 
-  <title>Android安全之APP去广告 | 病已的博客</title>
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
   
 
 
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
 
 
 
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
 
-  <script>
-    var _hmt = _hmt || [];
-    (function() {
-      var hm = document.createElement("script");
-      hm.src = "https://hm.baidu.com/hm.js?666a58de875adc9dd40d5de65ceac026";
-      var s = document.getElementsByTagName("script")[0];
-      s.parentNode.insertBefore(hm, s);
-    })();
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"ivonhoe.github.io","root":"/","version":"1.8.14","typing":{"enable":false,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"baidu":"666a58de875adc9dd40d5de65ceac026","google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"JdLpddsaWqwfJtXPdDK8woaF-gzGzoHsz","app_key":"CEmtHXH8f0PtvF0zYtVE0EeY","server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
   </script>
-
-
-
-
-
-
-
-  <noscript>
-  <style>
-  .use-motion .motion-element,
-  .use-motion .brand,
-  .use-motion .menu-item,
-  .sidebar-inner,
-  .use-motion .post-block,
-  .use-motion .pagination,
-  .use-motion .comments,
-  .use-motion .post-header,
-  .use-motion .post-body,
-  .use-motion .collection-title { opacity: initial; }
-
-  .use-motion .logo,
-  .use-motion .site-title,
-  .use-motion .site-subtitle {
-    opacity: initial;
-    top: initial;
-  }
-
-  .use-motion .logo-line-before i { left: initial; }
-  .use-motion .logo-line-after i { right: initial; }
-  </style>
-</noscript>
-
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 6.1.0"><link rel="alternate" href="/atom.xml" title="病已的博客" type="application/atom+xml">
 </head>
 
-<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
 
-  
-  
-    
-  
+<body>
+  <header style="height: 30vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>病已的博客</strong>
+    </a>
 
-  <div class="container sidebar-position-left page-post-detail">
-    <div class="headband"></div>
-
-    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-brand-wrapper">
-  <div class="site-meta">
-    
-
-    <div class="custom-logo-site-title">
-      <a href="/" class="brand" rel="start">
-        <span class="logo-line-before"><i></i></span>
-        <span class="site-title">病已的博客</span>
-        <span class="logo-line-after"><i></i></span>
-      </a>
-    </div>
-    
-      
-        <p class="site-subtitle">枕上，马上，厕上</p>
-      
-    
-    
-  </div>
-
-  <div class="site-nav-toggle">
-    <button aria-label="切换导航栏">
-      <span class="btn-bar"></span>
-      <span class="btn-bar"></span>
-      <span class="btn-bar"></span>
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
     </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
   </div>
-</div>
-
-
-
-<nav class="site-nav">
-  
-    <ul id="menu" class="menu">
-      
-        
-        
-        
-          
-          <li class="menu-item menu-item-home">
-
-    
-    
-    
-      
-    
-
-    
-
-    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
-
-  </li>
-        
-        
-        
-          
-          <li class="menu-item menu-item-categories">
-
-    
-    
-    
-      
-    
-
-    
-
-    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
-
-  </li>
-        
-        
-        
-          
-          <li class="menu-item menu-item-tags">
-
-    
-    
-    
-      
-    
-
-    
-
-    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
-
-  </li>
-        
-        
-        
-          
-          <li class="menu-item menu-item-archives">
-
-    
-    
-    
-      
-    
-
-    
-
-    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
-
-  </li>
-        
-        
-        
-          
-          <li class="menu-item menu-item-about">
-
-    
-    
-    
-      
-    
-
-    
-
-    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
-
-  </li>
-
-      
-      
-    </ul>
-  
-
-  
-
-  
 </nav>
 
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default_post.jpeg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="Android安全之APP去广告">
+              
+                Android安全之APP去广告
+              
+            </span>
 
-
+            
+              <div class="mt-3">
   
-
-
-
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2017-02-04 13:27" pubdate>
+        2017年2月4日 下午
+      </time>
+    </span>
+  
 </div>
-    </header>
 
-    
+<div class="mt-1">
   
-  
-
-  
-
-  <a href="https://github.com/Ivonhoe" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewbox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a>
-
-
-
-    <main id="main" class="main">
-      <div class="main-inner">
-        <div class="content-wrap">
-          
-            
-
-          
-          <div id="content" class="content">
-            
-
-  <div id="posts" class="posts-expand">
-    
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://ivonhoe.github.io/2017/02/04/Android安全之---APP去广告/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="病已">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      1.8k 字
     </span>
+  
 
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="病已的博客">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      15 分钟
     </span>
+  
 
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">Android安全之APP去广告
-
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
+  
+  
+</div>
 
             
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2月 4 2017 13:27:20" itemprop="dateCreated datePublished" datetime="2017-02-04T13:27:20+08:00">2月 4 2017</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：9月 11 2018 21:26:57" itemprop="dateModified" datetime="2018-09-11T21:26:57+08:00">9月 11 2018</time>
-              
-            
-          </span>
+          </div>
 
           
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Android安全/" itemprop="url" rel="index"><span itemprop="name">Android安全</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2017/02/04/Android安全之---APP去广告/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2017/02/04/Android安全之---APP去广告/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-            <span id="/2017/02/04/Android安全之---APP去广告/" class="leancloud_visitors" data-flag-title="Android安全之APP去广告">
-              <span class="post-meta-divider">|</span>
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              
-                <span class="post-meta-item-text">阅读次数：</span>
-              
-                <span class="leancloud-visitors-count"></span>
-            </span>
-          
-
-          
-
-          
-
-          
-
         </div>
-      </header>
-    
+      </div>
+    </div>
+  </header>
 
+  <main>
     
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
       
 
-      
-        <h3 id="一、工具介绍"><a href="#一、工具介绍" class="headerlink" title="一、工具介绍"></a>一、工具介绍</h3><ul>
-<li><strong>apktool：</strong>google提供Android apk编译与反编译工具，<a href="https://ibotpeaches.github.io/Apktool/" target="_blank" rel="noopener">https://ibotpeaches.github.io/Apktool/</a></li>
-<li><strong>dex2jar：</strong>dex文件转jar文件工具，<a href="https://github.com/pxb1988/dex2jar" target="_blank" rel="noopener">https://github.com/pxb1988/dex2jar</a></li>
-<li><strong>jd-gui：</strong>查看jar文件，<a href="http://jd.benow.ca/" target="_blank" rel="noopener">http://jd.benow.ca/</a></li>
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Android安全之APP去广告</h1>
+            
+            <div class="markdown-body">
+              <h3 id="一、工具介绍"><a href="#一、工具介绍" class="headerlink" title="一、工具介绍"></a>一、工具介绍</h3><ul>
+<li><strong>apktool：</strong>google提供Android apk编译与反编译工具，<a target="_blank" rel="noopener" href="https://ibotpeaches.github.io/Apktool/">https://ibotpeaches.github.io/Apktool/</a></li>
+<li><strong>dex2jar：</strong>dex文件转jar文件工具，<a target="_blank" rel="noopener" href="https://github.com/pxb1988/dex2jar">https://github.com/pxb1988/dex2jar</a></li>
+<li><strong>jd-gui：</strong>查看jar文件，<a target="_blank" rel="noopener" href="http://jd.benow.ca/">http://jd.benow.ca/</a></li>
 <li><strong>keytool：</strong>制作和管理数字证书</li>
 <li><strong>jarsigner：</strong>使用数字证书对jar和apk进行签名</li>
 <li><strong>Android killer：</strong>Window系统中，上述工具的集成工具</li>
 </ul>
-<p>更多反编译工具可查看：<a href="http://unclechen.github.io/2016/09/07/Android%E5%8F%8D%E7%BC%96%E8%AF%91%E6%8A%80%E6%9C%AF%E6%80%BB%E7%BB%93/" target="_blank" rel="noopener">Uncle Chen—Android反编译技术总结</a></p>
-<h3 id="二、去除应用开发助手的广告"><a href="#二、去除应用开发助手的广告" class="headerlink" title="二、去除应用开发助手的广告"></a>二、去除应用开发助手的广告</h3><p>CodeKK公众号在17年初推出了一个<a href="https://mp.weixin.qq.com/s?__biz=MzAxNjI3MDkzOQ==&amp;mid=2654472664&amp;idx=1&amp;sn=dfc2b5beb90daa8fd068d8064ce0dcce&amp;chksm=803bfaecb74c73fa9a9addfd4d8bce031186c34b7d7b59ee22df41799c7eaa71a34863890f56&amp;mpshare=1&amp;scene=1&amp;srcid=0220tEQNaL7PwIgfBT8sIITK&amp;key=776fc8cdd0b88c0d0b9a6c8e271e4cfe2b2363aeda110198d4250b0a422befd0f43f78e2a17d528112f757336e136c56f488bc174baa56c116045a9bdbb37dbccf508eb8c70e48a2d09ca1da1b4d92d3&amp;ascene=0&amp;uin=MTMzNzYxMDM2MQ%3D%3D&amp;devicetype=iMac+MacBookPro11%2C4+OSX+OSX+10.12.1+build(16B2555" target="_blank" rel="noopener">应用开发助手</a>)。V1.0版本是有广告版本的，下面以这个版本为例，简单看下去广告过程。它的后续的V1.1.0和V1.2.0已经去除了广告功能。</p>
-<a id="more"></a>
-<h4 id="2-1、反编译"><a href="#2-1、反编译" class="headerlink" title="2.1、反编译"></a>2.1、反编译</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apktool.sh d -f ./dev-tools.apk</span><br></pre></td></tr></table></figure>
-<p><img src="/res/dev-tool/dev-tool1.png" alt><br><img src="/res/dev-tool/dev-tool2.png" alt></p>
-<h4 id="2-2、注释广告代码"><a href="#2-2、注释广告代码" class="headerlink" title="2.2、注释广告代码"></a>2.2、注释广告代码</h4><p>这里可以先用dex2jar转jar后查看下源码，会发现使用的是Google AdMob作为广告平台，简单看下代码可以发现在主页面activty_main.xml中包含广告视图的布局文件。所以只需要找到<code>ad_layout.xml</code>将其<code>android:visibility=&quot;gone&quot;</code>属性设置成<code>gone</code>就可以了。</p>
-<p><img src="/res/dev-tool/dev-tool3.png" alt></p>
+<p>更多反编译工具可查看：<a target="_blank" rel="noopener" href="http://unclechen.github.io/2016/09/07/Android%E5%8F%8D%E7%BC%96%E8%AF%91%E6%8A%80%E6%9C%AF%E6%80%BB%E7%BB%93/">Uncle Chen—Android反编译技术总结</a></p>
+<h3 id="二、去除应用开发助手的广告"><a href="#二、去除应用开发助手的广告" class="headerlink" title="二、去除应用开发助手的广告"></a>二、去除应用开发助手的广告</h3><p>CodeKK公众号在17年初推出了一个<a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=MzAxNjI3MDkzOQ==&mid=2654472664&idx=1&sn=dfc2b5beb90daa8fd068d8064ce0dcce&chksm=803bfaecb74c73fa9a9addfd4d8bce031186c34b7d7b59ee22df41799c7eaa71a34863890f56&mpshare=1&scene=1&srcid=0220tEQNaL7PwIgfBT8sIITK&key=776fc8cdd0b88c0d0b9a6c8e271e4cfe2b2363aeda110198d4250b0a422befd0f43f78e2a17d528112f757336e136c56f488bc174baa56c116045a9bdbb37dbccf508eb8c70e48a2d09ca1da1b4d92d3&ascene=0&uin=MTMzNzYxMDM2MQ==&devicetype=iMac+MacBookPro11,4+OSX+OSX+10.12.1+build(16B2555)">应用开发助手</a>。V1.0版本是有广告版本的，下面以这个版本为例，简单看下去广告过程。它的后续的V1.1.0和V1.2.0已经去除了广告功能。</p>
+<span id="more"></span>
+
+<h4 id="2-1、反编译"><a href="#2-1、反编译" class="headerlink" title="2.1、反编译"></a>2.1、反编译</h4><figure class="highlight bash"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><pre><code class="hljs bash">apktool.sh d -f ./dev-tools.apk<br></code></pre></td></tr></table></figure>
+
+<p><img src="/res/dev-tool/dev-tool1.png" srcset="/img/loading.gif" lazyload><br><img src="/res/dev-tool/dev-tool2.png" srcset="/img/loading.gif" lazyload></p>
+<h4 id="2-2、注释广告代码"><a href="#2-2、注释广告代码" class="headerlink" title="2.2、注释广告代码"></a>2.2、注释广告代码</h4><p>这里可以先用dex2jar转jar后查看下源码，会发现使用的是Google AdMob作为广告平台，简单看下代码可以发现在主页面activty_main.xml中包含广告视图的布局文件。所以只需要找到<code>ad_layout.xml</code>将其<code>            android:visibility=&quot;gone&quot;</code>属性设置成<code>gone</code>就可以了。</p>
+<p><img src="/res/dev-tool/dev-tool3.png" srcset="/img/loading.gif" lazyload></p>
 <h4 id="2-3、重打包"><a href="#2-3、重打包" class="headerlink" title="2.3、重打包"></a>2.3、重打包</h4><p>这里重打包的过程可能会遇到一些错误，不过认真查看日志并结合Google都是可以找到解决方案的，这里暂且不表。使用apktool b命令，生成的apk默认路径为<code>/dist</code>路径下</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apktool.sh b ./dev-tools</span><br></pre></td></tr></table></figure>
-<p><img src="/res/dev-tool/dev-tool4.png" alt></p>
-<h4 id="2-4、制作一个名为hackapk-keystore的证书-并重新签名应用"><a href="#2-4、制作一个名为hackapk-keystore的证书-并重新签名应用" class="headerlink" title="2.4、制作一个名为hackapk.keystore的证书,并重新签名应用"></a>2.4、制作一个名为hackapk.keystore的证书,并重新签名应用</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">制作证书：</span><br><span class="line">keytool -genkey -keystore hackapk.keystore -keyalg RSA -validity 10000 -alias hackapk</span><br><span class="line"></span><br><span class="line">签名：</span><br><span class="line">jarsigner -verbose -keystore hackapk.keystore -signedjar dev-tools-no-ads.apk ./dev-tools/dist/dev-tools.apk hackapk</span><br></pre></td></tr></table></figure>
-<p><img src="/res/dev-tool/dev-tool5.png" alt></p>
-<p>详细的参数可以参考：<br><a href="http://www.tttabc.com/android/keytool-keystore-jarsigner-apk.htm" target="_blank" rel="noopener">APK签名之keytool生成keystore和jarsigner签名apk</a></p>
-<h4 id="2-5、安装"><a href="#2-5、安装" class="headerlink" title="2.5、安装"></a>2.5、安装</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">adb install -r dev-tools-no-ads.apk</span><br></pre></td></tr></table></figure>
-<p><img src="/res/dev-tool/dev-tool6.png" alt></p>
-<p><img src="/res/dev-tool/dev-tool11.png" alt="有广告版本"></p>
-<p><img src="/res/dev-tool/dev-tool10.png" alt="无广告版本"></p>
-<h4 id="2-6、下载去广告版本的应用开发助手"><a href="#2-6、下载去广告版本的应用开发助手" class="headerlink" title="2.6、下载去广告版本的应用开发助手"></a>2.6、下载去广告版本的应用开发助手</h4><p><img src="/res/dev-tool/dev-tool7.png" alt></p>
-<h3 id="三、反编译脚本"><a href="#三、反编译脚本" class="headerlink" title="三、反编译脚本"></a>三、反编译脚本</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">#!/bin/sh</span><br><span class="line">workDir=./</span><br><span class="line">if [ &quot;$2&quot; ]</span><br><span class="line">then</span><br><span class="line">         mkdir $2</span><br><span class="line">         workDir=./$2/</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line">echo $workDir</span><br><span class="line">name=`basename $1 .apk`</span><br><span class="line">zipPath=$workDir$name.zip</span><br><span class="line"></span><br><span class="line">##apkTool反编译</span><br><span class="line">smaliDir=$workDir$name@smali</span><br><span class="line">apktool.sh d -f $1 -o $smaliDir</span><br><span class="line"></span><br><span class="line">## 解压缩，使用dex2jar处理</span><br><span class="line">unzipDir=$workDir$name@unzip</span><br><span class="line">cp $1 $zipPath</span><br><span class="line">unzip $zipPath -d $unzipDir</span><br><span class="line"></span><br><span class="line">d2j-dex2jar.sh -f $unzipDir/classes.dex -o $&#123;workDir&#125;dex2jar.jar</span><br><span class="line">d2j-dex2jar.sh -f $unzipDir/classes2.dex -o $&#123;workDir&#125;dex2jar2.jar</span><br><span class="line">d2j-dex2jar.sh -f $unzipDir/classes3.dex -o $&#123;workDir&#125;dex2jar3.jar</span><br><span class="line">open $workDir</span><br></pre></td></tr></table></figure>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs stylus">apktool<span class="hljs-selector-class">.sh</span> <span class="hljs-selector-tag">b</span> ./dev-tools<br></code></pre></td></tr></table></figure>
+<p><img src="/res/dev-tool/dev-tool4.png" srcset="/img/loading.gif" lazyload></p>
+<h4 id="2-4、制作一个名为hackapk-keystore的证书-并重新签名应用"><a href="#2-4、制作一个名为hackapk-keystore的证书-并重新签名应用" class="headerlink" title="2.4、制作一个名为hackapk.keystore的证书,并重新签名应用"></a>2.4、制作一个名为hackapk.keystore的证书,并重新签名应用</h4><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs stylus">制作证书：<br>keytool -genkey -keystore hackapk<span class="hljs-selector-class">.keystore</span> -keyalg RSA -validity <span class="hljs-number">10000</span> -alias hackapk<br><br>签名：<br>jarsigner -verbose -keystore hackapk<span class="hljs-selector-class">.keystore</span> -signedjar dev-tools-no-ads<span class="hljs-selector-class">.apk</span> ./dev-tools/dist/dev-tools<span class="hljs-selector-class">.apk</span> hackapk<br></code></pre></td></tr></table></figure>
+
+<p><img src="/res/dev-tool/dev-tool5.png" srcset="/img/loading.gif" lazyload></p>
+<p>详细的参数可以参考：<br><a target="_blank" rel="noopener" href="http://www.tttabc.com/android/keytool-keystore-jarsigner-apk.htm">APK签名之keytool生成keystore和jarsigner签名apk</a></p>
+<h4 id="2-5、安装"><a href="#2-5、安装" class="headerlink" title="2.5、安装"></a>2.5、安装</h4><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs nginx"><span class="hljs-attribute">adb</span> install -r dev-tools-<span class="hljs-literal">no</span>-ads.apk<br></code></pre></td></tr></table></figure>
+<p><img src="/res/dev-tool/dev-tool6.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/res/dev-tool/dev-tool11.png" srcset="/img/loading.gif" lazyload alt="有广告版本"></p>
+<p><img src="/res/dev-tool/dev-tool10.png" srcset="/img/loading.gif" lazyload alt="无广告版本"></p>
+<h4 id="2-6、下载去广告版本的应用开发助手"><a href="#2-6、下载去广告版本的应用开发助手" class="headerlink" title="2.6、下载去广告版本的应用开发助手"></a>2.6、下载去广告版本的应用开发助手</h4><p><img src="/res/dev-tool/dev-tool7.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="三、反编译脚本"><a href="#三、反编译脚本" class="headerlink" title="三、反编译脚本"></a>三、反编译脚本</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-meta">#!/bin/sh</span><br>workDir=./<br><span class="hljs-keyword">if</span> [ <span class="hljs-string">&quot;<span class="hljs-variable">$2</span>&quot;</span> ]<br><span class="hljs-keyword">then</span><br>         <span class="hljs-built_in">mkdir</span> <span class="hljs-variable">$2</span><br>         workDir=./<span class="hljs-variable">$2</span>/<br><span class="hljs-keyword">fi</span><br><br><span class="hljs-built_in">echo</span> <span class="hljs-variable">$workDir</span><br>name=`<span class="hljs-built_in">basename</span> <span class="hljs-variable">$1</span> .apk`<br>zipPath=$workDir<span class="hljs-variable">$name</span>.zip<br><br><span class="hljs-comment">##apkTool反编译</span><br>smaliDir=$workDir<span class="hljs-variable">$name</span>@smali<br>apktool.sh d -f <span class="hljs-variable">$1</span> -o <span class="hljs-variable">$smaliDir</span><br><br><span class="hljs-comment">## 解压缩，使用dex2jar处理</span><br>unzipDir=$workDir<span class="hljs-variable">$name</span>@unzip<br><span class="hljs-built_in">cp</span> <span class="hljs-variable">$1</span> <span class="hljs-variable">$zipPath</span><br>unzip <span class="hljs-variable">$zipPath</span> -d <span class="hljs-variable">$unzipDir</span><br><br>d2j-dex2jar.sh -f <span class="hljs-variable">$unzipDir</span>/classes.dex -o <span class="hljs-variable">$&#123;workDir&#125;</span>dex2jar.jar<br>d2j-dex2jar.sh -f <span class="hljs-variable">$unzipDir</span>/classes2.dex -o <span class="hljs-variable">$&#123;workDir&#125;</span>dex2jar2.jar<br>d2j-dex2jar.sh -f <span class="hljs-variable">$unzipDir</span>/classes3.dex -o <span class="hljs-variable">$&#123;workDir&#125;</span>dex2jar3.jar<br>open <span class="hljs-variable">$workDir</span><br></code></pre></td></tr></table></figure>
+
 <p>将上述内容保存到本地<code>hack.sh</code>文件中，使用下面的命令就会把apktool和dex2jar的结果输出到<code>meipu</code>这个目录中，这样就不需要每次收到敲命令喽，只要知道需要反编译的apk和输出的文件夹名称就可以~</p>
 <p><code>./hack.sh ./美铺_1487845975713.apk meipu</code></p>
 <h3 id="转载请标明出处病已blog-https-ivonhoe-github-io"><a href="#转载请标明出处病已blog-https-ivonhoe-github-io" class="headerlink" title="转载请标明出处病已blog https://ivonhoe.github.io/"></a>转载请标明出处<a href="https://ivonhoe.github.io/">病已blog https://ivonhoe.github.io/</a></h3>
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-        
-          
-        
-        <div class="post-tags">
-          
-            <a href="/tags/Android/" rel="tag"># Android</a>
-          
-            <a href="/tags/移动安全/" rel="tag"># 移动安全</a>
-          
-            <a href="/tags/去广告/" rel="tag"># 去广告</a>
-          
-        </div>
-      
-
-      
-      
-      
-
-      
-        <div class="post-nav">
-          <div class="post-nav-next post-nav-item">
-            
-              <a href="/2017/01/20/MacOS上编译Android源码/" rel="next" title="Mac OS上编译Android源码">
-                <i class="fa fa-chevron-left"></i> Mac OS上编译Android源码
-              </a>
-            
-          </div>
-
-          <span class="post-nav-divider"></span>
-
-          <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/02/09/美团如何防dex2jar/" rel="prev" title="Android安全之应用防dex2jar原理及实现">
-                Android安全之应用防dex2jar原理及实现 <i class="fa fa-chevron-right"></i>
-              </a>
-            
-          </div>
-        </div>
-      
-
-      
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-  </div>
-
-
-          </div>
-          
-
-  
-    <div class="comments" id="comments">
-    </div>
-
-  
-
-
-
-        </div>
-        
-          
-  
-  <div class="sidebar-toggle">
-    <div class="sidebar-toggle-line-wrap">
-      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
-    </div>
-  </div>
-
-  <aside id="sidebar" class="sidebar">
-    <div class="sidebar-inner">
-
-      
-
-      
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            站点概览
-          </li>
-        </ul>
-      
-
-      <div class="site-overview-wrap sidebar-panel">
-        <div class="site-overview">
-          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-            
-              <p class="site-author-name" itemprop="name">病已</p>
-              <div class="site-description motion-element" itemprop="description"></div>
-          </div>
-
-          
-            <nav class="site-state motion-element">
-              
-                <div class="site-state-item site-state-posts">
-                
-                  <a href="/archives/">
-                
-                    <span class="site-state-item-count">38</span>
-                    <span class="site-state-item-name">日志</span>
-                  </a>
-                </div>
-              
-
-              
-                
-                
-                <div class="site-state-item site-state-categories">
-                  
-                    
-                      <a href="/categories/">
-                    
-                  
-                    
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                    <span class="site-state-item-count">9</span>
-                    <span class="site-state-item-name">分类</span>
-                  </a>
-                </div>
-              
-
-              
-                
-                
-                <div class="site-state-item site-state-tags">
-                  
-                    
-                      <a href="/tags/">
-                    
-                  
-                    
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                    <span class="site-state-item-count">41</span>
-                    <span class="site-state-item-name">标签</span>
-                  </a>
-                </div>
-              
-            </nav>
-          
-
-          
-            <div class="feed-link motion-element">
-              <a href="/atom.xml" rel="alternate">
-                <i class="fa fa-rss"></i>
-                RSS
-              </a>
             </div>
-          
-
-          
-
-          
-            <div class="links-of-author motion-element">
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/Android%E5%AE%89%E5%85%A8/">Android安全</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/Android/">Android</a>
+                    
+                      <a class="hover-with-bg" href="/tags/%E7%A7%BB%E5%8A%A8%E5%AE%89%E5%85%A8/">移动安全</a>
+                    
+                      <a class="hover-with-bg" href="/tags/%E5%8E%BB%E5%B9%BF%E5%91%8A/">去广告</a>
+                    
+                  </div>
+                
+              </div>
               
-                <span class="links-of-author-item">
+                <p class="note note-warning">
                   
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
                   
-                    
-                  
-                  
-                    
-                  
-                  <a href="https://github.com/ivonhoe" title="GitHub &rarr; https://github.com/ivonhoe" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
-                </span>
+                </p>
               
-                <span class="links-of-author-item">
-                  
-                  
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
                     
-                  
-                  
                     
-                  
-                  <a href="mailto:yangfan3687@163.com" title="E-Mail &rarr; mailto:yangfan3687@163.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
-                </span>
+                      <a href="/2017/02/09/%E7%BE%8E%E5%9B%A2%E5%A6%82%E4%BD%95%E9%98%B2dex2jar/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Android安全之应用防dex2jar原理及实现</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2017/01/20/MacOS%E4%B8%8A%E7%BC%96%E8%AF%91Android%E6%BA%90%E7%A0%81/">
+                        <span class="hidden-mobile">Mac OS上编译Android源码</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
               
             </div>
-          
 
-          
-
-          
-          
-
-          
             
-          
-          
+              <!-- Comments -->
+              <article class="comments" id="comments" lazyload>
+                
+                  
+                
+                
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/valine@1/dist/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"JdLpddsaWqwfJtXPdDK8woaF-gzGzoHsz","appKey":"CEmtHXH8f0PtvF0zYtVE0EeY","path":"window.location.pathname","placeholder":null,"avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          Fluid.plugins.initFancyBox('#valine .vcontent img:not(.vemoji)');
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
 
+
+              </article>
+            
+          </article>
         </div>
       </div>
-
-      
-      <!--noindex-->
-        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-            
-            
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#一、工具介绍"><span class="nav-number">1.</span> <span class="nav-text">一、工具介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二、去除应用开发助手的广告"><span class="nav-number">2.</span> <span class="nav-text">二、去除应用开发助手的广告</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1、反编译"><span class="nav-number">2.1.</span> <span class="nav-text">2.1、反编译</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2、注释广告代码"><span class="nav-number">2.2.</span> <span class="nav-text">2.2、注释广告代码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3、重打包"><span class="nav-number">2.3.</span> <span class="nav-text">2.3、重打包</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-4、制作一个名为hackapk-keystore的证书-并重新签名应用"><span class="nav-number">2.4.</span> <span class="nav-text">2.4、制作一个名为hackapk.keystore的证书,并重新签名应用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-5、安装"><span class="nav-number">2.5.</span> <span class="nav-text">2.5、安装</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-6、下载去广告版本的应用开发助手"><span class="nav-number">2.6.</span> <span class="nav-text">2.6、下载去广告版本的应用开发助手</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#三、反编译脚本"><span class="nav-number">3.</span> <span class="nav-text">三、反编译脚本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#转载请标明出处病已blog-https-ivonhoe-github-io"><span class="nav-number">4.</span> <span class="nav-text">转载请标明出处病已blog https://ivonhoe.github.io/</span></a></li></ol></div>
-            
-
-          </div>
-        </div>
-      <!--/noindex-->
-      
-
-      
-
     </div>
-  </aside>
-  
-
-
-        
-      </div>
-    </main>
-
-    <footer id="footer" class="footer">
-      <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
-  <span class="with-love" id="animate">
-    <i class="fa fa-user"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">病已</span>
-
-  
-
-  
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
 </div>
 
-
-  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
-
-
-
-  <span class="post-meta-divider">|</span>
-
-
-
-  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.1.2</div>
-
-
-
-
-        
-
-
-
-
-
-
-
-
-        
       </div>
-    </footer>
-
-    
-      <div class="back-to-top">
-        <i class="fa fa-arrow-up"></i>
-        
-      </div>
-    
-
-    
-
-    
-
     
   </div>
+</div>
 
-  
-
-<script>
-  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
-    window.Promise = null;
-  }
-</script>
+<!-- Custom -->
 
 
+    
 
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
 
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
 
+    
+  </main>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-  <script src="/lib/jquery/index.js?v=3.4.1"></script>
-
-  
-  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
-
-  
-  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
-
-
-  
-
-
-  <script src="/js/utils.js?v=7.1.2"></script>
-
-  <script src="/js/motion.js?v=7.1.2"></script>
-
-
-
-  
-  
-
-
-  <script src="/js/affix.js?v=7.1.2"></script>
-
-  <script src="/js/schemes/pisces.js?v=7.1.2"></script>
-
-
-
-
-  
-  <script src="/js/scrollspy.js?v=7.1.2"></script>
-<script src="/js/post-details.js?v=7.1.2"></script>
-
-
-
-  
-
-
-  <script src="/js/next-boot.js?v=7.1.2"></script>
-
-
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
   
 
   
 
   
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
 
   
+    <script  src="/js/img-lazyload.js" ></script>
   
-
-<script src="//cdn1.lncld.net/static/js/3.11.1/av-min.js"></script>
-
-
-
-<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
-
-<script>
-  var GUEST = ['nick', 'mail', 'link'];
-  var guest = 'nick,mail,link';
-  guest = guest.split(',').filter(function(item) {
-    return GUEST.indexOf(item) > -1;
-  });
-  new Valine({
-    el: '#comments',
-    verify: false,
-    notify: false,
-    appId: 'JdLpddsaWqwfJtXPdDK8woaF-gzGzoHsz',
-    appKey: 'CEmtHXH8f0PtvF0zYtVE0EeY',
-    placeholder: 'Just go go',
-    avatar: 'mm',
-    meta: guest,
-    pageSize: '10' || 10,
-    visitor: true,
-    lang: '' || 'zh-cn'
-  });
-</script>
-
 
 
 
   
 
 
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
   
 
 
 
 
-  
+  <script defer src="/js/leancloud.js" ></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   
-
-  
-
-  
-
-  
-
+    <!-- Baidu Analytics -->
+    <script defer>
+      var _hmt = _hmt || [];
+      (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?666a58de875adc9dd40d5de65ceac026";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();
+    </script>
   
 
   
@@ -1089,11 +531,13 @@
 
   
 
-  
 
-  
 
-  
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
 
 </body>
 </html>

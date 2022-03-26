@@ -1,325 +1,450 @@
+
+
 <!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
 
 
 
-
-
-
-
-
-
-
-
-
-  
-
-
-<html class="theme-next gemini use-motion" lang="zh-CN">
-<head><meta name="generator" content="Hexo 3.9.0">
+<head>
   <meta charset="UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
-<meta name="theme-color" content="#222">
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
-
-<link rel="stylesheet" href="/css/main.css?v=7.1.2">
-
-
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.1.2">
-
-
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.1.2">
-
-
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.1.2">
-
-
-  <link rel="mask-icon" href="/images/logo.svg?v=7.1.2" color="#222">
-
-
-
-
-
-
-
-<script id="hexo.configurations">
-  var NexT = window.NexT || {};
-  var CONFIG = {
-    root: '/',
-    scheme: 'Gemini',
-    version: '7.1.2',
-    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
-    back2top: true,
-    back2top_sidebar: false,
-    fancybox: false,
-    fastclick: false,
-    lazyload: false,
-    tabs: true,
-    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
-    algolia: {
-      applicationID: '',
-      apiKey: '',
-      indexName: '',
-      hits: {"per_page":10},
-      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
-    }
-  };
-</script>
-
-
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
   
-
-
-
-
-  <meta name="description" content="原文地址：Zygote https://anatomyofandroid.com/2013/10/15/zygote/ Zygote（受精卵）是一个启动应用的守护进程，在Server Manager之后被init.rc触发，但其实他是真正被app_process启动的，下面是启动这个特殊进程的流程。 1234567service zygote /system/bin/app_process -Xz">
-<meta name="keywords" content="翻译,Zygote">
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="病已">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="原文地址：Zygote https:&#x2F;&#x2F;anatomyofandroid.com&#x2F;2013&#x2F;10&#x2F;15&#x2F;zygote&#x2F; Zygote（受精卵）是一个启动应用的守护进程，在Server Manager之后被init.rc触发，但其实他是真正被app_process启动的，下面是启动这个特殊进程的流程。 1234567service zygote &#x2F;system&#x2F;bin&#x2F;app_process -Xz">
 <meta property="og:type" content="article">
 <meta property="og:title" content="[译]Zygote">
 <meta property="og:url" content="https://ivonhoe.github.io/2017/04/15/Zygote/index.html">
 <meta property="og:site_name" content="病已的博客">
-<meta property="og:description" content="原文地址：Zygote https://anatomyofandroid.com/2013/10/15/zygote/ Zygote（受精卵）是一个启动应用的守护进程，在Server Manager之后被init.rc触发，但其实他是真正被app_process启动的，下面是启动这个特殊进程的流程。 1234567service zygote /system/bin/app_process -Xz">
-<meta property="og:locale" content="zh-CN">
+<meta property="og:description" content="原文地址：Zygote https:&#x2F;&#x2F;anatomyofandroid.com&#x2F;2013&#x2F;10&#x2F;15&#x2F;zygote&#x2F; Zygote（受精卵）是一个启动应用的守护进程，在Server Manager之后被init.rc触发，但其实他是真正被app_process启动的，下面是启动这个特殊进程的流程。 1234567service zygote &#x2F;system&#x2F;bin&#x2F;app_process -Xz">
+<meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://ivonhoe.github.io/res/zygote/zygote-1.png">
-<meta property="og:updated_time" content="2018-09-11T13:30:14.000Z">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="[译]Zygote">
-<meta name="twitter:description" content="原文地址：Zygote https://anatomyofandroid.com/2013/10/15/zygote/ Zygote（受精卵）是一个启动应用的守护进程，在Server Manager之后被init.rc触发，但其实他是真正被app_process启动的，下面是启动这个特殊进程的流程。 1234567service zygote /system/bin/app_process -Xz">
+<meta property="article:published_time" content="2017-04-15T15:32:51.000Z">
+<meta property="article:modified_time" content="2018-09-11T13:30:14.000Z">
+<meta property="article:author" content="病已">
+<meta property="article:tag" content="翻译">
+<meta property="article:tag" content="Zygote">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://ivonhoe.github.io/res/zygote/zygote-1.png">
+  
+  
+  <title>[译]Zygote - 病已的博客</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
 
 
 
-  <link rel="alternate" href="/atom.xml" title="病已的博客" type="application/atom+xml">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
 
 
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"ivonhoe.github.io","root":"/","version":"1.8.14","typing":{"enable":false,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"baidu":"666a58de875adc9dd40d5de65ceac026","google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"JdLpddsaWqwfJtXPdDK8woaF-gzGzoHsz","app_key":"CEmtHXH8f0PtvF0zYtVE0EeY","server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 6.1.0"><link rel="alternate" href="/atom.xml" title="病已的博客" type="application/atom+xml">
+</head>
+
+
+<body>
+  <header style="height: 30vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>病已的博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default_post.jpeg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="[译]Zygote">
+              
+                [译]Zygote
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2017-04-15 23:32" pubdate>
+        2017年4月15日 晚上
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      4.2k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      36 分钟
+    </span>
+  
 
   
   
-  <link rel="canonical" href="https://ivonhoe.github.io/2017/04/15/Zygote/">
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">[译]Zygote</h1>
+            
+            <div class="markdown-body">
+              <p>原文地址：<a target="_blank" rel="noopener" href="https://anatomyofandroid.com/2013/10/15/zygote/">Zygote https://anatomyofandroid.com/2013/10/15/zygote/</a></p>
+<p>Zygote（受精卵）是一个启动应用的守护进程，在Server Manager之后被init.rc触发，但其实他是真正被app_process启动的，下面是启动这个特殊进程的流程。</p>
+<figure class="highlight angelscript"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></div></td><td class="code"><pre><code class="hljs angelscript">service zygote /system/bin/app_process -Xzygote /system/bin --zygote --start-system-server<br><span class="hljs-keyword">class</span> <span class="hljs-symbol">main</span><br><span class="hljs-symbol">socket</span> <span class="hljs-symbol">zygote</span> <span class="hljs-symbol">stream</span> <span class="hljs-symbol">660</span> <span class="hljs-symbol">root</span> <span class="hljs-symbol">system</span><br><span class="hljs-symbol">onrestart</span> <span class="hljs-symbol">write</span> /<span class="hljs-symbol">sys</span>/<span class="hljs-symbol">android_power</span>/<span class="hljs-symbol">request_state</span> <span class="hljs-symbol">wake</span><br><span class="hljs-symbol">onrestart</span> <span class="hljs-symbol">write</span> /<span class="hljs-symbol">sys</span>/<span class="hljs-symbol">power</span>/<span class="hljs-symbol">state</span> <span class="hljs-symbol">on</span><br><span class="hljs-symbol">onrestart</span> <span class="hljs-symbol">restart</span> <span class="hljs-symbol">media</span><br><span class="hljs-symbol">onrestart</span> <span class="hljs-symbol">restart</span> <span class="hljs-symbol">netd</span><br></code></pre></td></tr></table></figure>
+
+<p>你可以发现Zygote是如何当做系统服务启动的，你也可以看到app_process为什么说app_process是启动Zygote的真正命令。就像之前说的，Zygote是一个以专门启动应用为的守护进程。这意味着Zygote是所有App进程的父进程。当app_process启动Zygote时，它通过调用Zygote的main()方法创建了第一个Dalvik虚拟机。当Zygote启动后，zygote会预加载所有必须的Java类和资源，启动System Server并打开一个名为&#x2F;dev&#x2F;socket&#x2F;zygote的socket服务，去监听所有启动应用的请求。 想之前的文章所说，System Server 是一个和它的父进程完全分离的进程。一旦System Server创建完成，它会初始化一系列不同的System Services并启动Activity Manager。那Zygote是如何启动新的应用的呢？</p>
+<span id="more"></span>
+
+<p>Zygote 通过&#x2F;dev&#x2F;socket&#x2F;zygote(一个sockete Socket Server)接收启动应用的请求，就会触发一次fork()调用，会在另一个存储空间创建一个自身的拷贝。这个过程是很高效的。当Zygote执行fork时，它会精准创建一个预加载了应用进程所需的所有必要类和资源的Dalvik虚拟机，这样就会把创建虚拟机和加载资源的过程变得很高效。但这个设计不仅仅是这样。由于Android运行在Linux内核上，Linux Kernal实现了一个叫做Copy On Write（COW）的策略，在fork进程的过程中并不会真正的拷贝内存。一个进程想要修改这个共享的内存是，kernel会拦截这个请求，并对要修改的内存做一个拷贝。当一些Android的类库是不可写的情况下，那就意味着所有从Zygote fork出来的进程都在共享一份系统类文件和资源。另一个好处就是真的节省内存。不管启动多少应用进程在内存的增长上都会小很多。</p>
+<p>If you are in an early stage of a porting process, Zygote is another big process that you don’t need to start. You can disable it by adding the keyword “disabled” at the end of the boot sequence in init.rc</p>
+<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs angelscript">service zygote /system/bin/app_process -Xzygote /system/bin --zygote --start-system-server<br><span class="hljs-keyword">class</span> <span class="hljs-symbol">main</span><br><span class="hljs-symbol">socket</span> <span class="hljs-symbol">zygote</span> <span class="hljs-symbol">stream</span> <span class="hljs-symbol">660</span> <span class="hljs-symbol">root</span> <span class="hljs-symbol">system</span><br><span class="hljs-symbol">onrestart</span> <span class="hljs-symbol">write</span> /<span class="hljs-symbol">sys</span>/<span class="hljs-symbol">android_power</span>/<span class="hljs-symbol">request_state</span> <span class="hljs-symbol">wake</span><br><span class="hljs-symbol">onrestart</span> <span class="hljs-symbol">write</span> /<span class="hljs-symbol">sys</span>/<span class="hljs-symbol">power</span>/<span class="hljs-symbol">state</span> <span class="hljs-symbol">on</span><br><span class="hljs-symbol">onrestart</span> <span class="hljs-symbol">restart</span> <span class="hljs-symbol">media</span><br><span class="hljs-symbol">onrestart</span> <span class="hljs-symbol">restart</span> <span class="hljs-symbol">netd</span><br><span class="hljs-symbol">disabled</span><br></code></pre></td></tr></table></figure>
+
+<p>下面是一张说明Zygote在Android平台中作用的关系图(from Embedded Android)。</p>
+<p><img src="/res/zygote/zygote-1.png" srcset="/img/loading.gif" lazyload></p>
+<p>zygote的main()方法：</p>
+<figure class="highlight scss"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><code class="hljs scss">public static void <span class="hljs-selector-tag">main</span>(String argv[]) &#123;<br> try &#123;<br>     <span class="hljs-comment">// Start profiling the zygote initialization.</span><br>     SamplingProfilerIntegration<span class="hljs-selector-class">.start</span>();<br><br>    <span class="hljs-built_in">registerZygoteSocket</span>();<br>    EventLog<span class="hljs-selector-class">.writeEvent</span>(LOG_BOOT_PROGRESS_PRELOAD_START,<br>    SystemClock.uptimeMillis());<br>    <span class="hljs-built_in">preload</span>();<br>    EventLog<span class="hljs-selector-class">.writeEvent</span>(LOG_BOOT_PROGRESS_PRELOAD_END,<br>    SystemClock.uptimeMillis());<br><br>    <span class="hljs-comment">// Finish profiling the zygote initialization.</span><br>    SamplingProfilerIntegration<span class="hljs-selector-class">.writeZygoteSnapshot</span>();<br><br>    <span class="hljs-comment">// Do an initial gc to clean up after startup</span><br>    <span class="hljs-built_in">gc</span>();<br><br>    <span class="hljs-comment">// Disable tracing so that forked processes do not inherit stale tracing tags from</span><br>    <span class="hljs-comment">// Zygote.</span><br>    Trace<span class="hljs-selector-class">.setTracingEnabled</span>(false);<br><br>    <span class="hljs-comment">// If requested, start system server directly from Zygote</span><br>    if (argv.length != <span class="hljs-number">2</span>) &#123;<br>        throw new <span class="hljs-built_in">RuntimeException</span>(argv[<span class="hljs-number">0</span>] + USAGE_STRING);<br>    &#125;<br><br>    if (argv[<span class="hljs-number">1</span>].equals(&quot;start-system-server&quot;)) &#123;<br>        <span class="hljs-built_in">startSystemServer</span>();<br>    &#125; else if (!argv[<span class="hljs-number">1</span>].equals(&quot;&quot;)) &#123;<br>        throw new <span class="hljs-built_in">RuntimeException</span>(argv[<span class="hljs-number">0</span>] + USAGE_STRING);<br>    &#125;<br><br>    Log<span class="hljs-selector-class">.i</span>(TAG, &quot;Accepting command socket connections&quot;);<br><br>    <span class="hljs-built_in">runSelectLoop</span>();<br><br>    <span class="hljs-built_in">closeServerSocket</span>();<br> &#125; catch (MethodAndArgsCaller caller) &#123;<br>     caller<span class="hljs-selector-class">.run</span>();<br> &#125; catch (RuntimeException ex) &#123;<br>     Log<span class="hljs-selector-class">.e</span>(TAG, &quot;Zygote died with exception&quot;, ex);<br>     <span class="hljs-built_in">closeServerSocket</span>();<br>     throw ex;<br> &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>通过下面代码可以看到Zygote是如何启动System Server的。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * Prepare the arguments and fork for the system server process.</span><br><span class="hljs-comment"> */</span><br><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-type">boolean</span> <span class="hljs-title function_">startSystemServer</span><span class="hljs-params">()</span><br>        <span class="hljs-keyword">throws</span> MethodAndArgsCaller, RuntimeException &#123;<br>    <span class="hljs-comment">/* Hardcoded command line to start the system server */</span><br>    String args[] = &#123;<br>            <span class="hljs-string">&quot;--setuid=1000&quot;</span>,<br>            <span class="hljs-string">&quot;--setgid=1000&quot;</span>,<br>            <span class="hljs-string">&quot;--setgroups=1001,1002,1003,1004,1005,1006,1007,1008,1009,1010,1018,3001,3002,3003,3006,3007&quot;</span>,<br>            <span class="hljs-string">&quot;--capabilities=130104352,130104352&quot;</span>,<br>            <span class="hljs-string">&quot;--runtime-init&quot;</span>,<br>            <span class="hljs-string">&quot;--nice-name=system_server&quot;</span>,<br>            <span class="hljs-string">&quot;com.android.server.SystemServer&quot;</span>,<br>    &#125;;<br>    ZygoteConnection.<span class="hljs-type">Arguments</span> <span class="hljs-variable">parsedArgs</span> <span class="hljs-operator">=</span> <span class="hljs-literal">null</span>;<br><br>    <span class="hljs-type">int</span> pid;<br><br>    <span class="hljs-keyword">try</span> &#123;<br>        parsedArgs = <span class="hljs-keyword">new</span> <span class="hljs-title class_">ZygoteConnection</span>.Arguments(args);<br>        ZygoteConnection.applyDebuggerSystemProperty(parsedArgs);<br>        ZygoteConnection.applyInvokeWithSystemProperty(parsedArgs);<br>        <br>        <span class="hljs-comment">/* Request to fork the system server process */</span><br>        pid = Zygote.forkSystemServer(<br>                parsedArgs.uid, parsedArgs.gid,<br>                parsedArgs.gids,<br>                parsedArgs.debugFlags,<br>                <span class="hljs-literal">null</span>,<br>                parsedArgs.permittedCapabilities,<br>                parsedArgs.effectiveCapabilities);<br>    &#125; <span class="hljs-keyword">catch</span> (IllegalArgumentException ex) &#123;<br>        <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">RuntimeException</span>(ex);<br>    &#125;<br>    <br>    <span class="hljs-comment">/* For child process */</span><br>    <span class="hljs-keyword">if</span> (pid == <span class="hljs-number">0</span>) &#123;<br>        handleSystemServerProcess(parsedArgs);<br>    &#125;<br><br>    <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="转载请标明出处病已blog-https-ivonhoe-github-io"><a href="#转载请标明出处病已blog-https-ivonhoe-github-io" class="headerlink" title="转载请标明出处病已blog https://ivonhoe.github.io/"></a>转载请标明出处<a href="https://ivonhoe.github.io/">病已blog https://ivonhoe.github.io/</a></h3>
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E7%BF%BB%E8%AF%91/">翻译</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E7%BF%BB%E8%AF%91/">翻译</a>
+                    
+                      <a class="hover-with-bg" href="/tags/Zygote/">Zygote</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2017/04/25/%E5%A6%82%E4%BD%95%E5%86%99%E5%87%BAGC%E5%8F%8B%E5%A5%BD%E7%9A%84Android%E5%BA%94%E7%94%A8/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Android性能优化之如何写出GC友好的应用</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2017/04/09/how-to-dump-heap/">
+                        <span class="hidden-mobile">如何使用ddmlib dump出堆文件</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments" lazyload>
+                
+                  
+                
+                
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/valine@1/dist/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"JdLpddsaWqwfJtXPdDK8woaF-gzGzoHsz","appKey":"CEmtHXH8f0PtvF0zYtVE0EeY","path":"window.location.pathname","placeholder":null,"avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          Fluid.plugins.initFancyBox('#valine .vcontent img:not(.vemoji)');
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
 
 
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
 
-<script id="page.configurations">
-  CONFIG.page = {
-    sidebar: "",
-  };
-</script>
+      </div>
+    
+  </div>
+</div>
 
-  <title>[译]Zygote | 病已的博客</title>
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
   
 
+  
+
+  
+</footer>
 
 
-
-
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
 
   <script>
-    var _hmt = _hmt || [];
-    (function() {
-      var hm = document.createElement("script");
-      hm.src = "https://hm.baidu.com/hm.js?666a58de875adc9dd40d5de65ceac026";
-      var s = document.getElementsByTagName("script")[0];
-      s.parentNode.insertBefore(hm, s);
-    })();
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
   </script>
 
 
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
 
 
+  <script  src="/js/local-search.js" ></script>
 
 
-
-  <noscript>
-  <style>
-  .use-motion .motion-element,
-  .use-motion .brand,
-  .use-motion .menu-item,
-  .sidebar-inner,
-  .use-motion .post-block,
-  .use-motion .pagination,
-  .use-motion .comments,
-  .use-motion .post-header,
-  .use-motion .post-body,
-  .use-motion .collection-title { opacity: initial; }
-
-  .use-motion .logo,
-  .use-motion .site-title,
-  .use-motion .site-subtitle {
-    opacity: initial;
-    top: initial;
-  }
-
-  .use-motion .logo-line-before i { left: initial; }
-  .use-motion .logo-line-after i { right: initial; }
-  </style>
-</noscript>
-
-</head>
-
-<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
 
   
+    <script  src="/js/img-lazyload.js" ></script>
   
-    
-  
-
-  <div class="container sidebar-position-left page-post-detail">
-    <div class="headband"></div>
-
-    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-brand-wrapper">
-  <div class="site-meta">
-    
-
-    <div class="custom-logo-site-title">
-      <a href="/" class="brand" rel="start">
-        <span class="logo-line-before"><i></i></span>
-        <span class="site-title">病已的博客</span>
-        <span class="logo-line-after"><i></i></span>
-      </a>
-    </div>
-    
-      
-        <p class="site-subtitle">枕上，马上，厕上</p>
-      
-    
-    
-  </div>
-
-  <div class="site-nav-toggle">
-    <button aria-label="切换导航栏">
-      <span class="btn-bar"></span>
-      <span class="btn-bar"></span>
-      <span class="btn-bar"></span>
-    </button>
-  </div>
-</div>
-
-
-
-<nav class="site-nav">
-  
-    <ul id="menu" class="menu">
-      
-        
-        
-        
-          
-          <li class="menu-item menu-item-home">
-
-    
-    
-    
-      
-    
-
-    
-
-    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
-
-  </li>
-        
-        
-        
-          
-          <li class="menu-item menu-item-categories">
-
-    
-    
-    
-      
-    
-
-    
-
-    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
-
-  </li>
-        
-        
-        
-          
-          <li class="menu-item menu-item-tags">
-
-    
-    
-    
-      
-    
-
-    
-
-    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
-
-  </li>
-        
-        
-        
-          
-          <li class="menu-item menu-item-archives">
-
-    
-    
-    
-      
-    
-
-    
-
-    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
-
-  </li>
-        
-        
-        
-          
-          <li class="menu-item menu-item-about">
-
-    
-    
-    
-      
-    
-
-    
-
-    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
-
-  </li>
-
-      
-      
-    </ul>
-  
-
-  
-
-  
-</nav>
 
 
 
@@ -327,618 +452,23 @@
 
 
 
-</div>
-    </header>
-
-    
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
   
   
-
-  
-
-  <a href="https://github.com/Ivonhoe" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewbox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a>
-
-
-
-    <main id="main" class="main">
-      <div class="main-inner">
-        <div class="content-wrap">
-          
-            
-
-          
-          <div id="content" class="content">
-            
-
-  <div id="posts" class="posts-expand">
-    
-
-  
-
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
   
   
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
   
   
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://ivonhoe.github.io/2017/04/15/Zygote/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="病已">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="病已的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">[译]Zygote
-
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：4月 15 2017 23:32:51" itemprop="dateCreated datePublished" datetime="2017-04-15T23:32:51+08:00">4月 15 2017</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：9月 11 2018 21:30:14" itemprop="dateModified" datetime="2018-09-11T21:30:14+08:00">9月 11 2018</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/翻译/" itemprop="url" rel="index"><span itemprop="name">翻译</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2017/04/15/Zygote/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2017/04/15/Zygote/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-            <span id="/2017/04/15/Zygote/" class="leancloud_visitors" data-flag-title="[译]Zygote">
-              <span class="post-meta-divider">|</span>
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              
-                <span class="post-meta-item-text">阅读次数：</span>
-              
-                <span class="leancloud-visitors-count"></span>
-            </span>
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        <p>原文地址：<a href="https://anatomyofandroid.com/2013/10/15/zygote/" target="_blank" rel="noopener">Zygote https://anatomyofandroid.com/2013/10/15/zygote/</a></p>
-<p>Zygote（受精卵）是一个启动应用的守护进程，在Server Manager之后被init.rc触发，但其实他是真正被app_process启动的，下面是启动这个特殊进程的流程。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">service zygote /system/bin/app_process -Xzygote /system/bin --zygote --start-system-server</span><br><span class="line">class main</span><br><span class="line">socket zygote stream 660 root system</span><br><span class="line">onrestart write /sys/android_power/request_state wake</span><br><span class="line">onrestart write /sys/power/state on</span><br><span class="line">onrestart restart media</span><br><span class="line">onrestart restart netd</span><br></pre></td></tr></table></figure>
-<p>你可以发现Zygote是如何当做系统服务启动的，你也可以看到app_process为什么说app_process是启动Zygote的真正命令。就像之前说的，Zygote是一个以专门启动应用为的守护进程。这意味着Zygote是所有App进程的父进程。当app_process启动Zygote时，它通过调用Zygote的main()方法创建了第一个Dalvik虚拟机。当Zygote启动后，zygote会预加载所有必须的Java类和资源，启动System Server并打开一个名为/dev/socket/zygote的socket服务，去监听所有启动应用的请求。 想之前的文章所说，System Server 是一个和它的父进程完全分离的进程。一旦System Server创建完成，它会初始化一系列不同的System Services并启动Activity Manager。那Zygote是如何启动新的应用的呢？</p>
-<a id="more"></a>
-<p>Zygote 通过/dev/socket/zygote(一个sockete Socket Server)接收启动应用的请求，就会触发一次fork()调用，会在另一个存储空间创建一个自身的拷贝。这个过程是很高效的。当Zygote执行fork时，它会精准创建一个预加载了应用进程所需的所有必要类和资源的Dalvik虚拟机，这样就会把创建虚拟机和加载资源的过程变得很高效。但这个设计不仅仅是这样。由于Android运行在Linux内核上，Linux Kernal实现了一个叫做Copy On Write（COW）的策略，在fork进程的过程中并不会真正的拷贝内存。一个进程想要修改这个共享的内存是，kernel会拦截这个请求，并对要修改的内存做一个拷贝。当一些Android的类库是不可写的情况下，那就意味着所有从Zygote fork出来的进程都在共享一份系统类文件和资源。另一个好处就是真的节省内存。不管启动多少应用进程在内存的增长上都会小很多。</p>
-<p>If you are in an early stage of a porting process, Zygote is another big process that you don’t need to start. You can disable it by adding the keyword “disabled” at the end of the boot sequence in init.rc</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">service zygote /system/bin/app_process -Xzygote /system/bin --zygote --start-system-server</span><br><span class="line">class main</span><br><span class="line">socket zygote stream 660 root system</span><br><span class="line">onrestart write /sys/android_power/request_state wake</span><br><span class="line">onrestart write /sys/power/state on</span><br><span class="line">onrestart restart media</span><br><span class="line">onrestart restart netd</span><br><span class="line">disabled</span><br></pre></td></tr></table></figure>
-<p>下面是一张说明Zygote在Android平台中作用的关系图(from Embedded Android)。</p>
-<p><img src="/res/zygote/zygote-1.png" alt></p>
-<p>zygote的main()方法：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">public static void main(String argv[]) &#123;</span><br><span class="line"> try &#123;</span><br><span class="line">     // Start profiling the zygote initialization.</span><br><span class="line">     SamplingProfilerIntegration.start();</span><br><span class="line"></span><br><span class="line">    registerZygoteSocket();</span><br><span class="line">    EventLog.writeEvent(LOG_BOOT_PROGRESS_PRELOAD_START,</span><br><span class="line">    SystemClock.uptimeMillis());</span><br><span class="line">    preload();</span><br><span class="line">    EventLog.writeEvent(LOG_BOOT_PROGRESS_PRELOAD_END,</span><br><span class="line">    SystemClock.uptimeMillis());</span><br><span class="line"></span><br><span class="line">    // Finish profiling the zygote initialization.</span><br><span class="line">    SamplingProfilerIntegration.writeZygoteSnapshot();</span><br><span class="line"></span><br><span class="line">    // Do an initial gc to clean up after startup</span><br><span class="line">    gc();</span><br><span class="line"></span><br><span class="line">    // Disable tracing so that forked processes do not inherit stale tracing tags from</span><br><span class="line">    // Zygote.</span><br><span class="line">    Trace.setTracingEnabled(false);</span><br><span class="line"></span><br><span class="line">    // If requested, start system server directly from Zygote</span><br><span class="line">    if (argv.length != 2) &#123;</span><br><span class="line">        throw new RuntimeException(argv[0] + USAGE_STRING);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    if (argv[1].equals(&quot;start-system-server&quot;)) &#123;</span><br><span class="line">        startSystemServer();</span><br><span class="line">    &#125; else if (!argv[1].equals(&quot;&quot;)) &#123;</span><br><span class="line">        throw new RuntimeException(argv[0] + USAGE_STRING);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    Log.i(TAG, &quot;Accepting command socket connections&quot;);</span><br><span class="line"></span><br><span class="line">    runSelectLoop();</span><br><span class="line"></span><br><span class="line">    closeServerSocket();</span><br><span class="line"> &#125; catch (MethodAndArgsCaller caller) &#123;</span><br><span class="line">     caller.run();</span><br><span class="line"> &#125; catch (RuntimeException ex) &#123;</span><br><span class="line">     Log.e(TAG, &quot;Zygote died with exception&quot;, ex);</span><br><span class="line">     closeServerSocket();</span><br><span class="line">     throw ex;</span><br><span class="line"> &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>通过下面代码可以看到Zygote是如何启动System Server的。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * Prepare the arguments and fork for the system server process.</span><br><span class="line"> */</span><br><span class="line">private static boolean startSystemServer()</span><br><span class="line">        throws MethodAndArgsCaller, RuntimeException &#123;</span><br><span class="line">    /* Hardcoded command line to start the system server */</span><br><span class="line">    String args[] = &#123;</span><br><span class="line">            &quot;--setuid=1000&quot;,</span><br><span class="line">            &quot;--setgid=1000&quot;,</span><br><span class="line">            &quot;--setgroups=1001,1002,1003,1004,1005,1006,1007,1008,1009,1010,1018,3001,3002,3003,3006,3007&quot;,</span><br><span class="line">            &quot;--capabilities=130104352,130104352&quot;,</span><br><span class="line">            &quot;--runtime-init&quot;,</span><br><span class="line">            &quot;--nice-name=system_server&quot;,</span><br><span class="line">            &quot;com.android.server.SystemServer&quot;,</span><br><span class="line">    &#125;;</span><br><span class="line">    ZygoteConnection.Arguments parsedArgs = null;</span><br><span class="line"></span><br><span class="line">    int pid;</span><br><span class="line"></span><br><span class="line">    try &#123;</span><br><span class="line">        parsedArgs = new ZygoteConnection.Arguments(args);</span><br><span class="line">        ZygoteConnection.applyDebuggerSystemProperty(parsedArgs);</span><br><span class="line">        ZygoteConnection.applyInvokeWithSystemProperty(parsedArgs);</span><br><span class="line">        </span><br><span class="line">        /* Request to fork the system server process */</span><br><span class="line">        pid = Zygote.forkSystemServer(</span><br><span class="line">                parsedArgs.uid, parsedArgs.gid,</span><br><span class="line">                parsedArgs.gids,</span><br><span class="line">                parsedArgs.debugFlags,</span><br><span class="line">                null,</span><br><span class="line">                parsedArgs.permittedCapabilities,</span><br><span class="line">                parsedArgs.effectiveCapabilities);</span><br><span class="line">    &#125; catch (IllegalArgumentException ex) &#123;</span><br><span class="line">        throw new RuntimeException(ex);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    /* For child process */</span><br><span class="line">    if (pid == 0) &#123;</span><br><span class="line">        handleSystemServerProcess(parsedArgs);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    return true;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="转载请标明出处病已blog-https-ivonhoe-github-io"><a href="#转载请标明出处病已blog-https-ivonhoe-github-io" class="headerlink" title="转载请标明出处病已blog https://ivonhoe.github.io/"></a>转载请标明出处<a href="https://ivonhoe.github.io/">病已blog https://ivonhoe.github.io/</a></h3>
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-        
-          
-        
-        <div class="post-tags">
-          
-            <a href="/tags/翻译/" rel="tag"># 翻译</a>
-          
-            <a href="/tags/Zygote/" rel="tag"># Zygote</a>
-          
-        </div>
-      
-
-      
-      
-      
-
-      
-        <div class="post-nav">
-          <div class="post-nav-next post-nav-item">
-            
-              <a href="/2017/04/09/how-to-dump-heap/" rel="next" title="如何使用ddmlib dump出堆文件">
-                <i class="fa fa-chevron-left"></i> 如何使用ddmlib dump出堆文件
-              </a>
-            
-          </div>
-
-          <span class="post-nav-divider"></span>
-
-          <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/04/25/如何写出GC友好的Android应用/" rel="prev" title="Android性能优化之如何写出GC友好的应用">
-                Android性能优化之如何写出GC友好的应用 <i class="fa fa-chevron-right"></i>
-              </a>
-            
-          </div>
-        </div>
-      
-
-      
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-  </div>
-
-
-          </div>
-          
-
-  
-    <div class="comments" id="comments">
-    </div>
-
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
   
 
 
 
-        </div>
-        
-          
-  
-  <div class="sidebar-toggle">
-    <div class="sidebar-toggle-line-wrap">
-      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
-    </div>
-  </div>
 
-  <aside id="sidebar" class="sidebar">
-    <div class="sidebar-inner">
-
-      
-
-      
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            站点概览
-          </li>
-        </ul>
-      
-
-      <div class="site-overview-wrap sidebar-panel">
-        <div class="site-overview">
-          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-            
-              <p class="site-author-name" itemprop="name">病已</p>
-              <div class="site-description motion-element" itemprop="description"></div>
-          </div>
-
-          
-            <nav class="site-state motion-element">
-              
-                <div class="site-state-item site-state-posts">
-                
-                  <a href="/archives/">
-                
-                    <span class="site-state-item-count">38</span>
-                    <span class="site-state-item-name">日志</span>
-                  </a>
-                </div>
-              
-
-              
-                
-                
-                <div class="site-state-item site-state-categories">
-                  
-                    
-                      <a href="/categories/">
-                    
-                  
-                    
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                    <span class="site-state-item-count">9</span>
-                    <span class="site-state-item-name">分类</span>
-                  </a>
-                </div>
-              
-
-              
-                
-                
-                <div class="site-state-item site-state-tags">
-                  
-                    
-                      <a href="/tags/">
-                    
-                  
-                    
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                    <span class="site-state-item-count">41</span>
-                    <span class="site-state-item-name">标签</span>
-                  </a>
-                </div>
-              
-            </nav>
-          
-
-          
-            <div class="feed-link motion-element">
-              <a href="/atom.xml" rel="alternate">
-                <i class="fa fa-rss"></i>
-                RSS
-              </a>
-            </div>
-          
-
-          
-
-          
-            <div class="links-of-author motion-element">
-              
-                <span class="links-of-author-item">
-                  
-                  
-                    
-                  
-                  
-                    
-                  
-                  <a href="https://github.com/ivonhoe" title="GitHub &rarr; https://github.com/ivonhoe" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
-                </span>
-              
-                <span class="links-of-author-item">
-                  
-                  
-                    
-                  
-                  
-                    
-                  
-                  <a href="mailto:yangfan3687@163.com" title="E-Mail &rarr; mailto:yangfan3687@163.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
-                </span>
-              
-            </div>
-          
-
-          
-
-          
-          
-
-          
-            
-          
-          
-
-        </div>
-      </div>
-
-      
-      <!--noindex-->
-        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-            
-            
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#转载请标明出处病已blog-https-ivonhoe-github-io"><span class="nav-number">1.</span> <span class="nav-text">转载请标明出处病已blog https://ivonhoe.github.io/</span></a></li></ol></div>
-            
-
-          </div>
-        </div>
-      <!--/noindex-->
-      
-
-      
-
-    </div>
-  </aside>
-  
-
-
-        
-      </div>
-    </main>
-
-    <footer id="footer" class="footer">
-      <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
-  <span class="with-love" id="animate">
-    <i class="fa fa-user"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">病已</span>
-
-  
-
-  
-</div>
-
-
-  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
-
-
-
-  <span class="post-meta-divider">|</span>
-
-
-
-  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.1.2</div>
-
-
-
-
-        
-
-
-
-
-
-
-
-
-        
-      </div>
-    </footer>
-
-    
-      <div class="back-to-top">
-        <i class="fa fa-arrow-up"></i>
-        
-      </div>
-    
-
-    
-
-    
-
-    
-  </div>
-
-  
-
-<script>
-  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
-    window.Promise = null;
-  }
-</script>
-
-
-
-
-
-
-
-
-
-
-
-
+  <script defer src="/js/leancloud.js" ></script>
 
 
 
@@ -954,94 +484,16 @@
 
 
   
-  <script src="/lib/jquery/index.js?v=3.4.1"></script>
-
-  
-  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
-
-  
-  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
-
-
-  
-
-
-  <script src="/js/utils.js?v=7.1.2"></script>
-
-  <script src="/js/motion.js?v=7.1.2"></script>
-
-
-
-  
-  
-
-
-  <script src="/js/affix.js?v=7.1.2"></script>
-
-  <script src="/js/schemes/pisces.js?v=7.1.2"></script>
-
-
-
-
-  
-  <script src="/js/scrollspy.js?v=7.1.2"></script>
-<script src="/js/post-details.js?v=7.1.2"></script>
-
-
-
-  
-
-
-  <script src="/js/next-boot.js?v=7.1.2"></script>
-
-
-  
-
-  
-
-  
-
-  
-  
-
-<script src="//cdn1.lncld.net/static/js/3.11.1/av-min.js"></script>
-
-
-
-<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
-
-<script>
-  var GUEST = ['nick', 'mail', 'link'];
-  var guest = 'nick,mail,link';
-  guest = guest.split(',').filter(function(item) {
-    return GUEST.indexOf(item) > -1;
-  });
-  new Valine({
-    el: '#comments',
-    verify: false,
-    notify: false,
-    appId: 'JdLpddsaWqwfJtXPdDK8woaF-gzGzoHsz',
-    appKey: 'CEmtHXH8f0PtvF0zYtVE0EeY',
-    placeholder: 'Just go go',
-    avatar: 'mm',
-    meta: guest,
-    pageSize: '10' || 10,
-    visitor: true,
-    lang: '' || 'zh-cn'
-  });
-</script>
-
-
-
-
-  
-
-
-  
-
-
-
-
+    <!-- Baidu Analytics -->
+    <script defer>
+      var _hmt = _hmt || [];
+      (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?666a58de875adc9dd40d5de65ceac026";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();
+    </script>
   
 
   
@@ -1054,21 +506,13 @@
 
   
 
-  
 
-  
 
-  
 
-  
 
-  
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
 
-  
-
-  
-
-  
 
 </body>
 </html>

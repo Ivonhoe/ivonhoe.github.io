@@ -1,507 +1,251 @@
+
+
 <!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
 
 
 
-
-
-
-
-
-
-
-
-
-  
-
-
-<html class="theme-next gemini use-motion" lang="zh-CN">
-<head><meta name="generator" content="Hexo 3.9.0">
+<head>
   <meta charset="UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
-<meta name="theme-color" content="#222">
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
-
-<link rel="stylesheet" href="/css/main.css?v=7.1.2">
-
-
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.1.2">
-
-
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.1.2">
-
-
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.1.2">
-
-
-  <link rel="mask-icon" href="/images/logo.svg?v=7.1.2" color="#222">
-
-
-
-
-
-
-
-<script id="hexo.configurations">
-  var NexT = window.NexT || {};
-  var CONFIG = {
-    root: '/',
-    scheme: 'Gemini',
-    version: '7.1.2',
-    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
-    back2top: true,
-    back2top_sidebar: false,
-    fancybox: false,
-    fastclick: false,
-    lazyload: false,
-    tabs: true,
-    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
-    algolia: {
-      applicationID: '',
-      apiKey: '',
-      indexName: '',
-      hits: {"per_page":10},
-      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
-    }
-  };
-</script>
-
-
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
   
-
-
-
-
-  <meta name="description" content="原文地址：http://possiblemobile.com/2013/06/context/ Context可能是Android应用中最常用的元素也是最容易误用的元素Context是经常被传递的对象，它可以很容易的构造一个你意想不到的情景，如加载资源，启动一个新的Activity，得到一个系统服务，得到内部文件路径和创建视图都需要一个Context去完成这个工作，我接下来为你在Context到底">
-<meta name="keywords" content="Android,Context,翻译">
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="病已">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="原文地址：http:&#x2F;&#x2F;possiblemobile.com&#x2F;2013&#x2F;06&#x2F;context&#x2F; Context可能是Android应用中最常用的元素也是最容易误用的元素Context是经常被传递的对象，它可以很容易的构造一个你意想不到的情景，如加载资源，启动一个新的Activity，得到一个系统服务，得到内部文件路径和创建视图都需要一个Context去完成这个工作，我接下来为你在Context到底">
 <meta property="og:type" content="article">
 <meta property="og:title" content="[译]Context?什么是Context？">
-<meta property="og:url" content="https://ivonhoe.github.io/2015/04/08/-翻译-Context-什么是Context？/index.html">
+<meta property="og:url" content="https://ivonhoe.github.io/2015/04/08/-%E7%BF%BB%E8%AF%91-Context-%E4%BB%80%E4%B9%88%E6%98%AFContext%EF%BC%9F/index.html">
 <meta property="og:site_name" content="病已的博客">
-<meta property="og:description" content="原文地址：http://possiblemobile.com/2013/06/context/ Context可能是Android应用中最常用的元素也是最容易误用的元素Context是经常被传递的对象，它可以很容易的构造一个你意想不到的情景，如加载资源，启动一个新的Activity，得到一个系统服务，得到内部文件路径和创建视图都需要一个Context去完成这个工作，我接下来为你在Context到底">
-<meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-09-11T13:24:36.000Z">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="[译]Context?什么是Context？">
-<meta name="twitter:description" content="原文地址：http://possiblemobile.com/2013/06/context/ Context可能是Android应用中最常用的元素也是最容易误用的元素Context是经常被传递的对象，它可以很容易的构造一个你意想不到的情景，如加载资源，启动一个新的Activity，得到一个系统服务，得到内部文件路径和创建视图都需要一个Context去完成这个工作，我接下来为你在Context到底">
-
-
-
-  <link rel="alternate" href="/atom.xml" title="病已的博客" type="application/atom+xml">
-
-
-
+<meta property="og:description" content="原文地址：http:&#x2F;&#x2F;possiblemobile.com&#x2F;2013&#x2F;06&#x2F;context&#x2F; Context可能是Android应用中最常用的元素也是最容易误用的元素Context是经常被传递的对象，它可以很容易的构造一个你意想不到的情景，如加载资源，启动一个新的Activity，得到一个系统服务，得到内部文件路径和创建视图都需要一个Context去完成这个工作，我接下来为你在Context到底">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2015-04-08T03:06:31.000Z">
+<meta property="article:modified_time" content="2018-09-11T13:24:36.000Z">
+<meta property="article:author" content="病已">
+<meta property="article:tag" content="Android">
+<meta property="article:tag" content="Context">
+<meta property="article:tag" content="翻译">
+<meta name="twitter:card" content="summary_large_image">
   
   
-  <link rel="canonical" href="https://ivonhoe.github.io/2015/04/08/-翻译-Context-什么是Context？/">
+  <title>[译]Context?什么是Context？ - 病已的博客</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
 
 
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
 
-<script id="page.configurations">
-  CONFIG.page = {
-    sidebar: "",
-  };
-</script>
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
 
-  <title>[译]Context?什么是Context？ | 病已的博客</title>
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
   
 
 
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
 
 
 
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
 
-  <script>
-    var _hmt = _hmt || [];
-    (function() {
-      var hm = document.createElement("script");
-      hm.src = "https://hm.baidu.com/hm.js?666a58de875adc9dd40d5de65ceac026";
-      var s = document.getElementsByTagName("script")[0];
-      s.parentNode.insertBefore(hm, s);
-    })();
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"ivonhoe.github.io","root":"/","version":"1.8.14","typing":{"enable":false,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"baidu":"666a58de875adc9dd40d5de65ceac026","google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"JdLpddsaWqwfJtXPdDK8woaF-gzGzoHsz","app_key":"CEmtHXH8f0PtvF0zYtVE0EeY","server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
   </script>
-
-
-
-
-
-
-
-  <noscript>
-  <style>
-  .use-motion .motion-element,
-  .use-motion .brand,
-  .use-motion .menu-item,
-  .sidebar-inner,
-  .use-motion .post-block,
-  .use-motion .pagination,
-  .use-motion .comments,
-  .use-motion .post-header,
-  .use-motion .post-body,
-  .use-motion .collection-title { opacity: initial; }
-
-  .use-motion .logo,
-  .use-motion .site-title,
-  .use-motion .site-subtitle {
-    opacity: initial;
-    top: initial;
-  }
-
-  .use-motion .logo-line-before i { left: initial; }
-  .use-motion .logo-line-after i { right: initial; }
-  </style>
-</noscript>
-
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 6.1.0"><link rel="alternate" href="/atom.xml" title="病已的博客" type="application/atom+xml">
 </head>
 
-<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
 
-  
-  
-    
-  
+<body>
+  <header style="height: 30vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>病已的博客</strong>
+    </a>
 
-  <div class="container sidebar-position-left page-post-detail">
-    <div class="headband"></div>
-
-    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-brand-wrapper">
-  <div class="site-meta">
-    
-
-    <div class="custom-logo-site-title">
-      <a href="/" class="brand" rel="start">
-        <span class="logo-line-before"><i></i></span>
-        <span class="site-title">病已的博客</span>
-        <span class="logo-line-after"><i></i></span>
-      </a>
-    </div>
-    
-      
-        <p class="site-subtitle">枕上，马上，厕上</p>
-      
-    
-    
-  </div>
-
-  <div class="site-nav-toggle">
-    <button aria-label="切换导航栏">
-      <span class="btn-bar"></span>
-      <span class="btn-bar"></span>
-      <span class="btn-bar"></span>
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
     </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
   </div>
-</div>
-
-
-
-<nav class="site-nav">
-  
-    <ul id="menu" class="menu">
-      
-        
-        
-        
-          
-          <li class="menu-item menu-item-home">
-
-    
-    
-    
-      
-    
-
-    
-
-    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
-
-  </li>
-        
-        
-        
-          
-          <li class="menu-item menu-item-categories">
-
-    
-    
-    
-      
-    
-
-    
-
-    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
-
-  </li>
-        
-        
-        
-          
-          <li class="menu-item menu-item-tags">
-
-    
-    
-    
-      
-    
-
-    
-
-    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
-
-  </li>
-        
-        
-        
-          
-          <li class="menu-item menu-item-archives">
-
-    
-    
-    
-      
-    
-
-    
-
-    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
-
-  </li>
-        
-        
-        
-          
-          <li class="menu-item menu-item-about">
-
-    
-    
-    
-      
-    
-
-    
-
-    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
-
-  </li>
-
-      
-      
-    </ul>
-  
-
-  
-
-  
 </nav>
 
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default_post.jpeg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="[译]Context?什么是Context？">
+              
+                [译]Context?什么是Context？
+              
+            </span>
 
-
+            
+              <div class="mt-3">
   
-
-
-
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2015-04-08 11:06" pubdate>
+        2015年4月8日 上午
+      </time>
+    </span>
+  
 </div>
-    </header>
 
-    
+<div class="mt-1">
   
-  
-
-  
-
-  <a href="https://github.com/Ivonhoe" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewbox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a>
-
-
-
-    <main id="main" class="main">
-      <div class="main-inner">
-        <div class="content-wrap">
-          
-            
-
-          
-          <div id="content" class="content">
-            
-
-  <div id="posts" class="posts-expand">
-    
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://ivonhoe.github.io/2015/04/08/-翻译-Context-什么是Context？/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="病已">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      4.5k 字
     </span>
+  
 
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="病已的博客">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      38 分钟
     </span>
+  
 
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">[译]Context?什么是Context？
-
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
+  
+  
+</div>
 
             
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：4月 8 2015 11:06:31" itemprop="dateCreated datePublished" datetime="2015-04-08T11:06:31+08:00">4月 8 2015</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：9月 11 2018 21:24:36" itemprop="dateModified" datetime="2018-09-11T21:24:36+08:00">9月 11 2018</time>
-              
-            
-          </span>
+          </div>
 
           
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/翻译/" itemprop="url" rel="index"><span itemprop="name">翻译</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2015/04/08/-翻译-Context-什么是Context？/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2015/04/08/-翻译-Context-什么是Context？/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-            <span id="/2015/04/08/-翻译-Context-什么是Context？/" class="leancloud_visitors" data-flag-title="[译]Context?什么是Context？">
-              <span class="post-meta-divider">|</span>
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              
-                <span class="post-meta-item-text">阅读次数：</span>
-              
-                <span class="leancloud-visitors-count"></span>
-            </span>
-          
-
-          
-
-          
-
-          
-
         </div>
-      </header>
-    
+      </div>
+    </div>
+  </header>
 
+  <main>
     
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
       
 
-      
-        <p>原文地址：<a href="http://possiblemobile.com/2013/06/context/" target="_blank" rel="noopener">http://possiblemobile.com/2013/06/context/</a></p>
-<h2 id="Context可能是Android应用中最常用的元素也是最容易误用的元素"><a href="#Context可能是Android应用中最常用的元素也是最容易误用的元素" class="headerlink" title="Context可能是Android应用中最常用的元素也是最容易误用的元素"></a>Context可能是Android应用中最常用的元素也是最容易误用的元素</h2><p>Context是经常被传递的对象，它可以很容易的构造一个你意想不到的情景，如加载资源，启动一个新的Activity，得到一个系统服务，得到内部文件路径和创建视图都需要一个Context去完成这个工作，我接下来为你在Context到底是如何工作的和为你能在你的应用中更好的运用Context提供建议。<br><a id="more"></a></p>
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">[译]Context?什么是Context？</h1>
+            
+            <div class="markdown-body">
+              <p>原文地址：<a target="_blank" rel="noopener" href="http://possiblemobile.com/2013/06/context/">http://possiblemobile.com/2013/06/context/</a></p>
+<h2 id="Context可能是Android应用中最常用的元素也是最容易误用的元素"><a href="#Context可能是Android应用中最常用的元素也是最容易误用的元素" class="headerlink" title="Context可能是Android应用中最常用的元素也是最容易误用的元素"></a>Context可能是Android应用中最常用的元素也是最容易误用的元素</h2><p>Context是经常被传递的对象，它可以很容易的构造一个你意想不到的情景，如加载资源，启动一个新的Activity，得到一个系统服务，得到内部文件路径和创建视图都需要一个Context去完成这个工作，我接下来为你在Context到底是如何工作的和为你能在你的应用中更好的运用Context提供建议。</p>
+<span id="more"></span>
 <h2 id="Context类型"><a href="#Context类型" class="headerlink" title="Context类型"></a>Context类型</h2><p>并不是所有的Context实例都是相同的，对于不同的Android应用组件，Context会有一些差别。</p>
 <h3 id="Application"><a href="#Application" class="headerlink" title="Application"></a>Application</h3><p>Application 是应用进程中的一个单例，它可以通过Activity或者Service的getApplication()方法或者从Context派生出的其他对象调用getApplicationContext()方法得到，在同一个进程里任意时刻你得到的都是相同的Application实例。</p>
 <h3 id="Activity和Service"><a href="#Activity和Service" class="headerlink" title="Activity和Service"></a>Activity和Service</h3><p>Activity和Sevice继承ContextWrapper，而ContxtWrapper同样实现了Context的接口，但是ContextWrapper的所有的方法都是通过包装一个内部context对象实现的，也就是它的base context（注：看ContextWrapper源码，ContextWrapper顾名思义就是Context的包装，ContextWrapper的实际功能都是成员变量mBase完成的，ContextThemeWrapper集成ContextWrapper，增加了Theme和Configuration作为成员变量，Activity继承ContextThemeWrapper，所以说Activity才是唯一包含主题信息的context。详细见下文）。当framework创建一个新的Activity或者Service的实例时，也会创造一个新的ContextImpl实例去真正完成context的实际功能，每一个Activity或者服务，和他们相应的base context，都是不同的context实例。</p>
@@ -509,666 +253,361 @@
 <h3 id="ContentProvider"><a href="#ContentProvider" class="headerlink" title="ContentProvider"></a>ContentProvider</h3><p>ContentProvider同样也不是Context，但是已被创建就可以活取getContext方法，如果ContentProvider和调用者在同一个进程，那会返回相同的Application实例，如果在两个单独的进程里，getContext()会返回一个新创建的Context，代表这个provider进程的Context。（注：可以阅读ActivityThread.java中的installProvider()和ContentProvider的attachInfo()方法，installProvider方法会根据provider的包名和当前进程名进行比较，如果是同一个进程那就使用当前的application context，如果在不同的进程中，就会调用createPackageContext创建一个provider相关的Context，并通过attachInfo绑定provider）。</p>
 <h2 id="保存引用"><a href="#保存引用" class="headerlink" title="保存引用"></a>保存引用</h2><p>我们首先关注的问题是，当我们在一个对象或者类里面保存一个context的引用，但是这个对象或者类的生命周期超过了你保存的context实例的生命周期。例如，创建需要一个Context对象去加载资源或者去调用CotentProvider，保存当前Activity或者Service的引用在这个单例中。</p>
 <p>失败的单例：</p>
-<pre><code>public class CustomManager {
+<div class="code-wrapper"><pre><code class="hljs">public class CustomManager &#123;
     private static CustomManager sInstance;
 
-    public static CustomManager getInstance(Context context) {
-        if (sInstance == null) {
+    public static CustomManager getInstance(Context context) &#123;
+        if (sInstance == null) &#123;
             sInstance = new CustomManager(context);
-        }
+        &#125;
 
         return sInstance;
-    }
+    &#125;
 
     private Context mContext;
 
-    private CustomManager(Context context) {
+    private CustomManager(Context context) &#123;
         mContext = context;
-    }
-}
-</code></pre><p>这里的问题是我们并不知道这个Context从哪里来，当持有一个结束的Activity或者Service是不安全的，这是因为在这个类里的单例是一个静态引用。这意味着我们引用的对象包括所有被这个对象引用的对象都不会被垃圾回收。如果这个Context是一个Activity，那么就会造成这个Activity引用的所有视图和其他可能跟它关联的对象持续占有内存，造成内存泄露。</p>
+    &#125;
+&#125;
+</code></pre></div>
+<p>这里的问题是我们并不知道这个Context从哪里来，当持有一个结束的Activity或者Service是不安全的，这是因为在这个类里的单例是一个静态引用。这意味着我们引用的对象包括所有被这个对象引用的对象都不会被垃圾回收。如果这个Context是一个Activity，那么就会造成这个Activity引用的所有视图和其他可能跟它关联的对象持续占有内存，造成内存泄露。</p>
 <p>为了防止这种情况，我们把这个单例修改成引用appliction context。</p>
 <p>修改后的单例：</p>
-<pre><code>public class CustomManager {
+<div class="code-wrapper"><pre><code class="hljs">public class CustomManager &#123;
     private static CustomManager sInstance;
 
-    public static CustomManager getInstance(Context context) {
-        if (sInstance == null) {
+    public static CustomManager getInstance(Context context) &#123;
+        if (sInstance == null) &#123;
             //Always pass in the Application Context
             sInstance = new CustomManager(context.getApplicationContext());
-        }
+        &#125;
 
         return sInstance;
-    }
+    &#125;
 
     private Context mContext;
 
-    private CustomManager(Context context) {
+    private CustomManager(Context context) &#123;
         mContext = context;
-    }
-}
-</code></pre><p>现在不用关心这个Context是什么，因为现在持有的引用是安全的。Application context本身就是一个单例，我们只是创建另一个静态引用并不会造成内存泄露。另一个类似例子就是在一个后台的线程或者等待的Handler里持有一个Context引用。<br>既然这样那我们为什么总是引用一个application context呢？我们就永远不用担心内存泄露的问题。答案当然是不可以，就想我在前面提到的那样，每种类型的Context类型都不相同。</p>
+    &#125;
+&#125;
+</code></pre></div>
+<p>现在不用关心这个Context是什么，因为现在持有的引用是安全的。Application context本身就是一个单例，我们只是创建另一个静态引用并不会造成内存泄露。另一个类似例子就是在一个后台的线程或者等待的Handler里持有一个Context引用。<br>既然这样那我们为什么总是引用一个application context呢？我们就永远不用担心内存泄露的问题。答案当然是不可以，就想我在前面提到的那样，每种类型的Context类型都不相同。</p>
 <h2 id="Context的功能"><a href="#Context的功能" class="headerlink" title="Context的功能"></a>Context的功能</h2><p>我们安全的调用Context的方法取决于这个Context是如何创建的，下面的表是Context功能的使用情况：</p>
 <table>
 <thead>
 <tr>
 <th></th>
-<th style="text-align:center">Application</th>
-<th style="text-align:center">Activity</th>
-<th style="text-align:center">Service</th>
-<th style="text-align:center">ContentProvider</th>
-<th style="text-align:center">BroadcastReceiver</th>
+<th align="center">Application</th>
+<th align="center">Activity</th>
+<th align="center">Service</th>
+<th align="center">ContentProvider</th>
+<th align="center">BroadcastReceiver</th>
 </tr>
 </thead>
-<tbody>
-<tr>
+<tbody><tr>
 <td>Show a Dialog</td>
-<td style="text-align:center">NO</td>
-<td style="text-align:center">YES</td>
-<td style="text-align:center">NO</td>
-<td style="text-align:center">NO</td>
-<td style="text-align:center">NO</td>
+<td align="center">NO</td>
+<td align="center">YES</td>
+<td align="center">NO</td>
+<td align="center">NO</td>
+<td align="center">NO</td>
 </tr>
 <tr>
 <td>Start an Activity</td>
-<td style="text-align:center">NO1</td>
-<td style="text-align:center">YES</td>
-<td style="text-align:center">NO1</td>
-<td style="text-align:center">NO1</td>
-<td style="text-align:center">NO1</td>
+<td align="center">NO1</td>
+<td align="center">YES</td>
+<td align="center">NO1</td>
+<td align="center">NO1</td>
+<td align="center">NO1</td>
 </tr>
 <tr>
 <td>Layout Inflation</td>
-<td style="text-align:center">NO2</td>
-<td style="text-align:center">YES</td>
-<td style="text-align:center">NO2</td>
-<td style="text-align:center">NO2</td>
-<td style="text-align:center">NO2</td>
+<td align="center">NO2</td>
+<td align="center">YES</td>
+<td align="center">NO2</td>
+<td align="center">NO2</td>
+<td align="center">NO2</td>
 </tr>
 <tr>
 <td>Start a Service</td>
-<td style="text-align:center">YES</td>
-<td style="text-align:center">YES</td>
-<td style="text-align:center">YES</td>
-<td style="text-align:center">YES</td>
-<td style="text-align:center">YES</td>
+<td align="center">YES</td>
+<td align="center">YES</td>
+<td align="center">YES</td>
+<td align="center">YES</td>
+<td align="center">YES</td>
 </tr>
 <tr>
 <td>Bind to a Service</td>
-<td style="text-align:center">YES</td>
-<td style="text-align:center">YES</td>
-<td style="text-align:center">YES</td>
-<td style="text-align:center">YES</td>
-<td style="text-align:center">NO</td>
+<td align="center">YES</td>
+<td align="center">YES</td>
+<td align="center">YES</td>
+<td align="center">YES</td>
+<td align="center">NO</td>
 </tr>
 <tr>
 <td>Send a Broadcast</td>
-<td style="text-align:center">YES</td>
-<td style="text-align:center">YES</td>
-<td style="text-align:center">YES</td>
-<td style="text-align:center">YES</td>
-<td style="text-align:center">YES</td>
+<td align="center">YES</td>
+<td align="center">YES</td>
+<td align="center">YES</td>
+<td align="center">YES</td>
+<td align="center">YES</td>
 </tr>
 <tr>
 <td>Register BroadcastReceiver</td>
-<td style="text-align:center">YES</td>
-<td style="text-align:center">YES</td>
-<td style="text-align:center">YES</td>
-<td style="text-align:center">YES</td>
-<td style="text-align:center">NO3</td>
+<td align="center">YES</td>
+<td align="center">YES</td>
+<td align="center">YES</td>
+<td align="center">YES</td>
+<td align="center">NO3</td>
 </tr>
 <tr>
 <td>Load Resource Values</td>
-<td style="text-align:center">YES</td>
-<td style="text-align:center">YES</td>
-<td style="text-align:center">YES</td>
-<td style="text-align:center">YES</td>
-<td style="text-align:center">YES</td>
+<td align="center">YES</td>
+<td align="center">YES</td>
+<td align="center">YES</td>
+<td align="center">YES</td>
+<td align="center">YES</td>
 </tr>
-</tbody>
-</table>
+</tbody></table>
 <p>注：<br>1.一个application可以启动一个Activity，但是需要创建一个新的任务。这样做可能满足一些特定的需求，但是在应用中创建一个非标准的回退栈并不是一种经过深思熟虑的推荐做法。<br>2.这样是合法的，但是这样是加载出来的系统默认的主题布局，而并不是你在应用里定义的主题样式。<br>3.在receiver是null的情况下是允许的（注：看ContextImpl的内部类ReceiverRestrictedContext，ReceiverRestrictedContext进程ContentWrapper但是重写了注册广播和绑定服务的方法，会在这两个方法里抛出异常。为什么要这么做？），在4.2以上版本用来获取粘性广播。</p>
-<h2 id="用户接口"><a href="#用户接口" class="headerlink" title="用户接口"></a>用户接口</h2><p>从上个表格你可以看出，有很多和UI处理相关的Context的功能并不适合用application context去处理。事实上，实现了所有和所有UI相关的操作接口的是Activity，而其他的类别的功能都几乎相同。<br>幸运的是这三个操作（注：指Application context不具备的三个Context功能）是application在Activity范围之外根本不需要去做的，这好像就是framework故意设计如此，如果你尝试通过一个application context去创建一个对话框或者启动一个Activity会抛出异常并造成应用程序终止，会有明显的指示告诉你这样出错了。<br>另一个值得注意的问题是加载布局，如果你阅读过我的文章<a href="http://www.doubleencore.com/2013/05/layout-inflation-as-intended" target="_blank" rel="noopener">layout inflation</a>,你会觉得这个过程会是稍微难理解的过程，使用正确的context就算一个。当你使用通过application context构造的LayoutInflater去加载视图，当然framework同样会返回一个正确的视图树，但是你在应用中设置的主题和样式是被忽略的，这是因为Activity才是真正关联你在manifest中设置的主题的Context。其他类型的Context实例会使用系统默认的主题样式去构建视图。所以这样构建出的视图可能并不是像你预期的那样。</p>
+<h2 id="用户接口"><a href="#用户接口" class="headerlink" title="用户接口"></a>用户接口</h2><p>从上个表格你可以看出，有很多和UI处理相关的Context的功能并不适合用application context去处理。事实上，实现了所有和所有UI相关的操作接口的是Activity，而其他的类别的功能都几乎相同。<br>幸运的是这三个操作（注：指Application context不具备的三个Context功能）是application在Activity范围之外根本不需要去做的，这好像就是framework故意设计如此，如果你尝试通过一个application context去创建一个对话框或者启动一个Activity会抛出异常并造成应用程序终止，会有明显的指示告诉你这样出错了。<br>另一个值得注意的问题是加载布局，如果你阅读过我的文章<a target="_blank" rel="noopener" href="http://www.doubleencore.com/2013/05/layout-inflation-as-intended">layout inflation</a>,你会觉得这个过程会是稍微难理解的过程，使用正确的context就算一个。当你使用通过application context构造的LayoutInflater去加载视图，当然framework同样会返回一个正确的视图树，但是你在应用中设置的主题和样式是被忽略的，这是因为Activity才是真正关联你在manifest中设置的主题的Context。其他类型的Context实例会使用系统默认的主题样式去构建视图。所以这样构建出的视图可能并不是像你预期的那样。</p>
 <h2 id="交集"><a href="#交集" class="headerlink" title="交集"></a>交集</h2><p>一定会有人得到这样的冲突的结论，在应用设计中会有一种情况，可能必须长期持有一个Activity Context引用，因为我想完成的任务包含UI的操作。如果是这样的话，那我只能强烈建议你重新考虑你的设计，因为那样的设计将是和Android应用架构背道而驰的过程。</p>
 <h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>在大多数情况下，使用你当前封闭的组件中直接使用Context就是可以了，只有你持有引用不超过这个组件的生命周期就不会有问题，只要你需要保存一个Context的引用超出Activity或者Service的生命周期，哪怕是暂时的引用，那就请转换成保存application context的引用。</p>
 <h3 id="转载请标明出处病已blog-https-ivonhoe-github-io"><a href="#转载请标明出处病已blog-https-ivonhoe-github-io" class="headerlink" title="转载请标明出处病已blog https://ivonhoe.github.io/"></a>转载请标明出处<a href="https://ivonhoe.github.io/">病已blog https://ivonhoe.github.io/</a></h3>
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-        
-          
-        
-        <div class="post-tags">
-          
-            <a href="/tags/Android/" rel="tag"># Android</a>
-          
-            <a href="/tags/Context/" rel="tag"># Context</a>
-          
-            <a href="/tags/翻译/" rel="tag"># 翻译</a>
-          
-        </div>
-      
-
-      
-      
-      
-
-      
-        <div class="post-nav">
-          <div class="post-nav-next post-nav-item">
-            
-              <a href="/2015/03/03/android-animation-source/" rel="next" title="动画源码分析（基于Android 5.0）">
-                <i class="fa fa-chevron-left"></i> 动画源码分析（基于Android 5.0）
-              </a>
-            
-          </div>
-
-          <span class="post-nav-divider"></span>
-
-          <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2015/04/17/基于贝塞尔曲线的Android动画差值器/" rel="prev" title="基于贝塞尔曲线的Android动画差值器">
-                基于贝塞尔曲线的Android动画差值器 <i class="fa fa-chevron-right"></i>
-              </a>
-            
-          </div>
-        </div>
-      
-
-      
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-  </div>
-
-
-          </div>
-          
-
-  
-    <div class="comments" id="comments">
-    </div>
-
-  
-
-
-
-        </div>
-        
-          
-  
-  <div class="sidebar-toggle">
-    <div class="sidebar-toggle-line-wrap">
-      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
-    </div>
-  </div>
-
-  <aside id="sidebar" class="sidebar">
-    <div class="sidebar-inner">
-
-      
-
-      
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            站点概览
-          </li>
-        </ul>
-      
-
-      <div class="site-overview-wrap sidebar-panel">
-        <div class="site-overview">
-          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-            
-              <p class="site-author-name" itemprop="name">病已</p>
-              <div class="site-description motion-element" itemprop="description"></div>
-          </div>
-
-          
-            <nav class="site-state motion-element">
-              
-                <div class="site-state-item site-state-posts">
-                
-                  <a href="/archives/">
-                
-                    <span class="site-state-item-count">38</span>
-                    <span class="site-state-item-name">日志</span>
-                  </a>
-                </div>
-              
-
-              
-                
-                
-                <div class="site-state-item site-state-categories">
-                  
-                    
-                      <a href="/categories/">
-                    
-                  
-                    
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                    <span class="site-state-item-count">9</span>
-                    <span class="site-state-item-name">分类</span>
-                  </a>
-                </div>
-              
-
-              
-                
-                
-                <div class="site-state-item site-state-tags">
-                  
-                    
-                      <a href="/tags/">
-                    
-                  
-                    
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                    <span class="site-state-item-count">41</span>
-                    <span class="site-state-item-name">标签</span>
-                  </a>
-                </div>
-              
-            </nav>
-          
-
-          
-            <div class="feed-link motion-element">
-              <a href="/atom.xml" rel="alternate">
-                <i class="fa fa-rss"></i>
-                RSS
-              </a>
             </div>
-          
-
-          
-
-          
-            <div class="links-of-author motion-element">
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E7%BF%BB%E8%AF%91/">翻译</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/Android/">Android</a>
+                    
+                      <a class="hover-with-bg" href="/tags/Context/">Context</a>
+                    
+                      <a class="hover-with-bg" href="/tags/%E7%BF%BB%E8%AF%91/">翻译</a>
+                    
+                  </div>
+                
+              </div>
               
-                <span class="links-of-author-item">
+                <p class="note note-warning">
                   
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
                   
-                    
-                  
-                  
-                    
-                  
-                  <a href="https://github.com/ivonhoe" title="GitHub &rarr; https://github.com/ivonhoe" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
-                </span>
+                </p>
               
-                <span class="links-of-author-item">
-                  
-                  
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
                     
-                  
-                  
                     
-                  
-                  <a href="mailto:yangfan3687@163.com" title="E-Mail &rarr; mailto:yangfan3687@163.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
-                </span>
+                      <a href="/2015/04/17/%E5%9F%BA%E4%BA%8E%E8%B4%9D%E5%A1%9E%E5%B0%94%E6%9B%B2%E7%BA%BF%E7%9A%84Android%E5%8A%A8%E7%94%BB%E5%B7%AE%E5%80%BC%E5%99%A8/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">基于贝塞尔曲线的Android动画差值器</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2015/03/03/android-animation-source/">
+                        <span class="hidden-mobile">动画源码分析（基于Android 5.0）</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
               
             </div>
-          
 
-          
-
-          
-          
-
-          
             
-          
-          
+              <!-- Comments -->
+              <article class="comments" id="comments" lazyload>
+                
+                  
+                
+                
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/valine@1/dist/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"JdLpddsaWqwfJtXPdDK8woaF-gzGzoHsz","appKey":"CEmtHXH8f0PtvF0zYtVE0EeY","path":"window.location.pathname","placeholder":null,"avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          Fluid.plugins.initFancyBox('#valine .vcontent img:not(.vemoji)');
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
 
+
+              </article>
+            
+          </article>
         </div>
       </div>
-
-      
-      <!--noindex-->
-        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-            
-            
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Context可能是Android应用中最常用的元素也是最容易误用的元素"><span class="nav-number">1.</span> <span class="nav-text">Context可能是Android应用中最常用的元素也是最容易误用的元素</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Context类型"><span class="nav-number">2.</span> <span class="nav-text">Context类型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Application"><span class="nav-number">2.1.</span> <span class="nav-text">Application</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Activity和Service"><span class="nav-number">2.2.</span> <span class="nav-text">Activity和Service</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#BroadcastReceiver"><span class="nav-number">2.3.</span> <span class="nav-text">BroadcastReceiver</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ContentProvider"><span class="nav-number">2.4.</span> <span class="nav-text">ContentProvider</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#保存引用"><span class="nav-number">3.</span> <span class="nav-text">保存引用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Context的功能"><span class="nav-number">4.</span> <span class="nav-text">Context的功能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#用户接口"><span class="nav-number">5.</span> <span class="nav-text">用户接口</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#交集"><span class="nav-number">6.</span> <span class="nav-text">交集</span></a></li></ol><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number"></span> <span class="nav-text">总结</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#转载请标明出处病已blog-https-ivonhoe-github-io"><span class="nav-number">0.1.</span> <span class="nav-text">转载请标明出处病已blog https://ivonhoe.github.io/</span></a></li></ol></li></div>
-            
-
-          </div>
-        </div>
-      <!--/noindex-->
-      
-
-      
-
     </div>
-  </aside>
-  
-
-
-        
-      </div>
-    </main>
-
-    <footer id="footer" class="footer">
-      <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
-  <span class="with-love" id="animate">
-    <i class="fa fa-user"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">病已</span>
-
-  
-
-  
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
 </div>
 
-
-  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
-
-
-
-  <span class="post-meta-divider">|</span>
-
-
-
-  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.1.2</div>
-
-
-
-
-        
-
-
-
-
-
-
-
-
-        
       </div>
-    </footer>
-
-    
-      <div class="back-to-top">
-        <i class="fa fa-arrow-up"></i>
-        
-      </div>
-    
-
-    
-
-    
-
     
   </div>
+</div>
 
-  
-
-<script>
-  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
-    window.Promise = null;
-  }
-</script>
+<!-- Custom -->
 
 
+    
 
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
 
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
 
+    
+  </main>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-  <script src="/lib/jquery/index.js?v=3.4.1"></script>
-
-  
-  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
-
-  
-  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
-
-
-  
-
-
-  <script src="/js/utils.js?v=7.1.2"></script>
-
-  <script src="/js/motion.js?v=7.1.2"></script>
-
-
-
-  
-  
-
-
-  <script src="/js/affix.js?v=7.1.2"></script>
-
-  <script src="/js/schemes/pisces.js?v=7.1.2"></script>
-
-
-
-
-  
-  <script src="/js/scrollspy.js?v=7.1.2"></script>
-<script src="/js/post-details.js?v=7.1.2"></script>
-
-
-
-  
-
-
-  <script src="/js/next-boot.js?v=7.1.2"></script>
-
-
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
   
 
   
 
   
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
 
   
+    <script  src="/js/img-lazyload.js" ></script>
   
-
-<script src="//cdn1.lncld.net/static/js/3.11.1/av-min.js"></script>
-
-
-
-<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
-
-<script>
-  var GUEST = ['nick', 'mail', 'link'];
-  var guest = 'nick,mail,link';
-  guest = guest.split(',').filter(function(item) {
-    return GUEST.indexOf(item) > -1;
-  });
-  new Valine({
-    el: '#comments',
-    verify: false,
-    notify: false,
-    appId: 'JdLpddsaWqwfJtXPdDK8woaF-gzGzoHsz',
-    appKey: 'CEmtHXH8f0PtvF0zYtVE0EeY',
-    placeholder: 'Just go go',
-    avatar: 'mm',
-    meta: guest,
-    pageSize: '10' || 10,
-    visitor: true,
-    lang: '' || 'zh-cn'
-  });
-</script>
-
 
 
 
   
 
 
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
   
 
 
 
 
-  
+  <script defer src="/js/leancloud.js" ></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   
-
-  
-
-  
-
-  
-
+    <!-- Baidu Analytics -->
+    <script defer>
+      var _hmt = _hmt || [];
+      (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?666a58de875adc9dd40d5de65ceac026";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();
+    </script>
   
 
   
@@ -1181,11 +620,13 @@
 
   
 
-  
 
-  
 
-  
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
 
 </body>
 </html>

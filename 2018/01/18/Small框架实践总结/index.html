@@ -1,533 +1,277 @@
+
+
 <!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
 
 
 
-
-
-
-
-
-
-
-
-
-  
-
-
-<html class="theme-next gemini use-motion" lang="zh-CN">
-<head><meta name="generator" content="Hexo 3.9.0">
+<head>
   <meta charset="UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
-<meta name="theme-color" content="#222">
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
-
-<link rel="stylesheet" href="/css/main.css?v=7.1.2">
-
-
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.1.2">
-
-
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.1.2">
-
-
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.1.2">
-
-
-  <link rel="mask-icon" href="/images/logo.svg?v=7.1.2" color="#222">
-
-
-
-
-
-
-
-<script id="hexo.configurations">
-  var NexT = window.NexT || {};
-  var CONFIG = {
-    root: '/',
-    scheme: 'Gemini',
-    version: '7.1.2',
-    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
-    back2top: true,
-    back2top_sidebar: false,
-    fancybox: false,
-    fastclick: false,
-    lazyload: false,
-    tabs: true,
-    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
-    algolia: {
-      applicationID: '',
-      apiKey: '',
-      indexName: '',
-      hits: {"per_page":10},
-      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
-    }
-  };
-</script>
-
-
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
   
-
-
-
-
-  <meta name="description" content="0x00 前言这篇文章主要总结了在使用Small框架改造老项目过程中遇到的问题和相应的解决方案，也总结了使用Small框架的基础知识点，并从一个使用者的角度来分析Small框架的优缺点。如果你的项目也面临业务模块耦合，边界不清晰，没有动态部署方案等等需要插件化方案来解决的问题，不妨先看下这篇文章再试一试Small框架，Small的功能未必全面但绝对聚焦了插件化框架需要解决的的核心问题。 什么是Sm">
-<meta name="keywords" content="Android,插件化">
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="病已">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="0x00 前言这篇文章主要总结了在使用Small框架改造老项目过程中遇到的问题和相应的解决方案，也总结了使用Small框架的基础知识点，并从一个使用者的角度来分析Small框架的优缺点。如果你的项目也面临业务模块耦合，边界不清晰，没有动态部署方案等等需要插件化方案来解决的问题，不妨先看下这篇文章再试一试Small框架，Small的功能未必全面但绝对聚焦了插件化框架需要解决的的核心问题。 什么是Sm">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Android插件化之Small框架实践总结">
-<meta property="og:url" content="https://ivonhoe.github.io/2018/01/18/Small框架实践总结/index.html">
+<meta property="og:url" content="https://ivonhoe.github.io/2018/01/18/Small%E6%A1%86%E6%9E%B6%E5%AE%9E%E8%B7%B5%E6%80%BB%E7%BB%93/index.html">
 <meta property="og:site_name" content="病已的博客">
 <meta property="og:description" content="0x00 前言这篇文章主要总结了在使用Small框架改造老项目过程中遇到的问题和相应的解决方案，也总结了使用Small框架的基础知识点，并从一个使用者的角度来分析Small框架的优缺点。如果你的项目也面临业务模块耦合，边界不清晰，没有动态部署方案等等需要插件化方案来解决的问题，不妨先看下这篇文章再试一试Small框架，Small的功能未必全面但绝对聚焦了插件化框架需要解决的的核心问题。 什么是Sm">
-<meta property="og:locale" content="zh-CN">
+<meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://ivonhoe.github.io/res/small/small-1.png">
 <meta property="og:image" content="https://ivonhoe.github.io/res/small/small-2.png">
-<meta property="og:updated_time" content="2018-09-18T09:50:27.000Z">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Android插件化之Small框架实践总结">
-<meta name="twitter:description" content="0x00 前言这篇文章主要总结了在使用Small框架改造老项目过程中遇到的问题和相应的解决方案，也总结了使用Small框架的基础知识点，并从一个使用者的角度来分析Small框架的优缺点。如果你的项目也面临业务模块耦合，边界不清晰，没有动态部署方案等等需要插件化方案来解决的问题，不妨先看下这篇文章再试一试Small框架，Small的功能未必全面但绝对聚焦了插件化框架需要解决的的核心问题。 什么是Sm">
+<meta property="article:published_time" content="2018-01-18T09:42:57.000Z">
+<meta property="article:modified_time" content="2018-09-18T09:50:27.000Z">
+<meta property="article:author" content="病已">
+<meta property="article:tag" content="Android">
+<meta property="article:tag" content="插件化">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://ivonhoe.github.io/res/small/small-1.png">
-
-
-
-  <link rel="alternate" href="/atom.xml" title="病已的博客" type="application/atom+xml">
-
-
-
   
   
-  <link rel="canonical" href="https://ivonhoe.github.io/2018/01/18/Small框架实践总结/">
+  <title>Android插件化之Small框架实践总结 - 病已的博客</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
 
 
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
 
-<script id="page.configurations">
-  CONFIG.page = {
-    sidebar: "",
-  };
-</script>
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
 
-  <title>Android插件化之Small框架实践总结 | 病已的博客</title>
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
   
 
 
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
 
 
 
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
 
-  <script>
-    var _hmt = _hmt || [];
-    (function() {
-      var hm = document.createElement("script");
-      hm.src = "https://hm.baidu.com/hm.js?666a58de875adc9dd40d5de65ceac026";
-      var s = document.getElementsByTagName("script")[0];
-      s.parentNode.insertBefore(hm, s);
-    })();
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"ivonhoe.github.io","root":"/","version":"1.8.14","typing":{"enable":false,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"baidu":"666a58de875adc9dd40d5de65ceac026","google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"JdLpddsaWqwfJtXPdDK8woaF-gzGzoHsz","app_key":"CEmtHXH8f0PtvF0zYtVE0EeY","server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
   </script>
-
-
-
-
-
-
-
-  <noscript>
-  <style>
-  .use-motion .motion-element,
-  .use-motion .brand,
-  .use-motion .menu-item,
-  .sidebar-inner,
-  .use-motion .post-block,
-  .use-motion .pagination,
-  .use-motion .comments,
-  .use-motion .post-header,
-  .use-motion .post-body,
-  .use-motion .collection-title { opacity: initial; }
-
-  .use-motion .logo,
-  .use-motion .site-title,
-  .use-motion .site-subtitle {
-    opacity: initial;
-    top: initial;
-  }
-
-  .use-motion .logo-line-before i { left: initial; }
-  .use-motion .logo-line-after i { right: initial; }
-  </style>
-</noscript>
-
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 6.1.0"><link rel="alternate" href="/atom.xml" title="病已的博客" type="application/atom+xml">
 </head>
 
-<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
 
-  
-  
-    
-  
+<body>
+  <header style="height: 30vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>病已的博客</strong>
+    </a>
 
-  <div class="container sidebar-position-left page-post-detail">
-    <div class="headband"></div>
-
-    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-brand-wrapper">
-  <div class="site-meta">
-    
-
-    <div class="custom-logo-site-title">
-      <a href="/" class="brand" rel="start">
-        <span class="logo-line-before"><i></i></span>
-        <span class="site-title">病已的博客</span>
-        <span class="logo-line-after"><i></i></span>
-      </a>
-    </div>
-    
-      
-        <p class="site-subtitle">枕上，马上，厕上</p>
-      
-    
-    
-  </div>
-
-  <div class="site-nav-toggle">
-    <button aria-label="切换导航栏">
-      <span class="btn-bar"></span>
-      <span class="btn-bar"></span>
-      <span class="btn-bar"></span>
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
     </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
   </div>
-</div>
-
-
-
-<nav class="site-nav">
-  
-    <ul id="menu" class="menu">
-      
-        
-        
-        
-          
-          <li class="menu-item menu-item-home">
-
-    
-    
-    
-      
-    
-
-    
-
-    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
-
-  </li>
-        
-        
-        
-          
-          <li class="menu-item menu-item-categories">
-
-    
-    
-    
-      
-    
-
-    
-
-    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
-
-  </li>
-        
-        
-        
-          
-          <li class="menu-item menu-item-tags">
-
-    
-    
-    
-      
-    
-
-    
-
-    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
-
-  </li>
-        
-        
-        
-          
-          <li class="menu-item menu-item-archives">
-
-    
-    
-    
-      
-    
-
-    
-
-    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
-
-  </li>
-        
-        
-        
-          
-          <li class="menu-item menu-item-about">
-
-    
-    
-    
-      
-    
-
-    
-
-    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
-
-  </li>
-
-      
-      
-    </ul>
-  
-
-  
-
-  
 </nav>
 
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default_post.jpeg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="Android插件化之Small框架实践总结">
+              
+                Android插件化之Small框架实践总结
+              
+            </span>
 
-
+            
+              <div class="mt-3">
   
-
-
-
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2018-01-18 17:42" pubdate>
+        2018年1月18日 下午
+      </time>
+    </span>
+  
 </div>
-    </header>
 
-    
+<div class="mt-1">
   
-  
-
-  
-
-  <a href="https://github.com/Ivonhoe" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewbox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a>
-
-
-
-    <main id="main" class="main">
-      <div class="main-inner">
-        <div class="content-wrap">
-          
-            
-
-          
-          <div id="content" class="content">
-            
-
-  <div id="posts" class="posts-expand">
-    
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://ivonhoe.github.io/2018/01/18/Small框架实践总结/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="病已">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      2.6k 字
     </span>
+  
 
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="病已的博客">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      22 分钟
     </span>
+  
 
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">Android插件化之Small框架实践总结
-
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
+  
+  
+</div>
 
             
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：1月 18 2018 17:42:57" itemprop="dateCreated datePublished" datetime="2018-01-18T17:42:57+08:00">1月 18 2018</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：9月 18 2018 17:50:27" itemprop="dateModified" datetime="2018-09-18T17:50:27+08:00">9月 18 2018</time>
-              
-            
-          </span>
+          </div>
 
           
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Android插件化/" itemprop="url" rel="index"><span itemprop="name">Android插件化</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2018/01/18/Small框架实践总结/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2018/01/18/Small框架实践总结/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-            <span id="/2018/01/18/Small框架实践总结/" class="leancloud_visitors" data-flag-title="Android插件化之Small框架实践总结">
-              <span class="post-meta-divider">|</span>
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              
-                <span class="post-meta-item-text">阅读次数：</span>
-              
-                <span class="leancloud-visitors-count"></span>
-            </span>
-          
-
-          
-
-          
-
-          
-
         </div>
-      </header>
-    
+      </div>
+    </div>
+  </header>
 
+  <main>
     
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
       
 
-      
-        <h3 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00 前言"></a>0x00 前言</h3><p>这篇文章主要总结了在使用Small框架改造老项目过程中遇到的问题和相应的解决方案，也总结了使用Small框架的基础知识点，并从一个使用者的角度来分析Small框架的优缺点。如果你的项目也面临业务模块耦合，边界不清晰，没有动态部署方案等等需要插件化方案来解决的问题，不妨先看下这篇文章再试一试Small框架，Small的功能未必全面但绝对聚焦了插件化框架需要解决的的核心问题。</p>
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Android插件化之Small框架实践总结</h1>
+            
+            <div class="markdown-body">
+              <h3 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00 前言"></a>0x00 前言</h3><p>这篇文章主要总结了在使用Small框架改造老项目过程中遇到的问题和相应的解决方案，也总结了使用Small框架的基础知识点，并从一个使用者的角度来分析Small框架的优缺点。如果你的项目也面临业务模块耦合，边界不清晰，没有动态部署方案等等需要插件化方案来解决的问题，不妨先看下这篇文章再试一试Small框架，Small的功能未必全面但绝对聚焦了插件化框架需要解决的的核心问题。</p>
 <p>什么是Small框架？ Small是一个轻量级的插件化框架，Small也是一个dex分包方案，Small也是一个业务模块解耦方案，同时Small也是一个动态化加载和更新方案。先去看官网文档了解Small的基础知识~~</p>
-<p><a href="http://code.wequick.net/Small/cn/quickstart" target="_blank" rel="noopener">Small官网文档</a></p>
+<p><a target="_blank" rel="noopener" href="http://code.wequick.net/Small/cn/quickstart">Small官网文档</a></p>
 <h3 id="关于Small插件化的其他文档："><a href="#关于Small插件化的其他文档：" class="headerlink" title="关于Small插件化的其他文档："></a>关于Small插件化的其他文档：</h3><p><a href="http://ivonhoe.github.io/2018/01/18/Small%E6%A1%86%E6%9E%B6%E5%8E%9F%E7%90%86/"><strong>《Android插件化之Small框架原理》</strong></a><br><a href="http://ivonhoe.github.io/2018/03/14/small-bug-555-fix/"><strong>《Android插件化之资源加载机制》</strong></a><br><a href="https://ivonhoe.github.io/2018/07/18/abandon-the-plugin-framework/"><strong>《Android插件化之从入门到放弃》</strong></a></p>
-<a id="more"></a>
-<h4 id="0x01-Small必知必会"><a href="#0x01-Small必知必会" class="headerlink" title="0x01 Small必知必会"></a>0x01 Small必知必会</h4><p><img src="/res/small/small-1.png" alt="Small角色关系"></p>
+<span id="more"></span>
+
+<h4 id="0x01-Small必知必会"><a href="#0x01-Small必知必会" class="headerlink" title="0x01 Small必知必会"></a>0x01 Small必知必会</h4><p><img src="/res/small/small-1.png" srcset="/img/loading.gif" lazyload alt="Small角色关系"></p>
 <ol>
 <li>Small框架将工程模块分为这几个角色，宿主，宿主分身，app插件，公共lib插件</li>
 <li>宿主不依赖任何模块，宿主分身被所有app和lib依赖，但是宿主和宿主分身都被打包在主应用的主dex中，app插件和公共lib插件被单独打包在自己的插件so中</li>
 <li>Small如何编译? <ul>
-<li>./gradlew cleanLib </li>
-<li><strong>编译公共库:</strong> ./gradlew buildLib </li>
-<li>./gradlew cleanBundle</li>
-<li><strong>编译app插件:</strong> ./gradle buildBundle </li>
-<li><strong>编译宿主app:</strong> ./gradle :app:assembleDaily  <strong>注意：</strong>这里不是assembleDaily 而是:app:assembleDaily</li>
+<li>.&#x2F;gradlew cleanLib </li>
+<li><strong>编译公共库:</strong> .&#x2F;gradlew buildLib </li>
+<li>.&#x2F;gradlew cleanBundle</li>
+<li><strong>编译app插件:</strong> .&#x2F;gradle buildBundle </li>
+<li><strong>编译宿主app:</strong> .&#x2F;gradle :app:assembleDaily  <strong>注意：</strong>这里不是assembleDaily 而是:app:assembleDaily</li>
 </ul>
 </li>
-<li>app插件的模块名称必须是app.<em> , 公共库lib插件的模块名称必须是lib.</em>。</li>
+<li>app插件的模块名称必须是app.* , 公共库lib插件的模块名称必须是lib.*。</li>
 <li>在宿主app assets目录的bundle.json文件中声明每个插件的包名、类型和页面路由等信息。当app插件的包名为 <code>**.app.*</code> 或 <code>**.app*</code>时, small框架会默认该插件模块为app插件。</li>
 <li>app插件和app插件之间无法相互依赖，app插件之间可以通过路由uri传参，或者LocalBroadcast、Eventbus等消息机制实现通信。</li>
-<li><p>Small中插件的packageId是自动根据模块名称hash计算生成，有可能会遇到插件模块packageId冲突的情况，在这种情况下需要在发生冲突模块的build.gradle重新声明packageId, 如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ext &#123;</span><br><span class="line">  packageId = 0x33</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>生成插件到 x86 架构下./gradlew buildLib -q -Dbundle.arch=x86，<strong>需要注意</strong> 宿主的ndk abiFilters 要和<code>bundle.arch</code>一致哦。</p>
-</li>
+<li>Small中插件的packageId是自动根据模块名称hash计算生成，有可能会遇到插件模块packageId冲突的情况，在这种情况下需要在发生冲突模块的build.gradle重新声明packageId, 如下：</li>
+</ol>
+  <figure class="highlight abnf"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></div></td><td class="code"><pre><code class="hljs abnf">ext &#123;<br>  packageId <span class="hljs-operator">=</span> <span class="hljs-number">0</span>x33<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<ol start="8">
+<li>生成插件到 x86 架构下.&#x2F;gradlew buildLib -q -Dbundle.arch&#x3D;x86，<strong>需要注意</strong> 宿主的ndk abiFilters 要和<code>bundle.arch</code>一致哦。</li>
 <li>如何启动其他插件模块的页面？通过<code>Small.openUri()</code>方法打开页面的路由地址。</li>
 <li>动态更新插件时，需要升级插件的versionCode才会生效</li>
 <li>非Activity组件需要声明在宿主或者宿主分身的manifest中</li>
@@ -558,557 +302,252 @@
 <li>确认该异常类继承的父类或者接口满足上述几个条件</li>
 </ul>
 </li>
-<li>Class ref in pre-verified class resolved to unexpected implementation ，使用gradle smallLint命令查看是否有class重复了 <a href="https://github.com/wequick/Small/issues/423" target="_blank" rel="noopener">https://github.com/wequick/Small/issues/423</a></li>
-<li>Activity launch mode为singletop时在activity style中设置透明背景无效 <a href="https://github.com/wequick/Small/issues/94" target="_blank" rel="noopener">https://github.com/wequick/Small/issues/94</a></li>
+<li>Class ref in pre-verified class resolved to unexpected implementation ，使用gradle smallLint命令查看是否有class重复了 <a target="_blank" rel="noopener" href="https://github.com/wequick/Small/issues/423">https://github.com/wequick/Small/issues/423</a></li>
+<li>Activity launch mode为singletop时在activity style中设置透明背景无效 <a target="_blank" rel="noopener" href="https://github.com/wequick/Small/issues/94">https://github.com/wequick/Small/issues/94</a></li>
 <li>无法通过Small.openUri()方法启动页面怎么办？一定是你用法不对，debug找原因。</li>
 </ol>
 <h4 id="0x04-Small插件化规范"><a href="#0x04-Small插件化规范" class="headerlink" title="0x04 Small插件化规范"></a>0x04 Small插件化规范</h4><ol>
 <li>不要在宿主中添加业务代码</li>
-<li>native module so放在宿主中, 原因关注Github issue: <a href="https://github.com/wequick/Small/issues/560" target="_blank" rel="noopener">增加或修改插件中ndk module覆盖安装不生效 </a></li>
+<li>native module so放在宿主中, 原因关注Github issue: <a target="_blank" rel="noopener" href="https://github.com/wequick/Small/issues/560">增加或修改插件中ndk module覆盖安装不生效 </a></li>
 <li>不同插件模块中依赖相同第三方aar或jar的版本号要相同，建议将aar或jar的版本号统一声明在gradle.properties中，将共同依赖的第三方sdk声明在宿主分身中</li>
 <li>所有Theme的定义都放在宿主和宿主分身中，具体原因看我的另一篇问题总结：<a href="https://ivonhoe.github.io/2018/03/14/small-bug-555-fix/">Android插件化之资源加载</a></li>
 </ol>
 <p><strong>Small插件化项目的完全体</strong></p>
-<p><img src="/res/small/small-2.png" alt="Small插件化完全体"></p>
-<h4 id="0x05-参考"><a href="#0x05-参考" class="headerlink" title="0x05 参考"></a>0x05 参考</h4><p>Small官网文档 <a href="http://code.wequick.net/Small/cn/quickstart" target="_blank" rel="noopener">http://code.wequick.net/Small/cn/quickstart</a></p>
-<p>Small github主页 <a href="https://github.com/wequick/Small" target="_blank" rel="noopener">https://github.com/wequick/Small</a></p>
-<p><a href="http://code.wequick.net/small/docs/ppt/gmtc-galen-small.ppsx" target="_blank" rel="noopener">GMTC演讲PPT</a></p>
+<p><img src="/res/small/small-2.png" srcset="/img/loading.gif" lazyload alt="Small插件化完全体"></p>
+<h4 id="0x05-参考"><a href="#0x05-参考" class="headerlink" title="0x05 参考"></a>0x05 参考</h4><p>Small官网文档 <a target="_blank" rel="noopener" href="http://code.wequick.net/Small/cn/quickstart">http://code.wequick.net/Small/cn/quickstart</a></p>
+<p>Small github主页 <a target="_blank" rel="noopener" href="https://github.com/wequick/Small">https://github.com/wequick/Small</a></p>
+<p><a target="_blank" rel="noopener" href="http://code.wequick.net/small/docs/ppt/gmtc-galen-small.ppsx">GMTC演讲PPT</a></p>
 <h3 id="转载请标明出处病已blog-https-ivonhoe-github-io"><a href="#转载请标明出处病已blog-https-ivonhoe-github-io" class="headerlink" title="转载请标明出处病已blog https://ivonhoe.github.io/"></a>转载请标明出处<a href="https://ivonhoe.github.io/">病已blog https://ivonhoe.github.io/</a></h3>
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-        
-          
-        
-        <div class="post-tags">
-          
-            <a href="/tags/Android/" rel="tag"># Android</a>
-          
-            <a href="/tags/插件化/" rel="tag"># 插件化</a>
-          
-        </div>
-      
-
-      
-      
-      
-
-      
-        <div class="post-nav">
-          <div class="post-nav-next post-nav-item">
-            
-              <a href="/2017/06/18/android-app-gold-flow-hack/" rel="next" title="Android安全之某团请求加密破解">
-                <i class="fa fa-chevron-left"></i> Android安全之某团请求加密破解
-              </a>
-            
-          </div>
-
-          <span class="post-nav-divider"></span>
-
-          <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/01/18/Small框架原理/" rel="prev" title="Android插件化之Small框架原理">
-                Android插件化之Small框架原理 <i class="fa fa-chevron-right"></i>
-              </a>
-            
-          </div>
-        </div>
-      
-
-      
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-  </div>
-
-
-          </div>
-          
-
-  
-    <div class="comments" id="comments">
-    </div>
-
-  
-
-
-
-        </div>
-        
-          
-  
-  <div class="sidebar-toggle">
-    <div class="sidebar-toggle-line-wrap">
-      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
-    </div>
-  </div>
-
-  <aside id="sidebar" class="sidebar">
-    <div class="sidebar-inner">
-
-      
-
-      
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            站点概览
-          </li>
-        </ul>
-      
-
-      <div class="site-overview-wrap sidebar-panel">
-        <div class="site-overview">
-          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-            
-              <p class="site-author-name" itemprop="name">病已</p>
-              <div class="site-description motion-element" itemprop="description"></div>
-          </div>
-
-          
-            <nav class="site-state motion-element">
-              
-                <div class="site-state-item site-state-posts">
-                
-                  <a href="/archives/">
-                
-                    <span class="site-state-item-count">38</span>
-                    <span class="site-state-item-name">日志</span>
-                  </a>
-                </div>
-              
-
-              
-                
-                
-                <div class="site-state-item site-state-categories">
-                  
-                    
-                      <a href="/categories/">
-                    
-                  
-                    
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                    <span class="site-state-item-count">9</span>
-                    <span class="site-state-item-name">分类</span>
-                  </a>
-                </div>
-              
-
-              
-                
-                
-                <div class="site-state-item site-state-tags">
-                  
-                    
-                      <a href="/tags/">
-                    
-                  
-                    
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                    <span class="site-state-item-count">41</span>
-                    <span class="site-state-item-name">标签</span>
-                  </a>
-                </div>
-              
-            </nav>
-          
-
-          
-            <div class="feed-link motion-element">
-              <a href="/atom.xml" rel="alternate">
-                <i class="fa fa-rss"></i>
-                RSS
-              </a>
             </div>
-          
-
-          
-
-          
-            <div class="links-of-author motion-element">
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/Android%E6%8F%92%E4%BB%B6%E5%8C%96/">Android插件化</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/Android/">Android</a>
+                    
+                      <a class="hover-with-bg" href="/tags/%E6%8F%92%E4%BB%B6%E5%8C%96/">插件化</a>
+                    
+                  </div>
+                
+              </div>
               
-                <span class="links-of-author-item">
+                <p class="note note-warning">
                   
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
                   
-                    
-                  
-                  
-                    
-                  
-                  <a href="https://github.com/ivonhoe" title="GitHub &rarr; https://github.com/ivonhoe" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
-                </span>
+                </p>
               
-                <span class="links-of-author-item">
-                  
-                  
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
                     
-                  
-                  
                     
-                  
-                  <a href="mailto:yangfan3687@163.com" title="E-Mail &rarr; mailto:yangfan3687@163.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
-                </span>
+                      <a href="/2018/01/18/Small%E6%A1%86%E6%9E%B6%E5%8E%9F%E7%90%86/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Android插件化之Small框架原理</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2017/06/18/android-app-gold-flow-hack/">
+                        <span class="hidden-mobile">Android安全之某团请求加密破解</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
               
             </div>
-          
 
-          
-
-          
-          
-
-          
             
-          
-          
+              <!-- Comments -->
+              <article class="comments" id="comments" lazyload>
+                
+                  
+                
+                
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/valine@1/dist/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"JdLpddsaWqwfJtXPdDK8woaF-gzGzoHsz","appKey":"CEmtHXH8f0PtvF0zYtVE0EeY","path":"window.location.pathname","placeholder":null,"avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          Fluid.plugins.initFancyBox('#valine .vcontent img:not(.vemoji)');
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
 
+
+              </article>
+            
+          </article>
         </div>
       </div>
-
-      
-      <!--noindex-->
-        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-            
-            
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#0x00-前言"><span class="nav-number">1.</span> <span class="nav-text">0x00 前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#关于Small插件化的其他文档："><span class="nav-number">2.</span> <span class="nav-text">关于Small插件化的其他文档：</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#0x01-Small必知必会"><span class="nav-number">2.1.</span> <span class="nav-text">0x01 Small必知必会</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x02-Small框架的优缺点"><span class="nav-number">2.2.</span> <span class="nav-text">0x02 Small框架的优缺点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x03-Small插件化实践踩过的那些坑"><span class="nav-number">2.3.</span> <span class="nav-text">0x03 Small插件化实践踩过的那些坑</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x04-Small插件化规范"><span class="nav-number">2.4.</span> <span class="nav-text">0x04 Small插件化规范</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x05-参考"><span class="nav-number">2.5.</span> <span class="nav-text">0x05 参考</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#转载请标明出处病已blog-https-ivonhoe-github-io"><span class="nav-number">3.</span> <span class="nav-text">转载请标明出处病已blog https://ivonhoe.github.io/</span></a></li></ol></div>
-            
-
-          </div>
-        </div>
-      <!--/noindex-->
-      
-
-      
-
     </div>
-  </aside>
-  
-
-
-        
-      </div>
-    </main>
-
-    <footer id="footer" class="footer">
-      <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
-  <span class="with-love" id="animate">
-    <i class="fa fa-user"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">病已</span>
-
-  
-
-  
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
 </div>
 
-
-  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
-
-
-
-  <span class="post-meta-divider">|</span>
-
-
-
-  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.1.2</div>
-
-
-
-
-        
-
-
-
-
-
-
-
-
-        
       </div>
-    </footer>
-
-    
-      <div class="back-to-top">
-        <i class="fa fa-arrow-up"></i>
-        
-      </div>
-    
-
-    
-
-    
-
     
   </div>
+</div>
 
-  
-
-<script>
-  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
-    window.Promise = null;
-  }
-</script>
+<!-- Custom -->
 
 
+    
 
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
 
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
 
+    
+  </main>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-  <script src="/lib/jquery/index.js?v=3.4.1"></script>
-
-  
-  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
-
-  
-  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
-
-
-  
-
-
-  <script src="/js/utils.js?v=7.1.2"></script>
-
-  <script src="/js/motion.js?v=7.1.2"></script>
-
-
-
-  
-  
-
-
-  <script src="/js/affix.js?v=7.1.2"></script>
-
-  <script src="/js/schemes/pisces.js?v=7.1.2"></script>
-
-
-
-
-  
-  <script src="/js/scrollspy.js?v=7.1.2"></script>
-<script src="/js/post-details.js?v=7.1.2"></script>
-
-
-
-  
-
-
-  <script src="/js/next-boot.js?v=7.1.2"></script>
-
-
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
   
 
   
 
   
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
 
   
+    <script  src="/js/img-lazyload.js" ></script>
   
-
-<script src="//cdn1.lncld.net/static/js/3.11.1/av-min.js"></script>
-
-
-
-<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
-
-<script>
-  var GUEST = ['nick', 'mail', 'link'];
-  var guest = 'nick,mail,link';
-  guest = guest.split(',').filter(function(item) {
-    return GUEST.indexOf(item) > -1;
-  });
-  new Valine({
-    el: '#comments',
-    verify: false,
-    notify: false,
-    appId: 'JdLpddsaWqwfJtXPdDK8woaF-gzGzoHsz',
-    appKey: 'CEmtHXH8f0PtvF0zYtVE0EeY',
-    placeholder: 'Just go go',
-    avatar: 'mm',
-    meta: guest,
-    pageSize: '10' || 10,
-    visitor: true,
-    lang: '' || 'zh-cn'
-  });
-</script>
-
 
 
 
   
 
 
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
   
 
 
 
 
-  
+  <script defer src="/js/leancloud.js" ></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   
-
-  
-
-  
-
-  
-
+    <!-- Baidu Analytics -->
+    <script defer>
+      var _hmt = _hmt || [];
+      (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?666a58de875adc9dd40d5de65ceac026";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();
+    </script>
   
 
   
@@ -1121,11 +560,13 @@
 
   
 
-  
 
-  
 
-  
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
 
 </body>
 </html>

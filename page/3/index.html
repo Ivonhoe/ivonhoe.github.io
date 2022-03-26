@@ -1,2840 +1,778 @@
+
+
 <!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
 
 
 
-
-
-
-
-
-
-
-
-
-  
-
-
-<html class="theme-next gemini use-motion" lang="zh-CN">
-<head><meta name="generator" content="Hexo 3.9.0">
+<head>
   <meta charset="UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
-<meta name="theme-color" content="#222">
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
-
-<link rel="stylesheet" href="/css/main.css?v=7.1.2">
-
-
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.1.2">
-
-
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.1.2">
-
-
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.1.2">
-
-
-  <link rel="mask-icon" href="/images/logo.svg?v=7.1.2" color="#222">
-
-
-
-
-
-
-
-<script id="hexo.configurations">
-  var NexT = window.NexT || {};
-  var CONFIG = {
-    root: '/',
-    scheme: 'Gemini',
-    version: '7.1.2',
-    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
-    back2top: true,
-    back2top_sidebar: false,
-    fancybox: false,
-    fastclick: false,
-    lazyload: false,
-    tabs: true,
-    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
-    algolia: {
-      applicationID: '',
-      apiKey: '',
-      indexName: '',
-      hits: {"per_page":10},
-      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
-    }
-  };
-</script>
-
-
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
   
-
-
-
-
-  <meta property="og:type" content="website">
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="病已">
+  <meta name="keywords" content="">
+  
+    <meta property="og:type" content="website">
 <meta property="og:title" content="病已的博客">
 <meta property="og:url" content="https://ivonhoe.github.io/page/3/index.html">
 <meta property="og:site_name" content="病已的博客">
-<meta property="og:locale" content="zh-CN">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="病已的博客">
-
-
-
-  <link rel="alternate" href="/atom.xml" title="病已的博客" type="application/atom+xml">
-
-
-
+<meta property="og:locale" content="zh_CN">
+<meta property="article:author" content="病已">
+<meta name="twitter:card" content="summary_large_image">
   
   
-  <link rel="canonical" href="https://ivonhoe.github.io/page/3/">
-
-
-
-<script id="page.configurations">
-  CONFIG.page = {
-    sidebar: "",
-  };
-</script>
-
   <title>病已的博客</title>
-  
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
 
 
 
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
 
 
 
-  <script>
-    var _hmt = _hmt || [];
-    (function() {
-      var hm = document.createElement("script");
-      hm.src = "https://hm.baidu.com/hm.js?666a58de875adc9dd40d5de65ceac026";
-      var s = document.getElementsByTagName("script")[0];
-      s.parentNode.insertBefore(hm, s);
-    })();
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"ivonhoe.github.io","root":"/","version":"1.8.14","typing":{"enable":false,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"baidu":"666a58de875adc9dd40d5de65ceac026","google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"JdLpddsaWqwfJtXPdDK8woaF-gzGzoHsz","app_key":"CEmtHXH8f0PtvF0zYtVE0EeY","server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
   </script>
-
-
-
-
-
-
-
-  <noscript>
-  <style>
-  .use-motion .motion-element,
-  .use-motion .brand,
-  .use-motion .menu-item,
-  .sidebar-inner,
-  .use-motion .post-block,
-  .use-motion .pagination,
-  .use-motion .comments,
-  .use-motion .post-header,
-  .use-motion .post-body,
-  .use-motion .collection-title { opacity: initial; }
-
-  .use-motion .logo,
-  .use-motion .site-title,
-  .use-motion .site-subtitle {
-    opacity: initial;
-    top: initial;
-  }
-
-  .use-motion .logo-line-before i { left: initial; }
-  .use-motion .logo-line-after i { right: initial; }
-  </style>
-</noscript>
-
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 6.1.0"><link rel="alternate" href="/atom.xml" title="病已的博客" type="application/atom+xml">
 </head>
 
-<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
 
-  
-  
-    
-  
+<body>
+  <header style="height: 60vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>病已的博客</strong>
+    </a>
 
-  <div class="container sidebar-position-left 
-  page-home">
-    <div class="headband"></div>
-
-    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-brand-wrapper">
-  <div class="site-meta">
-    
-
-    <div class="custom-logo-site-title">
-      <a href="/" class="brand" rel="start">
-        <span class="logo-line-before"><i></i></span>
-        <span class="site-title">病已的博客</span>
-        <span class="logo-line-after"><i></i></span>
-      </a>
-    </div>
-    
-      
-        <p class="site-subtitle">枕上，马上，厕上</p>
-      
-    
-    
-  </div>
-
-  <div class="site-nav-toggle">
-    <button aria-label="切换导航栏">
-      <span class="btn-bar"></span>
-      <span class="btn-bar"></span>
-      <span class="btn-bar"></span>
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
     </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
   </div>
-</div>
-
-
-
-<nav class="site-nav">
-  
-    <ul id="menu" class="menu">
-      
-        
-        
-        
-          
-          <li class="menu-item menu-item-home">
-
-    
-    
-    
-      
-    
-
-    
-
-    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
-
-  </li>
-        
-        
-        
-          
-          <li class="menu-item menu-item-categories">
-
-    
-    
-    
-      
-    
-
-    
-
-    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
-
-  </li>
-        
-        
-        
-          
-          <li class="menu-item menu-item-tags">
-
-    
-    
-    
-      
-    
-
-    
-
-    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
-
-  </li>
-        
-        
-        
-          
-          <li class="menu-item menu-item-archives">
-
-    
-    
-    
-      
-    
-
-    
-
-    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
-
-  </li>
-        
-        
-        
-          
-          <li class="menu-item menu-item-about">
-
-    
-    
-    
-      
-    
-
-    
-
-    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
-
-  </li>
-
-      
-      
-    </ul>
-  
-
-  
-
-  
 </nav>
 
-
-
-  
-
-
-
-</div>
-    </header>
-
-    
-  
-  
-
-  
-
-  <a href="https://github.com/Ivonhoe" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewbox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a>
-
-
-
-    <main id="main" class="main">
-      <div class="main-inner">
-        <div class="content-wrap">
-          
-            
-
-          
-          <div id="content" class="content">
-            
-  <section id="posts" class="posts-expand">
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://ivonhoe.github.io/2017/05/05/android-performance-tips/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="病已">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="病已的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2017/05/05/android-performance-tips/" class="post-title-link" itemprop="url">Android性能优化之一刀流优化[持续更新]</a>
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default.jpeg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="">
               
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：5月 5 2017 22:59:14" itemprop="dateCreated datePublished" datetime="2017-05-05T22:59:14+08:00">5月 5 2017</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：7月 7 2019 22:35:44" itemprop="dateModified" datetime="2019-07-07T22:35:44+08:00">7月 7 2019</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Android性能优化/" itemprop="url" rel="index"><span itemprop="name">Android性能优化</span></a></span>
-
-                
                 
               
             </span>
-          
 
-          
             
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2017/05/05/android-performance-tips/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2017/05/05/android-performance-tips/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
+          </div>
 
           
-          
-            <span id="/2017/05/05/android-performance-tips/" class="leancloud_visitors" data-flag-title="Android性能优化之一刀流优化[持续更新]">
-              <span class="post-meta-divider">|</span>
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              
-                <span class="post-meta-item-text">阅读次数：</span>
-              
-                <span class="leancloud-visitors-count"></span>
-            </span>
-          
-
-          
-
-          
-
-          
-
         </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h3 id="使用windowBackground实现应用秒开"><a href="#使用windowBackground实现应用秒开" class="headerlink" title="使用windowBackground实现应用秒开"></a>使用windowBackground实现应用秒开</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;style name=&quot;SplashTheme&quot; parent=&quot;@android:style/Theme.Black.NoTitleBar.Fullscreen&quot;&gt;</span><br><span class="line">    &lt;item name=&quot;android:windowBackground&quot;&gt;@drawable/bg_splash_activity&lt;/item&gt;</span><br><span class="line">    &lt;item name=&quot;@android:windowAnimationStyle&quot;&gt;@style/myact&lt;/item&gt;</span><br><span class="line">&lt;/style&gt;</span><br></pre></td></tr></table></figure>
-<h3 id="使用windowBackground减少过度绘制"><a href="#使用windowBackground减少过度绘制" class="headerlink" title="使用windowBackground减少过度绘制"></a>使用windowBackground减少过度绘制</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;style name=&quot;AppMainTheme&quot; parent=&quot;@android:style/Theme.Holo.Light&quot;&gt;</span><br><span class="line">    &lt;item name=&quot;android:windowBackground&quot;&gt;@color/white&lt;/item&gt;</span><br><span class="line">    &lt;item name=&quot;android:windowNoTitle&quot;&gt;true&lt;/item&gt;</span><br><span class="line">    &lt;item name=&quot;@android:windowAnimationStyle&quot;&gt;@style/myact&lt;/item&gt;</span><br><span class="line">&lt;/style&gt;</span><br></pre></td></tr></table></figure>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2017/05/05/android-performance-tips/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
-        
-      
+      </div>
     </div>
+  </header>
 
+  <main>
     
+      <div class="container nopadding-x-md">
+        <div class="py-5" id="board"
+          >
+          
+          <div class="container">
+            <div class="row">
+              <div class="col-12 col-md-10 m-auto">
+                
 
-    
-    
-    
 
-    
-
-    
-      
+  <div class="row mx-auto index-card">
     
     
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2017/05/05/android-performance-tips/" target="_self">
+          Android性能优化之一刀流优化[持续更新]
+        </a>
+      </h1>
 
-    
+      <p class="index-excerpt">
+        <a href="/2017/05/05/android-performance-tips/" target="_self">
+          
+          使用windowBackground实现应用秒开1234&lt;style name&#x3D;&quot;SplashTheme&quot; parent&#x3D;&quot;@android:style&#x2F;Theme.Black.NoTitleBar.Fullscreen&quot;&gt;    &lt;item name&#x3D;&quot;android:windowBackground&quot;&gt;@dra
+        </a>
+      </p>
 
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2017-05-05 22:59" pubdate>
+              5月 5 2017
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/categories/Android%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">Android性能优化</a>
+            
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">性能优化</a>
+            
+          </div>
+        
+      </div>
+    </article>
   </div>
-  
-  
-  
-  </article>
 
-
+  <div class="row mx-auto index-card">
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://ivonhoe.github.io/2017/04/26/Zygote-2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="病已">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="病已的博客">
-    </span>
-
     
-      <header class="post-header">
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2017/04/26/Zygote-2/" target="_self">
+          Android性能优化之系统资源预加载的思考
+        </a>
+      </h1>
 
+      <p class="index-excerpt">
+        <a href="/2017/04/26/Zygote-2/" target="_self">
+          
+          一、分析一个Hello World App中bitmap对象的分布使用BitmapAnalyzer分析一个Android Hello World App时你会dump出400+张图片，什么是BitmapAnalyzer？BitmapAnalyzer是一个自动分析Android dump heap中bitmap对象的工具，详细请看《Android Bitmap的内存大小是如何计算的？》这篇文章的介绍
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2017-04-26 00:49" pubdate>
+              4月 26 2017
+            </time>
+          </div>
         
         
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2017/04/26/Zygote-2/" class="post-title-link" itemprop="url">Android性能优化之系统资源预加载的思考</a>
-              
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
             
-          </h1>
+              <a href="/categories/Android%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">Android性能优化</a>
+            
+          </div>
         
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：4月 26 2017 0:49:27" itemprop="dateCreated datePublished" datetime="2017-04-26T00:49:27+08:00">4月 26 2017</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：10月 16 2018 18:01:47" itemprop="dateModified" datetime="2018-10-16T18:01:47+08:00">10月 16 2018</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Android性能优化/" itemprop="url" rel="index"><span itemprop="name">Android性能优化</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2017/04/26/Zygote-2/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2017/04/26/Zygote-2/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-            <span id="/2017/04/26/Zygote-2/" class="leancloud_visitors" data-flag-title="Android性能优化之系统资源预加载的思考">
-              <span class="post-meta-divider">|</span>
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              
-                <span class="post-meta-item-text">阅读次数：</span>
-              
-                <span class="leancloud-visitors-count"></span>
-            </span>
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
         
-          <h3 id="一、分析一个Hello-World-App中bitmap对象的分布"><a href="#一、分析一个Hello-World-App中bitmap对象的分布" class="headerlink" title="一、分析一个Hello World App中bitmap对象的分布"></a>一、分析一个Hello World App中bitmap对象的分布</h3><p>使用BitmapAnalyzer分析一个Android Hello World App时你会dump出400+张图片，什么是BitmapAnalyzer？BitmapAnalyzer是一个自动分析Android dump heap中bitmap对象的工具，详细请看<a href="https://ivonhoe.github.io/2017/03/22/Bitmap&amp;Memory/">《Android Bitmap的内存大小是如何计算的？》</a>这篇文章的介绍。</p>
-<p><img src="http://upload-images.jianshu.io/upload_images/695750-211010ed47103e96.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="hprof-3.png"></p>
-<p>分析仔细看一下可以发现，上图中sPreloadedDrawables数组所引用的预加载Drawable就会占用10M以上的内存空间。这些都是Android系统的主题资源图片，为什么会有这么多主题资源被加载？不需要的无用的系统资源能否避免被加载？那么要如何做到？</p>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2017/04/26/Zygote-2/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">性能优化</a>
+            
+              <a href="/tags/Zygote/">Zygote</a>
+            
+              <a href="/tags/Copy-on-write/">Copy-on-write</a>
+            
+          </div>
         
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
+      </div>
+    </article>
   </div>
-  
-  
-  
-  </article>
 
-
+  <div class="row mx-auto index-card">
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://ivonhoe.github.io/2017/04/25/如何写出GC友好的Android应用/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="病已">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="病已的博客">
-    </span>
-
     
-      <header class="post-header">
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2017/04/25/%E5%A6%82%E4%BD%95%E5%86%99%E5%87%BAGC%E5%8F%8B%E5%A5%BD%E7%9A%84Android%E5%BA%94%E7%94%A8/" target="_self">
+          Android性能优化之如何写出GC友好的应用
+        </a>
+      </h1>
 
+      <p class="index-excerpt">
+        <a href="/2017/04/25/%E5%A6%82%E4%BD%95%E5%86%99%E5%87%BAGC%E5%8F%8B%E5%A5%BD%E7%9A%84Android%E5%BA%94%E7%94%A8/" target="_self">
+          
+          作者：乐蛙科技高级研发经理 易宁 Android应用普遍没有iOS应用流畅，这与Android应用是运行在Java虚拟机上有很大的关系，而关系最大的恐怕就是Java虚拟机上的Garbage Collection（GC）了。Java语言提供了自动内存管理，垃圾对象会在GC过程中自动被释放。这提供了开发效率，使开发者能集中精力在业务逻辑上；但天下没有免费的午餐，你写的Android应用的某些性能上的问
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2017-04-25 21:21" pubdate>
+              4月 25 2017
+            </time>
+          </div>
         
         
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2017/04/25/如何写出GC友好的Android应用/" class="post-title-link" itemprop="url">Android性能优化之如何写出GC友好的应用</a>
-              
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
             
-          </h1>
+              <a href="/categories/Android%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">Android性能优化</a>
+            
+          </div>
         
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：4月 25 2017 21:21:23" itemprop="dateCreated datePublished" datetime="2017-04-25T21:21:23+08:00">4月 25 2017</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：10月 16 2018 18:05:59" itemprop="dateModified" datetime="2018-10-16T18:05:59+08:00">10月 16 2018</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Android性能优化/" itemprop="url" rel="index"><span itemprop="name">Android性能优化</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2017/04/25/如何写出GC友好的Android应用/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2017/04/25/如何写出GC友好的Android应用/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-            <span id="/2017/04/25/如何写出GC友好的Android应用/" class="leancloud_visitors" data-flag-title="Android性能优化之如何写出GC友好的应用">
-              <span class="post-meta-divider">|</span>
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              
-                <span class="post-meta-item-text">阅读次数：</span>
-              
-                <span class="leancloud-visitors-count"></span>
-            </span>
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
         
-          <p>作者：乐蛙科技高级研发经理 易宁</p>
-<p>Android应用普遍没有iOS应用流畅，这与Android应用是运行在Java虚拟机上有很大的关系，而关系最大的恐怕就是Java虚拟机上的Garbage Collection（GC）了。Java语言提供了自动内存管理，垃圾对象会在GC过程中自动被释放。这提供了开发效率，使开发者能集中精力在业务逻辑上；但天下没有免费的午餐，你写的Android应用的某些性能上的问题很可能就是GC导致的。</p>
-<p>下面是一段非常简单的Java语句：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">byte</span>[] data = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">512</span> * <span class="number">512</span> * <span class="number">4</span>];</span><br></pre></td></tr></table></figure></p>
-<p>这条语句申请了一块大小相等于512*512大小图片的内存。执行这条语句会消耗多少时间呢？0+ms吗？基本没有性能影响吗？</p>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2017/04/25/如何写出GC友好的Android应用/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/Android/">Android</a>
+            
+              <a href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">性能优化</a>
+            
+              <a href="/tags/Delvik/">Delvik</a>
+            
+              <a href="/tags/GC/">GC</a>
+            
+              <a href="/tags/%E8%BD%AC%E8%BD%BD/">转载</a>
+            
+          </div>
         
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
+      </div>
+    </article>
   </div>
-  
-  
-  
-  </article>
 
-
+  <div class="row mx-auto index-card">
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://ivonhoe.github.io/2017/04/15/Zygote/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="病已">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="病已的博客">
-    </span>
-
     
-      <header class="post-header">
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2017/04/15/Zygote/" target="_self">
+          [译]Zygote
+        </a>
+      </h1>
 
+      <p class="index-excerpt">
+        <a href="/2017/04/15/Zygote/" target="_self">
+          
+          原文地址：Zygote https:&#x2F;&#x2F;anatomyofandroid.com&#x2F;2013&#x2F;10&#x2F;15&#x2F;zygote&#x2F; Zygote（受精卵）是一个启动应用的守护进程，在Server Manager之后被init.rc触发，但其实他是真正被app_process启动的，下面是启动这个特殊进程的流程。 1234567service zygote &#x2F;system&#x2F;bin&#x2F;app_process -Xz
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2017-04-15 23:32" pubdate>
+              4月 15 2017
+            </time>
+          </div>
         
         
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2017/04/15/Zygote/" class="post-title-link" itemprop="url">[译]Zygote</a>
-              
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
             
-          </h1>
+              <a href="/categories/%E7%BF%BB%E8%AF%91/">翻译</a>
+            
+          </div>
         
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：4月 15 2017 23:32:51" itemprop="dateCreated datePublished" datetime="2017-04-15T23:32:51+08:00">4月 15 2017</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：9月 11 2018 21:30:14" itemprop="dateModified" datetime="2018-09-11T21:30:14+08:00">9月 11 2018</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/翻译/" itemprop="url" rel="index"><span itemprop="name">翻译</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2017/04/15/Zygote/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2017/04/15/Zygote/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-            <span id="/2017/04/15/Zygote/" class="leancloud_visitors" data-flag-title="[译]Zygote">
-              <span class="post-meta-divider">|</span>
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              
-                <span class="post-meta-item-text">阅读次数：</span>
-              
-                <span class="leancloud-visitors-count"></span>
-            </span>
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
         
-          <p>原文地址：<a href="https://anatomyofandroid.com/2013/10/15/zygote/" target="_blank" rel="noopener">Zygote https://anatomyofandroid.com/2013/10/15/zygote/</a></p>
-<p>Zygote（受精卵）是一个启动应用的守护进程，在Server Manager之后被init.rc触发，但其实他是真正被app_process启动的，下面是启动这个特殊进程的流程。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">service zygote /system/bin/app_process -Xzygote /system/bin --zygote --start-system-server</span><br><span class="line">class main</span><br><span class="line">socket zygote stream 660 root system</span><br><span class="line">onrestart write /sys/android_power/request_state wake</span><br><span class="line">onrestart write /sys/power/state on</span><br><span class="line">onrestart restart media</span><br><span class="line">onrestart restart netd</span><br></pre></td></tr></table></figure>
-<p>你可以发现Zygote是如何当做系统服务启动的，你也可以看到app_process为什么说app_process是启动Zygote的真正命令。就像之前说的，Zygote是一个以专门启动应用为的守护进程。这意味着Zygote是所有App进程的父进程。当app_process启动Zygote时，它通过调用Zygote的main()方法创建了第一个Dalvik虚拟机。当Zygote启动后，zygote会预加载所有必须的Java类和资源，启动System Server并打开一个名为/dev/socket/zygote的socket服务，去监听所有启动应用的请求。 想之前的文章所说，System Server 是一个和它的父进程完全分离的进程。一旦System Server创建完成，它会初始化一系列不同的System Services并启动Activity Manager。那Zygote是如何启动新的应用的呢？</p>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2017/04/15/Zygote/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/%E7%BF%BB%E8%AF%91/">翻译</a>
+            
+              <a href="/tags/Zygote/">Zygote</a>
+            
+          </div>
         
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
+      </div>
+    </article>
   </div>
-  
-  
-  
-  </article>
 
-
+  <div class="row mx-auto index-card">
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://ivonhoe.github.io/2017/04/09/how-to-dump-heap/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="病已">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="病已的博客">
-    </span>
-
     
-      <header class="post-header">
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2017/04/09/how-to-dump-heap/" target="_self">
+          如何使用ddmlib dump出堆文件
+        </a>
+      </h1>
 
+      <p class="index-excerpt">
+        <a href="/2017/04/09/how-to-dump-heap/" target="_self">
+          
+          一般情况下如果我想要较详细的分析内存状况，会使用android monitor(下简称monitor)和Memory Analyzer工具(下简称MAT)，但步骤有些麻烦。  使用monitor dump堆文件 使用hprof-conv工具，将hprof转换成MAT能够识别的格式 使用MAT分析  需要手动dump hprof再使用hprof-conv工具手动转码，上篇Android Bitmap
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2017-04-09 19:03" pubdate>
+              4月 9 2017
+            </time>
+          </div>
         
         
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2017/04/09/how-to-dump-heap/" class="post-title-link" itemprop="url">如何使用ddmlib dump出堆文件</a>
-              
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
             
-          </h1>
+              <a href="/categories/Android%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">Android性能优化</a>
+            
+          </div>
         
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：4月 9 2017 19:03:01" itemprop="dateCreated datePublished" datetime="2017-04-09T19:03:01+08:00">4月 9 2017</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：10月 16 2018 18:01:03" itemprop="dateModified" datetime="2018-10-16T18:01:03+08:00">10月 16 2018</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Android性能优化/" itemprop="url" rel="index"><span itemprop="name">Android性能优化</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2017/04/09/how-to-dump-heap/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2017/04/09/how-to-dump-heap/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-            <span id="/2017/04/09/how-to-dump-heap/" class="leancloud_visitors" data-flag-title="如何使用ddmlib dump出堆文件">
-              <span class="post-meta-divider">|</span>
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              
-                <span class="post-meta-item-text">阅读次数：</span>
-              
-                <span class="leancloud-visitors-count"></span>
-            </span>
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
         
-          <p>一般情况下如果我想要较详细的分析内存状况，会使用android monitor(下简称monitor)和Memory Analyzer工具(下简称MAT)，但步骤有些麻烦。</p>
-<ol>
-<li>使用monitor dump堆文件</li>
-<li>使用hprof-conv工具，将hprof转换成MAT能够识别的格式</li>
-<li>使用MAT分析</li>
-</ol>
-<p>需要手动dump hprof再使用hprof-conv工具手动转码，上篇<a href="https://ivonhoe.github.io/2017/03/22/Bitmap&amp;Memory/">Android Bitmap的内存大小是如何计算的？</a>说到使用square的<a href="https://github.com/square/haha" target="_blank" rel="noopener">haha</a>来做内存堆中Bitmap的分析。所以在思考如何一键完成内存dump和analyze的过程，当然也可以任意其他Java对象做分析。<br>如何完成dump和转码，思路还是Read the fucking source code，看下monitor是如何dump hprof文件的。打开Android sdk目录，monitor和其依赖的jar分别在<code>/tools</code>和’/tools/lib’目录，核心代码在<code>ddmlib.jar</code>中，Java swring代码在<code>ddms.jar</code>和<code>ddmuilib.jar</code>中，ddmlib需要依赖<code>common.jar</code>和<code>guava.jar</code>。</p>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2017/04/09/how-to-dump-heap/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/%E5%86%85%E5%AD%98/">内存</a>
+            
+              <a href="/tags/dump-heap/">dump heap</a>
+            
+          </div>
         
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
+      </div>
+    </article>
   </div>
-  
-  
-  
-  </article>
 
-
+  <div class="row mx-auto index-card">
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://ivonhoe.github.io/2017/03/22/Bitmap&Memory/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="病已">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="病已的博客">
-    </span>
-
     
-      <header class="post-header">
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2017/03/22/Bitmap&amp;Memory/" target="_self">
+          Android Bitmap的内存大小是如何计算的？
+        </a>
+      </h1>
 
+      <p class="index-excerpt">
+        <a href="/2017/03/22/Bitmap&amp;Memory/" target="_self">
+          
+          一、前言本来只想说下Bitmap和内存的基本关系，但发现如果真的想把这看似简单的事情说清楚，实际上未必那么简单，你不信？不妨先尝试下回答下面几个问题！  问1：什么是dpi？什么是dp？答：你在侮辱我？我拒绝回答！（：无辜脸 问2：以Nexus6为例，分辨率1440*2560，5.96英寸，ppi是什么？dpi是什么？1dp是多少像素？ 问3：还以Nexus6为例，一张180*180的图片，放置在
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2017-03-22 19:35" pubdate>
+              3月 22 2017
+            </time>
+          </div>
         
         
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2017/03/22/Bitmap&Memory/" class="post-title-link" itemprop="url">Android Bitmap的内存大小是如何计算的？</a>
-              
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
             
-          </h1>
+              <a href="/categories/Android%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">Android性能优化</a>
+            
+          </div>
         
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：3月 22 2017 19:35:36" itemprop="dateCreated datePublished" datetime="2017-03-22T19:35:36+08:00">3月 22 2017</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：10月 16 2018 18:00:09" itemprop="dateModified" datetime="2018-10-16T18:00:09+08:00">10月 16 2018</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Android性能优化/" itemprop="url" rel="index"><span itemprop="name">Android性能优化</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2017/03/22/Bitmap&Memory/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2017/03/22/Bitmap&Memory/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-            <span id="/2017/03/22/Bitmap&Memory/" class="leancloud_visitors" data-flag-title="Android Bitmap的内存大小是如何计算的？">
-              <span class="post-meta-divider">|</span>
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              
-                <span class="post-meta-item-text">阅读次数：</span>
-              
-                <span class="leancloud-visitors-count"></span>
-            </span>
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
         
-          <h3 id="一、前言"><a href="#一、前言" class="headerlink" title="一、前言"></a>一、前言</h3><p>本来只想说下Bitmap和内存的基本关系，但发现如果真的想把这看似简单的事情说清楚，实际上未必那么简单，你不信？不妨先尝试下回答下面几个问题！</p>
-<ul>
-<li>问1：什么是dpi？什么是dp？答：你在侮辱我？我拒绝回答！（：无辜脸</li>
-<li>问2：以Nexus6为例，分辨率1440*2560，5.96英寸，ppi是什么？dpi是什么？1dp是多少像素？</li>
-<li>问3：还以Nexus6为例，一张180*180的图片，放置在设置了<code>wrap_content</code>属性的ImageView中，当这张图片，分别放在<code>drawable-nodpi</code>,<code>drawable-mdpi</code>,<code>drawable-hdpi</code>, <code>drawable-xxhdpi</code>,<code>drawable-xxxhdpi</code>这几个资源目录中，在屏幕上分别显示多大(像素)的图片？</li>
-<li>问4：这张图片占用的内存大小分别为多少？</li>
-<li>问5：如果设置ImageView的宽和高为固定的值，如50px，那么上述情况下，加载的Bitmap占用内存大小分别为多大？</li>
-</ul>
-<p>本文主要围绕上述问题，介绍Android图片资源加载的基本机制，图片的内存大小如何计算，以及内存图片分析工具。</p>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2017/03/22/Bitmap&Memory/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/Bitmap/">Bitmap</a>
+            
+              <a href="/tags/Drawable/">Drawable</a>
+            
+              <a href="/tags/%E5%86%85%E5%AD%98/">内存</a>
+            
+          </div>
         
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
+      </div>
+    </article>
   </div>
-  
-  
-  
-  </article>
 
-
+  <div class="row mx-auto index-card">
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://ivonhoe.github.io/2017/02/09/美团如何防dex2jar/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="病已">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="病已的博客">
-    </span>
-
     
-      <header class="post-header">
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2017/02/09/%E7%BE%8E%E5%9B%A2%E5%A6%82%E4%BD%95%E9%98%B2dex2jar/" target="_self">
+          Android安全之应用防dex2jar原理及实现
+        </a>
+      </h1>
 
+      <p class="index-excerpt">
+        <a href="/2017/02/09/%E7%BE%8E%E5%9B%A2%E5%A6%82%E4%BD%95%E9%98%B2dex2jar/" target="_self">
+          
+          一、反编译某平台代码最近在看某外卖平台的代码，发现某外卖平台最新版本版本无法正常的通过dex2jar工具将dex转换出Java源代码，在转换过程中会提示出错，如图：  查看转换出的Java源代码，会发现很多类方法提示下图所示异常，很多方法中都会抛出RuntimeException：can not merge I and Z: 12345678910public class AsyncTaskSer
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2017-02-09 21:55" pubdate>
+              2月 9 2017
+            </time>
+          </div>
         
         
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2017/02/09/美团如何防dex2jar/" class="post-title-link" itemprop="url">Android安全之应用防dex2jar原理及实现</a>
-              
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
             
-          </h1>
+              <a href="/categories/Android%E5%AE%89%E5%85%A8/">Android安全</a>
+            
+          </div>
         
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2月 9 2017 21:55:01" itemprop="dateCreated datePublished" datetime="2017-02-09T21:55:01+08:00">2月 9 2017</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：9月 11 2018 21:25:23" itemprop="dateModified" datetime="2018-09-11T21:25:23+08:00">9月 11 2018</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Android安全/" itemprop="url" rel="index"><span itemprop="name">Android安全</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2017/02/09/美团如何防dex2jar/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2017/02/09/美团如何防dex2jar/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-            <span id="/2017/02/09/美团如何防dex2jar/" class="leancloud_visitors" data-flag-title="Android安全之应用防dex2jar原理及实现">
-              <span class="post-meta-divider">|</span>
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              
-                <span class="post-meta-item-text">阅读次数：</span>
-              
-                <span class="leancloud-visitors-count"></span>
-            </span>
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
         
-          <h3 id="一、反编译某平台代码"><a href="#一、反编译某平台代码" class="headerlink" title="一、反编译某平台代码"></a>一、反编译某平台代码</h3><p>最近在看某外卖平台的代码，发现某外卖平台最新版本版本无法正常的通过dex2jar工具将dex转换出Java源代码，在转换过程中会提示出错，如图：</p>
-<p><img src="https://ivonhoe.github.io/res/dex2jar_error/dex2jar_error1.png" alt="dex2jar异常图"></p>
-<p>查看转换出的Java源代码，会发现很多类方法提示下图所示异常，很多方法中都会抛出<code>RuntimeException：can not merge I and Z</code>:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">public class AsyncTaskService extends IntentService &#123; </span><br><span class="line">  </span><br><span class="line">  protected void onHandleIntent(Intent paramIntent)&#123;</span><br><span class="line">    throw new RuntimeException(&quot;d2j fail translate: java.lang.RuntimeException: can not merge I and Z\n\tat...);</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  public int onStartCommand(Intent paramIntent, int paramInt1, int paramInt2)&#123;</span><br><span class="line">    throw new RuntimeException(&quot;d2j fail translate: java.lang.RuntimeException: can not merge I and Z\n\tat...&quot;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2017/02/09/美团如何防dex2jar/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/%E7%A7%BB%E5%8A%A8%E5%AE%89%E5%85%A8/">移动安全</a>
+            
+              <a href="/tags/dex2jar/">dex2jar</a>
+            
+              <a href="/tags/Gradle/">Gradle</a>
+            
+          </div>
         
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
+      </div>
+    </article>
   </div>
-  
-  
-  
-  </article>
 
-
+  <div class="row mx-auto index-card">
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://ivonhoe.github.io/2017/02/04/Android安全之---APP去广告/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="病已">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="病已的博客">
-    </span>
-
     
-      <header class="post-header">
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2017/02/04/Android%E5%AE%89%E5%85%A8%E4%B9%8B---APP%E5%8E%BB%E5%B9%BF%E5%91%8A/" target="_self">
+          Android安全之APP去广告
+        </a>
+      </h1>
 
+      <p class="index-excerpt">
+        <a href="/2017/02/04/Android%E5%AE%89%E5%85%A8%E4%B9%8B---APP%E5%8E%BB%E5%B9%BF%E5%91%8A/" target="_self">
+          
+          一、工具介绍 apktool：google提供Android apk编译与反编译工具，https:&#x2F;&#x2F;ibotpeaches.github.io&#x2F;Apktool&#x2F; dex2jar：dex文件转jar文件工具，https:&#x2F;&#x2F;github.com&#x2F;pxb1988&#x2F;dex2jar jd-gui：查看jar文件，http:&#x2F;&#x2F;jd.benow.ca&#x2F; keytool：制作和管理数字证书 jarsigne
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2017-02-04 13:27" pubdate>
+              2月 4 2017
+            </time>
+          </div>
         
         
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2017/02/04/Android安全之---APP去广告/" class="post-title-link" itemprop="url">Android安全之APP去广告</a>
-              
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
             
-          </h1>
+              <a href="/categories/Android%E5%AE%89%E5%85%A8/">Android安全</a>
+            
+          </div>
         
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：2月 4 2017 13:27:20" itemprop="dateCreated datePublished" datetime="2017-02-04T13:27:20+08:00">2月 4 2017</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：9月 11 2018 21:26:57" itemprop="dateModified" datetime="2018-09-11T21:26:57+08:00">9月 11 2018</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Android安全/" itemprop="url" rel="index"><span itemprop="name">Android安全</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2017/02/04/Android安全之---APP去广告/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2017/02/04/Android安全之---APP去广告/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-            <span id="/2017/02/04/Android安全之---APP去广告/" class="leancloud_visitors" data-flag-title="Android安全之APP去广告">
-              <span class="post-meta-divider">|</span>
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              
-                <span class="post-meta-item-text">阅读次数：</span>
-              
-                <span class="leancloud-visitors-count"></span>
-            </span>
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
         
-          <h3 id="一、工具介绍"><a href="#一、工具介绍" class="headerlink" title="一、工具介绍"></a>一、工具介绍</h3><ul>
-<li><strong>apktool：</strong>google提供Android apk编译与反编译工具，<a href="https://ibotpeaches.github.io/Apktool/" target="_blank" rel="noopener">https://ibotpeaches.github.io/Apktool/</a></li>
-<li><strong>dex2jar：</strong>dex文件转jar文件工具，<a href="https://github.com/pxb1988/dex2jar" target="_blank" rel="noopener">https://github.com/pxb1988/dex2jar</a></li>
-<li><strong>jd-gui：</strong>查看jar文件，<a href="http://jd.benow.ca/" target="_blank" rel="noopener">http://jd.benow.ca/</a></li>
-<li><strong>keytool：</strong>制作和管理数字证书</li>
-<li><strong>jarsigner：</strong>使用数字证书对jar和apk进行签名</li>
-<li><strong>Android killer：</strong>Window系统中，上述工具的集成工具</li>
-</ul>
-<p>更多反编译工具可查看：<a href="http://unclechen.github.io/2016/09/07/Android%E5%8F%8D%E7%BC%96%E8%AF%91%E6%8A%80%E6%9C%AF%E6%80%BB%E7%BB%93/" target="_blank" rel="noopener">Uncle Chen—Android反编译技术总结</a></p>
-<h3 id="二、去除应用开发助手的广告"><a href="#二、去除应用开发助手的广告" class="headerlink" title="二、去除应用开发助手的广告"></a>二、去除应用开发助手的广告</h3><p>CodeKK公众号在17年初推出了一个<a href="https://mp.weixin.qq.com/s?__biz=MzAxNjI3MDkzOQ==&amp;mid=2654472664&amp;idx=1&amp;sn=dfc2b5beb90daa8fd068d8064ce0dcce&amp;chksm=803bfaecb74c73fa9a9addfd4d8bce031186c34b7d7b59ee22df41799c7eaa71a34863890f56&amp;mpshare=1&amp;scene=1&amp;srcid=0220tEQNaL7PwIgfBT8sIITK&amp;key=776fc8cdd0b88c0d0b9a6c8e271e4cfe2b2363aeda110198d4250b0a422befd0f43f78e2a17d528112f757336e136c56f488bc174baa56c116045a9bdbb37dbccf508eb8c70e48a2d09ca1da1b4d92d3&amp;ascene=0&amp;uin=MTMzNzYxMDM2MQ%3D%3D&amp;devicetype=iMac+MacBookPro11%2C4+OSX+OSX+10.12.1+build(16B2555" target="_blank" rel="noopener">应用开发助手</a>)。V1.0版本是有广告版本的，下面以这个版本为例，简单看下去广告过程。它的后续的V1.1.0和V1.2.0已经去除了广告功能。</p>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2017/02/04/Android安全之---APP去广告/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/Android/">Android</a>
+            
+              <a href="/tags/%E7%A7%BB%E5%8A%A8%E5%AE%89%E5%85%A8/">移动安全</a>
+            
+              <a href="/tags/%E5%8E%BB%E5%B9%BF%E5%91%8A/">去广告</a>
+            
+          </div>
         
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
+      </div>
+    </article>
   </div>
-  
-  
-  
-  </article>
 
-
+  <div class="row mx-auto index-card">
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://ivonhoe.github.io/2017/01/20/MacOS上编译Android源码/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="病已">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="病已的博客">
-    </span>
-
     
-      <header class="post-header">
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2017/01/20/MacOS%E4%B8%8A%E7%BC%96%E8%AF%91Android%E6%BA%90%E7%A0%81/" target="_self">
+          Mac OS上编译Android源码
+        </a>
+      </h1>
 
+      <p class="index-excerpt">
+        <a href="/2017/01/20/MacOS%E4%B8%8A%E7%BC%96%E8%AF%91Android%E6%BA%90%E7%A0%81/" target="_self">
+          
+          一、制作一个大小写敏感的磁盘分区1.1.Mac OS磁盘工具这里我使用一块移动硬盘，将移动硬盘的一个分区使用Mac OS的硬盘工具，抹掉数据，选择MacOS扩展(区分大小写，日志式)，创建成大小写敏感的分区。  这里会遇到一个问题，抹掉分区数据的时候，会报错：“Mac OSX 抹盘发生错误:Mediakit 报告设备上空间不足以执行此操作”，这里的原因是磁盘没有大于200M的UEFI分区。
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2017-01-20 22:16" pubdate>
+              1月 20 2017
+            </time>
+          </div>
         
         
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2017/01/20/MacOS上编译Android源码/" class="post-title-link" itemprop="url">Mac OS上编译Android源码</a>
-              
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
             
-          </h1>
+              <a href="/categories/%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/">学习总结</a>
+            
+          </div>
         
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：1月 20 2017 22:16:46" itemprop="dateCreated datePublished" datetime="2017-01-20T22:16:46+08:00">1月 20 2017</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：9月 11 2018 21:29:14" itemprop="dateModified" datetime="2018-09-11T21:29:14+08:00">9月 11 2018</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/学习总结/" itemprop="url" rel="index"><span itemprop="name">学习总结</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2017/01/20/MacOS上编译Android源码/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2017/01/20/MacOS上编译Android源码/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-            <span id="/2017/01/20/MacOS上编译Android源码/" class="leancloud_visitors" data-flag-title="Mac OS上编译Android源码">
-              <span class="post-meta-divider">|</span>
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              
-                <span class="post-meta-item-text">阅读次数：</span>
-              
-                <span class="leancloud-visitors-count"></span>
-            </span>
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
         
-          <h3 id="一、制作一个大小写敏感的磁盘分区"><a href="#一、制作一个大小写敏感的磁盘分区" class="headerlink" title="一、制作一个大小写敏感的磁盘分区"></a>一、制作一个大小写敏感的磁盘分区</h3><h4 id="1-1-Mac-OS磁盘工具"><a href="#1-1-Mac-OS磁盘工具" class="headerlink" title="1.1.Mac OS磁盘工具"></a>1.1.Mac OS磁盘工具</h4><p>这里我使用一块移动硬盘，将移动硬盘的一个分区使用Mac OS的硬盘工具，抹掉数据，选择MacOS扩展(区分大小写，日志式)，创建成大小写敏感的分区。</p>
-<p><img src="/res/compile_android_source/android-source-disk1.jpeg" alt></p>
-<p>这里会遇到一个问题，抹掉分区数据的时候，<code>会报错：“Mac OSX 抹盘发生错误:Mediakit 报告设备上空间不足以执行此操作”</code>，这里的原因是磁盘没有大于200M的UEFI分区。</p>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2017/01/20/MacOS上编译Android源码/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91/">源码编译</a>
+            
+          </div>
         
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
+      </div>
+    </article>
   </div>
-  
-  
-  
-  </article>
 
-
+  <div class="row mx-auto index-card">
     
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://ivonhoe.github.io/2016/12/16/Mac-Linux下gcc编译动态链接库-so文件/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="病已">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="病已的博客">
-    </span>
-
     
-      <header class="post-header">
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2016/12/16/Mac-Linux%E4%B8%8Bgcc%E7%BC%96%E8%AF%91%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5%E5%BA%93-so%E6%96%87%E4%BB%B6/" target="_self">
+          Mac/Linux下gcc编译动态链接库[.so文件]
+        </a>
+      </h1>
 
+      <p class="index-excerpt">
+        <a href="/2016/12/16/Mac-Linux%E4%B8%8Bgcc%E7%BC%96%E8%AF%91%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5%E5%BA%93-so%E6%96%87%E4%BB%B6/" target="_self">
+          
+          一、以bsdiff.c和bspatch.c为例编译bsdiff.sobsdiff.c和bspatch.c分别依赖bzip2 项目结构步骤 使用BsDiff.java生成BsDiff.class文件 javac ivonhoe&#x2F;spring&#x2F;wrcenter&#x2F;jni&#x2F;BsDiff.java  生成BsDiff.h文件 javah ivonhoe.spring.
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2016-12-16 13:47" pubdate>
+              12月 16 2016
+            </time>
+          </div>
         
         
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2016/12/16/Mac-Linux下gcc编译动态链接库-so文件/" class="post-title-link" itemprop="url">Mac/Linux下gcc编译动态链接库[.so文件]</a>
-              
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
             
-          </h1>
+              <a href="/categories/%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/">学习总结</a>
+            
+          </div>
         
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：12月 16 2016 13:47:55" itemprop="dateCreated datePublished" datetime="2016-12-16T13:47:55+08:00">12月 16 2016</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：9月 11 2018 21:29:06" itemprop="dateModified" datetime="2018-09-11T21:29:06+08:00">9月 11 2018</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/学习总结/" itemprop="url" rel="index"><span itemprop="name">学习总结</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2016/12/16/Mac-Linux下gcc编译动态链接库-so文件/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2016/12/16/Mac-Linux下gcc编译动态链接库-so文件/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-            <span id="/2016/12/16/Mac-Linux下gcc编译动态链接库-so文件/" class="leancloud_visitors" data-flag-title="Mac/Linux下gcc编译动态链接库[.so文件]">
-              <span class="post-meta-divider">|</span>
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              
-                <span class="post-meta-item-text">阅读次数：</span>
-              
-                <span class="leancloud-visitors-count"></span>
-            </span>
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
         
-          <h2 id="一、以bsdiff-c和bspatch-c为例编译bsdiff-so"><a href="#一、以bsdiff-c和bspatch-c为例编译bsdiff-so" class="headerlink" title="一、以bsdiff.c和bspatch.c为例编译bsdiff.so"></a>一、以bsdiff.c和bspatch.c为例编译bsdiff.so</h2><p>bsdiff.c和bspatch.c分别依赖bzip2</p>
-<h3 id="项目结构"><a href="#项目结构" class="headerlink" title="项目结构"></a>项目结构</h3><h3 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h3><ul>
-<li><p>使用BsDiff.java生成BsDiff.class文件</p>
-<p><strong>javac</strong> ivonhoe/spring/wrcenter/jni/BsDiff.java</p>
-</li>
-<li><p>生成BsDiff.h文件</p>
-<p><strong>javah</strong> ivonhoe.spring.wrcenter.jni.BsDiff </p>
-</li>
-<li><p>生成bspatch.o</p>
-          <!--noindex-->
-          
-            <div class="post-button text-center">
-              <a class="btn" href="/2016/12/16/Mac-Linux下gcc编译动态链接库-so文件/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          
-          <!--/noindex-->
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5%E5%BA%93/">动态链接库</a>
+            
+          </div>
         
-      
-    </li></ul></div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
+      </div>
+    </article>
   </div>
-  
-  
-  
-  </article>
 
 
-    
-  </section>
 
-  
-  <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+  <nav aria-label="navigation">
+    <span class="pagination" id="pagination">
+      <a class="extend prev" rel="prev" href="/page/2/#board"><i class="iconfont icon-arrowleft"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/#board">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/#board">4</a><a class="extend next" rel="next" href="/page/4/#board"><i class="iconfont icon-arrowright"></i></a>
+    </span>
   </nav>
 
 
 
+              </div>
+            </div>
           </div>
-          
-
         </div>
-        
-          
-  
-  <div class="sidebar-toggle">
-    <div class="sidebar-toggle-line-wrap">
-      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+      </div>
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
     </div>
   </div>
-
-  <aside id="sidebar" class="sidebar">
-    <div class="sidebar-inner">
-
-      
-
-      
-
-      <div class="site-overview-wrap sidebar-panel sidebar-panel-active">
-        <div class="site-overview">
-          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-            
-              <p class="site-author-name" itemprop="name">病已</p>
-              <div class="site-description motion-element" itemprop="description"></div>
-          </div>
-
-          
-            <nav class="site-state motion-element">
-              
-                <div class="site-state-item site-state-posts">
-                
-                  <a href="/archives/">
-                
-                    <span class="site-state-item-count">38</span>
-                    <span class="site-state-item-name">日志</span>
-                  </a>
-                </div>
-              
-
-              
-                
-                
-                <div class="site-state-item site-state-categories">
-                  
-                    
-                      <a href="/categories/">
-                    
-                  
-                    
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                    <span class="site-state-item-count">9</span>
-                    <span class="site-state-item-name">分类</span>
-                  </a>
-                </div>
-              
-
-              
-                
-                
-                <div class="site-state-item site-state-tags">
-                  
-                    
-                      <a href="/tags/">
-                    
-                  
-                    
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                    <span class="site-state-item-count">41</span>
-                    <span class="site-state-item-name">标签</span>
-                  </a>
-                </div>
-              
-            </nav>
-          
-
-          
-            <div class="feed-link motion-element">
-              <a href="/atom.xml" rel="alternate">
-                <i class="fa fa-rss"></i>
-                RSS
-              </a>
-            </div>
-          
-
-          
-
-          
-            <div class="links-of-author motion-element">
-              
-                <span class="links-of-author-item">
-                  
-                  
-                    
-                  
-                  
-                    
-                  
-                  <a href="https://github.com/ivonhoe" title="GitHub &rarr; https://github.com/ivonhoe" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
-                </span>
-              
-                <span class="links-of-author-item">
-                  
-                  
-                    
-                  
-                  
-                    
-                  
-                  <a href="mailto:yangfan3687@163.com" title="E-Mail &rarr; mailto:yangfan3687@163.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
-                </span>
-              
-            </div>
-          
-
-          
-
-          
-          
-
-          
-            
-          
-          
-
-        </div>
-      </div>
-
-      
-
-      
-
-    </div>
-  </aside>
-  
-
-
-        
-      </div>
-    </main>
-
-    <footer id="footer" class="footer">
-      <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
-  <span class="with-love" id="animate">
-    <i class="fa fa-user"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">病已</span>
-
-  
-
-  
 </div>
-
-
-  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
-
-
-
-  <span class="post-meta-divider">|</span>
-
-
-
-  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.1.2</div>
-
-
-
-
-        
-
-
-
-
-
-
-
-
-        
-      </div>
-    </footer>
-
-    
-      <div class="back-to-top">
-        <i class="fa fa-arrow-up"></i>
-        
-      </div>
     
 
     
+  </main>
 
-    
-
-    
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
   </div>
-
-  
-
-<script>
-  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
-    window.Promise = null;
-  }
-</script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-  <script src="/lib/jquery/index.js?v=3.4.1"></script>
-
-  
-  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
-
-  
-  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
-
-
-  
-
-
-  <script src="/js/utils.js?v=7.1.2"></script>
-
-  <script src="/js/motion.js?v=7.1.2"></script>
-
-
-
-  
-  
-
-
-  <script src="/js/affix.js?v=7.1.2"></script>
-
-  <script src="/js/schemes/pisces.js?v=7.1.2"></script>
-
-
-
-
-  
-
-  
-
-
-  <script src="/js/next-boot.js?v=7.1.2"></script>
-
-
   
 
   
 
   
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
 
   
+    <script  src="/js/img-lazyload.js" ></script>
   
-
-<script src="//cdn1.lncld.net/static/js/3.11.1/av-min.js"></script>
-
-
-
-<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
-
-<script>
-  var GUEST = ['nick', 'mail', 'link'];
-  var guest = 'nick,mail,link';
-  guest = guest.split(',').filter(function(item) {
-    return GUEST.indexOf(item) > -1;
-  });
-  new Valine({
-    el: '#comments',
-    verify: false,
-    notify: false,
-    appId: 'JdLpddsaWqwfJtXPdDK8woaF-gzGzoHsz',
-    appKey: 'CEmtHXH8f0PtvF0zYtVE0EeY',
-    placeholder: 'Just go go',
-    avatar: 'mm',
-    meta: guest,
-    pageSize: '10' || 10,
-    visitor: true,
-    lang: '' || 'zh-cn'
-  });
-</script>
-
-
 
 
 
@@ -2843,6 +781,34 @@
 
 
 
+
+
+  <script defer src="/js/leancloud.js" ></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    <!-- Baidu Analytics -->
+    <script defer>
+      var _hmt = _hmt || [];
+      (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?666a58de875adc9dd40d5de65ceac026";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();
+    </script>
   
 
   
@@ -2855,21 +821,13 @@
 
   
 
-  
 
-  
 
-  
 
-  
 
-  
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
 
-  
-
-  
-
-  
 
 </body>
 </html>

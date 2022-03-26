@@ -1,516 +1,259 @@
+
+
 <!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
 
 
 
-
-
-
-
-
-
-
-
-
-  
-
-
-<html class="theme-next gemini use-motion" lang="zh-CN">
-<head><meta name="generator" content="Hexo 3.9.0">
+<head>
   <meta charset="UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
-<meta name="theme-color" content="#222">
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
-
-<link rel="stylesheet" href="/css/main.css?v=7.1.2">
-
-
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.1.2">
-
-
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.1.2">
-
-
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.1.2">
-
-
-  <link rel="mask-icon" href="/images/logo.svg?v=7.1.2" color="#222">
-
-
-
-
-
-
-
-<script id="hexo.configurations">
-  var NexT = window.NexT || {};
-  var CONFIG = {
-    root: '/',
-    scheme: 'Gemini',
-    version: '7.1.2',
-    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
-    back2top: true,
-    back2top_sidebar: false,
-    fancybox: false,
-    fastclick: false,
-    lazyload: false,
-    tabs: true,
-    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
-    algolia: {
-      applicationID: '',
-      apiKey: '',
-      indexName: '',
-      hits: {"per_page":10},
-      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
-    }
-  };
-</script>
-
-
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
   
-
-
-
-
-  <meta name="description" content="一、Drawble是干嘛的？说到Drawable肯定会第一时间想到图片资源，可能有人会认为Drawable就是图片。Drawble从字面上说就是“可绘制的”，google文档的描述:“A Drawable is a general abstraction for “something that can be drawn.””，Drawable其实就是为那些”可以被绘制的’’提供的抽象类。  哪些东">
-<meta name="keywords" content="Android,Drawable,性能优化">
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="病已">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="一、Drawble是干嘛的？说到Drawable肯定会第一时间想到图片资源，可能有人会认为Drawable就是图片。Drawble从字面上说就是“可绘制的”，google文档的描述:“A Drawable is a general abstraction for “something that can be drawn.””，Drawable其实就是为那些”可以被绘制的’’提供的抽象类。  哪些东">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Drawable,从简化布局谈起">
-<meta property="og:url" content="https://ivonhoe.github.io/2015/04/28/Drawable-从简化布局谈起/index.html">
+<meta property="og:url" content="https://ivonhoe.github.io/2015/04/28/Drawable-%E4%BB%8E%E7%AE%80%E5%8C%96%E5%B8%83%E5%B1%80%E8%B0%88%E8%B5%B7/index.html">
 <meta property="og:site_name" content="病已的博客">
 <meta property="og:description" content="一、Drawble是干嘛的？说到Drawable肯定会第一时间想到图片资源，可能有人会认为Drawable就是图片。Drawble从字面上说就是“可绘制的”，google文档的描述:“A Drawable is a general abstraction for “something that can be drawn.””，Drawable其实就是为那些”可以被绘制的’’提供的抽象类。  哪些东">
-<meta property="og:locale" content="zh-CN">
+<meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://ivonhoe.github.io/res/drawable/1.jpg">
 <meta property="og:image" content="https://ivonhoe.github.io/res/drawable/2.jpg">
-<meta property="og:updated_time" content="2018-10-16T10:00:22.000Z">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Drawable,从简化布局谈起">
-<meta name="twitter:description" content="一、Drawble是干嘛的？说到Drawable肯定会第一时间想到图片资源，可能有人会认为Drawable就是图片。Drawble从字面上说就是“可绘制的”，google文档的描述:“A Drawable is a general abstraction for “something that can be drawn.””，Drawable其实就是为那些”可以被绘制的’’提供的抽象类。  哪些东">
+<meta property="article:published_time" content="2015-04-28T15:31:29.000Z">
+<meta property="article:modified_time" content="2018-10-16T10:00:22.000Z">
+<meta property="article:author" content="病已">
+<meta property="article:tag" content="Android">
+<meta property="article:tag" content="Drawable">
+<meta property="article:tag" content="性能优化">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://ivonhoe.github.io/res/drawable/1.jpg">
-
-
-
-  <link rel="alternate" href="/atom.xml" title="病已的博客" type="application/atom+xml">
-
-
-
   
   
-  <link rel="canonical" href="https://ivonhoe.github.io/2015/04/28/Drawable-从简化布局谈起/">
+  <title>Drawable,从简化布局谈起 - 病已的博客</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
 
 
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
 
-<script id="page.configurations">
-  CONFIG.page = {
-    sidebar: "",
-  };
-</script>
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
 
-  <title>Drawable,从简化布局谈起 | 病已的博客</title>
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
   
 
 
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
 
 
 
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
 
-  <script>
-    var _hmt = _hmt || [];
-    (function() {
-      var hm = document.createElement("script");
-      hm.src = "https://hm.baidu.com/hm.js?666a58de875adc9dd40d5de65ceac026";
-      var s = document.getElementsByTagName("script")[0];
-      s.parentNode.insertBefore(hm, s);
-    })();
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"ivonhoe.github.io","root":"/","version":"1.8.14","typing":{"enable":false,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"baidu":"666a58de875adc9dd40d5de65ceac026","google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"JdLpddsaWqwfJtXPdDK8woaF-gzGzoHsz","app_key":"CEmtHXH8f0PtvF0zYtVE0EeY","server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
   </script>
-
-
-
-
-
-
-
-  <noscript>
-  <style>
-  .use-motion .motion-element,
-  .use-motion .brand,
-  .use-motion .menu-item,
-  .sidebar-inner,
-  .use-motion .post-block,
-  .use-motion .pagination,
-  .use-motion .comments,
-  .use-motion .post-header,
-  .use-motion .post-body,
-  .use-motion .collection-title { opacity: initial; }
-
-  .use-motion .logo,
-  .use-motion .site-title,
-  .use-motion .site-subtitle {
-    opacity: initial;
-    top: initial;
-  }
-
-  .use-motion .logo-line-before i { left: initial; }
-  .use-motion .logo-line-after i { right: initial; }
-  </style>
-</noscript>
-
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 6.1.0"><link rel="alternate" href="/atom.xml" title="病已的博客" type="application/atom+xml">
 </head>
 
-<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
 
-  
-  
-    
-  
+<body>
+  <header style="height: 30vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>病已的博客</strong>
+    </a>
 
-  <div class="container sidebar-position-left page-post-detail">
-    <div class="headband"></div>
-
-    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-brand-wrapper">
-  <div class="site-meta">
-    
-
-    <div class="custom-logo-site-title">
-      <a href="/" class="brand" rel="start">
-        <span class="logo-line-before"><i></i></span>
-        <span class="site-title">病已的博客</span>
-        <span class="logo-line-after"><i></i></span>
-      </a>
-    </div>
-    
-      
-        <p class="site-subtitle">枕上，马上，厕上</p>
-      
-    
-    
-  </div>
-
-  <div class="site-nav-toggle">
-    <button aria-label="切换导航栏">
-      <span class="btn-bar"></span>
-      <span class="btn-bar"></span>
-      <span class="btn-bar"></span>
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
     </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
   </div>
-</div>
-
-
-
-<nav class="site-nav">
-  
-    <ul id="menu" class="menu">
-      
-        
-        
-        
-          
-          <li class="menu-item menu-item-home">
-
-    
-    
-    
-      
-    
-
-    
-
-    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
-
-  </li>
-        
-        
-        
-          
-          <li class="menu-item menu-item-categories">
-
-    
-    
-    
-      
-    
-
-    
-
-    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
-
-  </li>
-        
-        
-        
-          
-          <li class="menu-item menu-item-tags">
-
-    
-    
-    
-      
-    
-
-    
-
-    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
-
-  </li>
-        
-        
-        
-          
-          <li class="menu-item menu-item-archives">
-
-    
-    
-    
-      
-    
-
-    
-
-    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
-
-  </li>
-        
-        
-        
-          
-          <li class="menu-item menu-item-about">
-
-    
-    
-    
-      
-    
-
-    
-
-    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
-
-  </li>
-
-      
-      
-    </ul>
-  
-
-  
-
-  
 </nav>
 
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default_post.jpeg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="Drawable,从简化布局谈起">
+              
+                Drawable,从简化布局谈起
+              
+            </span>
 
-
+            
+              <div class="mt-3">
   
-
-
-
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2015-04-28 23:31" pubdate>
+        2015年4月28日 晚上
+      </time>
+    </span>
+  
 </div>
-    </header>
 
-    
+<div class="mt-1">
   
-  
-
-  
-
-  <a href="https://github.com/Ivonhoe" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewbox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a>
-
-
-
-    <main id="main" class="main">
-      <div class="main-inner">
-        <div class="content-wrap">
-          
-            
-
-          
-          <div id="content" class="content">
-            
-
-  <div id="posts" class="posts-expand">
-    
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://ivonhoe.github.io/2015/04/28/Drawable-从简化布局谈起/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="病已">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      4.7k 字
     </span>
+  
 
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="病已的博客">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      40 分钟
     </span>
+  
 
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">Drawable,从简化布局谈起
-
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
+  
+  
+</div>
 
             
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：4月 28 2015 23:31:29" itemprop="dateCreated datePublished" datetime="2015-04-28T23:31:29+08:00">4月 28 2015</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：10月 16 2018 18:00:22" itemprop="dateModified" datetime="2018-10-16T18:00:22+08:00">10月 16 2018</time>
-              
-            
-          </span>
+          </div>
 
           
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Android性能优化/" itemprop="url" rel="index"><span itemprop="name">Android性能优化</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2015/04/28/Drawable-从简化布局谈起/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2015/04/28/Drawable-从简化布局谈起/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-            <span id="/2015/04/28/Drawable-从简化布局谈起/" class="leancloud_visitors" data-flag-title="Drawable,从简化布局谈起">
-              <span class="post-meta-divider">|</span>
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              
-                <span class="post-meta-item-text">阅读次数：</span>
-              
-                <span class="leancloud-visitors-count"></span>
-            </span>
-          
-
-          
-
-          
-
-          
-
         </div>
-      </header>
-    
+      </div>
+    </div>
+  </header>
 
+  <main>
     
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
       
 
-      
-        <h2 id="一、Drawble是干嘛的？"><a href="#一、Drawble是干嘛的？" class="headerlink" title="一、Drawble是干嘛的？"></a>一、Drawble是干嘛的？</h2><p>说到Drawable肯定会第一时间想到图片资源，可能有人会认为Drawable就是图片。Drawble从字面上说就是“可绘制的”，google文档的描述:“A Drawable is a general abstraction for “something that can be drawn.””，Drawable其实就是为那些”可以被绘制的’’提供的抽象类。</p>
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Drawable,从简化布局谈起</h1>
+            
+            <div class="markdown-body">
+              <h2 id="一、Drawble是干嘛的？"><a href="#一、Drawble是干嘛的？" class="headerlink" title="一、Drawble是干嘛的？"></a>一、Drawble是干嘛的？</h2><p>说到Drawable肯定会第一时间想到图片资源，可能有人会认为Drawable就是图片。Drawble从字面上说就是“可绘制的”，google文档的描述:“A Drawable is a general abstraction for “something that can be drawn.””，Drawable其实就是为那些”可以被绘制的’’提供的抽象类。</p>
 <ul>
 <li><strong>哪些东西是”can be drawn”？</strong></li>
 <li><strong>绘制在哪里的？</strong></li>
 </ul>
-<p>看下android原生的Drawable和Canvas提供了的绘图的接口：<a href="http://developer.android.com/reference/android/graphics/drawable/package-summary.html" target="_blank" rel="noopener">android.graphics.drawable</a><br><a href="http://developer.android.com/reference/android/graphics/Canvas.html" target="_blank" rel="noopener">android.graphics.Canvas</a>。Canvas提供了一系列的接口去实现绘制想要的图形、图片、颜色或者其他something，Drawable就是为了这些”something”提供的。</p>
-<a id="more"></a>
-<h2 id="二、如何自定义Drawable？如何简化布局？"><a href="#二、如何自定义Drawable？如何简化布局？" class="headerlink" title="二、如何自定义Drawable？如何简化布局？"></a>二、如何自定义Drawable？如何简化布局？</h2><p><img src="/res/drawable/1.jpg" alt="Canvas和布局实现"></p>
+<p>看下android原生的Drawable和Canvas提供了的绘图的接口：<a target="_blank" rel="noopener" href="http://developer.android.com/reference/android/graphics/drawable/package-summary.html">android.graphics.drawable</a><br><a target="_blank" rel="noopener" href="http://developer.android.com/reference/android/graphics/Canvas.html">android.graphics.Canvas</a>。Canvas提供了一系列的接口去实现绘制想要的图形、图片、颜色或者其他something，Drawable就是为了这些”something”提供的。</p>
+<span id="more"></span>
+<h2 id="二、如何自定义Drawable？如何简化布局？"><a href="#二、如何自定义Drawable？如何简化布局？" class="headerlink" title="二、如何自定义Drawable？如何简化布局？"></a>二、如何自定义Drawable？如何简化布局？</h2><p><img src="/res/drawable/1.jpg" srcset="/img/loading.gif" lazyload alt="Canvas和布局实现"></p>
 <p>相信一定见过类似这样的布局，在Android系统中如何把想要的图形绘制处理，一般有两种方式：</p>
 <ul>
 <li>把你想要的视图简单的定义到布局文件中，系统读取布局文件绘制视图</li>
@@ -518,7 +261,7 @@
 </ul>
 <p>通过Drawable绘制想要的图形是个不错的选择，Drawable是一个抽象类，draw()方法提供了绘制的Canvas，invalidateSelf()方法提供了重绘的可能。Drawable的抽象方法分别是：</p>
 <ul>
-<li><p><strong>draw(Canvas canvas)</strong>将想要的东西绘制到这个canvas对象上</p>
+<li><p>**draw(Canvas canvas)**将想要的东西绘制到这个canvas对象上</p>
 </li>
 <li><p><strong>setAlpha(int alpha)</strong> 为drawable指定一个alpha值，0代表全透明，255代表全不透明。</p>
 </li>
@@ -527,597 +270,295 @@
 <li><p><strong>getOpacity()</strong> 获取透明度</p>
 </li>
 </ul>
-<p>实现自定义的Drawable只需要继承Drawable.java，并且在draw方法里通过canvas绘制需要的图形就可以了，听起来很简单。无论是一组图片、一条曲线还是一个色块，所有你想要的图形都可通过canvas参数绘制上去。举个例子，如何使用Drawable简化上图所示的网格布局？假设你需要在网格布局里显示不同的图片，就可以把场景微信朋友群组的图标。当然你可以使用view布局来做，当然也可以使用canvas方式。根据Drawable添加的顺序依次确定每个图片的坐标位置，在draw()方法里根据每个图片的坐标位置和图片显示位置绘制到canvas上。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">@Override</span><br><span class="line">public void draw(Canvas canvas) &#123;</span><br><span class="line">    final int N = Math.min(mChildDrawable.size(), mRowCount * mColumnCount);</span><br><span class="line">    for (int i = 0; i &lt; N; i++) &#123;</span><br><span class="line">        ChildDrawable itemToDraw = mChildDrawable.get(i);</span><br><span class="line">        Drawable drawable = itemToDraw.mDrawable;</span><br><span class="line">        if (drawable != null) &#123;</span><br><span class="line">            itemToDraw.mDrawable.setBounds(itemToDraw.mInsetL, itemToDraw.mInsetT, itemToDraw.mInsetR, itemToDraw.mInsetB);</span><br><span class="line">            drawable.draw(canvas);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>实现自定义的Drawable只需要继承Drawable.java，并且在draw方法里通过canvas绘制需要的图形就可以了，听起来很简单。无论是一组图片、一条曲线还是一个色块，所有你想要的图形都可通过canvas参数绘制上去。举个例子，如何使用Drawable简化上图所示的网格布局？假设你需要在网格布局里显示不同的图片，就可以把场景微信朋友群组的图标。当然你可以使用view布局来做，当然也可以使用canvas方式。根据Drawable添加的顺序依次确定每个图片的坐标位置，在draw()方法里根据每个图片的坐标位置和图片显示位置绘制到canvas上。</p>
+<figure class="highlight reasonml"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></div></td><td class="code"><pre><code class="hljs reasonml">@Override<br>public void draw(Canvas canvas) &#123;<br>    final <span class="hljs-built_in">int</span> N = <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Math</span>.</span></span>min(mChildDrawable.size<span class="hljs-literal">()</span>, mRowCount<span class="hljs-operator"> * </span>mColumnCount);<br>    <span class="hljs-keyword">for</span> (<span class="hljs-built_in">int</span> i = <span class="hljs-number">0</span>; i &lt; N; i++) &#123;<br>        ChildDrawable itemToDraw = mChildDrawable.get(i);<br>        Drawable drawable = itemToDraw.mDrawable;<br>        <span class="hljs-keyword">if</span> (drawable != null) &#123;<br>            itemToDraw.mDrawable.set<span class="hljs-constructor">Bounds(<span class="hljs-params">itemToDraw</span>.<span class="hljs-params">mInsetL</span>, <span class="hljs-params">itemToDraw</span>.<span class="hljs-params">mInsetT</span>, <span class="hljs-params">itemToDraw</span>.<span class="hljs-params">mInsetR</span>, <span class="hljs-params">itemToDraw</span>.<span class="hljs-params">mInsetB</span>)</span>;<br>            drawable.draw(canvas);<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
 <h2 id="三、让Drawable动起来怎么样？"><a href="#三、让Drawable动起来怎么样？" class="headerlink" title="三、让Drawable动起来怎么样？"></a>三、让Drawable动起来怎么样？</h2><ul>
 <li><strong>首先看下Drawable的Canvas从哪里来</strong></li>
 </ul>
-<p>一般使用ImageView显示drawable，看下ImageView的onDraw(Canvas canvas)，可以看到Drawable在ImageView里的绘制发生在View的onDraw回调里，根据scaleType和padding确定绘制的方式和位置。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">protected void onDraw(Canvas canvas) &#123;</span><br><span class="line">    super.onDraw(canvas);</span><br><span class="line">    ....</span><br><span class="line"></span><br><span class="line">    // mDrawMatrix根据ImageView的ScaleType来确定的</span><br><span class="line">    if (mDrawMatrix == null &amp;&amp; mPaddingTop == 0 &amp;&amp; mPaddingLeft == 0) &#123;</span><br><span class="line">        mDrawable.draw(canvas);</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        ......</span><br><span class="line">        mDrawable.draw(canvas);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>View绘制Background Drawable在draw(Canvas canvas)方法，并在setBackgroundDrawable时会执行background.setCallback(this)操作。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">// Step 1, draw the background, if needed</span><br><span class="line">if (background != null) &#123;</span><br><span class="line">     ......</span><br><span class="line">     if ((scrollX | scrollY) == 0) &#123;</span><br><span class="line">         background.draw(canvas);</span><br><span class="line">     &#125; else &#123;</span><br><span class="line">         ......</span><br><span class="line">         background.draw(canvas);</span><br><span class="line">         ......</span><br><span class="line">     &#125;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure></p>
+<p>一般使用ImageView显示drawable，看下ImageView的onDraw(Canvas canvas)，可以看到Drawable在ImageView里的绘制发生在View的onDraw回调里，根据scaleType和padding确定绘制的方式和位置。</p>
+<figure class="highlight lasso"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs lasso"><span class="hljs-keyword">protected</span> <span class="hljs-literal">void</span> onDraw(Canvas canvas) &#123;<br>    super.onDraw(canvas);<br>    <span class="hljs-params">...</span>.<br><br>    <span class="hljs-comment">// mDrawMatrix根据ImageView的ScaleType来确定的</span><br>    <span class="hljs-keyword">if</span> (mDrawMatrix == <span class="hljs-built_in">null</span> &amp;&amp; mPaddingTop == <span class="hljs-number">0</span> &amp;&amp; mPaddingLeft == <span class="hljs-number">0</span>) &#123;<br>        mDrawable.draw(canvas);<br>    &#125; <span class="hljs-keyword">else</span> &#123;<br>        <span class="hljs-params">...</span><span class="hljs-params">...</span><br>        mDrawable.draw(canvas);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>View绘制Background Drawable在draw(Canvas canvas)方法，并在setBackgroundDrawable时会执行background.setCallback(this)操作。</p>
+<figure class="highlight lasso"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs lasso"><span class="hljs-comment">// Step 1, draw the background, if needed</span><br><span class="hljs-keyword">if</span> (background != <span class="hljs-built_in">null</span>) &#123;<br>     <span class="hljs-params">...</span><span class="hljs-params">...</span><br>     <span class="hljs-keyword">if</span> ((scrollX | scrollY) == <span class="hljs-number">0</span>) &#123;<br>         background.draw(canvas);<br>     &#125; <span class="hljs-keyword">else</span> &#123;<br>         <span class="hljs-params">...</span><span class="hljs-params">...</span><br>         background.draw(canvas);<br>         <span class="hljs-params">...</span><span class="hljs-params">...</span><br>     &#125;<br> &#125;<br></code></pre></td></tr></table></figure>
 <ul>
-<li><strong>再看Drawable如何重绘</strong>，<br>Drawable是依赖Canvas绘制的，查看Drawable源码发现调用invalidateSelf()方法需要获取Callback，在Callback是空的情况下无法重绘Drawable。那么在View里如何实现Drawable的重绘，显然需要先设置Drawable的重绘回调，View.java实现了Drawable.Callback接口，在View里调用setImageDrawable()方法里会首先设置当前View为Drawable的回调。<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">public void invalidateSelf() &#123;</span><br><span class="line">    final Callback callback = getCallback();</span><br><span class="line">    if (callback != null) &#123;</span><br><span class="line">        callback.invalidateDrawable(this);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public static interface Callback &#123;</span><br><span class="line">    public void invalidateDrawable(Drawable who);</span><br><span class="line">    public void scheduleDrawable(Drawable who, Runnable what, long when);</span><br><span class="line">    public void unscheduleDrawable(Drawable who, Runnable what);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
+<li><strong>再看Drawable如何重绘</strong>，<br>Drawable是依赖Canvas绘制的，查看Drawable源码发现调用invalidateSelf()方法需要获取Callback，在Callback是空的情况下无法重绘Drawable。那么在View里如何实现Drawable的重绘，显然需要先设置Drawable的重绘回调，View.java实现了Drawable.Callback接口，在View里调用setImageDrawable()方法里会首先设置当前View为Drawable的回调。<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">invalidateSelf</span>()</span> &#123;<br>    final Callback callback = getCallback();<br>    <span class="hljs-keyword">if</span> (callback != <span class="hljs-literal">null</span>) &#123;<br>        callback.invalidateDrawable(<span class="hljs-keyword">this</span>);<br>    &#125;<br>&#125;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">interface</span> <span class="hljs-title">Callback</span> &#123;<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">invalidateDrawable</span>(<span class="hljs-params">Drawable who</span>)</span>;<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">scheduleDrawable</span>(<span class="hljs-params">Drawable who, Runnable what, <span class="hljs-built_in">long</span> <span class="hljs-keyword">when</span></span>)</span>;<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">unscheduleDrawable</span>(<span class="hljs-params">Drawable who, Runnable what</span>)</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+ImageView调用invalidate触发重绘，回调ImageView的onDraw()方法，完成Drawable的重绘。<figure class="highlight scss"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs scss"><span class="hljs-keyword">@Override</span><br>public void invalidateDrawable(Drawable dr) &#123;<br>    if (dr == mDrawable) &#123;<br>        <span class="hljs-comment">/* we invalidate the whole view in this case because it&#x27;s very</span><br><span class="hljs-comment">         * hard to know where the drawable actually is. This is made</span><br><span class="hljs-comment">         * complicated because of the offsets and transformations that</span><br><span class="hljs-comment">         * can be applied. In theory we could get the drawable&#x27;s bounds</span><br><span class="hljs-comment">         * and run them through the transformation and offsets, but this</span><br><span class="hljs-comment">         * is probably not worth the effort.</span><br><span class="hljs-comment">         */</span><br>        <span class="hljs-built_in">invalidate</span>();<br>    &#125; else &#123;<br>        super<span class="hljs-selector-class">.invalidateDrawable</span>(dr);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+了解了Drawable绘制的画布和重绘的方法，如何实现动画的Drawable只需要按时重绘Drawable就可以了，用动画控制重绘效果。具体实现可以看<a target="_blank" rel="noopener" href="https://github.com/Ivonhoe/FancyDrawable">https://github.com/Ivonhoe/FancyDrawable</a>，现在看如何实现我在<a href="https://ivonhoe.github.io/2015/04/17/%E5%9F%BA%E4%BA%8E%E8%B4%9D%E5%A1%9E%E5%B0%94%E6%9B%B2%E7%BA%BF%E7%9A%84Android%E5%8A%A8%E7%94%BB%E5%B7%AE%E5%80%BC%E5%99%A8/">贝赛尔插值器</a>里说过的BallsLine进度条效果，只需要在每次重绘的回调里动态的控制每个小球点的位置就可以了，需要的动画插值器参数可以参考<a target="_blank" rel="noopener" href="http://thecodeplayer.com/walkthrough/windows-phone-loading-animation">Web代码</a>。</li>
 </ul>
-<p>ImageView调用invalidate触发重绘，回调ImageView的onDraw()方法，完成Drawable的重绘。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">@Override</span><br><span class="line">public void invalidateDrawable(Drawable dr) &#123;</span><br><span class="line">    if (dr == mDrawable) &#123;</span><br><span class="line">        /* we invalidate the whole view in this case because it&apos;s very</span><br><span class="line">         * hard to know where the drawable actually is. This is made</span><br><span class="line">         * complicated because of the offsets and transformations that</span><br><span class="line">         * can be applied. In theory we could get the drawable&apos;s bounds</span><br><span class="line">         * and run them through the transformation and offsets, but this</span><br><span class="line">         * is probably not worth the effort.</span><br><span class="line">         */</span><br><span class="line">        invalidate();</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        super.invalidateDrawable(dr);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>了解了Drawable绘制的画布和重绘的方法，如何实现动画的Drawable只需要按时重绘Drawable就可以了，用动画控制重绘效果。具体实现可以看<a href="https://github.com/Ivonhoe/FancyDrawable" target="_blank" rel="noopener">https://github.com/Ivonhoe/FancyDrawable</a>，现在看如何实现我在<a href="https://ivonhoe.github.io/2015/04/17/%E5%9F%BA%E4%BA%8E%E8%B4%9D%E5%A1%9E%E5%B0%94%E6%9B%B2%E7%BA%BF%E7%9A%84Android%E5%8A%A8%E7%94%BB%E5%B7%AE%E5%80%BC%E5%99%A8/">贝赛尔插值器</a>里说过的BallsLine进度条效果，只需要在每次重绘的回调里动态的控制每个小球点的位置就可以了，需要的动画插值器参数可以参考<a href="http://thecodeplayer.com/walkthrough/windows-phone-loading-animation" target="_blank" rel="noopener">Web代码</a>。</p>
-<p><img src="/res/drawable/2.jpg" alt="动态Drawable和GridDrawable"></p>
-<pre><code>protected static final long FRAME_DURATION = 1000 / 60;
+<p><img src="/res/drawable/2.jpg" srcset="/img/loading.gif" lazyload alt="动态Drawable和GridDrawable"></p>
+<div class="code-wrapper"><pre><code class="hljs">protected static final long FRAME_DURATION = 1000 / 60;
 
-protected Runnable mUpdater = new Runnable() {
+protected Runnable mUpdater = new Runnable() &#123;
     @Override
-    public void run() {
+    public void run() &#123;
         onFrame();
 
         scheduleSelf(mUpdater, SystemClock.uptimeMillis() + FRAME_DURATION);
         invalidateSelf();
-    }
-};
+    &#125;
+&#125;;
 
 @Override
-public void start() {
-    if (!isRunning()) {
+public void start() &#123;
+    if (!isRunning()) &#123;
         mIsRunning = true;
 
         // start
         onStart();
         scheduleSelf(mUpdater, SystemClock.uptimeMillis() + FRAME_DURATION);
         invalidateSelf();
-    }
-}
+    &#125;
+&#125;
 
 @Override
-public void stop() {
-    if (isRunning()) {
+public void stop() &#123;
+    if (isRunning()) &#123;
         mIsRunning = false;
         unscheduleSelf(mUpdater);
 
         //stop
         onStop();
-    }
-}
-</code></pre><h1 id="五、参考文档"><a href="#五、参考文档" class="headerlink" title="五、参考文档"></a>五、参考文档</h1><p><a href="http://developer.android.com/reference/android/graphics/drawable/Drawable.html" target="_blank" rel="noopener">http://developer.android.com/reference/android/graphics/drawable/Drawable.html</a></p>
-<p><a href="http://developer.android.com/guide/topics/graphics/2d-graphics.html" target="_blank" rel="noopener">http://developer.android.com/guide/topics/graphics/2d-graphics.html</a></p>
-<p><a href="http://wiresareobsolete.com/2012/12/textdrawable-draw-some-text/" target="_blank" rel="noopener">http://wiresareobsolete.com/2012/12/textdrawable-draw-some-text/</a></p>
-<p><a href="http://cyrilmottier.com/2012/11/27/actionbar-on-the-move/" target="_blank" rel="noopener">http://cyrilmottier.com/2012/11/27/actionbar-on-the-move/</a></p>
-<p><a href="http://antoine-merle.com/blog/2013/11/12/make-your-progressbar-more-smooth/" target="_blank" rel="noopener">http://antoine-merle.com/blog/2013/11/12/make-your-progressbar-more-smooth/</a></p>
-<h2 id="六、Github"><a href="#六、Github" class="headerlink" title="六、Github"></a>六、Github</h2><p><a href="https://github.com/Ivonhoe/FancyDrawable" target="_blank" rel="noopener">https://github.com/Ivonhoe/FancyDrawable</a></p>
+    &#125;
+&#125;
+</code></pre></div>
+<h1 id="五、参考文档"><a href="#五、参考文档" class="headerlink" title="五、参考文档"></a>五、参考文档</h1><p><a target="_blank" rel="noopener" href="http://developer.android.com/reference/android/graphics/drawable/Drawable.html">http://developer.android.com/reference/android/graphics/drawable/Drawable.html</a></p>
+<p><a target="_blank" rel="noopener" href="http://developer.android.com/guide/topics/graphics/2d-graphics.html">http://developer.android.com/guide/topics/graphics/2d-graphics.html</a></p>
+<p><a target="_blank" rel="noopener" href="http://wiresareobsolete.com/2012/12/textdrawable-draw-some-text/">http://wiresareobsolete.com/2012/12/textdrawable-draw-some-text/</a></p>
+<p><a target="_blank" rel="noopener" href="http://cyrilmottier.com/2012/11/27/actionbar-on-the-move/">http://cyrilmottier.com/2012/11/27/actionbar-on-the-move/</a></p>
+<p><a target="_blank" rel="noopener" href="http://antoine-merle.com/blog/2013/11/12/make-your-progressbar-more-smooth/">http://antoine-merle.com/blog/2013/11/12/make-your-progressbar-more-smooth/</a></p>
+<h2 id="六、Github"><a href="#六、Github" class="headerlink" title="六、Github"></a>六、Github</h2><p><a target="_blank" rel="noopener" href="https://github.com/Ivonhoe/FancyDrawable">https://github.com/Ivonhoe/FancyDrawable</a></p>
 <h3 id="转载请标明出处病已blog-https-ivonhoe-github-io"><a href="#转载请标明出处病已blog-https-ivonhoe-github-io" class="headerlink" title="转载请标明出处病已blog https://ivonhoe.github.io/"></a>转载请标明出处<a href="https://ivonhoe.github.io/">病已blog https://ivonhoe.github.io/</a></h3>
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-        
-          
-        
-        <div class="post-tags">
-          
-            <a href="/tags/Android/" rel="tag"># Android</a>
-          
-            <a href="/tags/Drawable/" rel="tag"># Drawable</a>
-          
-            <a href="/tags/性能优化/" rel="tag"># 性能优化</a>
-          
-        </div>
-      
-
-      
-      
-      
-
-      
-        <div class="post-nav">
-          <div class="post-nav-next post-nav-item">
-            
-              <a href="/2015/04/23/ColorOS和APEX桌面产品分析/" rel="next" title="ColorOS和APEX桌面产品分析">
-                <i class="fa fa-chevron-left"></i> ColorOS和APEX桌面产品分析
-              </a>
-            
-          </div>
-
-          <span class="post-nav-divider"></span>
-
-          <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2015/08/19/数据解析工具设计文档/" rel="prev" title="数据解析工具">
-                数据解析工具 <i class="fa fa-chevron-right"></i>
-              </a>
-            
-          </div>
-        </div>
-      
-
-      
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-  </div>
-
-
-          </div>
-          
-
-  
-    <div class="comments" id="comments">
-    </div>
-
-  
-
-
-
-        </div>
-        
-          
-  
-  <div class="sidebar-toggle">
-    <div class="sidebar-toggle-line-wrap">
-      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
-    </div>
-  </div>
-
-  <aside id="sidebar" class="sidebar">
-    <div class="sidebar-inner">
-
-      
-
-      
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            站点概览
-          </li>
-        </ul>
-      
-
-      <div class="site-overview-wrap sidebar-panel">
-        <div class="site-overview">
-          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-            
-              <p class="site-author-name" itemprop="name">病已</p>
-              <div class="site-description motion-element" itemprop="description"></div>
-          </div>
-
-          
-            <nav class="site-state motion-element">
-              
-                <div class="site-state-item site-state-posts">
-                
-                  <a href="/archives/">
-                
-                    <span class="site-state-item-count">38</span>
-                    <span class="site-state-item-name">日志</span>
-                  </a>
-                </div>
-              
-
-              
-                
-                
-                <div class="site-state-item site-state-categories">
-                  
-                    
-                      <a href="/categories/">
-                    
-                  
-                    
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                    <span class="site-state-item-count">9</span>
-                    <span class="site-state-item-name">分类</span>
-                  </a>
-                </div>
-              
-
-              
-                
-                
-                <div class="site-state-item site-state-tags">
-                  
-                    
-                      <a href="/tags/">
-                    
-                  
-                    
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                    <span class="site-state-item-count">41</span>
-                    <span class="site-state-item-name">标签</span>
-                  </a>
-                </div>
-              
-            </nav>
-          
-
-          
-            <div class="feed-link motion-element">
-              <a href="/atom.xml" rel="alternate">
-                <i class="fa fa-rss"></i>
-                RSS
-              </a>
             </div>
-          
-
-          
-
-          
-            <div class="links-of-author motion-element">
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/Android%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">Android性能优化</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/Android/">Android</a>
+                    
+                      <a class="hover-with-bg" href="/tags/Drawable/">Drawable</a>
+                    
+                      <a class="hover-with-bg" href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">性能优化</a>
+                    
+                  </div>
+                
+              </div>
               
-                <span class="links-of-author-item">
+                <p class="note note-warning">
                   
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
                   
-                    
-                  
-                  
-                    
-                  
-                  <a href="https://github.com/ivonhoe" title="GitHub &rarr; https://github.com/ivonhoe" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
-                </span>
+                </p>
               
-                <span class="links-of-author-item">
-                  
-                  
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
                     
-                  
-                  
                     
-                  
-                  <a href="mailto:yangfan3687@163.com" title="E-Mail &rarr; mailto:yangfan3687@163.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
-                </span>
+                      <a href="/2015/08/19/%E6%95%B0%E6%8D%AE%E8%A7%A3%E6%9E%90%E5%B7%A5%E5%85%B7%E8%AE%BE%E8%AE%A1%E6%96%87%E6%A1%A3/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">数据解析工具</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2015/04/23/ColorOS%E5%92%8CAPEX%E6%A1%8C%E9%9D%A2%E4%BA%A7%E5%93%81%E5%88%86%E6%9E%90/">
+                        <span class="hidden-mobile">ColorOS和APEX桌面产品分析</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
               
             </div>
-          
 
-          
-
-          
-          
-
-          
             
-          
-          
+              <!-- Comments -->
+              <article class="comments" id="comments" lazyload>
+                
+                  
+                
+                
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/valine@1/dist/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"JdLpddsaWqwfJtXPdDK8woaF-gzGzoHsz","appKey":"CEmtHXH8f0PtvF0zYtVE0EeY","path":"window.location.pathname","placeholder":null,"avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          Fluid.plugins.initFancyBox('#valine .vcontent img:not(.vemoji)');
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
 
+
+              </article>
+            
+          </article>
         </div>
       </div>
-
-      
-      <!--noindex-->
-        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-            
-            
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一、Drawble是干嘛的？"><span class="nav-number">1.</span> <span class="nav-text">一、Drawble是干嘛的？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、如何自定义Drawable？如何简化布局？"><span class="nav-number">2.</span> <span class="nav-text">二、如何自定义Drawable？如何简化布局？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三、让Drawable动起来怎么样？"><span class="nav-number">3.</span> <span class="nav-text">三、让Drawable动起来怎么样？</span></a></li></ol><li class="nav-item nav-level-1"><a class="nav-link" href="#五、参考文档"><span class="nav-number"></span> <span class="nav-text">五、参考文档</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#六、Github"><span class="nav-number">1.</span> <span class="nav-text">六、Github</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#转载请标明出处病已blog-https-ivonhoe-github-io"><span class="nav-number">1.1.</span> <span class="nav-text">转载请标明出处病已blog https://ivonhoe.github.io/</span></a></li></ol></li></ol></li></div>
-            
-
-          </div>
-        </div>
-      <!--/noindex-->
-      
-
-      
-
     </div>
-  </aside>
-  
-
-
-        
-      </div>
-    </main>
-
-    <footer id="footer" class="footer">
-      <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
-  <span class="with-love" id="animate">
-    <i class="fa fa-user"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">病已</span>
-
-  
-
-  
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
 </div>
 
-
-  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
-
-
-
-  <span class="post-meta-divider">|</span>
-
-
-
-  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.1.2</div>
-
-
-
-
-        
-
-
-
-
-
-
-
-
-        
       </div>
-    </footer>
-
-    
-      <div class="back-to-top">
-        <i class="fa fa-arrow-up"></i>
-        
-      </div>
-    
-
-    
-
-    
-
     
   </div>
+</div>
 
-  
-
-<script>
-  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
-    window.Promise = null;
-  }
-</script>
+<!-- Custom -->
 
 
+    
 
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
 
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
 
+    
+  </main>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-  <script src="/lib/jquery/index.js?v=3.4.1"></script>
-
-  
-  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
-
-  
-  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
-
-
-  
-
-
-  <script src="/js/utils.js?v=7.1.2"></script>
-
-  <script src="/js/motion.js?v=7.1.2"></script>
-
-
-
-  
-  
-
-
-  <script src="/js/affix.js?v=7.1.2"></script>
-
-  <script src="/js/schemes/pisces.js?v=7.1.2"></script>
-
-
-
-
-  
-  <script src="/js/scrollspy.js?v=7.1.2"></script>
-<script src="/js/post-details.js?v=7.1.2"></script>
-
-
-
-  
-
-
-  <script src="/js/next-boot.js?v=7.1.2"></script>
-
-
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
   
 
   
 
   
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
 
   
+    <script  src="/js/img-lazyload.js" ></script>
   
-
-<script src="//cdn1.lncld.net/static/js/3.11.1/av-min.js"></script>
-
-
-
-<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
-
-<script>
-  var GUEST = ['nick', 'mail', 'link'];
-  var guest = 'nick,mail,link';
-  guest = guest.split(',').filter(function(item) {
-    return GUEST.indexOf(item) > -1;
-  });
-  new Valine({
-    el: '#comments',
-    verify: false,
-    notify: false,
-    appId: 'JdLpddsaWqwfJtXPdDK8woaF-gzGzoHsz',
-    appKey: 'CEmtHXH8f0PtvF0zYtVE0EeY',
-    placeholder: 'Just go go',
-    avatar: 'mm',
-    meta: guest,
-    pageSize: '10' || 10,
-    visitor: true,
-    lang: '' || 'zh-cn'
-  });
-</script>
-
 
 
 
   
 
 
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
   
 
 
 
 
-  
+  <script defer src="/js/leancloud.js" ></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   
-
-  
-
-  
-
-  
-
+    <!-- Baidu Analytics -->
+    <script defer>
+      var _hmt = _hmt || [];
+      (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?666a58de875adc9dd40d5de65ceac026";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();
+    </script>
   
 
   
@@ -1130,11 +571,13 @@ public void stop() {
 
   
 
-  
 
-  
 
-  
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
 
 </body>
 </html>

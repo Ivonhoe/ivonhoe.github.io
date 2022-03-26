@@ -1,109 +1,28 @@
+
+
 <!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
 
 
 
-
-
-
-
-
-
-
-
-
-  
-
-
-<html class="theme-next gemini use-motion" lang="zh-CN">
-<head><meta name="generator" content="Hexo 3.9.0">
+<head>
   <meta charset="UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
-<meta name="theme-color" content="#222">
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.7.0">
-
-<link rel="stylesheet" href="/css/main.css?v=7.1.2">
-
-
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.1.2">
-
-
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.1.2">
-
-
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.1.2">
-
-
-  <link rel="mask-icon" href="/images/logo.svg?v=7.1.2" color="#222">
-
-
-
-
-
-
-
-<script id="hexo.configurations">
-  var NexT = window.NexT || {};
-  var CONFIG = {
-    root: '/',
-    scheme: 'Gemini',
-    version: '7.1.2',
-    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
-    back2top: true,
-    back2top_sidebar: false,
-    fancybox: false,
-    fastclick: false,
-    lazyload: false,
-    tabs: true,
-    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
-    algolia: {
-      applicationID: '',
-      apiKey: '',
-      indexName: '',
-      hits: {"per_page":10},
-      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
-    }
-  };
-</script>
-
-
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
   
-
-
-
-
-  <meta name="description" content="一、简介贝塞尔曲线于1962，由法国工程师皮埃尔·贝塞尔（Pierre Bézier）所广泛发表，他运用贝塞尔曲线来为汽车的主体进行设计。贝塞尔曲线最初由Paul de Casteljau于1959年运用de Casteljau算法开发，以稳定数值的方法求出贝兹曲线。贝塞尔曲线不仅仅可以应用到工业设计中，在计算机动画开发中同样占有一席之地，通过构造贝塞尔曲线模拟物体运动的轨迹、速度甚至加速度，来达">
-<meta name="keywords" content="Android,动画,贝塞尔曲线">
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="病已">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="一、简介贝塞尔曲线于1962，由法国工程师皮埃尔·贝塞尔（Pierre Bézier）所广泛发表，他运用贝塞尔曲线来为汽车的主体进行设计。贝塞尔曲线最初由Paul de Casteljau于1959年运用de Casteljau算法开发，以稳定数值的方法求出贝兹曲线。贝塞尔曲线不仅仅可以应用到工业设计中，在计算机动画开发中同样占有一席之地，通过构造贝塞尔曲线模拟物体运动的轨迹、速度甚至加速度，来达">
 <meta property="og:type" content="article">
 <meta property="og:title" content="基于贝塞尔曲线的Android动画差值器">
-<meta property="og:url" content="https://ivonhoe.github.io/2015/04/17/基于贝塞尔曲线的Android动画差值器/index.html">
+<meta property="og:url" content="https://ivonhoe.github.io/2015/04/17/%E5%9F%BA%E4%BA%8E%E8%B4%9D%E5%A1%9E%E5%B0%94%E6%9B%B2%E7%BA%BF%E7%9A%84Android%E5%8A%A8%E7%94%BB%E5%B7%AE%E5%80%BC%E5%99%A8/index.html">
 <meta property="og:site_name" content="病已的博客">
 <meta property="og:description" content="一、简介贝塞尔曲线于1962，由法国工程师皮埃尔·贝塞尔（Pierre Bézier）所广泛发表，他运用贝塞尔曲线来为汽车的主体进行设计。贝塞尔曲线最初由Paul de Casteljau于1959年运用de Casteljau算法开发，以稳定数值的方法求出贝兹曲线。贝塞尔曲线不仅仅可以应用到工业设计中，在计算机动画开发中同样占有一席之地，通过构造贝塞尔曲线模拟物体运动的轨迹、速度甚至加速度，来达">
-<meta property="og:locale" content="zh-CN">
+<meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://ivonhoe.github.io/res/bezier/TimingFunction.png">
 <meta property="og:image" content="https://ivonhoe.github.io/res/bezier/decu.png">
 <meta property="og:image" content="https://ivonhoe.github.io/res/bezier/1.gif">
@@ -112,221 +31,458 @@
 <meta property="og:image" content="https://ivonhoe.github.io/res/bezier/3.gif">
 <meta property="og:image" content="https://ivonhoe.github.io/res/bezier/4.gif">
 <meta property="og:image" content="https://ivonhoe.github.io/res/bezier/windows_balls_line.GIF">
-<meta property="og:updated_time" content="2018-09-11T13:24:49.000Z">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="基于贝塞尔曲线的Android动画差值器">
-<meta name="twitter:description" content="一、简介贝塞尔曲线于1962，由法国工程师皮埃尔·贝塞尔（Pierre Bézier）所广泛发表，他运用贝塞尔曲线来为汽车的主体进行设计。贝塞尔曲线最初由Paul de Casteljau于1959年运用de Casteljau算法开发，以稳定数值的方法求出贝兹曲线。贝塞尔曲线不仅仅可以应用到工业设计中，在计算机动画开发中同样占有一席之地，通过构造贝塞尔曲线模拟物体运动的轨迹、速度甚至加速度，来达">
+<meta property="article:published_time" content="2015-04-17T02:35:05.000Z">
+<meta property="article:modified_time" content="2018-09-11T13:24:49.000Z">
+<meta property="article:author" content="病已">
+<meta property="article:tag" content="Android">
+<meta property="article:tag" content="动画">
+<meta property="article:tag" content="贝塞尔曲线">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://ivonhoe.github.io/res/bezier/TimingFunction.png">
+  
+  
+  <title>基于贝塞尔曲线的Android动画差值器 - 病已的博客</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
 
 
 
-  <link rel="alternate" href="/atom.xml" title="病已的博客" type="application/atom+xml">
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
 
 
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"ivonhoe.github.io","root":"/","version":"1.8.14","typing":{"enable":false,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"baidu":"666a58de875adc9dd40d5de65ceac026","google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"JdLpddsaWqwfJtXPdDK8woaF-gzGzoHsz","app_key":"CEmtHXH8f0PtvF0zYtVE0EeY","server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 6.1.0"><link rel="alternate" href="/atom.xml" title="病已的博客" type="application/atom+xml">
+</head>
+
+
+<body>
+  <header style="height: 30vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>病已的博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default_post.jpeg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="基于贝塞尔曲线的Android动画差值器">
+              
+                基于贝塞尔曲线的Android动画差值器
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2015-04-17 10:35" pubdate>
+        2015年4月17日 上午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      2.3k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      19 分钟
+    </span>
+  
 
   
   
-  <link rel="canonical" href="https://ivonhoe.github.io/2015/04/17/基于贝塞尔曲线的Android动画差值器/">
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">基于贝塞尔曲线的Android动画差值器</h1>
+            
+            <div class="markdown-body">
+              <h2 id="一、简介"><a href="#一、简介" class="headerlink" title="一、简介"></a>一、简介</h2><p>贝塞尔曲线于1962，由法国工程师皮埃尔·贝塞尔（Pierre Bézier）所广泛发表，他运用贝塞尔曲线来为汽车的主体进行设计。贝塞尔曲线最初由Paul de Casteljau于1959年运用de Casteljau算法开发，以稳定数值的方法求出贝兹曲线。贝塞尔曲线不仅仅可以应用到工业设计中，在计算机动画开发中同样占有一席之地，通过构造贝塞尔曲线模拟物体运动的轨迹、速度甚至加速度，来达到想要的动画效果。在CSS开发中使用‘cubic-bezier’方法，传递三次贝赛尔曲线的两个控制点P1和P2来生成一条平滑的曲线。甚至也有很多javaScript动画库使用贝赛尔曲线来实现完美的动画效果。</p>
+<p><img src="/res/bezier/TimingFunction.png" srcset="/img/loading.gif" lazyload alt="通过P1和P2控制曲线"></p>
+<span id="more"></span>
+
+<p>而我要做的通过贝塞尔曲线的原理生成Android动画插值器，在Android平台上实现基于贝赛尔曲线的动画效果。想要了解Android动画原理请先阅读<a href="https://ivonhoe.github.io/2015/02/09/Android%E5%8A%A8%E7%94%BB%E6%80%BB%E7%BB%93/">这篇文章</a>。了解贝塞尔曲线绘制过程可以先阅读<a target="_blank" rel="noopener" href="http://www.html-js.com/article/1628">贝塞尔曲线扫盲</a>，写的很好。</p>
+<h2 id="二、De-Casteljau算法"><a href="#二、De-Casteljau算法" class="headerlink" title="二、De Casteljau算法"></a>二、De Casteljau算法</h2><p><img src="/res/bezier/decu.png" srcset="/img/loading.gif" lazyload alt="二次贝塞尔曲线"></p>
+<p>贝塞尔曲线常见的算法是可以通过多项式、De Casteljau算法和递归算法来进行计算。针对De算法，设P0,P1,P2确定了一条二次贝塞尔曲线q，引入参数t，令<img src="/res/bezier/1.gif" srcset="/img/loading.gif" lazyload>即有：</p>
+<p><img src="/res/bezier/2.gif" srcset="/img/loading.gif" lazyload alt=" "></p>
+<p>当t从0变到1，第一、二式是两条一次Bezier曲线。将一、二式代入第三式得到：</p>
+<p><img src="/res/bezier/5.gif" srcset="/img/loading.gif" lazyload alt=" "></p>
+<p>当t从0变到1时，它表示了由P0、P1、P2三个控制点形成一条二次Bezier曲线。并且这个二次Bezier曲线可以分别由前两个顶点(P0,P1)和后两个顶点(P1,P2)决定的一次Bezier曲线的线性组合。以此类推，由四个控制点定义的三次Bezier曲线可被定义为分别由(P0,P1,P2)和(P1,P2,P3)确定的两条二次Bezier曲线的线性组合，由(n+1)个控制点定义的n次Bezier曲线可被定义为分别由前后n个控制点定义的两条(n-1)次Bezier曲线的线性组合：</p>
+<p><img src="/res/bezier/3.gif" srcset="/img/loading.gif" lazyload alt=" "></p>
+<p>由此得到Bezier曲线的递推计算公式:</p>
+<p><img src="/res/bezier/4.gif" srcset="/img/loading.gif" lazyload alt=" "></p>
+<p>这就是De Casteljau算法。使用这个递推公式，在给定参数下，求Bezier曲线上一点P(t)非常有效。</p>
+<h2 id="三、Bezier动画插值器实现"><a href="#三、Bezier动画插值器实现" class="headerlink" title="三、Bezier动画插值器实现"></a>三、Bezier动画插值器实现</h2><p>基于De Casteljau算法的递推公式求曲线上点的坐标：</p>
+<div class="code-wrapper"><pre><code class="hljs">public static Point deCasteljau(Point[] points, float t) &#123;
+    final int n = points.length;
+    for (int i = 1; i &lt;= n; i++)
+        for (int j = 0; j &lt; n - i; j++) &#123;
+            points[j].x = (1 - t) * points[j].x + t * points[j + 1].x;
+            points[j].y = (1 - t) * points[j].y + t * points[j + 1].y;
+        &#125;
+
+    return points[0];
+&#125;
+</code></pre></div>
+<p>De Casteljau算法目的是求得曲线上的每一个点，如何用这些采样点描述一条曲线插值器还需要进一步的处理。主要就是处理精度的问题，用距离很近的两个点连线的线段近似描述曲线，理论上采样点越密集描述的越准确，但是很明显在实际项目中不能选择太多的采样点，因为要考虑内存和效率的问题。所以用尽可能少的点尽可能精细的用直线段描述一条曲线，一个不错的做法就是在采样点的在横坐标方向上不要等距分布，而是在曲线变化较快的地方（即斜率较大）采样点尽可能的密集，而在曲线变化平缓的地方采样点选择稀疏。所以需要在通过De Casteljau算法获取初步的采样点后，再进一步获取非均匀分布的采样点，更加处理后的采样点再进行计算。</p>
+<p>考虑到针对不同动画的编辑，可能不仅仅是动画进度的插值，还需要动画速度的插值和动画变化率的插值，针对不同曲线类型的变化，通过下面的方式进行扩展。详细代码可以查看<a target="_blank" rel="noopener" href="https://github.com/Ivonhoe/BezierInterpolator">这里</a></p>
+<h2 id="四、使用范例"><a href="#四、使用范例" class="headerlink" title="四、使用范例"></a>四、使用范例</h2><p>通过控制点构造贝塞尔曲线插值器，例如，可以通过构造一个特殊的插值器，控制drawable的重绘和每个小球的动画并重绘drawable就可以实现类似window phone上经典的Balls Line进度条效果，详细实现可以参考<a href="https://ivonhoe.github.io/2015/04/28/Drawable-%E4%BB%8E%E7%AE%80%E5%8C%96%E5%B8%83%E5%B1%80%E8%B0%88%E8%B5%B7/">这里</a>。</p>
+<p><img src="/res/bezier/windows_balls_line.GIF" srcset="/img/loading.gif" lazyload alt="window 进度条"></p>
+<p>通过两个控制点构造三次贝赛尔插值器(默认会增加(0,0)和(1,1)作为控制点)。</p>
+<div class="code-wrapper"><pre><code class="hljs">    if (mBezierInterpolator == null) &#123;
+        // 贝塞尔插值器
+        mBezierInterpolator = new BezierInterpolator(0.03f, 0.615f, 0.995f, 0.415f);
+    &#125;
+    if (mLinearInterpolator == null)&#123;
+        // 普通线性插值器
+        mLinearInterpolator = new LinearInterpolator();
+    &#125;
+</code></pre></div>
+<p>同样可以传递包含所有控制点的List构造插值器。</p>
+<div class="code-wrapper"><pre><code class="hljs">    mBezierInterpolator = new BezierInterpolator(new ArrayList&lt;Point&gt;());
+</code></pre></div>
+<p>针对BezierInterpolator的构造会有一定的耗时，所以并不建议在需要用到的时候才去构造，也不建议频繁的构造相同的插值器实例。</p>
+<h2 id="五、参考文档"><a href="#五、参考文档" class="headerlink" title="五、参考文档"></a>五、参考文档</h2><p><a target="_blank" rel="noopener" href="http://baike.baidu.com/view/10167166.htm">3D计算机图形学 Samuel R.Buss</a><br><a target="_blank" rel="noopener" href="http://wenku.baidu.com/view/2beaa4bc960590c69ec376cd.html">Bezier曲线的算法描述及其程序实现</a><br><a target="_blank" rel="noopener" href="http://cubic-bezier.com/">在线贝塞尔曲线编辑器</a><br><a target="_blank" rel="noopener" href="http://thecodeplayer.com/walkthrough/windows-phone-loading-animation">window phone loading animation</a></p>
+<h2 id="六、Github"><a href="#六、Github" class="headerlink" title="六、Github"></a>六、Github</h2><p><a target="_blank" rel="noopener" href="https://github.com/Ivonhoe/BezierInterpolator">https://github.com/Ivonhoe/BezierInterpolator</a></p>
+<h2 id="转载请标明出处病已blog-https-ivonhoe-github-io"><a href="#转载请标明出处病已blog-https-ivonhoe-github-io" class="headerlink" title="转载请标明出处病已blog https://ivonhoe.github.io/"></a>转载请标明出处<a href="https://ivonhoe.github.io/">病已blog https://ivonhoe.github.io/</a></h2>
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/Android%E5%8A%A8%E7%94%BB/">Android动画</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/Android/">Android</a>
+                    
+                      <a class="hover-with-bg" href="/tags/%E5%8A%A8%E7%94%BB/">动画</a>
+                    
+                      <a class="hover-with-bg" href="/tags/%E8%B4%9D%E5%A1%9E%E5%B0%94%E6%9B%B2%E7%BA%BF/">贝塞尔曲线</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2015/04/23/ColorOS%E5%92%8CAPEX%E6%A1%8C%E9%9D%A2%E4%BA%A7%E5%93%81%E5%88%86%E6%9E%90/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">ColorOS和APEX桌面产品分析</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2015/04/08/-%E7%BF%BB%E8%AF%91-Context-%E4%BB%80%E4%B9%88%E6%98%AFContext%EF%BC%9F/">
+                        <span class="hidden-mobile">[译]Context?什么是Context？</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments" lazyload>
+                
+                  
+                
+                
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/valine@1/dist/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"JdLpddsaWqwfJtXPdDK8woaF-gzGzoHsz","appKey":"CEmtHXH8f0PtvF0zYtVE0EeY","path":"window.location.pathname","placeholder":null,"avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          Fluid.plugins.initFancyBox('#valine .vcontent img:not(.vemoji)');
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
 
 
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
 
-<script id="page.configurations">
-  CONFIG.page = {
-    sidebar: "",
-  };
-</script>
+      </div>
+    
+  </div>
+</div>
 
-  <title>基于贝塞尔曲线的Android动画差值器 | 病已的博客</title>
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
   
 
+  
+
+  
+</footer>
 
 
-
-
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
 
   <script>
-    var _hmt = _hmt || [];
-    (function() {
-      var hm = document.createElement("script");
-      hm.src = "https://hm.baidu.com/hm.js?666a58de875adc9dd40d5de65ceac026";
-      var s = document.getElementsByTagName("script")[0];
-      s.parentNode.insertBefore(hm, s);
-    })();
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
   </script>
 
 
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
 
 
+  <script  src="/js/local-search.js" ></script>
 
 
-
-  <noscript>
-  <style>
-  .use-motion .motion-element,
-  .use-motion .brand,
-  .use-motion .menu-item,
-  .sidebar-inner,
-  .use-motion .post-block,
-  .use-motion .pagination,
-  .use-motion .comments,
-  .use-motion .post-header,
-  .use-motion .post-body,
-  .use-motion .collection-title { opacity: initial; }
-
-  .use-motion .logo,
-  .use-motion .site-title,
-  .use-motion .site-subtitle {
-    opacity: initial;
-    top: initial;
-  }
-
-  .use-motion .logo-line-before i { left: initial; }
-  .use-motion .logo-line-after i { right: initial; }
-  </style>
-</noscript>
-
-</head>
-
-<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
 
   
+    <script  src="/js/img-lazyload.js" ></script>
   
-    
-  
-
-  <div class="container sidebar-position-left page-post-detail">
-    <div class="headband"></div>
-
-    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-brand-wrapper">
-  <div class="site-meta">
-    
-
-    <div class="custom-logo-site-title">
-      <a href="/" class="brand" rel="start">
-        <span class="logo-line-before"><i></i></span>
-        <span class="site-title">病已的博客</span>
-        <span class="logo-line-after"><i></i></span>
-      </a>
-    </div>
-    
-      
-        <p class="site-subtitle">枕上，马上，厕上</p>
-      
-    
-    
-  </div>
-
-  <div class="site-nav-toggle">
-    <button aria-label="切换导航栏">
-      <span class="btn-bar"></span>
-      <span class="btn-bar"></span>
-      <span class="btn-bar"></span>
-    </button>
-  </div>
-</div>
-
-
-
-<nav class="site-nav">
-  
-    <ul id="menu" class="menu">
-      
-        
-        
-        
-          
-          <li class="menu-item menu-item-home">
-
-    
-    
-    
-      
-    
-
-    
-
-    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
-
-  </li>
-        
-        
-        
-          
-          <li class="menu-item menu-item-categories">
-
-    
-    
-    
-      
-    
-
-    
-
-    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
-
-  </li>
-        
-        
-        
-          
-          <li class="menu-item menu-item-tags">
-
-    
-    
-    
-      
-    
-
-    
-
-    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
-
-  </li>
-        
-        
-        
-          
-          <li class="menu-item menu-item-archives">
-
-    
-    
-    
-      
-    
-
-    
-
-    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
-
-  </li>
-        
-        
-        
-          
-          <li class="menu-item menu-item-about">
-
-    
-    
-    
-      
-    
-
-    
-
-    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br>关于</a>
-
-  </li>
-
-      
-      
-    </ul>
-  
-
-  
-
-  
-</nav>
 
 
 
@@ -334,649 +490,23 @@
 
 
 
-</div>
-    </header>
-
-    
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
   
   
-
-  
-
-  <a href="https://github.com/Ivonhoe" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewbox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a>
-
-
-
-    <main id="main" class="main">
-      <div class="main-inner">
-        <div class="content-wrap">
-          
-            
-
-          
-          <div id="content" class="content">
-            
-
-  <div id="posts" class="posts-expand">
-    
-
-  
-
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
   
   
-  
-
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
   
   
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://ivonhoe.github.io/2015/04/17/基于贝塞尔曲线的Android动画差值器/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="病已">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="病已的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">基于贝塞尔曲线的Android动画差值器
-
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-
-              
-                
-              
-
-              <time title="创建时间：4月 17 2015 10:35:05" itemprop="dateCreated datePublished" datetime="2015-04-17T10:35:05+08:00">4月 17 2015</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：9月 11 2018 21:24:49" itemprop="dateModified" datetime="2018-09-11T21:24:49+08:00">9月 11 2018</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Android动画/" itemprop="url" rel="index"><span itemprop="name">Android动画</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-              
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-            
-                <span class="post-meta-item-text">评论数：</span>
-                <a href="/2015/04/17/基于贝塞尔曲线的Android动画差值器/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2015/04/17/基于贝塞尔曲线的Android动画差值器/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-            <span id="/2015/04/17/基于贝塞尔曲线的Android动画差值器/" class="leancloud_visitors" data-flag-title="基于贝塞尔曲线的Android动画差值器">
-              <span class="post-meta-divider">|</span>
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              
-                <span class="post-meta-item-text">阅读次数：</span>
-              
-                <span class="leancloud-visitors-count"></span>
-            </span>
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        <h2 id="一、简介"><a href="#一、简介" class="headerlink" title="一、简介"></a>一、简介</h2><p>贝塞尔曲线于1962，由法国工程师皮埃尔·贝塞尔（Pierre Bézier）所广泛发表，他运用贝塞尔曲线来为汽车的主体进行设计。贝塞尔曲线最初由Paul de Casteljau于1959年运用de Casteljau算法开发，以稳定数值的方法求出贝兹曲线。贝塞尔曲线不仅仅可以应用到工业设计中，在计算机动画开发中同样占有一席之地，通过构造贝塞尔曲线模拟物体运动的轨迹、速度甚至加速度，来达到想要的动画效果。在CSS开发中使用‘cubic-bezier’方法，传递三次贝赛尔曲线的两个控制点P1和P2来生成一条平滑的曲线。甚至也有很多javaScript动画库使用贝赛尔曲线来实现完美的动画效果。</p>
-<p><img src="/res/bezier/TimingFunction.png" alt="通过P1和P2控制曲线"></p>
-<a id="more"></a>
-<p>而我要做的通过贝塞尔曲线的原理生成Android动画插值器，在Android平台上实现基于贝赛尔曲线的动画效果。想要了解Android动画原理请先阅读<a href="https://ivonhoe.github.io/2015/02/09/Android%E5%8A%A8%E7%94%BB%E6%80%BB%E7%BB%93/">这篇文章</a>。了解贝塞尔曲线绘制过程可以先阅读<a href="http://www.html-js.com/article/1628" target="_blank" rel="noopener">贝塞尔曲线扫盲</a>，写的很好。</p>
-<h2 id="二、De-Casteljau算法"><a href="#二、De-Casteljau算法" class="headerlink" title="二、De Casteljau算法"></a>二、De Casteljau算法</h2><p><img src="/res/bezier/decu.png" alt="二次贝塞尔曲线"></p>
-<p>贝塞尔曲线常见的算法是可以通过多项式、De Casteljau算法和递归算法来进行计算。针对De算法，设P0,P1,P2确定了一条二次贝塞尔曲线q，引入参数t，令<img src="/res/bezier/1.gif" alt>即有：</p>
-<p><img src="/res/bezier/2.gif" alt=" "></p>
-<p>当t从0变到1，第一、二式是两条一次Bezier曲线。将一、二式代入第三式得到：</p>
-<p><img src="/res/bezier/5.gif" alt=" "></p>
-<p>当t从0变到1时，它表示了由P0、P1、P2三个控制点形成一条二次Bezier曲线。并且这个二次Bezier曲线可以分别由前两个顶点(P0,P1)和后两个顶点(P1,P2)决定的一次Bezier曲线的线性组合。以此类推，由四个控制点定义的三次Bezier曲线可被定义为分别由(P0,P1,P2)和(P1,P2,P3)确定的两条二次Bezier曲线的线性组合，由(n+1)个控制点定义的n次Bezier曲线可被定义为分别由前后n个控制点定义的两条(n-1)次Bezier曲线的线性组合：</p>
-<p><img src="/res/bezier/3.gif" alt=" "></p>
-<p>由此得到Bezier曲线的递推计算公式:</p>
-<p><img src="/res/bezier/4.gif" alt=" "></p>
-<p>这就是De Casteljau算法。使用这个递推公式，在给定参数下，求Bezier曲线上一点P(t)非常有效。</p>
-<h2 id="三、Bezier动画插值器实现"><a href="#三、Bezier动画插值器实现" class="headerlink" title="三、Bezier动画插值器实现"></a>三、Bezier动画插值器实现</h2><p>基于De Casteljau算法的递推公式求曲线上点的坐标：</p>
-<pre><code>public static Point deCasteljau(Point[] points, float t) {
-    final int n = points.length;
-    for (int i = 1; i &lt;= n; i++)
-        for (int j = 0; j &lt; n - i; j++) {
-            points[j].x = (1 - t) * points[j].x + t * points[j + 1].x;
-            points[j].y = (1 - t) * points[j].y + t * points[j + 1].y;
-        }
-
-    return points[0];
-}
-</code></pre><p>De Casteljau算法目的是求得曲线上的每一个点，如何用这些采样点描述一条曲线插值器还需要进一步的处理。主要就是处理精度的问题，用距离很近的两个点连线的线段近似描述曲线，理论上采样点越密集描述的越准确，但是很明显在实际项目中不能选择太多的采样点，因为要考虑内存和效率的问题。所以用尽可能少的点尽可能精细的用直线段描述一条曲线，一个不错的做法就是在采样点的在横坐标方向上不要等距分布，而是在曲线变化较快的地方（即斜率较大）采样点尽可能的密集，而在曲线变化平缓的地方采样点选择稀疏。所以需要在通过De Casteljau算法获取初步的采样点后，再进一步获取非均匀分布的采样点，更加处理后的采样点再进行计算。</p>
-<p>考虑到针对不同动画的编辑，可能不仅仅是动画进度的插值，还需要动画速度的插值和动画变化率的插值，针对不同曲线类型的变化，通过下面的方式进行扩展。详细代码可以查看<a href="https://github.com/Ivonhoe/BezierInterpolator" target="_blank" rel="noopener">这里</a></p>
-<h2 id="四、使用范例"><a href="#四、使用范例" class="headerlink" title="四、使用范例"></a>四、使用范例</h2><p>通过控制点构造贝塞尔曲线插值器，例如，可以通过构造一个特殊的插值器，控制drawable的重绘和每个小球的动画并重绘drawable就可以实现类似window phone上经典的Balls Line进度条效果，详细实现可以参考<a href="https://ivonhoe.github.io/2015/04/28/Drawable-%E4%BB%8E%E7%AE%80%E5%8C%96%E5%B8%83%E5%B1%80%E8%B0%88%E8%B5%B7/">这里</a>。</p>
-<p><img src="/res/bezier/windows_balls_line.GIF" alt="window 进度条"></p>
-<p>通过两个控制点构造三次贝赛尔插值器(默认会增加(0,0)和(1,1)作为控制点)。</p>
-<pre><code>if (mBezierInterpolator == null) {
-    // 贝塞尔插值器
-    mBezierInterpolator = new BezierInterpolator(0.03f, 0.615f, 0.995f, 0.415f);
-}
-if (mLinearInterpolator == null){
-    // 普通线性插值器
-    mLinearInterpolator = new LinearInterpolator();
-}
-</code></pre><p>同样可以传递包含所有控制点的List构造插值器。</p>
-<pre><code>mBezierInterpolator = new BezierInterpolator(new ArrayList&lt;Point&gt;());
-</code></pre><p>针对BezierInterpolator的构造会有一定的耗时，所以并不建议在需要用到的时候才去构造，也不建议频繁的构造相同的插值器实例。</p>
-<h2 id="五、参考文档"><a href="#五、参考文档" class="headerlink" title="五、参考文档"></a>五、参考文档</h2><p><a href="http://baike.baidu.com/view/10167166.htm" target="_blank" rel="noopener">3D计算机图形学 Samuel R.Buss</a><br><a href="http://wenku.baidu.com/view/2beaa4bc960590c69ec376cd.html" target="_blank" rel="noopener">Bezier曲线的算法描述及其程序实现</a><br><a href="http://cubic-bezier.com/" target="_blank" rel="noopener">在线贝塞尔曲线编辑器</a><br><a href="http://thecodeplayer.com/walkthrough/windows-phone-loading-animation" target="_blank" rel="noopener">window phone loading animation</a></p>
-<h2 id="六、Github"><a href="#六、Github" class="headerlink" title="六、Github"></a>六、Github</h2><p><a href="https://github.com/Ivonhoe/BezierInterpolator" target="_blank" rel="noopener">https://github.com/Ivonhoe/BezierInterpolator</a></p>
-<h2 id="转载请标明出处病已blog-https-ivonhoe-github-io"><a href="#转载请标明出处病已blog-https-ivonhoe-github-io" class="headerlink" title="转载请标明出处病已blog https://ivonhoe.github.io/"></a>转载请标明出处<a href="https://ivonhoe.github.io/">病已blog https://ivonhoe.github.io/</a></h2>
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-        
-          
-        
-        <div class="post-tags">
-          
-            <a href="/tags/Android/" rel="tag"># Android</a>
-          
-            <a href="/tags/动画/" rel="tag"># 动画</a>
-          
-            <a href="/tags/贝塞尔曲线/" rel="tag"># 贝塞尔曲线</a>
-          
-        </div>
-      
-
-      
-      
-      
-
-      
-        <div class="post-nav">
-          <div class="post-nav-next post-nav-item">
-            
-              <a href="/2015/04/08/-翻译-Context-什么是Context？/" rel="next" title="[译]Context?什么是Context？">
-                <i class="fa fa-chevron-left"></i> [译]Context?什么是Context？
-              </a>
-            
-          </div>
-
-          <span class="post-nav-divider"></span>
-
-          <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2015/04/23/ColorOS和APEX桌面产品分析/" rel="prev" title="ColorOS和APEX桌面产品分析">
-                ColorOS和APEX桌面产品分析 <i class="fa fa-chevron-right"></i>
-              </a>
-            
-          </div>
-        </div>
-      
-
-      
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-  </div>
-
-
-          </div>
-          
-
-  
-    <div class="comments" id="comments">
-    </div>
-
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
   
 
 
 
-        </div>
-        
-          
-  
-  <div class="sidebar-toggle">
-    <div class="sidebar-toggle-line-wrap">
-      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
-    </div>
-  </div>
 
-  <aside id="sidebar" class="sidebar">
-    <div class="sidebar-inner">
-
-      
-
-      
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            站点概览
-          </li>
-        </ul>
-      
-
-      <div class="site-overview-wrap sidebar-panel">
-        <div class="site-overview">
-          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-            
-              <p class="site-author-name" itemprop="name">病已</p>
-              <div class="site-description motion-element" itemprop="description"></div>
-          </div>
-
-          
-            <nav class="site-state motion-element">
-              
-                <div class="site-state-item site-state-posts">
-                
-                  <a href="/archives/">
-                
-                    <span class="site-state-item-count">38</span>
-                    <span class="site-state-item-name">日志</span>
-                  </a>
-                </div>
-              
-
-              
-                
-                
-                <div class="site-state-item site-state-categories">
-                  
-                    
-                      <a href="/categories/">
-                    
-                  
-                    
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                    <span class="site-state-item-count">9</span>
-                    <span class="site-state-item-name">分类</span>
-                  </a>
-                </div>
-              
-
-              
-                
-                
-                <div class="site-state-item site-state-tags">
-                  
-                    
-                      <a href="/tags/">
-                    
-                  
-                    
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                      
-                    
-                    <span class="site-state-item-count">41</span>
-                    <span class="site-state-item-name">标签</span>
-                  </a>
-                </div>
-              
-            </nav>
-          
-
-          
-            <div class="feed-link motion-element">
-              <a href="/atom.xml" rel="alternate">
-                <i class="fa fa-rss"></i>
-                RSS
-              </a>
-            </div>
-          
-
-          
-
-          
-            <div class="links-of-author motion-element">
-              
-                <span class="links-of-author-item">
-                  
-                  
-                    
-                  
-                  
-                    
-                  
-                  <a href="https://github.com/ivonhoe" title="GitHub &rarr; https://github.com/ivonhoe" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
-                </span>
-              
-                <span class="links-of-author-item">
-                  
-                  
-                    
-                  
-                  
-                    
-                  
-                  <a href="mailto:yangfan3687@163.com" title="E-Mail &rarr; mailto:yangfan3687@163.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
-                </span>
-              
-            </div>
-          
-
-          
-
-          
-          
-
-          
-            
-          
-          
-
-        </div>
-      </div>
-
-      
-      <!--noindex-->
-        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-            
-            
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一、简介"><span class="nav-number">1.</span> <span class="nav-text">一、简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、De-Casteljau算法"><span class="nav-number">2.</span> <span class="nav-text">二、De Casteljau算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三、Bezier动画插值器实现"><span class="nav-number">3.</span> <span class="nav-text">三、Bezier动画插值器实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四、使用范例"><span class="nav-number">4.</span> <span class="nav-text">四、使用范例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#五、参考文档"><span class="nav-number">5.</span> <span class="nav-text">五、参考文档</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#六、Github"><span class="nav-number">6.</span> <span class="nav-text">六、Github</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#转载请标明出处病已blog-https-ivonhoe-github-io"><span class="nav-number">7.</span> <span class="nav-text">转载请标明出处病已blog https://ivonhoe.github.io/</span></a></li></ol></div>
-            
-
-          </div>
-        </div>
-      <!--/noindex-->
-      
-
-      
-
-    </div>
-  </aside>
-  
-
-
-        
-      </div>
-    </main>
-
-    <footer id="footer" class="footer">
-      <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
-  <span class="with-love" id="animate">
-    <i class="fa fa-user"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">病已</span>
-
-  
-
-  
-</div>
-
-
-  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.9.0</div>
-
-
-
-  <span class="post-meta-divider">|</span>
-
-
-
-  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.1.2</div>
-
-
-
-
-        
-
-
-
-
-
-
-
-
-        
-      </div>
-    </footer>
-
-    
-      <div class="back-to-top">
-        <i class="fa fa-arrow-up"></i>
-        
-      </div>
-    
-
-    
-
-    
-
-    
-  </div>
-
-  
-
-<script>
-  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
-    window.Promise = null;
-  }
-</script>
-
-
-
-
-
-
-
-
-
-
-
-
+  <script defer src="/js/leancloud.js" ></script>
 
 
 
@@ -992,94 +522,16 @@ if (mLinearInterpolator == null){
 
 
   
-  <script src="/lib/jquery/index.js?v=3.4.1"></script>
-
-  
-  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
-
-  
-  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
-
-
-  
-
-
-  <script src="/js/utils.js?v=7.1.2"></script>
-
-  <script src="/js/motion.js?v=7.1.2"></script>
-
-
-
-  
-  
-
-
-  <script src="/js/affix.js?v=7.1.2"></script>
-
-  <script src="/js/schemes/pisces.js?v=7.1.2"></script>
-
-
-
-
-  
-  <script src="/js/scrollspy.js?v=7.1.2"></script>
-<script src="/js/post-details.js?v=7.1.2"></script>
-
-
-
-  
-
-
-  <script src="/js/next-boot.js?v=7.1.2"></script>
-
-
-  
-
-  
-
-  
-
-  
-  
-
-<script src="//cdn1.lncld.net/static/js/3.11.1/av-min.js"></script>
-
-
-
-<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
-
-<script>
-  var GUEST = ['nick', 'mail', 'link'];
-  var guest = 'nick,mail,link';
-  guest = guest.split(',').filter(function(item) {
-    return GUEST.indexOf(item) > -1;
-  });
-  new Valine({
-    el: '#comments',
-    verify: false,
-    notify: false,
-    appId: 'JdLpddsaWqwfJtXPdDK8woaF-gzGzoHsz',
-    appKey: 'CEmtHXH8f0PtvF0zYtVE0EeY',
-    placeholder: 'Just go go',
-    avatar: 'mm',
-    meta: guest,
-    pageSize: '10' || 10,
-    visitor: true,
-    lang: '' || 'zh-cn'
-  });
-</script>
-
-
-
-
-  
-
-
-  
-
-
-
-
+    <!-- Baidu Analytics -->
+    <script defer>
+      var _hmt = _hmt || [];
+      (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?666a58de875adc9dd40d5de65ceac026";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();
+    </script>
   
 
   
@@ -1092,21 +544,13 @@ if (mLinearInterpolator == null){
 
   
 
-  
 
-  
 
-  
 
-  
 
-  
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
 
-  
-
-  
-
-  
 
 </body>
 </html>
