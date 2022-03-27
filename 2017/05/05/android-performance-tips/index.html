@@ -18,21 +18,21 @@
   
     <meta name="description" content="使用windowBackground实现应用秒开1234&lt;style name&#x3D;&quot;SplashTheme&quot; parent&#x3D;&quot;@android:style&#x2F;Theme.Black.NoTitleBar.Fullscreen&quot;&gt;    &lt;item name&#x3D;&quot;android:windowBackground&quot;&gt;@dra">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Android性能优化之一刀流优化[持续更新]">
+<meta property="og:title" content="Android performance optimization tips">
 <meta property="og:url" content="https://ivonhoe.github.io/2017/05/05/android-performance-tips/index.html">
 <meta property="og:site_name" content="病已的博客">
 <meta property="og:description" content="使用windowBackground实现应用秒开1234&lt;style name&#x3D;&quot;SplashTheme&quot; parent&#x3D;&quot;@android:style&#x2F;Theme.Black.NoTitleBar.Fullscreen&quot;&gt;    &lt;item name&#x3D;&quot;android:windowBackground&quot;&gt;@dra">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://ivonhoe.github.io/res/performance-tips/overdraw.png">
 <meta property="article:published_time" content="2017-05-05T14:59:14.000Z">
-<meta property="article:modified_time" content="2019-07-07T14:35:44.621Z">
+<meta property="article:modified_time" content="2022-03-27T13:57:36.739Z">
 <meta property="article:author" content="病已">
 <meta property="article:tag" content="性能优化">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://ivonhoe.github.io/res/performance-tips/overdraw.png">
   
   
-  <title>Android性能优化之一刀流优化[持续更新] - 病已的博客</title>
+  <title>Android performance optimization tips - 病已的博客</title>
 
   <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
 
@@ -112,9 +112,9 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/archives/">
-                <i class="iconfont icon-archive-fill"></i>
-                归档
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
               </a>
             </li>
           
@@ -124,9 +124,9 @@
           
           
             <li class="nav-item">
-              <a class="nav-link" href="/categories/">
-                <i class="iconfont icon-category-fill"></i>
-                分类
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
               </a>
             </li>
           
@@ -179,9 +179,9 @@
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0)">
           <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="Android性能优化之一刀流优化[持续更新]">
+            <span class="h2" id="subtitle" title="Android performance optimization tips">
               
-                Android性能优化之一刀流优化[持续更新]
+                Android performance optimization tips
               
             </span>
 
@@ -240,7 +240,7 @@
         <div class="py-5" id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">Android性能优化之一刀流优化[持续更新]</h1>
+            <h1 style="display: none">Android performance optimization tips</h1>
             
             <div class="markdown-body">
               <h3 id="使用windowBackground实现应用秒开"><a href="#使用windowBackground实现应用秒开" class="headerlink" title="使用windowBackground实现应用秒开"></a>使用windowBackground实现应用秒开</h3><figure class="highlight xml"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></div></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">style</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;SplashTheme&quot;</span> <span class="hljs-attr">parent</span>=<span class="hljs-string">&quot;@android:style/Theme.Black.NoTitleBar.Fullscreen&quot;</span>&gt;</span><span class="language-xml"></span><br><span class="language-xml">    <span class="hljs-tag">&lt;<span class="hljs-name">item</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;android:windowBackground&quot;</span>&gt;</span>@drawable/bg_splash_activity<span class="hljs-tag">&lt;/<span class="hljs-name">item</span>&gt;</span></span><br><span class="language-xml">    <span class="hljs-tag">&lt;<span class="hljs-name">item</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;@android:windowAnimationStyle&quot;</span>&gt;</span>@style/myact<span class="hljs-tag">&lt;/<span class="hljs-name">item</span>&gt;</span></span><br><span class="language-xml"></span><span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span><br></code></pre></td></tr></table></figure>
@@ -261,7 +261,7 @@
                   <div class="post-meta mr-3">
                     <i class="iconfont icon-category"></i>
                     
-                      <a class="hover-with-bg" href="/categories/Android%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">Android性能优化</a>
+                      <a class="hover-with-bg" href="/categories/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">性能优化</a>
                     
                   </div>
                 
@@ -297,7 +297,7 @@
                     
                     
                       <a href="/2017/04/26/Zygote-2/">
-                        <span class="hidden-mobile">Android性能优化之系统资源预加载的思考</span>
+                        <span class="hidden-mobile">对Android系统资源预加载的思考</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
