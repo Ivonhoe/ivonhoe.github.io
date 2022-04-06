@@ -1,0 +1,547 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="病已">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="0x00 前言说到责任链模式一定会想到各种拦截器，在很多框架中都有拦截器的使用，如常见的okhttp中的请求处理拦截器，路由框架中的路由拦截器，作为框架的使用方你可能已经对拦截器司空见惯，但是不可否认的是一个好的设计经常会有让人有眼前一亮的感觉。本文尝试总结一下在安卓框架和源码中，责任链模式的使用场景和设计方法。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="责任链模式">
+<meta property="og:url" content="https://ivonhoe.github.io/2021/03/28/design-patterns-chain-of-responsibility/index.html">
+<meta property="og:site_name" content="病已的博客">
+<meta property="og:description" content="0x00 前言说到责任链模式一定会想到各种拦截器，在很多框架中都有拦截器的使用，如常见的okhttp中的请求处理拦截器，路由框架中的路由拦截器，作为框架的使用方你可能已经对拦截器司空见惯，但是不可否认的是一个好的设计经常会有让人有眼前一亮的感觉。本文尝试总结一下在安卓框架和源码中，责任链模式的使用场景和设计方法。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2022/jpeg/411436/1648398302641-53549587-8264-4f7d-8887-9f21106dcda2.jpeg#clientId=u546672ae-3373-4&crop=0&crop=0&crop=1&crop=1&from=paste&id=u6a2fa50d&margin=%5Bobject%20Object%5D&originHeight=178&originWidth=650&originalType=url&ratio=1&rotation=0&showTitle=false&status=done&style=none&taskId=udaad9ee6-1deb-4453-9855-3ef259e2663&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2022/jpeg/411436/1648398302704-d3aca097-09b8-48c1-8243-dc248a4374a5.jpeg#clientId=u546672ae-3373-4&crop=0&crop=0&crop=1&crop=1&from=paste&id=u831a5098&margin=%5Bobject%20Object%5D&originHeight=136&originWidth=994&originalType=url&ratio=1&rotation=0&showTitle=false&status=done&style=none&taskId=u22c7f9be-1c91-412b-b71d-9000a851439&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2022/jpeg/411436/1648398302774-14a9605a-d187-483a-8b3b-6cf65e1f76c2.jpeg#clientId=u546672ae-3373-4&crop=0&crop=0&crop=1&crop=1&from=paste&id=u1e4e8e96&margin=%5Bobject%20Object%5D&originHeight=523&originWidth=776&originalType=url&ratio=1&rotation=0&showTitle=false&status=done&style=none&taskId=u80dad5bb-5729-48e5-a0a7-fb999b1bb57&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2022/jpeg/411436/1648398302816-401efc0f-4e41-4d3f-ae15-b91933573d76.jpeg#clientId=u546672ae-3373-4&crop=0&crop=0&crop=1&crop=1&from=paste&id=udb6dcb82&margin=%5Bobject%20Object%5D&originHeight=1000&originWidth=825&originalType=url&ratio=1&rotation=0&showTitle=false&status=done&style=none&taskId=u56434ba8-f55e-4ca8-bf00-7bb5120444c&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2022/jpeg/411436/1648398302722-3e24c274-1333-4eb0-8726-eba1f7eeacd2.jpeg#clientId=u546672ae-3373-4&crop=0&crop=0&crop=1&crop=1&from=paste&id=u9dd305b3&margin=%5Bobject%20Object%5D&originHeight=746&originWidth=850&originalType=url&ratio=1&rotation=0&showTitle=false&status=done&style=none&taskId=ua3485184-b498-477f-9a87-ecc583dbfd0&title=">
+<meta property="article:published_time" content="2021-03-27T16:19:30.000Z">
+<meta property="article:modified_time" content="2022-04-06T15:51:38.155Z">
+<meta property="article:author" content="病已">
+<meta property="article:tag" content="设计模式">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2022/jpeg/411436/1648398302641-53549587-8264-4f7d-8887-9f21106dcda2.jpeg#clientId=u546672ae-3373-4&crop=0&crop=0&crop=1&crop=1&from=paste&id=u6a2fa50d&margin=%5Bobject%20Object%5D&originHeight=178&originWidth=650&originalType=url&ratio=1&rotation=0&showTitle=false&status=done&style=none&taskId=udaad9ee6-1deb-4453-9855-3ef259e2663&title=">
+  
+  
+  <title>责任链模式 - 病已的博客</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"ivonhoe.github.io","root":"/","version":"1.8.14","typing":{"enable":false,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"baidu":"666a58de875adc9dd40d5de65ceac026","google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"JdLpddsaWqwfJtXPdDK8woaF-gzGzoHsz","app_key":"CEmtHXH8f0PtvF0zYtVE0EeY","server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 6.1.0"><link rel="alternate" href="/atom.xml" title="病已的博客" type="application/atom+xml">
+</head>
+
+
+<body>
+  <header style="height: 30vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>病已的博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default_post.jpeg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="责任链模式">
+              
+                责任链模式
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2021-03-28 00:19" pubdate>
+        2021年3月28日 凌晨
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      5.7k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      48 分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">责任链模式</h1>
+            
+            <div class="markdown-body">
+              <h3 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00 前言"></a>0x00 前言</h3><p>说到责任链模式一定会想到各种拦截器，在很多框架中都有拦截器的使用，如常见的okhttp中的请求处理拦截器，路由框架中的路由拦截器，作为框架的使用方你可能已经对拦截器司空见惯，但是不可否认的是一个好的设计经常会有让人有眼前一亮的感觉。本文尝试总结一下在安卓框架和源码中，责任链模式的使用场景和设计方法。 <br /><span id="more"></span></p>
+<h3 id="0x01-什么是责任链模式"><a href="#0x01-什么是责任链模式" class="headerlink" title="0x01 什么是责任链模式"></a>0x01 什么是责任链模式</h3><p>从设计模式的角度，拦截器的设计常常称之为责任链模式（Chain of Responsibility）。责任链模式的定义：为了避免请求发送者与多个请求处理者耦合在一起，于是将所有请求的处理者通过前一对象记住其下一个对象的引用而连成一条链；当有请求发生时，可将请求沿着这条链传递，直到有对象处理它为止。<br /><img src="https://cdn.nlark.com/yuque/0/2022/jpeg/411436/1648398302641-53549587-8264-4f7d-8887-9f21106dcda2.jpeg#clientId=u546672ae-3373-4&crop=0&crop=0&crop=1&crop=1&from=paste&id=u6a2fa50d&margin=%5Bobject%20Object%5D&originHeight=178&originWidth=650&originalType=url&ratio=1&rotation=0&showTitle=false&status=done&style=none&taskId=udaad9ee6-1deb-4453-9855-3ef259e2663&title=" srcset="/img/loading.gif" lazyload></p>
+<p>责任链模式的优点：</p>
+<ol>
+<li>降低耦合，不需要知道整条处理链路的结构，发送者和接受者也无需知道对方的确切信息。</li>
+<li>灵活，扩展性强，可根据需要灵活增加处理流程，可动态调整处理顺序</li>
+<li>功能内聚，单一职责，每个类只需要关注自己处理的工作，不该处理的传递给下一个对象处理</li>
+</ol>
+<p>责任链模式的缺点：</p>
+<ol>
+<li>复杂度较高，性能可能受影响</li>
+<li>不能保证每个请求一定被处理。由于一个请求没有明确的接收者，所以不能保证它一定会被处理，该请求可能一直传到链的末端都得不到处理。<h3 id="0x02-okhttp中的阑尾式拦截器"><a href="#0x02-okhttp中的阑尾式拦截器" class="headerlink" title="0x02 okhttp中的阑尾式拦截器"></a>0x02 okhttp中的阑尾式拦截器</h3>在RealCall.java中内置了5个拦截器。创建一个包含所有拦截器的拦截器链表。在RealInterceptorChain的proceed方法中根据index获取当前拦截器，在拦截器的intercept方法内部递归调用RealInterceptorChain的proceed方法并将index+1，更新到下一个拦截器。这里需要注意的是，最后一个拦截器的实现，在最后一个拦截器CallServerInterceptor中，并不会再调用Chain的proceed方法，而是直接根据网络结果返回response。这里可以看做整个拦截器的尽头，在胡同走到尽头后再根据原路逐级返回response。所以像是走进胡同的拦截器调用算不算半截阑尾？</li>
+</ol>
+<p><img src="https://cdn.nlark.com/yuque/0/2022/jpeg/411436/1648398302704-d3aca097-09b8-48c1-8243-dc248a4374a5.jpeg#clientId=u546672ae-3373-4&crop=0&crop=0&crop=1&crop=1&from=paste&id=u831a5098&margin=%5Bobject%20Object%5D&originHeight=136&originWidth=994&originalType=url&ratio=1&rotation=0&showTitle=false&status=done&style=none&taskId=u22c7f9be-1c91-412b-b71d-9000a851439&title=" srcset="/img/loading.gif" lazyload></p>
+<figure class="highlight axapta"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></div></td><td class="code"><pre><code class="hljs axapta"><span class="hljs-comment">/// 拦截器起点和终点</span><br>  Response getResponseWithInterceptorChain() throws IOException &#123;<br>    <span class="hljs-comment">// Build a full stack of interceptors.</span><br>    List&lt;Interceptor&gt; interceptors = <span class="hljs-keyword">new</span> ArrayList&lt;&gt;();<br>    interceptors.addAll(<span class="hljs-keyword">client</span>.interceptors());<br>    interceptors.add(retryAndFollowUpInterceptor);<br>    interceptors.add(<span class="hljs-keyword">new</span> BridgeInterceptor(<span class="hljs-keyword">client</span>.cookieJar()));<br>    interceptors.add(<span class="hljs-keyword">new</span> CacheInterceptor(<span class="hljs-keyword">client</span>.internalCache()));<br>    interceptors.add(<span class="hljs-keyword">new</span> ConnectInterceptor(<span class="hljs-keyword">client</span>));<br>    <span class="hljs-keyword">if</span> (!forWebSocket) &#123;<br>      interceptors.addAll(<span class="hljs-keyword">client</span>.networkInterceptors());<br>    &#125;<br>    interceptors.add(<span class="hljs-keyword">new</span> CallServerInterceptor(forWebSocket));<br><br>    Interceptor.Chain chain = <span class="hljs-keyword">new</span> RealInterceptorChain(interceptors, <span class="hljs-literal">null</span>, <span class="hljs-literal">null</span>, <span class="hljs-literal">null</span>, <span class="hljs-number">0</span>,<br>        originalRequest, <span class="hljs-keyword">this</span>, eventListener, <span class="hljs-keyword">client</span>.connectTimeoutMillis(),<br>        <span class="hljs-keyword">client</span>.readTimeoutMillis(), <span class="hljs-keyword">client</span>.writeTimeoutMillis());<br><br>    <span class="hljs-keyword">return</span> chain.proceed(originalRequest);<br>  &#125;<br></code></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">/// 拦截器迭代</span><br>  <span class="hljs-keyword">public</span> Response <span class="hljs-title function_">proceed</span><span class="hljs-params">(Request request, StreamAllocation streamAllocation, HttpCodec httpCodec,</span><br><span class="hljs-params">      RealConnection connection)</span> <span class="hljs-keyword">throws</span> IOException &#123;<br><br>    <span class="hljs-comment">// Call the next interceptor in the chain.</span><br>    <span class="hljs-type">RealInterceptorChain</span> <span class="hljs-variable">next</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">RealInterceptorChain</span>(interceptors, streamAllocation, httpCodec,<br>        connection, index + <span class="hljs-number">1</span>, request, call, eventListener, connectTimeout, readTimeout,<br>        writeTimeout);<br>    <span class="hljs-type">Interceptor</span> <span class="hljs-variable">interceptor</span> <span class="hljs-operator">=</span> interceptors.get(index);<br>    <span class="hljs-type">Response</span> <span class="hljs-variable">response</span> <span class="hljs-operator">=</span> interceptor.intercept(next);<br><br>    <span class="hljs-keyword">return</span> response;<br>  &#125;<br></code></pre></td></tr></table></figure>
+<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs aspectj"><span class="hljs-comment">/// 单个拦截器递归回调到拦截器链</span><br><span class="hljs-keyword">public</span> <span class="hljs-function">Response <span class="hljs-title">intercept</span><span class="hljs-params">(Chain chain)</span> <span class="hljs-keyword">throws</span> IOException </span>&#123;<br>    Response networkResponse = <span class="hljs-keyword">null</span>;<br>    <span class="hljs-keyword">try</span> &#123;<br>      networkResponse = chain.<span class="hljs-keyword">proceed</span>(networkRequest);<br>    &#125; <span class="hljs-keyword">finally</span> &#123;<br>      <span class="hljs-comment">// If we&#x27;re crashing on I/O or otherwise, don&#x27;t leak the cache body.</span><br>      <span class="hljs-keyword">if</span> (networkResponse == <span class="hljs-keyword">null</span> &amp;&amp; cacheCandidate != <span class="hljs-keyword">null</span>) &#123;<br>        closeQuietly(cacheCandidate.body());<br>      &#125;<br>    &#125;<br><br>    <span class="hljs-keyword">return</span> response;<br>  &#125;<br></code></pre></td></tr></table></figure>
+<h3 id="0x03-wmrouter中的洋葱式拦截器"><a href="#0x03-wmrouter中的洋葱式拦截器" class="headerlink" title="0x03 wmrouter中的洋葱式拦截器"></a>0x03 wmrouter中的洋葱式拦截器</h3><p>和okhttp的拦截器相比，wmrouter中的拦截器差异在于他并没有response返回值，拦截器之间通过callback的方式返回结果或中断拦截流程。个人理解主要有以下几点考虑。</p>
+<ul>
+<li>并不需要像okhttp那样针对队尾的拦截器做特殊实现，所有拦截器的实现只要考虑是next还是complete即可。这样拦截器组合和嵌套更灵活。</li>
+<li>支持异步拦截回调</li>
+</ul>
+<p>wmrouter在查找路由的过程中，使用了多层UriHandler和Interceptor嵌套的拦截器，在UriHandler的handle方法中，通过shouldHandle是否被当前的Handler拦截，再通过是否包含拦截器来确定是handler拦截还是Interceptor拦截，如果是Interceptor拦截则进入下一层。<br />所以相比较okhttp的拦截器，wmrouter的拦截器模式分层更明显，更像洋葱。</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs less"><span class="hljs-selector-tag">public</span> <span class="hljs-selector-tag">void</span> <span class="hljs-selector-tag">handle</span>(<span class="hljs-variable">@NonNull</span> final UriRequest request, <span class="hljs-variable">@NonNull</span> final UriCallback callback) &#123;<br>    <span class="hljs-selector-tag">if</span> (shouldHandle(request)) &#123;<br>        <span class="hljs-selector-tag">if</span> (mInterceptor != null &amp;&amp; !request.isSkipInterceptors()) &#123;<br>            <span class="hljs-selector-tag">mInterceptor</span><span class="hljs-selector-class">.intercept</span>(request, new UriCallback() &#123;<br>                <span class="hljs-variable">@Override</span><br>                public void onNext() &#123;<br>                    <span class="hljs-selector-tag">handleInternal</span>(request, callback);<br>                &#125;<br><br>                @<span class="hljs-selector-tag">Override</span><br>                <span class="hljs-selector-tag">public</span> <span class="hljs-selector-tag">void</span> <span class="hljs-selector-tag">onComplete</span>(int result) &#123;<br>                    <span class="hljs-selector-tag">callback</span><span class="hljs-selector-class">.onComplete</span>(result);<br>                &#125;<br>            &#125;);<br>        &#125; <span class="hljs-selector-tag">else</span> &#123;<br>            <span class="hljs-selector-tag">handleInternal</span>(request, callback);<br>        &#125;<br>    &#125; <span class="hljs-selector-tag">else</span> &#123;<br>        <span class="hljs-selector-tag">callback</span><span class="hljs-selector-class">.onNext</span>();<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>在ChainedInterceptor中根据递归调用next方法更新拦截器迭代，通过Callback回溯到上一层，这里的上一层可能是Interceptor也可能是UriHandler。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">next</span><span class="hljs-params">(<span class="hljs-meta">@NonNull</span> <span class="hljs-keyword">final</span> Iterator&lt;UriInterceptor&gt; iterator, <span class="hljs-meta">@NonNull</span> <span class="hljs-keyword">final</span> UriRequest request,</span><br><span class="hljs-params">                  <span class="hljs-meta">@NonNull</span> <span class="hljs-keyword">final</span> UriCallback callback)</span> &#123;<br>    <span class="hljs-keyword">if</span> (iterator.hasNext()) &#123;<br>        <span class="hljs-type">UriInterceptor</span> <span class="hljs-variable">t</span> <span class="hljs-operator">=</span> iterator.next();<br>        t.intercept(request, <span class="hljs-keyword">new</span> <span class="hljs-title class_">UriCallback</span>() &#123;<br>            <span class="hljs-meta">@Override</span><br>            <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">onNext</span><span class="hljs-params">()</span> &#123;<br>                next(iterator, request, callback);<br>            &#125;<br><br>            <span class="hljs-meta">@Override</span><br>            <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">onComplete</span><span class="hljs-params">(<span class="hljs-type">int</span> resultCode)</span> &#123;<br>                callback.onComplete(resultCode);<br>            &#125;<br>        &#125;);<br>    &#125; <span class="hljs-keyword">else</span> &#123;<br>        callback.onNext();<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>可以参照下图理解<br /><img src="https://cdn.nlark.com/yuque/0/2022/jpeg/411436/1648398302774-14a9605a-d187-483a-8b3b-6cf65e1f76c2.jpeg#clientId=u546672ae-3373-4&crop=0&crop=0&crop=1&crop=1&from=paste&id=u1e4e8e96&margin=%5Bobject%20Object%5D&originHeight=523&originWidth=776&originalType=url&ratio=1&rotation=0&showTitle=false&status=done&style=none&taskId=u80dad5bb-5729-48e5-a0a7-fb999b1bb57&title=" srcset="/img/loading.gif" lazyload></p>
+<p>可以参照wmrouter官方文档的流程图理解ChainedHandler和ChainedInterceptor的多层嵌套关系。</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2022/jpeg/411436/1648398302816-401efc0f-4e41-4d3f-ae15-b91933573d76.jpeg#clientId=u546672ae-3373-4&crop=0&crop=0&crop=1&crop=1&from=paste&id=udb6dcb82&margin=%5Bobject%20Object%5D&originHeight=1000&originWidth=825&originalType=url&ratio=1&rotation=0&showTitle=false&status=done&style=none&taskId=u56434ba8-f55e-4ca8-bf00-7bb5120444c&title=" srcset="/img/loading.gif" lazyload></p>
+<h3 id="0x04-Touch事件分发的贪食蛇拦截"><a href="#0x04-Touch事件分发的贪食蛇拦截" class="headerlink" title="0x04 Touch事件分发的贪食蛇拦截"></a>0x04 Touch事件分发的贪食蛇拦截</h3><p>你一定看过类似这样的事件分发流程图（出自<a target="_blank" rel="noopener" href="https://www.gcssloop.com/customview/dispatch-touchevent-theory%EF%BC%89%EF%BC%9A">https://www.gcssloop.com/customview/dispatch-touchevent-theory）：</a><br /><img src="https://cdn.nlark.com/yuque/0/2022/jpeg/411436/1648398302722-3e24c274-1333-4eb0-8726-eba1f7eeacd2.jpeg#clientId=u546672ae-3373-4&crop=0&crop=0&crop=1&crop=1&from=paste&id=u9dd305b3&margin=%5Bobject%20Object%5D&originHeight=746&originWidth=850&originalType=url&ratio=1&rotation=0&showTitle=false&status=done&style=none&taskId=ua3485184-b498-477f-9a87-ecc583dbfd0&title=" srcset="/img/loading.gif" lazyload></p>
+<p>在touch分发的流程中三个关键的方法，dispatchTouchEvent()，interceptTouchEvent(),touchEvent()分别代表事件分发，事件拦截，事件消费。你也一定听过所谓的U型事件传递路径，从Activity开始分发，到ViewGroup，再到View。根据方法返回值是true还是false来决定上述的三个方法是否分发、拦截或消费touch事件。参考如下伪代码理解</p>
+<figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs reasonml">public boolean dispatch<span class="hljs-constructor">TouchEvent(MotionEvent <span class="hljs-params">ev</span>)</span> &#123;<br>    <span class="hljs-comment">// 默认状态为没有消费过</span><br>    boolean result = <span class="hljs-literal">false</span>;             <br><br>    <span class="hljs-keyword">if</span> (!on<span class="hljs-constructor">InterceptTouchEvent(<span class="hljs-params">ev</span>)</span>) &#123;<br>        <span class="hljs-comment">// 如果没有拦截就直接分发给子View</span><br>        result = child.dispatch<span class="hljs-constructor">TouchEvent(<span class="hljs-params">ev</span>)</span>;<br>    &#125;<br><br>    <span class="hljs-keyword">if</span> (!result) &#123;<br>        <span class="hljs-comment">// 如果事件没有子View消费或者是被自己拦截了,询问自身onTouchEvent</span><br>        result = on<span class="hljs-constructor">TouchEvent(<span class="hljs-params">ev</span>)</span>;<br>    &#125;<br><br>    return result;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>如果从责任链的角度来看，你是否想过<strong>在整个事件分发的流程中，整套机制的最终目标是什么？</strong></p>
+<ul>
+<li>其实事件分发的目标，是为了找到负责消费整个touch流程的view。这里的touch流程包含了DOWN、MOVE和UP事件。而CANCEL事件可以理解成一个error信号，只有当子视图消费的前驱事件，但是又被拦截了当前的事件才会收到CANCEL类型的事件。</li>
+<li>一次触摸流程中产生事件应被同一 View 消费，全部接收或者全部拒绝。</li>
+<li>所以才有了所谓的只有消费了DOWN事件才会接受MOVE和UP事件这样的分发规则。可以想象成一条由DOWN、MOVE和UP事件组成的贪食蛇。蛇身和蛇尾的运动是根据蛇头来的。事件分发机制先找到DOWN事件的消费者，再根据DOWN事件的touchTarget，将MOVE和UP事件分发下去。</li>
+<li>所谓的U型传递，从ViewGroup到View，再从View到ViewGroup的事件传递，只可能是DOWN类型的事件</li>
+</ul>
+<p><strong>当parent和child同时设置了click事件监听，为什么是child优先响应？</strong><br />因为click事件是在onTouchEvent中响应的，而onTouchEvent的消费顺序是先child后parent，当view设置了touchListener或者是clickListener，事件就会被view拦截</p>
+<h3 id="0x05-总结"><a href="#0x05-总结" class="headerlink" title="0x05 总结"></a>0x05 总结</h3><ul>
+<li>责任链在设计实现上，往往通过链表或者递归调用的方式，将请求或事件依次从头结点向下传递，并回溯</li>
+<li>在责任链的任意节点上，都可以根据情况决定是否终止在责任链上的事件传递，okhttp通过抛异常的方式终止，wmroutor通过callback依次退栈</li>
+</ul>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><p><a target="_blank" rel="noopener" href="http://c.biancheng.net/view/1383.html">http://c.biancheng.net/view/1383.html</a><br /><a target="_blank" rel="noopener" href="https://www.debug8.com/javascript/t_66952.html">https://www.debug8.com/javascript/t_66952.html</a><br /><a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000012227736">https://segmentfault.com/a/1190000012227736</a><br /><a target="_blank" rel="noopener" href="https://www.gcssloop.com/customview/dispatch-touchevent-theory">https://www.gcssloop.com/customview/dispatch-touchevent-theory</a><br /><a target="_blank" rel="noopener" href="https://blog.csdn.net/lfdfhl/article/details/50707724">https://blog.csdn.net/lfdfhl/article/details/50707724</a> </p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E6%96%B9%E6%A1%88%E4%B8%8E%E8%AE%BE%E8%AE%A1/">方案与设计</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">设计模式</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2021/03/28/design-patterns-proxy/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">代理模式</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2020/05/17/update-androidx-exception/">
+                        <span class="hidden-mobile">升级AndroidX遇到的问题</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments" lazyload>
+                
+                  
+                
+                
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/valine@1/dist/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"JdLpddsaWqwfJtXPdDK8woaF-gzGzoHsz","appKey":"CEmtHXH8f0PtvF0zYtVE0EeY","path":"window.location.pathname","placeholder":null,"avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          Fluid.plugins.initFancyBox('#valine .vcontent img:not(.vemoji)');
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+
+  <script defer src="/js/leancloud.js" ></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    <!-- Baidu Analytics -->
+    <script defer>
+      var _hmt = _hmt || [];
+      (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?666a58de875adc9dd40d5de65ceac026";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>

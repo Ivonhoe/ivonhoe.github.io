@@ -1,0 +1,527 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="病已">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="0x00 前言在实际工作中经常用到访问者模式，是比较常见的设计模式，本文主要通过以下几个方面来学习访问者模式：  什么是访问者模式，访问者模式想要解决的问题是什么？ 访问者模式的经典应用有哪些?  0x01 单分派和双重分派在介绍设计模式之前，先了解几个基础的概念。了解概念的含义并不是为了咬文嚼字，而是希望能从原理上理解设计模式背后想要解决的问题 重写（override）和重载（overload）">
+<meta property="og:type" content="article">
+<meta property="og:title" content="访问者模式">
+<meta property="og:url" content="https://ivonhoe.github.io/2021/03/28/design-patterns-visitor/index.html">
+<meta property="og:site_name" content="病已的博客">
+<meta property="og:description" content="0x00 前言在实际工作中经常用到访问者模式，是比较常见的设计模式，本文主要通过以下几个方面来学习访问者模式：  什么是访问者模式，访问者模式想要解决的问题是什么？ 访问者模式的经典应用有哪些?  0x01 单分派和双重分派在介绍设计模式之前，先了解几个基础的概念。了解概念的含义并不是为了咬文嚼字，而是希望能从原理上理解设计模式背后想要解决的问题 重写（override）和重载（overload）">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2022/png/411436/1648478340921-52d95fa8-489f-4098-b1c7-f86c7337fe4f.png#clientId=u9509d57c-feb4-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=390&id=rpEg9&margin=%5Bobject%20Object%5D&name=image.png&originHeight=780&originWidth=830&originalType=binary&ratio=1&rotation=0&showTitle=false&size=134454&status=done&style=none&taskId=u9699865e-5f29-4b7e-a0e9-4eee905c3bd&title=&width=415">
+<meta property="article:published_time" content="2021-03-27T16:19:59.000Z">
+<meta property="article:modified_time" content="2022-04-06T15:51:34.160Z">
+<meta property="article:author" content="病已">
+<meta property="article:tag" content="设计模式">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2022/png/411436/1648478340921-52d95fa8-489f-4098-b1c7-f86c7337fe4f.png#clientId=u9509d57c-feb4-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=390&id=rpEg9&margin=%5Bobject%20Object%5D&name=image.png&originHeight=780&originWidth=830&originalType=binary&ratio=1&rotation=0&showTitle=false&size=134454&status=done&style=none&taskId=u9699865e-5f29-4b7e-a0e9-4eee905c3bd&title=&width=415">
+  
+  
+  <title>访问者模式 - 病已的博客</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"ivonhoe.github.io","root":"/","version":"1.8.14","typing":{"enable":false,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"baidu":"666a58de875adc9dd40d5de65ceac026","google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"JdLpddsaWqwfJtXPdDK8woaF-gzGzoHsz","app_key":"CEmtHXH8f0PtvF0zYtVE0EeY","server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 6.1.0"><link rel="alternate" href="/atom.xml" title="病已的博客" type="application/atom+xml">
+</head>
+
+
+<body>
+  <header style="height: 30vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>病已的博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default_post.jpeg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="访问者模式">
+              
+                访问者模式
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2021-03-28 00:19" pubdate>
+        2021年3月28日 凌晨
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      5.2k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      44 分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">访问者模式</h1>
+            
+            <div class="markdown-body">
+              <h3 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00 前言"></a>0x00 前言</h3><p>在实际工作中经常用到访问者模式，是比较常见的设计模式，本文主要通过以下几个方面来学习访问者模式：</p>
+<ol>
+<li>什么是访问者模式，访问者模式想要解决的问题是什么？</li>
+<li>访问者模式的经典应用有哪些?</li>
+</ol>
+<h3 id="0x01-单分派和双重分派"><a href="#0x01-单分派和双重分派" class="headerlink" title="0x01 单分派和双重分派"></a>0x01 单分派和双重分派</h3><p>在介绍设计模式之前，先了解几个基础的概念。了解概念的含义并不是为了咬文嚼字，而是希望能从原理上理解设计模式背后想要解决的问题</p>
+<h4 id="重写（override）和重载（overload）"><a href="#重写（override）和重载（overload）" class="headerlink" title="重写（override）和重载（overload）"></a>重写（override）和重载（overload）</h4><ul>
+<li>重写，就是子类重写了父类的方法，返回值和形参都不能改变。当子类对象调用重写的方法时，调用的是子类的方法，而不是父类中被重写的方法。</li>
+<li>重载，在一个类里面，方法名字相同，而参数不同。返回类型可以相同也可以不同。</li>
+</ul>
+<h4 id="单分派和双重分派"><a href="#单分派和双重分派" class="headerlink" title="单分派和双重分派"></a>单分派和双重分派</h4><ul>
+<li>分派（Dispatch），在面向对象的语言中，可以把一次函数调动理解成一个消息事件的分发，如<code>a.test(b)</code>，a就是消息的接受者，这个函数的调用方就是消息的发送者。</li>
+<li>单分派（Single Dispatch），这里的单（Single）指的是，哪个对象的方法会被执行，只跟这个对象的运行时类型有关。以<code>a.test(b)</code>为例，如在Java中，在被执行的test函数，只跟a对象的运行时类型有关。</li>
+<li>双重分派(Double Dispatch)，这里的双（double）指的是，哪个对象的方法被执行，跟对象和方法参数的运行时类型都有关。还是以<code>a.test(b)</code>为例，哪个test函数被执行，不单单和a对象的类型有关还和b对象的类型有关。</li>
+</ul>
+<p>可以看到所谓分派就是函数的调用，所谓单分派和双分派就是和语言的多态特性有关，在常见的Java，C++，C#语言中，在语言层面都是只支持单分派的。想要实现双重分派，就要借助设计模式，比如访问者模式。你肯定会问，双重分派的作用是什么？不解决双重分派的问题不行吗？其实这种问题在项目代码中一定俯拾皆是，类似下面的这种代码，我们想要针对不同类型的文件（pdf，ppt，word）执行不同的文件提取和文件压缩操作。试想下，可能是你来实现，你要怎么做？是不是很容易写出下面这样的代码</p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></div></td><td class="code"><pre><code class="hljs haskell"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-type">Extractor</span> extends <span class="hljs-type">Processor</span> &#123;</span><br><span class="hljs-class">	void processFile(<span class="hljs-type">ResourceFile</span> <span class="hljs-title">file</span>) &#123;</span><br><span class="hljs-class">	    if (<span class="hljs-title">file</span> <span class="hljs-title">instanceof</span> <span class="hljs-type">PdfFile</span>) &#123;</span><br><span class="hljs-class">	        processPrdFile((<span class="hljs-type">PdfFile</span>)file);</span><br><span class="hljs-class">	    &#125; else if (<span class="hljs-title">file</span> <span class="hljs-title">instanceof</span> <span class="hljs-type">PowerPointFile</span>) &#123;</span><br><span class="hljs-class">	        processPowerPointFile((<span class="hljs-type">PowerPointFile</span>)e);</span><br><span class="hljs-class">	    &#125; else if (<span class="hljs-title">file</span> <span class="hljs-title">instanceof</span> <span class="hljs-type">WordFile</span>) &#123;</span><br><span class="hljs-class">	        processWordFile((<span class="hljs-type">WordFile</span>)e);</span><br><span class="hljs-class">	    &#125;</span><br><span class="hljs-class">    &#125;</span><br><span class="hljs-class">&#125;</span><br><span class="hljs-class"></span><br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-type">Compressor</span> extends <span class="hljs-type">Processor</span> &#123;</span><br><span class="hljs-class">	void processFile(<span class="hljs-type">ResourceFile</span> <span class="hljs-title">file</span>) &#123;</span><br><span class="hljs-class">	    if (<span class="hljs-title">file</span> <span class="hljs-title">instanceof</span> <span class="hljs-type">PdfFile</span>) &#123;</span><br><span class="hljs-class">	        processPrdFile((<span class="hljs-type">PdfFile</span>)file);</span><br><span class="hljs-class">	    &#125; else if (<span class="hljs-title">file</span> <span class="hljs-title">instanceof</span> <span class="hljs-type">PowerPointFile</span>) &#123;</span><br><span class="hljs-class">	        processPowerPointFile((<span class="hljs-type">PowerPointFile</span>)e);</span><br><span class="hljs-class">	    &#125; else if (<span class="hljs-title">file</span> <span class="hljs-title">instanceof</span> <span class="hljs-type">WordFile</span>) &#123;</span><br><span class="hljs-class">	        processWordFile((<span class="hljs-type">WordFile</span>)e);</span><br><span class="hljs-class">	    &#125;</span><br><span class="hljs-class">    &#125;</span><br><span class="hljs-class">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<p>可以看到这段代码的逻辑执行，既要根据接收者的运行时类型来决定<code>processXXXFile(file)</code>的执行，这里的接收者可以理解成是当前方法所对应的<code>Processor</code>对象。又要根据<code>ResourceFile file</code>对象的运行时的实际类型来做类型的判断，这里就会有很多<code>instanceof</code>和<code>else if</code>,<code>switch case</code>的多重嵌套。这种设计的代码虽然可以实现功能，但是在面对需求变更和扩展时会非常不灵活，既要加很多<code>else if</code>，也不利于功能的内聚和复用。那么这些代码如果用访问者模式，应该怎么来实现呢？这里借用王争在&lt;&lt;设计模式之美&gt;&gt;中的实例代码：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br></pre></td><td class="code"><pre><code class="hljs typescript"><span class="hljs-keyword">public</span> <span class="hljs-keyword">abstract</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">ResourceFile</span> &#123;<br>  <span class="hljs-keyword">protected</span> <span class="hljs-title class_">String</span> filePath;<br>  <span class="hljs-keyword">public</span> <span class="hljs-title class_">ResourceFile</span>(<span class="hljs-title class_">String</span> filePath) &#123;<br>    <span class="hljs-variable language_">this</span>.<span class="hljs-property">filePath</span> = filePath;<br>  &#125;<br>  <span class="hljs-keyword">abstract</span> <span class="hljs-keyword">public</span> <span class="hljs-built_in">void</span> <span class="hljs-title function_">accept</span>(<span class="hljs-title class_">Visitor</span> vistor);<br>&#125;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">PdfFile</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_ inherited__">ResourceFile</span> &#123;<br>  <span class="hljs-keyword">public</span> <span class="hljs-title class_">PdfFile</span>(<span class="hljs-title class_">String</span> filePath) &#123;<br>    <span class="hljs-variable language_">super</span>(filePath);<br>  &#125;<br><br>  <span class="hljs-meta">@Override</span><br>  <span class="hljs-keyword">public</span> <span class="hljs-built_in">void</span> <span class="hljs-title function_">accept</span>(<span class="hljs-params">Visitor visitor</span>) &#123;<br>    visitor.<span class="hljs-title function_">visit</span>(<span class="hljs-variable language_">this</span>);<br>  &#125;<br><br>  <span class="hljs-comment">//...</span><br>&#125;<br><span class="hljs-comment">//...PPTFile、WordFile跟PdfFile类似，这里就省略了...</span><br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">interface</span> <span class="hljs-title class_">Visitor</span> &#123;<br>  <span class="hljs-built_in">void</span> <span class="hljs-title function_">visit</span>(<span class="hljs-title class_">PdfFile</span> pdfFile);<br>  <span class="hljs-built_in">void</span> <span class="hljs-title function_">visit</span>(<span class="hljs-title class_">PPTFile</span> pdfFile);<br>  <span class="hljs-built_in">void</span> <span class="hljs-title function_">visit</span>(<span class="hljs-title class_">WordFile</span> pdfFile);<br>&#125;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Extractor</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">Visitor</span> &#123;<br>  <span class="hljs-meta">@Override</span><br>  <span class="hljs-keyword">public</span> <span class="hljs-built_in">void</span> <span class="hljs-title function_">visit</span>(<span class="hljs-params">PPTFile pptFile</span>) &#123;<br>    <span class="hljs-comment">//...</span><br>    <span class="hljs-title class_">System</span>.<span class="hljs-property">out</span>.<span class="hljs-title function_">println</span>(<span class="hljs-string">&quot;Extract PPT.&quot;</span>);<br>  &#125;<br><br>  <span class="hljs-meta">@Override</span><br>  <span class="hljs-keyword">public</span> <span class="hljs-built_in">void</span> <span class="hljs-title function_">visit</span>(<span class="hljs-params">PdfFile pdfFile</span>) &#123;<br>    <span class="hljs-comment">//...</span><br>    <span class="hljs-title class_">System</span>.<span class="hljs-property">out</span>.<span class="hljs-title function_">println</span>(<span class="hljs-string">&quot;Extract PDF.&quot;</span>);<br>  &#125;<br><br>  <span class="hljs-meta">@Override</span><br>  <span class="hljs-keyword">public</span> <span class="hljs-built_in">void</span> <span class="hljs-title function_">visit</span>(<span class="hljs-params">WordFile wordFile</span>) &#123;<br>    <span class="hljs-comment">//...</span><br>    <span class="hljs-title class_">System</span>.<span class="hljs-property">out</span>.<span class="hljs-title function_">println</span>(<span class="hljs-string">&quot;Extract WORD.&quot;</span>);<br>  &#125;<br>&#125;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Compressor</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">Visitor</span> &#123;<br>  <span class="hljs-meta">@Override</span><br>  <span class="hljs-keyword">public</span> <span class="hljs-built_in">void</span> <span class="hljs-title function_">visit</span>(<span class="hljs-params">PPTFile pptFile</span>) &#123;<br>    <span class="hljs-comment">//...</span><br>    <span class="hljs-title class_">System</span>.<span class="hljs-property">out</span>.<span class="hljs-title function_">println</span>(<span class="hljs-string">&quot;Compress PPT.&quot;</span>);<br>  &#125;<br><br>  <span class="hljs-meta">@Override</span><br>  <span class="hljs-keyword">public</span> <span class="hljs-built_in">void</span> <span class="hljs-title function_">visit</span>(<span class="hljs-params">PdfFile pdfFile</span>) &#123;<br>    <span class="hljs-comment">//...</span><br>    <span class="hljs-title class_">System</span>.<span class="hljs-property">out</span>.<span class="hljs-title function_">println</span>(<span class="hljs-string">&quot;Compress PDF.&quot;</span>);<br>  &#125;<br><br>  <span class="hljs-meta">@Override</span><br>  <span class="hljs-keyword">public</span> <span class="hljs-built_in">void</span> <span class="hljs-title function_">visit</span>(<span class="hljs-params">WordFile wordFile</span>) &#123;<br>    <span class="hljs-comment">//...</span><br>    <span class="hljs-title class_">System</span>.<span class="hljs-property">out</span>.<span class="hljs-title function_">println</span>(<span class="hljs-string">&quot;Compress WORD.&quot;</span>);<br>  &#125;<br><br>&#125;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">ToolApplication</span> &#123;<br>  <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-built_in">void</span> <span class="hljs-title function_">main</span>(<span class="hljs-params"><span class="hljs-built_in">String</span>[] args</span>) &#123;<br>    <span class="hljs-title class_">List</span>&lt;<span class="hljs-title class_">ResourceFile</span>&gt; resourceFiles = <span class="hljs-title function_">listAllResourceFiles</span>(args[<span class="hljs-number">0</span>]);<br><br>    <span class="hljs-title class_">Extractor</span> extractor = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Extractor</span>();<br>    <span class="hljs-keyword">for</span> (<span class="hljs-title class_">ResourceFile</span> resourceFile : resourceFiles) &#123;<br>      resourceFile.<span class="hljs-title function_">accept</span>(extractor);<br>    &#125;<br><br>    <span class="hljs-title class_">Compressor</span> compressor = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Compressor</span>();<br>    <span class="hljs-keyword">for</span>(<span class="hljs-title class_">ResourceFile</span> resourceFile : resourceFiles) &#123;<br>      resourceFile.<span class="hljs-title function_">accept</span>(compressor);<br>    &#125;<br>  &#125;<br><br>  <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-title class_">List</span>&lt;<span class="hljs-title class_">ResourceFile</span>&gt; <span class="hljs-title function_">listAllResourceFiles</span>(<span class="hljs-params"><span class="hljs-built_in">String</span> resourceDirectory</span>) &#123;<br>    <span class="hljs-title class_">List</span>&lt;<span class="hljs-title class_">ResourceFile</span>&gt; resourceFiles = <span class="hljs-keyword">new</span> <span class="hljs-title class_">ArrayList</span>&lt;&gt;();<br>    <span class="hljs-comment">//...根据后缀(pdf/ppt/word)由工厂方法创建不同的类对象(PdfFile/PPTFile/WordFile)</span><br>    resourceFiles.<span class="hljs-title function_">add</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">PdfFile</span>(<span class="hljs-string">&quot;a.pdf&quot;</span>));<br>    resourceFiles.<span class="hljs-title function_">add</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">WordFile</span>(<span class="hljs-string">&quot;b.word&quot;</span>));<br>    resourceFiles.<span class="hljs-title function_">add</span>(<span class="hljs-keyword">new</span> <span class="hljs-title class_">PPTFile</span>(<span class="hljs-string">&quot;c.ppt&quot;</span>));<br>    <span class="hljs-keyword">return</span> resourceFiles;<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="0x02-ASM中的访问者模式"><a href="#0x02-ASM中的访问者模式" class="headerlink" title="0x02 ASM中的访问者模式"></a>0x02 ASM中的访问者模式</h3><p>上面介绍了访问者模式设计初衷和设计方法，这里再看下访问者模式在实际工程中的应用。访问者模式最常见的应用场景就是访问复杂的结构或者对象，在不改变数据结构的情况下，将数据访问和数据操作分离出来，用回调的方式在访问者中处理业务逻辑。在面对不同的访问处理时，只需要新定义一个访问者实现不同的访问处理逻辑就可以了。这样说可能也很抽象，可以在在ASM中，是如何利用访问者的设计模式，实现字节码文件的读取和修改的。<br />ASM使用ClassReader遍历class文件结构获取文件中的类和对象信息，在其accept方法中接收ClassVisitor，在ClassVisitor的不同回调方法中完成不同的字节码操作。可以通过代码示例看到主要有以下几个类：</p>
+<figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs reasonml">ClassReader cr = <span class="hljs-keyword">new</span> <span class="hljs-constructor">ClassReader(<span class="hljs-params">inputStream</span>)</span>;<br>ClassWriter cw = <span class="hljs-keyword">new</span> <span class="hljs-constructor">ClassWriter(<span class="hljs-params">cr</span>, 0)</span>;<br><br>ClassVisitor cv = <span class="hljs-keyword">new</span> <span class="hljs-constructor">InjectCassVisitor(ASM6, <span class="hljs-params">cw</span>, <span class="hljs-params">methodName</span>)</span>;<br>cr.accept(cv, <span class="hljs-number">0</span>);<br>return cw.<span class="hljs-keyword">to</span><span class="hljs-constructor">ByteArray()</span>;<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>ClassReader（Element）：将不同输入类型的字节码读取到内存中，通过accept方法接受ClassVisitor的访问。</li>
+<li>ClassVisitor（Visitor）：完全由开发者自定义不同类型的Visitor，在Visitor的visitXXX回调中接收读取到的字节码信息并进行相应的处理。</li>
+</ul>
+<h3 id="0x03-总结"><a href="#0x03-总结" class="headerlink" title="0x03 总结"></a>0x03 总结</h3><p>利用访问者模式来解决这样的双重分派问题，如上面的类图所示，通过几个角色来做功能的区分，将文件的访问和处理分离成两个独立的接口。</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2022/png/411436/1648478340921-52d95fa8-489f-4098-b1c7-f86c7337fe4f.png#clientId=u9509d57c-feb4-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=390&id=rpEg9&margin=%5Bobject%20Object%5D&name=image.png&originHeight=780&originWidth=830&originalType=binary&ratio=1&rotation=0&showTitle=false&size=134454&status=done&style=none&taskId=u9699865e-5f29-4b7e-a0e9-4eee905c3bd&title=&width=415" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<ul>
+<li><strong>访问者（Visitor）</strong>，这里指不同类型的文件操作。用一个接口和一组不同类型的具体实现来定义不同的操作类型。</li>
+<li><strong>被访问者（Element）</strong>，这里指不同类型的文件。定义了accept操作，以Visitor作为参数，来接受不同类型visitor的对象访问。在accept方法中将this传递给访问者，通过回调再回调的操作，实现了双重分派。</li>
+<li><strong>对象结构（ObjectStructure）</strong>，访问的组织者，可以是组合也可以是集合；能够枚举它包含的元素；提供一个接口，允许Vistor访问它的元素。</li>
+</ul>
+<p><strong>理解访问者模式的设计，我觉得重点在理解所谓的回调再回调。这里有两次回调就意味着有两种类型接口，第一次回调是被访问者通过accept接受访问者，第二次回调是访问者通过visit方法访问被访问者，通过两次互相调换类型的调用，也就是通过两次单分派实现了双重分派。</strong></p>
+<h3 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h3><p>王争&lt;&lt;设计模式之美&gt;&gt;<br /><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/cd17bae4e949">https://www.jianshu.com/p/cd17bae4e949</a><br /><a target="_blank" rel="noopener" href="https://www.liaoxuefeng.com/wiki/1252599548343744/1281319659110433">https://www.liaoxuefeng.com/wiki/1252599548343744/1281319659110433</a></p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E6%96%B9%E6%A1%88%E4%B8%8E%E8%AE%BE%E8%AE%A1/">方案与设计</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">设计模式</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2021/03/28/design-patterns-proxy/">
+                        <span class="hidden-mobile">代理模式</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments" lazyload>
+                
+                  
+                
+                
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/valine@1/dist/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"JdLpddsaWqwfJtXPdDK8woaF-gzGzoHsz","appKey":"CEmtHXH8f0PtvF0zYtVE0EeY","path":"window.location.pathname","placeholder":null,"avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          Fluid.plugins.initFancyBox('#valine .vcontent img:not(.vemoji)');
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+
+  <script defer src="/js/leancloud.js" ></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    <!-- Baidu Analytics -->
+    <script defer>
+      var _hmt = _hmt || [];
+      (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?666a58de875adc9dd40d5de65ceac026";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>

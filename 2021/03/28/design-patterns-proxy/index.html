@@ -1,0 +1,539 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="病已">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="0x00 前言其实在日常生活中我们经常和代理模式打交道，比如当我们需要预定酒店时，我们（使用方）通常选择类似携程这样的平台来进行酒店和机票的预定，这里携程（代理）就代理了和酒店（服务提供方）之间的预订流程，使用方通过代理实现了和真实服务提供者之间的操作，那么为什么会使用代理而不是直接和服务提供方进行业务操作呢？可以通过以下两方面来考量：  代理降低了沟通成本，使用者不需要和服务提供方建立通讯，所有">
+<meta property="og:type" content="article">
+<meta property="og:title" content="代理模式">
+<meta property="og:url" content="https://ivonhoe.github.io/2021/03/28/design-patterns-proxy/index.html">
+<meta property="og:site_name" content="病已的博客">
+<meta property="og:description" content="0x00 前言其实在日常生活中我们经常和代理模式打交道，比如当我们需要预定酒店时，我们（使用方）通常选择类似携程这样的平台来进行酒店和机票的预定，这里携程（代理）就代理了和酒店（服务提供方）之间的预订流程，使用方通过代理实现了和真实服务提供者之间的操作，那么为什么会使用代理而不是直接和服务提供方进行业务操作呢？可以通过以下两方面来考量：  代理降低了沟通成本，使用者不需要和服务提供方建立通讯，所有">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2022/png/411436/1648478466765-f2a0a569-415d-4c4e-90ba-3ea37b20bce8.png#clientId=udd0e86b6-737e-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=262&id=ua9bbe8f6&margin=%5Bobject%20Object%5D&name=image.png&originHeight=524&originWidth=627&originalType=binary&ratio=1&rotation=0&showTitle=false&size=232289&status=done&style=none&taskId=u7c80ef72-e3a2-46df-a9bb-1272ff293d5&title=&width=313.5">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2022/png/411436/1648478479146-a37ec35d-b206-4228-bd82-35cc36736701.png#clientId=udd0e86b6-737e-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=260&id=u06c52024&margin=%5Bobject%20Object%5D&name=image.png&originHeight=520&originWidth=1000&originalType=binary&ratio=1&rotation=0&showTitle=false&size=243389&status=done&style=none&taskId=u3048a8ed-2f97-4f4e-beb2-4f3da2acc86&title=&width=500">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2022/png/411436/1648478503438-ecd40a20-c673-4c8f-a9af-3193342b78b5.png#clientId=udd0e86b6-737e-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=226&id=uc7b7bc1e&margin=%5Bobject%20Object%5D&name=image.png&originHeight=302&originWidth=538&originalType=binary&ratio=1&rotation=0&showTitle=false&size=66420&status=done&style=none&taskId=u15f526ec-58a7-4fc5-a6c3-09d54bdcc7f&title=&width=402">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2022/png/411436/1648478510603-6db1c76d-0efa-4d68-927e-50d801a4b26c.png#clientId=udd0e86b6-737e-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=127&id=uab5d01e8&margin=%5Bobject%20Object%5D&name=image.png&originHeight=201&originWidth=734&originalType=binary&ratio=1&rotation=0&showTitle=false&size=81824&status=done&style=none&taskId=ubd716343-6f89-4764-accd-b30b31c4719&title=&width=463">
+<meta property="article:published_time" content="2021-03-27T16:19:47.000Z">
+<meta property="article:modified_time" content="2022-04-06T15:54:00.226Z">
+<meta property="article:author" content="病已">
+<meta property="article:tag" content="设计模式">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2022/png/411436/1648478466765-f2a0a569-415d-4c4e-90ba-3ea37b20bce8.png#clientId=udd0e86b6-737e-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=262&id=ua9bbe8f6&margin=%5Bobject%20Object%5D&name=image.png&originHeight=524&originWidth=627&originalType=binary&ratio=1&rotation=0&showTitle=false&size=232289&status=done&style=none&taskId=u7c80ef72-e3a2-46df-a9bb-1272ff293d5&title=&width=313.5">
+  
+  
+  <title>代理模式 - 病已的博客</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"ivonhoe.github.io","root":"/","version":"1.8.14","typing":{"enable":false,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"baidu":"666a58de875adc9dd40d5de65ceac026","google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"JdLpddsaWqwfJtXPdDK8woaF-gzGzoHsz","app_key":"CEmtHXH8f0PtvF0zYtVE0EeY","server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 6.1.0"><link rel="alternate" href="/atom.xml" title="病已的博客" type="application/atom+xml">
+</head>
+
+
+<body>
+  <header style="height: 30vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>病已的博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default_post.jpeg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="代理模式">
+              
+                代理模式
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2021-03-28 00:19" pubdate>
+        2021年3月28日 凌晨
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      4.1k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      35 分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">代理模式</h1>
+            
+            <div class="markdown-body">
+              <h3 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00 前言"></a>0x00 前言</h3><p>其实在日常生活中我们经常和代理模式打交道，比如当我们需要预定酒店时，我们（使用方）通常选择类似携程这样的平台来进行酒店和机票的预定，这里携程（代理）就代理了和酒店（服务提供方）之间的预订流程，使用方通过代理实现了和真实服务提供者之间的操作，那么为什么会使用代理而不是直接和服务提供方进行业务操作呢？可以通过以下两方面来考量：</p>
+<ol>
+<li>代理降低了沟通成本，使用者不需要和服务提供方建立通讯，所有的通讯都通过代理商来完成，这样就将1对多的关系简化成1对1的关系，简化了业务流程，降低沟通成本。</li>
+<li>隐藏了服务提供者之间的差异，拿订酒店这件事情为例，让用户只需要关注到订酒店这件事情，和订酒店无关的其他事情都由代理商来做了</li>
+</ol>
+<h5 id="什么是「代理模式」？"><a href="#什么是「代理模式」？" class="headerlink" title="什么是「代理模式」？"></a>什么是「代理模式」？</h5><p>代理控制了对象的真实访问。代理模式是指，在不改变原始类（或叫被代理类）代码的情况下，通过引入代理类来给原始类附加功能。<strong>主要解决在直接访问对象时带来的问题</strong>，比如说：要访问的对象在远程的机器上。在面向对象系统中，有些对象由于某些原因（比如对象创建开销很大，或者某些操作需要安全控制，或者需要进程外的访问），直接访问会给使用者或者系统结构带来很多麻烦，我们可以在访问此对象时加上一个对此对象的访问层。<br />这里直接访问对象时带来的问题，可以类比上面生活中的例子，车站买票太远（对象单次访问成本高）选择用代买点买票。直接去酒店订房间太麻烦（实现功能的对象太多无法直接选择出最佳的对象）而选择在酒店平台预定酒店。</p>
+<h3 id="0x01-Binder中的静态代理"><a href="#0x01-Binder中的静态代理" class="headerlink" title="0x01 Binder中的静态代理"></a>0x01 Binder中的静态代理</h3><p>几乎所有安卓开发应该都应该知道，binder是android中实现进程间通信的方案，也都听说过所谓共享内存、Socket、管道、消息队列等等一系列其他的进程间通信（IPC）的方案，甚至听说过诸如dubbo，spring cloud之类的远程过程调用（RPC）。这里binder作为一个IPC方案同时在设计上又有很多RPC方案的影子，如果说想要理解RPC，<strong>这里一定绕不开代理模式</strong>。不管是Android的binder还是后端消息中间件dubbo都是使用代理模式来做设计的，在通讯的两端分别用代理隐藏实际的通信细节，让调用方像调用自己进程内对象方法一样实现对跨进程对象的调用。你比较熟悉组件化开发的话，也可以先从组件化的视角来类比binder通信，如果让你来实现一个进程间通信的架构方案，有哪些东西是必不可少的呢？</p>
+<p><strong>先类比组件化</strong></p>
+<ol>
+<li><strong>面向接口的设计</strong>，组件间通信，通过接口暴露组件能力</li>
+<li><strong>通过一个manager查询接口对应的服务实例</strong>，组件间相互调用，意味着组件间能够通过某种方式获取定义的组件接口所对应的实例对象，实现调用其他组件的方法就像调用自己内部方法一样</li>
+<li><strong>服务的注册和查询</strong>，想要获取响应的接口实现，意味着有一个类似路由和路由表的东西，通过一个路由服务查询到具体的接口实现对象</li>
+<li>其他高性能、安全性、稳定性的设计</li>
+</ol>
+<p><strong>再看Binder IPC</strong>，</p>
+<ol>
+<li>开发者使用AIDL实现进程间通信接口的定义</li>
+</ol>
+<figure class="highlight reasonml"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></div></td><td class="code"><pre><code class="hljs reasonml">interface IMyAidlInterface &#123;<br>    Response aidl<span class="hljs-constructor">Get(<span class="hljs-params">in</span> Request <span class="hljs-params">request</span>)</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>调用者client通过context bindService获取远程服务的代理对象，通过<code>queryLocalInterface</code>和<code>Stub.DESCRIPTOR</code>查询到远程服务在client的代理对象</li>
+</ol>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs typescript"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> com.<span class="hljs-property">android</span>.<span class="hljs-property">aidldemo</span>.<span class="hljs-property">IMyAidlInterface</span> <span class="hljs-title function_">asInterface</span>(<span class="hljs-params">android.os.IBinder obj</span>) &#123;<br>    <span class="hljs-keyword">if</span> ((obj == <span class="hljs-literal">null</span>)) &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;<br>    &#125;<br>    android.<span class="hljs-property">os</span>.<span class="hljs-property">IInterface</span> iin = obj.<span class="hljs-title function_">queryLocalInterface</span>(<span class="hljs-variable constant_">DESCRIPTOR</span>);<br>    <span class="hljs-keyword">if</span> (((iin != <span class="hljs-literal">null</span>) &amp;&amp; (iin <span class="hljs-keyword">instanceof</span> com.<span class="hljs-property">android</span>.<span class="hljs-property">aidldemo</span>.<span class="hljs-property">IMyAidlInterface</span>))) &#123;<br>        <span class="hljs-keyword">return</span> ((com.<span class="hljs-property">android</span>.<span class="hljs-property">aidldemo</span>.<span class="hljs-property">IMyAidlInterface</span>) iin);<br>    &#125;<br>    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> com.<span class="hljs-property">android</span>.<span class="hljs-property">aidldemo</span>.<span class="hljs-property">IMyAidlInterface</span>.<span class="hljs-property">Stub</span>.<span class="hljs-title class_">Proxy</span>(obj);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>对client来说，Binder代理对象<code>Stub.proxy</code>隐藏了和远程服务对象真实通信的细节，client不需要关心这个代理对象是不是真实的服务实现方，就像调用本地方法一样调用原生服务对象。而<code>Stub.proxy</code>实现了调用参数的序列化和响应结果的序列化，帮助client拿到了远程调用的结果。<br /><img src="https://cdn.nlark.com/yuque/0/2022/png/411436/1648478466765-f2a0a569-415d-4c4e-90ba-3ea37b20bce8.png#clientId=udd0e86b6-737e-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=262&id=ua9bbe8f6&margin=%5Bobject%20Object%5D&name=image.png&originHeight=524&originWidth=627&originalType=binary&ratio=1&rotation=0&showTitle=false&size=232289&status=done&style=none&taskId=u7c80ef72-e3a2-46df-a9bb-1272ff293d5&title=&width=313.5" srcset="/img/loading.gif" lazyload alt="image.png"></li>
+</ol>
+<p>可以对照下图理解代理过程：</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2022/png/411436/1648478479146-a37ec35d-b206-4228-bd82-35cc36736701.png#clientId=udd0e86b6-737e-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=260&id=u06c52024&margin=%5Bobject%20Object%5D&name=image.png&originHeight=520&originWidth=1000&originalType=binary&ratio=1&rotation=0&showTitle=false&size=243389&status=done&style=none&taskId=u3048a8ed-2f97-4f4e-beb2-4f3da2acc86&title=&width=500" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<p>同样的角色分布我们可以再看看系统的ActivityManagerService。IActivityManager是一个服务接口，代表了服务能力。ActivityManagerNative代表系统本地服务，ActivityManagerService是它的具体实现。而ActivityMangerProxy代表在app中的Binder代理对象，实现client到service调用的代理转发。</p>
+<h3 id="0x02-Retrofit中的动态代理"><a href="#0x02-Retrofit中的动态代理" class="headerlink" title="0x02 Retrofit中的动态代理"></a>0x02 Retrofit中的动态代理</h3><p>相比较Binder的静态代理，retrofit使用了动态代理模式。所谓动态代理模式，是指并没有手动创建一个代理类，而是使用动态字节码的方式创建代理类（用class生成class），然后使用反射的方式创建代理类的对象，再使用反射方式调用被代理的方法。可以先看一个在java中最简单的动态代理写法：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs typescript"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">TestProxy</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-built_in">void</span> <span class="hljs-title function_">main</span>(<span class="hljs-params"><span class="hljs-built_in">String</span> args[]</span>) &#123;<br>        <span class="hljs-title class_">Subject</span> subject = <span class="hljs-keyword">new</span> <span class="hljs-title class_">RealSubject</span>();<br><br>        <span class="hljs-title class_">InvocationHandler</span> handler = <span class="hljs-keyword">new</span> <span class="hljs-title class_">InvocationHandler</span>() &#123;<br><br>            <span class="hljs-meta">@Override</span><br>            <span class="hljs-keyword">public</span> <span class="hljs-title class_">Object</span> <span class="hljs-title function_">invoke</span>(<span class="hljs-title class_">Object</span> proxy, <span class="hljs-title class_">Method</span> method, <span class="hljs-title class_">Object</span>[] args) throws <span class="hljs-title class_">Throwable</span> &#123;<br>                <span class="hljs-title class_">Object</span> result = <span class="hljs-literal">null</span>;<br>                <span class="hljs-comment">//在调用具体函数方法前，执行功能处理</span><br>                result = method.<span class="hljs-title function_">invoke</span>(subject, args);<br>                <span class="hljs-comment">//在调用具体函数方法后，执行功能处理</span><br>                <span class="hljs-keyword">return</span> result;<br>            &#125;<br>        &#125;;<br><br>        <span class="hljs-title class_">Subject</span> <span class="hljs-built_in">object</span> = (<span class="hljs-title class_">Subject</span>) <span class="hljs-title class_">Proxy</span>.<span class="hljs-title function_">newProxyInstance</span>(subject.<span class="hljs-title function_">getClass</span>().<span class="hljs-title function_">getClassLoader</span>(),<br>                subject.<span class="hljs-title function_">getClass</span>().<span class="hljs-title function_">getInterfaces</span>(), handler);<br>        <span class="hljs-built_in">object</span>.<span class="hljs-title function_">doSomething</span>();<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>我们使用<code>Proxy.newProxyInstance</code>和<code>InvocationHandler</code>动态构造代理对象，通过获取invoke method注解对请求的描述信息，生成<code>ServiceMethod</code>对象，并根据该对象执行相应的网络请求。</p>
+<figure class="highlight oxygene"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs oxygene"><span class="hljs-keyword">public</span> &lt;T&gt; T <span class="hljs-keyword">create</span>(<span class="hljs-keyword">final</span> <span class="hljs-keyword">Class</span>&lt;T&gt; service) <span class="hljs-comment">&#123;</span><br><span class="hljs-comment">validateServiceInterface(service);</span><br><span class="hljs-comment">return (T)</span><br><span class="hljs-comment">    Proxy.newProxyInstance(</span><br><span class="hljs-comment">        service.getClassLoader(),</span><br><span class="hljs-comment">        new Class&lt;?&gt;[] &#123;service&#125;</span>,<br>        <span class="hljs-keyword">new</span> InvocationHandler() <span class="hljs-comment">&#123;</span><br><span class="hljs-comment">          private final Platform platform = Platform.get();</span><br><span class="hljs-comment">          private final Object[] emptyArgs = new Object[0];</span><br><span class="hljs-comment"></span><br><span class="hljs-comment">          @Override</span><br><span class="hljs-comment">          public @Nullable Object invoke(Object proxy, Method method, @Nullable Object[] args)</span><br><span class="hljs-comment">              throws Throwable &#123;</span><br><span class="hljs-comment">            // If the method is a method from Object then defer to normal invocation.</span><br><span class="hljs-comment">            if (method.getDeclaringClass() == Object.class) &#123;</span><br><span class="hljs-comment">              return method.invoke(this, args);</span><br><span class="hljs-comment">            &#125;</span><br>            args = args != null ? args : emptyArgs<span class="hljs-punctuation">;</span><br>            return <span class="hljs-keyword">platform</span>.isDefaultMethod(<span class="hljs-keyword">method</span>)<br>                ? <span class="hljs-title function_">platform</span>.<span class="hljs-title function_">invokeDefaultMethod</span><span class="hljs-params">(<span class="hljs-keyword">method</span>, service, proxy, args)</span><br>                : loadServiceMethod(<span class="hljs-keyword">method</span>).<span class="hljs-title function_">invoke</span><span class="hljs-params">(args)</span>;<br>          &#125;<br>        &#125;)<span class="hljs-punctuation">;</span><br>&#125;<br></code></pre></td></tr></table></figure>
+<p><img src="https://cdn.nlark.com/yuque/0/2022/png/411436/1648478503438-ecd40a20-c673-4c8f-a9af-3193342b78b5.png#clientId=udd0e86b6-737e-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=226&id=uc7b7bc1e&margin=%5Bobject%20Object%5D&name=image.png&originHeight=302&originWidth=538&originalType=binary&ratio=1&rotation=0&showTitle=false&size=66420&status=done&style=none&taskId=u15f526ec-58a7-4fc5-a6c3-09d54bdcc7f&title=&width=402" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<h3 id="0x03-总结"><a href="#0x03-总结" class="headerlink" title="0x03 总结"></a>0x03 总结</h3><p>这里借用知乎大佬的一张图，同时对比下静态代理和动态代理的差异，主要在于代理类如何生成。<br /><img src="https://cdn.nlark.com/yuque/0/2022/png/411436/1648478510603-6db1c76d-0efa-4d68-927e-50d801a4b26c.png#clientId=udd0e86b6-737e-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=127&id=uab5d01e8&margin=%5Bobject%20Object%5D&name=image.png&originHeight=201&originWidth=734&originalType=binary&ratio=1&rotation=0&showTitle=false&size=81824&status=done&style=none&taskId=ubd716343-6f89-4764-accd-b30b31c4719&title=&width=463" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<p>如果是编译或者编码过程中生成的代理类就是静态代理，所以静态代理的一个缺点就是会生成很多代理类。<br />如果在运行时或者编译时动态生成的代理类，一般就是动态代理。可以通过接口的Class对象，创建一个代理Class，通过代理Class创建代理对象。也就是所谓的用Class造Class。</p>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><p><a target="_blank" rel="noopener" href="http://weishu.me/2016/01/12/binder-index-for-newer/">http://weishu.me/2016/01/12/binder-index-for-newer/</a><br /><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/35519585">https://zhuanlan.zhihu.com/p/35519585</a><br /><a target="_blank" rel="noopener" href="http://gityuan.com/2016/09/04/binder-start-service/">http://gityuan.com/2016/09/04/binder-start-service/</a><br /><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/20794107">https://www.zhihu.com/question/20794107</a></p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E6%96%B9%E6%A1%88%E4%B8%8E%E8%AE%BE%E8%AE%A1/">方案与设计</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">设计模式</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2021/03/28/design-patterns-visitor/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">访问者模式</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2021/03/28/design-patterns-chain-of-responsibility/">
+                        <span class="hidden-mobile">责任链模式</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments" lazyload>
+                
+                  
+                
+                
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/valine@1/dist/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"JdLpddsaWqwfJtXPdDK8woaF-gzGzoHsz","appKey":"CEmtHXH8f0PtvF0zYtVE0EeY","path":"window.location.pathname","placeholder":null,"avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          Fluid.plugins.initFancyBox('#valine .vcontent img:not(.vemoji)');
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+
+  <script defer src="/js/leancloud.js" ></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    <!-- Baidu Analytics -->
+    <script defer>
+      var _hmt = _hmt || [];
+      (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?666a58de875adc9dd40d5de65ceac026";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>

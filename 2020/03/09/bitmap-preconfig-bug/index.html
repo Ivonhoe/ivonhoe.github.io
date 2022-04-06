@@ -18,7 +18,7 @@
   
     <meta name="description" content="0x00 前言某周六线上运营报障，在部分用户的Android手机上个别地图图标未能正常显示，只有部分手机有问题(7.0及以下版本)有问题，诡异的是只有个别图标(1个)显示有问题，大部分图标显示并没有问题,开发介入验证后发现更诡异的是，只在release版本才有这个问题，开发debug版本上并没有问题。低版本显示有问题还好理解，这应该是一个版本兼容相关的问题。release和debug上个别图标有差">
 <meta property="og:type" content="article">
-<meta property="og:title" content="你是否真的了解Bitmap Config？">
+<meta property="og:title" content="误用bitmap config导致的故障">
 <meta property="og:url" content="https://ivonhoe.github.io/2020/03/09/bitmap-preconfig-bug/index.html">
 <meta property="og:site_name" content="病已的博客">
 <meta property="og:description" content="0x00 前言某周六线上运营报障，在部分用户的Android手机上个别地图图标未能正常显示，只有部分手机有问题(7.0及以下版本)有问题，诡异的是只有个别图标(1个)显示有问题，大部分图标显示并没有问题,开发介入验证后发现更诡异的是，只在release版本才有这个问题，开发debug版本上并没有问题。低版本显示有问题还好理解，这应该是一个版本兼容相关的问题。release和debug上个别图标有差">
@@ -27,7 +27,7 @@
 <meta property="og:image" content="https://ivonhoe.github.io/res/bitmap_preconfig_bug/CF7A8756-E61A-4A45-88F7-8356DC3BA452.png">
 <meta property="og:image" content="https://ivonhoe.github.io/res/bitmap_preconfig_bug/3F44D7B5-08AB-4580-BF59-AC7E6E1B9901.png">
 <meta property="article:published_time" content="2020-03-08T16:27:32.000Z">
-<meta property="article:modified_time" content="2022-03-27T13:49:19.619Z">
+<meta property="article:modified_time" content="2022-04-06T15:56:36.194Z">
 <meta property="article:author" content="病已">
 <meta property="article:tag" content="Bitmap">
 <meta property="article:tag" content="BitmapFactory">
@@ -35,7 +35,7 @@
 <meta name="twitter:image" content="https://ivonhoe.github.io/res/bitmap_preconfig_bug/923F7833-056A-40DE-849B-205EC24F0F73.png">
   
   
-  <title>你是否真的了解Bitmap Config？ - 病已的博客</title>
+  <title>误用bitmap config导致的故障 - 病已的博客</title>
 
   <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
 
@@ -182,9 +182,9 @@
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0)">
           <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="你是否真的了解Bitmap Config？">
+            <span class="h2" id="subtitle" title="误用bitmap config导致的故障">
               
-                你是否真的了解Bitmap Config？
+                误用bitmap config导致的故障
               
             </span>
 
@@ -243,7 +243,7 @@
         <div class="py-5" id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">你是否真的了解Bitmap Config？</h1>
+            <h1 style="display: none">误用bitmap config导致的故障</h1>
             
             <div class="markdown-body">
               <h3 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00 前言"></a>0x00 前言</h3><p>某周六线上运营报障，在部分用户的Android手机上个别地图图标未能正常显示，只有部分手机有问题(7.0及以下版本)有问题，诡异的是只有个别图标(1个)显示有问题，大部分图标显示并没有问题,开发介入验证后发现更诡异的是，只在release版本才有这个问题，开发debug版本上并没有问题。<br>低版本显示有问题还好理解，这应该是一个版本兼容相关的问题。release和debug上个别图标有差别就有点匪夷所思了，写篇博客记录下。</p>
