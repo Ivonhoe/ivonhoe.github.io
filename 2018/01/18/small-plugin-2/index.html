@@ -16,33 +16,25 @@
   <meta name="author" content="病已">
   <meta name="keywords" content="">
   
-    <meta name="description" content="一、工具介绍 apktool：google提供Android apk编译与反编译工具，https:&#x2F;&#x2F;ibotpeaches.github.io&#x2F;Apktool&#x2F; dex2jar：dex文件转jar文件工具，https:&#x2F;&#x2F;github.com&#x2F;pxb1988&#x2F;dex2jar jd-gui：查看jar文件，http:&#x2F;&#x2F;jd.benow.ca&#x2F; keytool：制作和管理数字证书 jarsigne">
+    <meta name="description" content="0x00 前言这篇文章主要总结了在使用Small框架改造老项目过程中遇到的问题和相应的解决方案，也总结了使用Small框架的基础知识点，并从一个使用者的角度来分析Small框架的优缺点。如果你的项目也面临业务模块耦合，边界不清晰，没有动态部署方案等等需要插件化方案来解决的问题，不妨先看下这篇文章再试一试Small框架，Small的功能未必全面但绝对聚焦了插件化框架需要解决的的核心问题。 什么是Sm">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Android安全之APP去广告">
-<meta property="og:url" content="https://ivonhoe.github.io/2017/02/04/Android%E5%AE%89%E5%85%A8%E4%B9%8B---APP%E5%8E%BB%E5%B9%BF%E5%91%8A/index.html">
+<meta property="og:title" content="Android插件化之Small框架实践总结">
+<meta property="og:url" content="https://ivonhoe.github.io/2018/01/18/small-plugin-2/index.html">
 <meta property="og:site_name" content="病已的博客">
-<meta property="og:description" content="一、工具介绍 apktool：google提供Android apk编译与反编译工具，https:&#x2F;&#x2F;ibotpeaches.github.io&#x2F;Apktool&#x2F; dex2jar：dex文件转jar文件工具，https:&#x2F;&#x2F;github.com&#x2F;pxb1988&#x2F;dex2jar jd-gui：查看jar文件，http:&#x2F;&#x2F;jd.benow.ca&#x2F; keytool：制作和管理数字证书 jarsigne">
+<meta property="og:description" content="0x00 前言这篇文章主要总结了在使用Small框架改造老项目过程中遇到的问题和相应的解决方案，也总结了使用Small框架的基础知识点，并从一个使用者的角度来分析Small框架的优缺点。如果你的项目也面临业务模块耦合，边界不清晰，没有动态部署方案等等需要插件化方案来解决的问题，不妨先看下这篇文章再试一试Small框架，Small的功能未必全面但绝对聚焦了插件化框架需要解决的的核心问题。 什么是Sm">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://ivonhoe.github.io/res/dev-tool/dev-tool1.png">
-<meta property="og:image" content="https://ivonhoe.github.io/res/dev-tool/dev-tool2.png">
-<meta property="og:image" content="https://ivonhoe.github.io/res/dev-tool/dev-tool3.png">
-<meta property="og:image" content="https://ivonhoe.github.io/res/dev-tool/dev-tool4.png">
-<meta property="og:image" content="https://ivonhoe.github.io/res/dev-tool/dev-tool5.png">
-<meta property="og:image" content="https://ivonhoe.github.io/res/dev-tool/dev-tool6.png">
-<meta property="og:image" content="https://ivonhoe.github.io/res/dev-tool/dev-tool11.png">
-<meta property="og:image" content="https://ivonhoe.github.io/res/dev-tool/dev-tool10.png">
-<meta property="og:image" content="https://ivonhoe.github.io/res/dev-tool/dev-tool7.png">
-<meta property="article:published_time" content="2017-02-04T05:27:20.000Z">
-<meta property="article:modified_time" content="2018-09-11T13:26:57.000Z">
+<meta property="og:image" content="https://ivonhoe.github.io/res/small/small-1.png">
+<meta property="og:image" content="https://ivonhoe.github.io/res/small/small-2.png">
+<meta property="article:published_time" content="2018-01-18T09:42:57.000Z">
+<meta property="article:modified_time" content="2018-09-18T09:50:27.000Z">
 <meta property="article:author" content="病已">
+<meta property="article:tag" content="插件化">
 <meta property="article:tag" content="Android">
-<meta property="article:tag" content="移动安全">
-<meta property="article:tag" content="去广告">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://ivonhoe.github.io/res/dev-tool/dev-tool1.png">
+<meta name="twitter:image" content="https://ivonhoe.github.io/res/small/small-1.png">
   
   
-  <title>Android安全之APP去广告 - 病已的博客</title>
+  <title>Android插件化之Small框架实践总结 - 病已的博客</title>
 
   <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
 
@@ -189,9 +181,9 @@
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0)">
           <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="Android安全之APP去广告">
+            <span class="h2" id="subtitle" title="Android插件化之Small框架实践总结">
               
-                Android安全之APP去广告
+                Android插件化之Small框架实践总结
               
             </span>
 
@@ -201,8 +193,8 @@
   
     <span class="post-meta">
       <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-      <time datetime="2017-02-04 13:27" pubdate>
-        2017年2月4日 下午
+      <time datetime="2018-01-18 17:42" pubdate>
+        2018年1月18日 下午
       </time>
     </span>
   
@@ -212,7 +204,7 @@
   
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      1.8k 字
+      2.6k 字
     </span>
   
 
@@ -221,7 +213,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      15 分钟
+      22 分钟
     </span>
   
 
@@ -250,42 +242,81 @@
         <div class="py-5" id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">Android安全之APP去广告</h1>
+            <h1 style="display: none">Android插件化之Small框架实践总结</h1>
             
             <div class="markdown-body">
-              <h3 id="一、工具介绍"><a href="#一、工具介绍" class="headerlink" title="一、工具介绍"></a>一、工具介绍</h3><ul>
-<li><strong>apktool：</strong>google提供Android apk编译与反编译工具，<a target="_blank" rel="noopener" href="https://ibotpeaches.github.io/Apktool/">https://ibotpeaches.github.io/Apktool/</a></li>
-<li><strong>dex2jar：</strong>dex文件转jar文件工具，<a target="_blank" rel="noopener" href="https://github.com/pxb1988/dex2jar">https://github.com/pxb1988/dex2jar</a></li>
-<li><strong>jd-gui：</strong>查看jar文件，<a target="_blank" rel="noopener" href="http://jd.benow.ca/">http://jd.benow.ca/</a></li>
-<li><strong>keytool：</strong>制作和管理数字证书</li>
-<li><strong>jarsigner：</strong>使用数字证书对jar和apk进行签名</li>
-<li><strong>Android killer：</strong>Window系统中，上述工具的集成工具</li>
-</ul>
-<p>更多反编译工具可查看：<a target="_blank" rel="noopener" href="http://unclechen.github.io/2016/09/07/Android%E5%8F%8D%E7%BC%96%E8%AF%91%E6%8A%80%E6%9C%AF%E6%80%BB%E7%BB%93/">Uncle Chen—Android反编译技术总结</a></p>
-<h3 id="二、去除应用开发助手的广告"><a href="#二、去除应用开发助手的广告" class="headerlink" title="二、去除应用开发助手的广告"></a>二、去除应用开发助手的广告</h3><p>CodeKK公众号在17年初推出了一个<a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=MzAxNjI3MDkzOQ==&mid=2654472664&idx=1&sn=dfc2b5beb90daa8fd068d8064ce0dcce&chksm=803bfaecb74c73fa9a9addfd4d8bce031186c34b7d7b59ee22df41799c7eaa71a34863890f56&mpshare=1&scene=1&srcid=0220tEQNaL7PwIgfBT8sIITK&key=776fc8cdd0b88c0d0b9a6c8e271e4cfe2b2363aeda110198d4250b0a422befd0f43f78e2a17d528112f757336e136c56f488bc174baa56c116045a9bdbb37dbccf508eb8c70e48a2d09ca1da1b4d92d3&ascene=0&uin=MTMzNzYxMDM2MQ==&devicetype=iMac+MacBookPro11,4+OSX+OSX+10.12.1+build(16B2555)">应用开发助手</a>。V1.0版本是有广告版本的，下面以这个版本为例，简单看下去广告过程。它的后续的V1.1.0和V1.2.0已经去除了广告功能。</p>
+              <h3 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00 前言"></a>0x00 前言</h3><p>这篇文章主要总结了在使用Small框架改造老项目过程中遇到的问题和相应的解决方案，也总结了使用Small框架的基础知识点，并从一个使用者的角度来分析Small框架的优缺点。如果你的项目也面临业务模块耦合，边界不清晰，没有动态部署方案等等需要插件化方案来解决的问题，不妨先看下这篇文章再试一试Small框架，Small的功能未必全面但绝对聚焦了插件化框架需要解决的的核心问题。</p>
+<p>什么是Small框架？ Small是一个轻量级的插件化框架，Small也是一个dex分包方案，Small也是一个业务模块解耦方案，同时Small也是一个动态化加载和更新方案。先去看官网文档了解Small的基础知识~~</p>
+<p><a target="_blank" rel="noopener" href="http://code.wequick.net/Small/cn/quickstart">Small官网文档</a></p>
+<h3 id="关于Small插件化的其他文档："><a href="#关于Small插件化的其他文档：" class="headerlink" title="关于Small插件化的其他文档："></a>关于Small插件化的其他文档：</h3><p><a href="http://ivonhoe.github.io/2018/01/18/Small%E6%A1%86%E6%9E%B6%E5%8E%9F%E7%90%86/"><strong>《Android插件化之Small框架原理》</strong></a><br><a href="http://ivonhoe.github.io/2018/03/14/small-bug-555-fix/"><strong>《Android插件化之资源加载机制》</strong></a><br><a href="https://ivonhoe.github.io/2018/07/18/abandon-the-plugin-framework/"><strong>《Android插件化之从入门到放弃》</strong></a></p>
 <span id="more"></span>
 
-<h4 id="2-1、反编译"><a href="#2-1、反编译" class="headerlink" title="2.1、反编译"></a>2.1、反编译</h4><figure class="highlight bash"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><pre><code class="hljs bash">apktool.sh d -f ./dev-tools.apk<br></code></pre></td></tr></table></figure>
+<h4 id="0x01-Small必知必会"><a href="#0x01-Small必知必会" class="headerlink" title="0x01 Small必知必会"></a>0x01 Small必知必会</h4><p><img src="/res/small/small-1.png" srcset="/img/loading.gif" lazyload alt="Small角色关系"></p>
+<ol>
+<li>Small框架将工程模块分为这几个角色，宿主，宿主分身，app插件，公共lib插件</li>
+<li>宿主不依赖任何模块，宿主分身被所有app和lib依赖，但是宿主和宿主分身都被打包在主应用的主dex中，app插件和公共lib插件被单独打包在自己的插件so中</li>
+<li>Small如何编译? <ul>
+<li>.&#x2F;gradlew cleanLib </li>
+<li><strong>编译公共库:</strong> .&#x2F;gradlew buildLib </li>
+<li>.&#x2F;gradlew cleanBundle</li>
+<li><strong>编译app插件:</strong> .&#x2F;gradle buildBundle </li>
+<li><strong>编译宿主app:</strong> .&#x2F;gradle :app:assembleDaily  <strong>注意：</strong>这里不是assembleDaily 而是:app:assembleDaily</li>
+</ul>
+</li>
+<li>app插件的模块名称必须是app.* , 公共库lib插件的模块名称必须是lib.*。</li>
+<li>在宿主app assets目录的bundle.json文件中声明每个插件的包名、类型和页面路由等信息。当app插件的包名为 <code>**.app.*</code> 或 <code>**.app*</code>时, small框架会默认该插件模块为app插件。</li>
+<li>app插件和app插件之间无法相互依赖，app插件之间可以通过路由uri传参，或者LocalBroadcast、Eventbus等消息机制实现通信。</li>
+<li>Small中插件的packageId是自动根据模块名称hash计算生成，有可能会遇到插件模块packageId冲突的情况，在这种情况下需要在发生冲突模块的build.gradle重新声明packageId, 如下：</li>
+</ol>
+  <figure class="highlight abnf"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></div></td><td class="code"><pre><code class="hljs abnf">ext &#123;<br>  packageId <span class="hljs-operator">=</span> <span class="hljs-number">0</span>x33<br>&#125;<br></code></pre></td></tr></table></figure>
 
-<p><img src="/res/dev-tool/dev-tool1.png" srcset="/img/loading.gif" lazyload><br><img src="/res/dev-tool/dev-tool2.png" srcset="/img/loading.gif" lazyload></p>
-<h4 id="2-2、注释广告代码"><a href="#2-2、注释广告代码" class="headerlink" title="2.2、注释广告代码"></a>2.2、注释广告代码</h4><p>这里可以先用dex2jar转jar后查看下源码，会发现使用的是Google AdMob作为广告平台，简单看下代码可以发现在主页面activty_main.xml中包含广告视图的布局文件。所以只需要找到<code>ad_layout.xml</code>将其<code>            android:visibility=&quot;gone&quot;</code>属性设置成<code>gone</code>就可以了。</p>
-<p><img src="/res/dev-tool/dev-tool3.png" srcset="/img/loading.gif" lazyload></p>
-<h4 id="2-3、重打包"><a href="#2-3、重打包" class="headerlink" title="2.3、重打包"></a>2.3、重打包</h4><p>这里重打包的过程可能会遇到一些错误，不过认真查看日志并结合Google都是可以找到解决方案的，这里暂且不表。使用apktool b命令，生成的apk默认路径为<code>/dist</code>路径下</p>
-<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs stylus">apktool<span class="hljs-selector-class">.sh</span> <span class="hljs-selector-tag">b</span> ./dev-tools<br></code></pre></td></tr></table></figure>
-<p><img src="/res/dev-tool/dev-tool4.png" srcset="/img/loading.gif" lazyload></p>
-<h4 id="2-4、制作一个名为hackapk-keystore的证书-并重新签名应用"><a href="#2-4、制作一个名为hackapk-keystore的证书-并重新签名应用" class="headerlink" title="2.4、制作一个名为hackapk.keystore的证书,并重新签名应用"></a>2.4、制作一个名为hackapk.keystore的证书,并重新签名应用</h4><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs stylus">制作证书：<br>keytool -genkey -keystore hackapk<span class="hljs-selector-class">.keystore</span> -keyalg RSA -validity <span class="hljs-number">10000</span> -alias hackapk<br><br>签名：<br>jarsigner -verbose -keystore hackapk<span class="hljs-selector-class">.keystore</span> -signedjar dev-tools-no-ads<span class="hljs-selector-class">.apk</span> ./dev-tools/dist/dev-tools<span class="hljs-selector-class">.apk</span> hackapk<br></code></pre></td></tr></table></figure>
-
-<p><img src="/res/dev-tool/dev-tool5.png" srcset="/img/loading.gif" lazyload></p>
-<p>详细的参数可以参考：<br><a target="_blank" rel="noopener" href="http://www.tttabc.com/android/keytool-keystore-jarsigner-apk.htm">APK签名之keytool生成keystore和jarsigner签名apk</a></p>
-<h4 id="2-5、安装"><a href="#2-5、安装" class="headerlink" title="2.5、安装"></a>2.5、安装</h4><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs nginx"><span class="hljs-attribute">adb</span> install -r dev-tools-<span class="hljs-literal">no</span>-ads.apk<br></code></pre></td></tr></table></figure>
-<p><img src="/res/dev-tool/dev-tool6.png" srcset="/img/loading.gif" lazyload></p>
-<p><img src="/res/dev-tool/dev-tool11.png" srcset="/img/loading.gif" lazyload alt="有广告版本"></p>
-<p><img src="/res/dev-tool/dev-tool10.png" srcset="/img/loading.gif" lazyload alt="无广告版本"></p>
-<h4 id="2-6、下载去广告版本的应用开发助手"><a href="#2-6、下载去广告版本的应用开发助手" class="headerlink" title="2.6、下载去广告版本的应用开发助手"></a>2.6、下载去广告版本的应用开发助手</h4><p><img src="/res/dev-tool/dev-tool7.png" srcset="/img/loading.gif" lazyload></p>
-<h3 id="三、反编译脚本"><a href="#三、反编译脚本" class="headerlink" title="三、反编译脚本"></a>三、反编译脚本</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-meta">#!/bin/sh</span><br>workDir=./<br><span class="hljs-keyword">if</span> [ <span class="hljs-string">&quot;<span class="hljs-variable">$2</span>&quot;</span> ]<br><span class="hljs-keyword">then</span><br>         <span class="hljs-built_in">mkdir</span> <span class="hljs-variable">$2</span><br>         workDir=./<span class="hljs-variable">$2</span>/<br><span class="hljs-keyword">fi</span><br><br><span class="hljs-built_in">echo</span> <span class="hljs-variable">$workDir</span><br>name=`<span class="hljs-built_in">basename</span> <span class="hljs-variable">$1</span> .apk`<br>zipPath=$workDir<span class="hljs-variable">$name</span>.zip<br><br><span class="hljs-comment">##apkTool反编译</span><br>smaliDir=$workDir<span class="hljs-variable">$name</span>@smali<br>apktool.sh d -f <span class="hljs-variable">$1</span> -o <span class="hljs-variable">$smaliDir</span><br><br><span class="hljs-comment">## 解压缩，使用dex2jar处理</span><br>unzipDir=$workDir<span class="hljs-variable">$name</span>@unzip<br><span class="hljs-built_in">cp</span> <span class="hljs-variable">$1</span> <span class="hljs-variable">$zipPath</span><br>unzip <span class="hljs-variable">$zipPath</span> -d <span class="hljs-variable">$unzipDir</span><br><br>d2j-dex2jar.sh -f <span class="hljs-variable">$unzipDir</span>/classes.dex -o <span class="hljs-variable">$&#123;workDir&#125;</span>dex2jar.jar<br>d2j-dex2jar.sh -f <span class="hljs-variable">$unzipDir</span>/classes2.dex -o <span class="hljs-variable">$&#123;workDir&#125;</span>dex2jar2.jar<br>d2j-dex2jar.sh -f <span class="hljs-variable">$unzipDir</span>/classes3.dex -o <span class="hljs-variable">$&#123;workDir&#125;</span>dex2jar3.jar<br>open <span class="hljs-variable">$workDir</span><br></code></pre></td></tr></table></figure>
-
-<p>将上述内容保存到本地<code>hack.sh</code>文件中，使用下面的命令就会把apktool和dex2jar的结果输出到<code>meipu</code>这个目录中，这样就不需要每次收到敲命令喽，只要知道需要反编译的apk和输出的文件夹名称就可以~</p>
-<p><code>./hack.sh ./美铺_1487845975713.apk meipu</code></p>
+<ol start="8">
+<li>生成插件到 x86 架构下.&#x2F;gradlew buildLib -q -Dbundle.arch&#x3D;x86，<strong>需要注意</strong> 宿主的ndk abiFilters 要和<code>bundle.arch</code>一致哦。</li>
+<li>如何启动其他插件模块的页面？通过<code>Small.openUri()</code>方法打开页面的路由地址。</li>
+<li>动态更新插件时，需要升级插件的versionCode才会生效</li>
+<li>非Activity组件需要声明在宿主或者宿主分身的manifest中</li>
+</ol>
+<h4 id="0x02-Small框架的优缺点"><a href="#0x02-Small框架的优缺点" class="headerlink" title="0x02 Small框架的优缺点"></a>0x02 Small框架的优缺点</h4><p><strong>选择small框架的原因：</strong></p>
+<ol>
+<li>集成简单</li>
+<li>开发方式非常接近Android app的原生开发方式</li>
+<li>不需要更换编译工具，已有项目中针对业务需求开发的编译工具依然可以继续使用</li>
+<li>优雅，特别是对资源id冲突的处理方式</li>
+<li>轻量化，尽可能少的hook系统变量，兼容性问题较少</li>
+</ol>
+<p><strong>不选择small框架的原因：</strong></p>
+<ol>
+<li>插件的加载并不是按需加载</li>
+<li>插件的更新实现较简单，且没有回滚方案</li>
+<li>有些隐藏bug还未解决，但可以绕过</li>
+<li>功能相对其他插件化框架(比如atlas)来说还不够完善，但足够解决项目插件化目标中遇到的80%问题</li>
+</ol>
+<h4 id="0x03-Small插件化实践踩过的那些坑"><a href="#0x03-Small插件化实践踩过的那些坑" class="headerlink" title="0x03 Small插件化实践踩过的那些坑"></a>0x03 Small插件化实践踩过的那些坑</h4><p>遇到问题怎么办？到github issues里查询你遇到的问题，一般都可以找到答案。这里大致总结了我们团队在small框架使用过程中遇到的常见问题。</p>
+<ol>
+<li>lib插件中增加或减少资源时，需要删除模块目录下public.xml再重新编译。public.xml是为了锁定lib中资源id</li>
+<li>增加或修改插件中ndk module覆盖安装不生效，需要将native module编译生成的so文件放在宿主中才能实现更新</li>
+<li>遇到ClassNotFoundException异常或者无法启动某些activity companentInfo，排查问题的方法:<ul>
+<li>查看Fatal Runtime Exception日志，查看日志中已经加载的so是否包含你的插件so</li>
+<li>如果插件so被加载，再确定相应代码已经被编译进插件so中，查看方法很简单，将插件so重命名为apk直接在Android Studio中打开 </li>
+<li>确认是否将插件so正确声明在bundle.json文件中</li>
+<li>确认该异常类继承的父类或者接口满足上述几个条件</li>
+</ul>
+</li>
+<li>Class ref in pre-verified class resolved to unexpected implementation ，使用gradle smallLint命令查看是否有class重复了 <a target="_blank" rel="noopener" href="https://github.com/wequick/Small/issues/423">https://github.com/wequick/Small/issues/423</a></li>
+<li>Activity launch mode为singletop时在activity style中设置透明背景无效 <a target="_blank" rel="noopener" href="https://github.com/wequick/Small/issues/94">https://github.com/wequick/Small/issues/94</a></li>
+<li>无法通过Small.openUri()方法启动页面怎么办？一定是你用法不对，debug找原因。</li>
+</ol>
+<h4 id="0x04-Small插件化规范"><a href="#0x04-Small插件化规范" class="headerlink" title="0x04 Small插件化规范"></a>0x04 Small插件化规范</h4><ol>
+<li>不要在宿主中添加业务代码</li>
+<li>native module so放在宿主中, 原因关注Github issue: <a target="_blank" rel="noopener" href="https://github.com/wequick/Small/issues/560">增加或修改插件中ndk module覆盖安装不生效 </a></li>
+<li>不同插件模块中依赖相同第三方aar或jar的版本号要相同，建议将aar或jar的版本号统一声明在gradle.properties中，将共同依赖的第三方sdk声明在宿主分身中</li>
+<li>所有Theme的定义都放在宿主和宿主分身中，具体原因看我的另一篇问题总结：<a href="https://ivonhoe.github.io/2018/03/14/small-bug-555-fix/">Android插件化之资源加载</a></li>
+</ol>
+<p><strong>Small插件化项目的完全体</strong></p>
+<p><img src="/res/small/small-2.png" srcset="/img/loading.gif" lazyload alt="Small插件化完全体"></p>
+<h4 id="0x05-参考"><a href="#0x05-参考" class="headerlink" title="0x05 参考"></a>0x05 参考</h4><p>Small官网文档 <a target="_blank" rel="noopener" href="http://code.wequick.net/Small/cn/quickstart">http://code.wequick.net/Small/cn/quickstart</a></p>
+<p>Small github主页 <a target="_blank" rel="noopener" href="https://github.com/wequick/Small">https://github.com/wequick/Small</a></p>
+<p><a target="_blank" rel="noopener" href="http://code.wequick.net/small/docs/ppt/gmtc-galen-small.ppsx">GMTC演讲PPT</a></p>
 <h3 id="转载请标明出处病已blog-https-ivonhoe-github-io"><a href="#转载请标明出处病已blog-https-ivonhoe-github-io" class="headerlink" title="转载请标明出处病已blog https://ivonhoe.github.io/"></a>转载请标明出处<a href="https://ivonhoe.github.io/">病已blog https://ivonhoe.github.io/</a></h3>
             </div>
             <hr>
@@ -295,7 +326,7 @@
                   <div class="post-meta mr-3">
                     <i class="iconfont icon-category"></i>
                     
-                      <a class="hover-with-bg" href="/categories/Android%E5%AE%89%E5%85%A8/">Android安全</a>
+                      <a class="hover-with-bg" href="/categories/Android%E6%8F%92%E4%BB%B6%E5%8C%96/">Android插件化</a>
                     
                   </div>
                 
@@ -303,11 +334,9 @@
                   <div class="post-meta">
                     <i class="iconfont icon-tags"></i>
                     
+                      <a class="hover-with-bg" href="/tags/%E6%8F%92%E4%BB%B6%E5%8C%96/">插件化</a>
+                    
                       <a class="hover-with-bg" href="/tags/Android/">Android</a>
-                    
-                      <a class="hover-with-bg" href="/tags/%E7%A7%BB%E5%8A%A8%E5%AE%89%E5%85%A8/">移动安全</a>
-                    
-                      <a class="hover-with-bg" href="/tags/%E5%8E%BB%E5%B9%BF%E5%91%8A/">去广告</a>
                     
                   </div>
                 
@@ -324,9 +353,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2017/02/09/%E7%BE%8E%E5%9B%A2%E5%A6%82%E4%BD%95%E9%98%B2dex2jar/">
+                      <a href="/2018/01/18/small-plugin-1/">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">Android安全之应用防dex2jar原理及实现</span>
+                        <span class="hidden-mobile">Android插件化之Small框架原理</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -334,8 +363,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2017/01/20/build-aosp-with-macos/">
-                        <span class="hidden-mobile">Mac OS上编译Android源码</span>
+                      <a href="/2017/06/18/android-security-gold-flow-hack/">
+                        <span class="hidden-mobile">Android安全之某团请求加密破解</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
