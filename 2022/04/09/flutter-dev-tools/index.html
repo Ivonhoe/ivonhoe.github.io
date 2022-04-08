@@ -1,0 +1,536 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="病已">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="0x00 前言Flutter官方提供了Flutter DevTools和一些IDE Flutter plugin来辅助开发者进行性能评测，除了这些工具以外，还可以借助Dart和skia引擎提供的工具进行性能分析和调试。这里简单介绍下，Dart的Observatory和Skp Debugger的使用。 0x01 ObservatoryObservatory是Dart VM的性能分析工具，可以借助Ob">
+<meta property="og:type" content="article">
+<meta property="og:title" content="如何排查flutter性能问题">
+<meta property="og:url" content="https://ivonhoe.github.io/2022/04/09/flutter-dev-tools/index.html">
+<meta property="og:site_name" content="病已的博客">
+<meta property="og:description" content="0x00 前言Flutter官方提供了Flutter DevTools和一些IDE Flutter plugin来辅助开发者进行性能评测，除了这些工具以外，还可以借助Dart和skia引擎提供的工具进行性能分析和调试。这里简单介绍下，Dart的Observatory和Skp Debugger的使用。 0x01 ObservatoryObservatory是Dart VM的性能分析工具，可以借助Ob">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2022/png/411436/1649409937097-37f77b3e-2e95-41da-9aac-5157e7176c53.png#clientId=ud356dae1-8f2c-4&crop=0&crop=0.0398&crop=0.9976&crop=1&from=paste&height=125&id=u21d6449d&margin=%5Bobject%20Object%5D&name=image.png&originHeight=251&originWidth=851&originalType=binary&ratio=1&rotation=0&showTitle=false&size=289405&status=done&style=none&taskId=u58cfed1a-9fcc-4d92-8e77-6e387e18e0f&title=&width=425">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2022/png/411436/1649409973795-8b10e74e-3a56-4dde-a057-e5a63e67da12.png#clientId=ud356dae1-8f2c-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=201&id=ub7c7dcaf&margin=%5Bobject%20Object%5D&name=image.png&originHeight=182&originWidth=272&originalType=binary&ratio=1&rotation=0&showTitle=false&size=57674&status=done&style=none&taskId=ud661ac18-d6bb-4f5d-948a-e37f1a97f52&title=&width=300">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2022/png/411436/1649409997816-bb65cd58-77c3-4d7f-a11c-cd89d8a41ca4.png#clientId=ud356dae1-8f2c-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=44&id=u5dcdfb7f&margin=%5Bobject%20Object%5D&name=image.png&originHeight=75&originWidth=1007&originalType=binary&ratio=1&rotation=0&showTitle=false&size=56900&status=done&style=none&taskId=u0359de90-e714-4ce8-8755-1e3a0e8b965&title=&width=592.5">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2022/png/411436/1649410011695-418de8ee-c973-4f8c-9bbe-5cf3742b01f5.png#clientId=ud356dae1-8f2c-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=175&id=u9da0eaff&margin=%5Bobject%20Object%5D&name=image.png&originHeight=350&originWidth=1184&originalType=binary&ratio=1&rotation=0&showTitle=false&size=109162&status=done&style=none&taskId=udccaa6b0-3f39-4ffd-b311-63132ed929b&title=&width=592">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2022/png/411436/1649412857515-3bad9652-c5ad-4c79-a8cc-f1d3ebee74ee.png#clientId=u33a1fcc5-9f61-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=158&id=u95100d5f&margin=%5Bobject%20Object%5D&name=image.png&originHeight=290&originWidth=552&originalType=binary&ratio=1&rotation=0&showTitle=false&size=93151&status=done&style=none&taskId=u61740690-3bea-462b-a67c-f826f2178f5&title=&width=300">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2022/png/411436/1649412899577-6777db08-776f-417b-a934-6a8772b46dc0.png#clientId=u33a1fcc5-9f61-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=391&id=ub9fd1e38&margin=%5Bobject%20Object%5D&name=image.png&originHeight=782&originWidth=1212&originalType=binary&ratio=1&rotation=0&showTitle=false&size=680958&status=done&style=none&taskId=u991395f1-4be8-4898-88c3-f310063d31e&title=&width=606">
+<meta property="article:published_time" content="2022-04-08T16:00:51.000Z">
+<meta property="article:modified_time" content="2022-04-08T16:06:04.267Z">
+<meta property="article:author" content="病已">
+<meta property="article:tag" content="性能优化">
+<meta property="article:tag" content="flutter">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2022/png/411436/1649409937097-37f77b3e-2e95-41da-9aac-5157e7176c53.png#clientId=ud356dae1-8f2c-4&crop=0&crop=0.0398&crop=0.9976&crop=1&from=paste&height=125&id=u21d6449d&margin=%5Bobject%20Object%5D&name=image.png&originHeight=251&originWidth=851&originalType=binary&ratio=1&rotation=0&showTitle=false&size=289405&status=done&style=none&taskId=u58cfed1a-9fcc-4d92-8e77-6e387e18e0f&title=&width=425">
+  
+  
+  <title>如何排查flutter性能问题 - 病已的博客</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"ivonhoe.github.io","root":"/","version":"1.8.14","typing":{"enable":false,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"baidu":"666a58de875adc9dd40d5de65ceac026","google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"JdLpddsaWqwfJtXPdDK8woaF-gzGzoHsz","app_key":"CEmtHXH8f0PtvF0zYtVE0EeY","server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 6.1.0"><link rel="alternate" href="/atom.xml" title="病已的博客" type="application/atom+xml">
+</head>
+
+
+<body>
+  <header style="height: 30vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>病已的博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default_post.jpeg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="如何排查flutter性能问题">
+              
+                如何排查flutter性能问题
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2022-04-09 00:00" pubdate>
+        2022年4月9日 凌晨
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      2.6k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      23 分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">如何排查flutter性能问题</h1>
+            
+            <div class="markdown-body">
+              <h3 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00 前言"></a>0x00 前言</h3><p>Flutter官方提供了Flutter DevTools和一些IDE Flutter plugin来辅助开发者进行性能评测，除了这些工具以外，还可以借助Dart和skia引擎提供的工具进行性能分析和调试。这里简单介绍下，Dart的Observatory和Skp Debugger的使用。</p>
+<h3 id="0x01-Observatory"><a href="#0x01-Observatory" class="headerlink" title="0x01 Observatory"></a>0x01 Observatory</h3><p>Observatory是Dart VM的性能分析工具，可以借助Observatory对Dart VM进行内存，cpu，线程，渲染流程等方面的分析，在进行页面绘制性能分析时，可借助Observatory的timeline工具进行辅助分析。可以通过以下两种方式打开Observatory URL的Web页面。更详细信息可以查看官方文档：<br><a target="_blank" rel="noopener" href="https://flutterchina.club/debugging/">https://flutterchina.club/debugging/</a><br><a target="_blank" rel="noopener" href="https://dart.cn/tools/dart-devtools">https://dart.cn/tools/dart-devtools</a></p>
+<h4 id="1-通过flutter-run打开Observatory"><a href="#1-通过flutter-run打开Observatory" class="headerlink" title="1.通过flutter run打开Observatory"></a>1.通过flutter run打开Observatory</h4><p>可以使用<code>flutter run --profile | grep 127</code>命令可以看到，在终端中包含了观测台的地址<br><img src="https://cdn.nlark.com/yuque/0/2022/png/411436/1649409937097-37f77b3e-2e95-41da-9aac-5157e7176c53.png#clientId=ud356dae1-8f2c-4&crop=0&crop=0.0398&crop=0.9976&crop=1&from=paste&height=125&id=u21d6449d&margin=%5Bobject%20Object%5D&name=image.png&originHeight=251&originWidth=851&originalType=binary&ratio=1&rotation=0&showTitle=false&size=289405&status=done&style=none&taskId=u58cfed1a-9fcc-4d92-8e77-6e387e18e0f&title=&width=425" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<h4 id="2-通过Android-Studio打开Observatory"><a href="#2-通过Android-Studio打开Observatory" class="headerlink" title="2. 通过Android Studio打开Observatory"></a>2. 通过Android Studio打开Observatory</h4><p>1.通过点击Android studio底部的工具栏图标，打开Devtools</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2022/png/411436/1649409973795-8b10e74e-3a56-4dde-a057-e5a63e67da12.png#clientId=ud356dae1-8f2c-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=201&id=ub7c7dcaf&margin=%5Bobject%20Object%5D&name=image.png&originHeight=182&originWidth=272&originalType=binary&ratio=1&rotation=0&showTitle=false&size=57674&status=done&style=none&taskId=ud661ac18-d6bb-4f5d-948a-e37f1a97f52&title=&width=300" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<p>2.在截取浏览器中显示的uri参数</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2022/png/411436/1649409997816-bb65cd58-77c3-4d7f-a11c-cd89d8a41ca4.png#clientId=ud356dae1-8f2c-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=44&id=u5dcdfb7f&margin=%5Bobject%20Object%5D&name=image.png&originHeight=75&originWidth=1007&originalType=binary&ratio=1&rotation=0&showTitle=false&size=56900&status=done&style=none&taskId=u0359de90-e714-4ce8-8755-1e3a0e8b965&title=&width=592.5" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<p>3.借助urldecode工具解码，两次decode后就是Observatory本地服务地址。</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2022/png/411436/1649410011695-418de8ee-c973-4f8c-9bbe-5cf3742b01f5.png#clientId=ud356dae1-8f2c-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=175&id=u9da0eaff&margin=%5Bobject%20Object%5D&name=image.png&originHeight=350&originWidth=1184&originalType=binary&ratio=1&rotation=0&showTitle=false&size=109162&status=done&style=none&taskId=udccaa6b0-3f39-4ffd-b311-63132ed929b&title=&width=592" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<h3 id="0x02-Observatory-Timeline"><a href="#0x02-Observatory-Timeline" class="headerlink" title="0x02. Observatory Timeline"></a>0x02. Observatory Timeline</h3><h4 id="1-Flutter-debug-flag"><a href="#1-Flutter-debug-flag" class="headerlink" title="1. Flutter debug flag"></a>1. Flutter debug flag</h4><p>Flutter提供了很多debug flag用来帮助开发者跟踪不同处理流程的执行过程，需要注意的是，所有debug开头的flag只有在debug模式下才会生效，如</p>
+<ul>
+<li>debugProfileBuildsEnable：向Timeline事件中添加每个widget的build信息</li>
+<li>debugProfileLayoutEnabled：向Timeline事件中添加每个renderObject的layout信息</li>
+<li>debugProfilePaintEnabled: 向Timeline事件中添加每个renderObject的paint信息</li>
+<li>debugPaintLayerBoadersEnabled: 来用为每个layer的边界显示橙色边框</li>
+<li>debugPrintRebuildDirtyWidgets：打印标记为dirty的widgets</li>
+<li>debugPrintBeginFrameBanner&#x2F;debugPrintEndFrameBanner：打印每帧开始和结束</li>
+</ul>
+<p>最简单的方式是在程序顶部入口<code>void main()</code>中设置它，如下案例代码所示：<br><img src="https://cdn.nlark.com/yuque/0/2022/png/411436/1649412857515-3bad9652-c5ad-4c79-a8cc-f1d3ebee74ee.png#clientId=u33a1fcc5-9f61-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=158&id=u95100d5f&margin=%5Bobject%20Object%5D&name=image.png&originHeight=290&originWidth=552&originalType=binary&ratio=1&rotation=0&showTitle=false&size=93151&status=done&style=none&taskId=u61740690-3bea-462b-a67c-f826f2178f5&title=&width=300" srcset="/img/loading.gif" lazyload alt="image.png"><br>这样我们就可以在Observatory的Timeline中查看widget build在每一帧中的调用和耗时情况<br><img src="https://cdn.nlark.com/yuque/0/2022/png/411436/1649412899577-6777db08-776f-417b-a934-6a8772b46dc0.png#clientId=u33a1fcc5-9f61-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=391&id=ub9fd1e38&margin=%5Bobject%20Object%5D&name=image.png&originHeight=782&originWidth=1212&originalType=binary&ratio=1&rotation=0&showTitle=false&size=680958&status=done&style=none&taskId=u991395f1-4be8-4898-88c3-f310063d31e&title=&width=606" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<h4 id="2-自定义Timeline跟踪"><a href="#2-自定义Timeline跟踪" class="headerlink" title="2. 自定义Timeline跟踪"></a>2. 自定义Timeline跟踪</h4><p>要执行自定义性能跟踪和测量Dart任意代码段的wall&#x2F;CPU时间（类似于在Android上使用systrace）。 使用dart:developer的Timeline工具来包含你想测试的代码块，例如：</p>
+<figure class="highlight reasonml"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></div></td><td class="code"><pre><code class="hljs reasonml"><span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Timeline</span>.</span></span>start<span class="hljs-constructor">Sync(&#x27;<span class="hljs-params">interesting</span> <span class="hljs-params">function</span>&#x27;)</span>;<br><span class="hljs-comment">// iWonderHowLongThisTakes();</span><br><span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Timeline</span>.</span></span>finish<span class="hljs-constructor">Sync()</span>;<br></code></pre></td></tr></table></figure>
+<p>这段代码等同于Android原生端的beginSection和endSection</p>
+<figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs reasonml"><span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Trace</span>.</span></span><span class="hljs-keyword">begin</span><span class="hljs-constructor">Section(<span class="hljs-string">&quot;&quot;</span>)</span>;<br><span class="hljs-comment">// xxxxx</span><br><span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Trace</span>.</span></span><span class="hljs-keyword">end</span><span class="hljs-constructor">Section()</span>;<br></code></pre></td></tr></table></figure>
+<p>然后打开你应用程序的Observatory timeline页面，在”Recorded Streams”中选择’Dart’复选框，并执行你想测量的功能。刷新页面将在Chrome的跟踪工具中显示应用按时间顺序排列的timeline记录。</p>
+<h4 id="3-使用Observatory查看skia绘图指令"><a href="#3-使用Observatory查看skia绘图指令" class="headerlink" title="3. 使用Observatory查看skia绘图指令"></a>3. 使用Observatory查看skia绘图指令</h4><p>使用命令：<code>flutter run --profile --trace-skia</code><br><strong>重点关注saveLayer和clipPath函数的调用</strong></p>
+<h3 id="0x03-skpdebugger"><a href="#0x03-skpdebugger" class="headerlink" title="0x03. skpdebugger"></a>0x03. skpdebugger</h3><p>通过抓取skp，回放每条skia绘图指令的执行过程，可以在屏幕上直观的看到绘制流程的每个步骤，单步分析每一条绘图指令，从而定位在单帧绘制中影响绘制效率的问题。<br><a target="_blank" rel="noopener" href="https://player.bilibili.com/player.html?bvid=BV1ab411T7nM">点击查看【bilibili】</a></p>
+<p>使用步骤：</p>
+<ol>
+<li>使用<code>flutter screenshot --type=skia --observatory-uri=uri</code>命令，抓取一帧skia绘图指令的执行过程，截取skp可以单步检测每条绘图指令</li>
+<li>将生成的skp文件上传<a target="_blank" rel="noopener" href="https://debugger.skia.org/">https://debugger.skia.org/</a><h4 id="注意："><a href="#注意：" class="headerlink" title="注意："></a>注意：</h4>Android Studio4.1版本更改了插件的安装路径，在Flutter1.23以下，flutter doctor命令可能会找不到AS的flutter&amp;Dart plugin，导致flutter screenshot命令执行失败，这里可使用以下命令解决：<br><code>ln -s ~/Library/Application\ Support/Google/AndroidStudio4.1/plugins ~/Library/Application\ Support/AndroidStudio4.1</code></li>
+</ol>
+<h3 id="0x04-总结"><a href="#0x04-总结" class="headerlink" title="0x04 总结"></a>0x04 总结</h3><ol>
+<li>profile模式是最接近release的性能表现，当需要获取flutter app较为真实的性能评测数据时，要使用profile进行测试。而需要对具体的build paint流程进行详细分析时使用debug模式进行trace</li>
+<li>使用真机，不要使用模拟器，尤其是不要使用iOS的模拟器，模拟器没有硬件加速，所以在模拟器的测试数据和真机的差别会很大</li>
+<li>skpdebugger是神器，通过对单帧绘制指令的采集，可以很清晰的看到在绘制中不合理的部分。针对不合理的绘制进行单帧绘制优化</li>
+<li>重点关注saveLayer和clipPath的调用</li>
+</ol>
+<h3 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h3><p><a target="_blank" rel="noopener" href="https://www.sunmoonblog.com/2020/01/10/flutter-performance-tools/">https://www.sunmoonblog.com/2020/01/10/flutter-performance-tools/</a><br><a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/1591997">https://cloud.tencent.com/developer/article/1591997</a><br><a target="_blank" rel="noopener" href="https://flutterchina.club/debugging/">https://flutterchina.club/debugging/</a><br><a target="_blank" rel="noopener" href="https://flutter.cn/docs/testing/code-debugging">https://flutter.cn/docs/testing/code-debugging</a></p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">性能优化</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">性能优化</a>
+                    
+                      <a class="hover-with-bg" href="/tags/flutter/">flutter</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/02/08/java-spi/">
+                        <span class="hidden-mobile">JDK ServiceLoader加载优化</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments" lazyload>
+                
+                  
+                
+                
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/valine@1/dist/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"JdLpddsaWqwfJtXPdDK8woaF-gzGzoHsz","appKey":"CEmtHXH8f0PtvF0zYtVE0EeY","path":"window.location.pathname","placeholder":null,"avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          Fluid.plugins.initFancyBox('#valine .vcontent img:not(.vemoji)');
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+
+  <script defer src="/js/leancloud.js" ></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    <!-- Baidu Analytics -->
+    <script defer>
+      var _hmt = _hmt || [];
+      (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?666a58de875adc9dd40d5de65ceac026";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>
