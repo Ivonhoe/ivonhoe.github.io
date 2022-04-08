@@ -1,0 +1,533 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="病已">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="0x00 前言本文记录在启动优化项目中解决ServiceLoader加载长耗时问题的方案，介绍了JDK ServiceLoader在安卓平台中会带来哪些问题，方案执行过程中遇到的问题和相应的思考。特别是在一个负责的业务系统中，如何选择技改方案，保证方案的顺利落地。 0x01 什么是Java SPI？SPI，全称Service Provicer Interface。在JDK1.6内置的一套服务发现机">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JDK ServiceLoader加载优化">
+<meta property="og:url" content="https://ivonhoe.github.io/2022/02/08/java-spi/index.html">
+<meta property="og:site_name" content="病已的博客">
+<meta property="og:description" content="0x00 前言本文记录在启动优化项目中解决ServiceLoader加载长耗时问题的方案，介绍了JDK ServiceLoader在安卓平台中会带来哪些问题，方案执行过程中遇到的问题和相应的思考。特别是在一个负责的业务系统中，如何选择技改方案，保证方案的顺利落地。 0x01 什么是Java SPI？SPI，全称Service Provicer Interface。在JDK1.6内置的一套服务发现机">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2022/png/411436/1649403114832-2483028e-558c-40e6-a974-69b7d4b30685.png#clientId=u746e1af0-e590-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=105&id=u40d410af&margin=%5Bobject%20Object%5D&name=image.png&originHeight=202&originWidth=867&originalType=binary&ratio=1&rotation=0&showTitle=false&size=32688&status=done&style=none&taskId=u5cf5c6b2-12bc-49b1-a8cb-8c759cb8427&title=&width=450">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2022/png/411436/1649403126452-73a0392d-1725-42f6-bcfb-ec2216ab2682.png#clientId=u746e1af0-e590-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=181&id=u42ebebd2&margin=%5Bobject%20Object%5D&name=image.png&originHeight=228&originWidth=568&originalType=binary&ratio=1&rotation=0&showTitle=false&size=53669&status=done&style=none&taskId=u3551e280-e4e7-42c7-be49-9d9a4f0c643&title=&width=450">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2022/png/411436/1649403138515-417e156a-4435-474f-bd85-a2181b2c2510.png#clientId=u746e1af0-e590-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=442&id=udaf30fd2&margin=%5Bobject%20Object%5D&name=image.png&originHeight=883&originWidth=768&originalType=binary&ratio=1&rotation=0&showTitle=false&size=117366&status=done&style=none&taskId=udeffd1ae-b5e7-433b-ba75-f8a384c9daa&title=&width=384">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2022/png/411436/1649408066234-bc419d60-d2a2-4230-ac9d-5ebeb856d296.png#clientId=u746e1af0-e590-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=632&id=ue4608016&margin=%5Bobject%20Object%5D&name=image.png&originHeight=1264&originWidth=1440&originalType=binary&ratio=1&rotation=0&showTitle=false&size=271359&status=done&style=none&taskId=u863d831e-03aa-411d-80b6-e1e8f26b59c&title=&width=720">
+<meta property="article:published_time" content="2022-02-08T14:53:51.000Z">
+<meta property="article:modified_time" content="2022-04-08T15:03:18.899Z">
+<meta property="article:author" content="病已">
+<meta property="article:tag" content="性能优化">
+<meta property="article:tag" content="ASM">
+<meta property="article:tag" content="SPI">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2022/png/411436/1649403114832-2483028e-558c-40e6-a974-69b7d4b30685.png#clientId=u746e1af0-e590-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=105&id=u40d410af&margin=%5Bobject%20Object%5D&name=image.png&originHeight=202&originWidth=867&originalType=binary&ratio=1&rotation=0&showTitle=false&size=32688&status=done&style=none&taskId=u5cf5c6b2-12bc-49b1-a8cb-8c759cb8427&title=&width=450">
+  
+  
+  <title>JDK ServiceLoader加载优化 - 病已的博客</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"ivonhoe.github.io","root":"/","version":"1.8.14","typing":{"enable":false,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"baidu":"666a58de875adc9dd40d5de65ceac026","google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"JdLpddsaWqwfJtXPdDK8woaF-gzGzoHsz","app_key":"CEmtHXH8f0PtvF0zYtVE0EeY","server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 6.1.0"><link rel="alternate" href="/atom.xml" title="病已的博客" type="application/atom+xml">
+</head>
+
+
+<body>
+  <header style="height: 30vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>病已的博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default_post.jpeg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="JDK ServiceLoader加载优化">
+              
+                JDK ServiceLoader加载优化
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2022-02-08 22:53" pubdate>
+        2022年2月8日 晚上
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      2.5k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      21 分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">JDK ServiceLoader加载优化</h1>
+            
+            <div class="markdown-body">
+              <h3 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00 前言"></a>0x00 前言</h3><p>本文记录在启动优化项目中解决ServiceLoader加载长耗时问题的方案，介绍了JDK ServiceLoader在安卓平台中会带来哪些问题，方案执行过程中遇到的问题和相应的思考。特别是在一个负责的业务系统中，如何选择技改方案，保证方案的顺利落地。</p>
+<h3 id="0x01-什么是Java-SPI？"><a href="#0x01-什么是Java-SPI？" class="headerlink" title="0x01 什么是Java SPI？"></a>0x01 什么是Java SPI？</h3><p>SPI，全称Service Provicer Interface。在JDK1.6内置的一套服务发现机制，主要用来服务架构扩展和替换组件。在面向对象设计中，最基本的原则就是面向接口编程，通过接口暴露模块的功能定义，将具体的接口实现隐藏在模块内部。而服务发现机制，提供了通过接口获取服务实现的能力，实现模块的可插拔、可拓展、可替换。保证了由调用方在调用时选择自己需要的外部实现。</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2022/png/411436/1649403114832-2483028e-558c-40e6-a974-69b7d4b30685.png#clientId=u746e1af0-e590-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=105&id=u40d410af&margin=%5Bobject%20Object%5D&name=image.png&originHeight=202&originWidth=867&originalType=binary&ratio=1&rotation=0&showTitle=false&size=32688&status=done&style=none&taskId=u5cf5c6b2-12bc-49b1-a8cb-8c759cb8427&title=&width=450" srcset="/img/loading.gif" lazyload alt="image.png"><br />简单来是在利用JDK提供的ServiceLoader机制可以通过以下几个步骤：</p>
+<ol>
+<li>定义接口类</li>
+<li>定义接口实现类</li>
+<li>将实现类的类名保存在<code>META-INFO/services</code>目录中，文件名为接口类的类名</li>
+<li>使用<code>java.util.ServiceLoader.load</code>方法加载接口类，获取到在META-INFO中定义的接口实现类</li>
+</ol>
+<p>在META-INFO中的声明形式大致如下所示：<br /><img src="https://cdn.nlark.com/yuque/0/2022/png/411436/1649403126452-73a0392d-1725-42f6-bcfb-ec2216ab2682.png#clientId=u746e1af0-e590-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=181&id=u42ebebd2&margin=%5Bobject%20Object%5D&name=image.png&originHeight=228&originWidth=568&originalType=binary&ratio=1&rotation=0&showTitle=false&size=53669&status=done&style=none&taskId=u3551e280-e4e7-42c7-be49-9d9a4f0c643&title=&width=450" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<h3 id="0x02-JDK-ServiceLoader存在哪些问题？"><a href="#0x02-JDK-ServiceLoader存在哪些问题？" class="headerlink" title="0x02 JDK ServiceLoader存在哪些问题？"></a>0x02 JDK ServiceLoader存在哪些问题？</h3><h4 id="Autoservice组件解决了什么问题？"><a href="#Autoservice组件解决了什么问题？" class="headerlink" title="Autoservice组件解决了什么问题？"></a>Autoservice组件解决了什么问题？</h4><p>我们经常使用的autoservice（<a target="_blank" rel="noopener" href="https://github.com/google/auto">https://github.com/google/auto</a>）解决了什么问题呢？其实autoservice只是提供了注解和注解处理器的能力，通过自定义一个annotationprocessor将<code>@AutoService</code>注解标记的实现类信息，收集起来并保存到<code>META-INFO/services</code>目录中。通过注解的方式将上面的<strong>步骤3</strong>优化掉了，这样既提高了效率，又避免了方案变更时需要手动更新配置文件的问题。</p>
+<h4 id="Android中使用JDK-ServiceLoader会带来什么问题？"><a href="#Android中使用JDK-ServiceLoader会带来什么问题？" class="headerlink" title="Android中使用JDK ServiceLoader会带来什么问题？"></a>Android中使用JDK ServiceLoader会带来什么问题？</h4><p>主要是类配置文件的加载耗时问题。在java项目中，java.util.ServiceLoader通过加载jar文件META-INFO&#x2F;services目录下的配置文件获取实现类信息，当在Android项目中，java.util.ServiceLoader时通过加载apk包目录下META-INFO&#x2F;services中的配置文件，这里都涉及到整个zip文件的遍历，加载效率是非常低的，一般情况下会导致几百毫秒的耗时。而如果在一些关键流程中触发了JDK ServiceLoader的加载，几百毫秒就会带来很差的用户体验。<br /><img src="https://cdn.nlark.com/yuque/0/2022/png/411436/1649403138515-417e156a-4435-474f-bd85-a2181b2c2510.png#clientId=u746e1af0-e590-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=442&id=udaf30fd2&margin=%5Bobject%20Object%5D&name=image.png&originHeight=883&originWidth=768&originalType=binary&ratio=1&rotation=0&showTitle=false&size=117366&status=done&style=none&taskId=udeffd1ae-b5e7-433b-ba75-f8a384c9daa&title=&width=384" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<h3 id="0x03-如何解决JDK-ServiceLoader带来的问题？"><a href="#0x03-如何解决JDK-ServiceLoader带来的问题？" class="headerlink" title="0x03 如何解决JDK ServiceLoader带来的问题？"></a>0x03 如何解决JDK ServiceLoader带来的问题？</h3><p>先梳理现状：</p>
+<ol>
+<li>项目中大量使用了多个改造自autoservice组件的注解处理器，在meta-info目录下生成了多个配置文件</li>
+<li>耗时主要发生在启动流程业务初始化阶段，使用JDK serviceloader加载meta-info下的配置文件导致了长耗时</li>
+</ol>
+<p>ServiceLoader加载耗时过长的主要原因是，需要从zip文件中检索出meta-info目录下的配置文件，想要提升配置加载的效率，解决方法也很简单，可以将配置文件保存到更容易加载的地方，这里可以选择将配置信息保存到安卓原生提供的资源路径下，也可以选择将配置信息保存到类文件中。当然想要在相对复杂的业务系统中解决一个问题，既包括解决技术问题本身，也需要考虑到方案落地的成本和影响面。特别是高业务价值低技术价值的遗产系统中做技术优化，首先保证的是兼容现有业务逻辑。这里优先选择将相关配置信息保存在类文件中，借助android编译插件技术，在编译期间做信息收集，在运行时通过类加载的方式将所需service信息加载出来。这里可以主要参考wmrouter的实现思路，但是又稍有差别。<br />先对比wmrouter的实现方案，可以发现大致可以分为以下几个步骤：</p>
+<ol>
+<li>开发编码流程，定义服务接口，通过注解标记服务实现类</li>
+<li>组件aar发布流程，通过annotationprocessor生成.class的文件，将服务实现的类信息保存在自动生成的.class文件中</li>
+<li>编译打包流程，通过gradle插件收集步骤2中新生成的所有类，因为服务实现可能分布在项目中的多个组件中，所以在apk整包的编译流程，需要将所有服务实现的类信息统一收集起来，并加入到初始化的代码中。</li>
+</ol>
+<p>通过以上流程的说明，可以看到整个流程被分为两步：</p>
+<ol>
+<li>annotationprocessor通过将注解转换成jvm字节码</li>
+<li>通过AGP transform生成初始化代码，将jvm的初始化调用收集起来在初始化时统一调用</li>
+</ol>
+<p>前面也提到，在现有的遗产系统中，如果照搬wmrouter的方案会存在什么问呢？如果照搬上述的方案，在annotationprocessor处理阶段，需要将所有使用autoservice @AutoService的组件使用新的annotationprocessor重新发布一边。<strong>这个工作量和变更范围是巨大的。有没有更优化的方案呢？</strong></p>
+<p>解决思路也很直接，<strong>将注解的收集和配置信息保存到类文件合并成一步。</strong></p>
+<p>通过在AGP transform流程中收集注解，同时使用ASM框架动态生成相关字节码，将相关的实现类信息保存到类文件中。就可以避免重新发布大量业务组件的问题，将变更范围控制到最小。</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2022/png/411436/1649408066234-bc419d60-d2a2-4230-ac9d-5ebeb856d296.png#clientId=u746e1af0-e590-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=632&id=ue4608016&margin=%5Bobject%20Object%5D&name=image.png&originHeight=1264&originWidth=1440&originalType=binary&ratio=1&rotation=0&showTitle=false&size=271359&status=done&style=none&taskId=u863d831e-03aa-411d-80b6-e1e8f26b59c&title=&width=720" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<h3 id="0x04-总结"><a href="#0x04-总结" class="headerlink" title="0x04 总结"></a>0x04 总结</h3><p>ServiceLoader带来的性能问题，一旦被发现，解决思路其实是很直接的，并没有太多拐弯的地方。但是在这个技术方案落地的过程中遇到的问题比技术方案本身多很多。特别是在已有大量业务系统在使用的组件中做技改，影响面的评估和回滚方案是要优先被考虑的，所以在运行时加载配置阶段，需要通过配置开关控制是优先加载类信息还是保持原加载流程不变，来做到技改方案可观测可回滚。同时在技术方案的选择上，应该选择影响面尽可能小，变更尽可能少的方案。尽可能避免业务方的更改。</p>
+<h3 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h3><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/28909673">https://zhuanlan.zhihu.com/p/28909673</a><br /><a target="_blank" rel="noopener" href="https://github.com/meituan/WMRouter">https://github.com/meituan/WMRouter</a></p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">性能优化</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">性能优化</a>
+                    
+                      <a class="hover-with-bg" href="/tags/ASM/">ASM</a>
+                    
+                      <a class="hover-with-bg" href="/tags/SPI/">SPI</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2021/03/28/design-patterns-visitor/">
+                        <span class="hidden-mobile">访问者模式</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments" lazyload>
+                
+                  
+                
+                
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/valine@1/dist/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"JdLpddsaWqwfJtXPdDK8woaF-gzGzoHsz","appKey":"CEmtHXH8f0PtvF0zYtVE0EeY","path":"window.location.pathname","placeholder":null,"avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          Fluid.plugins.initFancyBox('#valine .vcontent img:not(.vemoji)');
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+
+  <script defer src="/js/leancloud.js" ></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    <!-- Baidu Analytics -->
+    <script defer>
+      var _hmt = _hmt || [];
+      (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?666a58de875adc9dd40d5de65ceac026";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>
