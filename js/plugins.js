@@ -75,6 +75,8 @@ Fluid.plugins = {
           }
         }
       }
+
+      $image.attr('referrerpolicy','no-referrer');
       var $imageWrap = $image.wrap(`
         <a class="fancybox fancybox.image" href="${imageUrl}"
           itemscope itemtype="http://schema.org/ImageObject" itemprop="url"></a>`
@@ -82,7 +84,10 @@ Fluid.plugins = {
       if ($image.is('.group-image-container img')) {
         $imageWrap.attr('data-fancybox', 'group').attr('rel', 'group');
       } else {
-        $imageWrap.attr('data-fancybox', 'default').attr('rel', 'default');
+        $imageWrap.attr('data-fancybox', 'default')
+        // .attr('referrer', 'no-referrer');
+        // .attr('rel', 'default');
+        .attr('referrerpolicy','no-referrer');
       }
 
       var imageTitle = $image.attr('title') || $image.attr('alt');
