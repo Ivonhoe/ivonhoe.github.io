@@ -1,27 +1,29 @@
-
-
 <!DOCTYPE html>
-<html lang="zh-CN" data-default-color-scheme=auto>
-
-
-
+<html lang=zh>
 <head>
-  <meta charset="UTF-8">
-  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
-  <link rel="icon" href="/img/favicon.png">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
-  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta charset="utf-8">
   
-  <meta name="theme-color" content="#2f4154">
-  <meta name="author" content="病已">
-  <meta name="keywords" content="">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
   
-    <meta name="description" content="0x01 前言在实际的开发工程中，对视图增加圆角和阴影效果的绘制是比较常见的需求，Android系统提供了一系列的方法以帮助开发者实现基础的视图圆角和阴影效果，但在面对实际的视觉需求时，想要完美达到视觉设计师的设计要求就难免需要了解一些基础的绘图原理和绘图方法才能达到特殊的设计需求，这里就简单对比和总结了常见的圆角和阴影的绘图方法。">
+  
+  <title>Android系统上绘制圆角和阴影的几种姿势 | Hexo</title>
+  <meta name="description" content="在实际的开发工程中，对视图增加圆角和阴影效果的绘制是比较常见的需求，Android系统提供了一系列的方法以帮助开发者实现基础的视图圆角和阴影效果，但在面对实际的视觉需求时，想要完美达到视觉设计师的设计要求就难免需要了解一些基础的绘图原理和绘图方法才能达到特殊的设计需求，这里就简单对比和总结了常见的圆角和阴影的绘图方法。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Android系统上绘制圆角和阴影的几种姿势">
 <meta property="og:url" content="https://ivonhoe.github.io/2019/01/29/android-corner-shadow/index.html">
 <meta property="og:site_name" content="病已的博客">
-<meta property="og:description" content="0x01 前言在实际的开发工程中，对视图增加圆角和阴影效果的绘制是比较常见的需求，Android系统提供了一系列的方法以帮助开发者实现基础的视图圆角和阴影效果，但在面对实际的视觉需求时，想要完美达到视觉设计师的设计要求就难免需要了解一些基础的绘图原理和绘图方法才能达到特殊的设计需求，这里就简单对比和总结了常见的圆角和阴影的绘图方法。">
+<meta property="og:description" content="在实际的开发工程中，对视图增加圆角和阴影效果的绘制是比较常见的需求，Android系统提供了一系列的方法以帮助开发者实现基础的视图圆角和阴影效果，但在面对实际的视觉需求时，想要完美达到视觉设计师的设计要求就难免需要了解一些基础的绘图原理和绘图方法才能达到特殊的设计需求，这里就简单对比和总结了常见的圆角和阴影的绘图方法。">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://ivonhoe.github.io/res/shadow/android_corner_shadow_0.png">
 <meta property="og:image" content="https://ivonhoe.github.io/res/shadow/android_corner_shadow_1.png">
@@ -29,512 +31,590 @@
 <meta property="og:image" content="https://ivonhoe.github.io/res/shadow/android_corner_shadow_3.png">
 <meta property="og:image" content="https://ivonhoe.github.io/res/shadow/android_corner_shadow_4.png">
 <meta property="article:published_time" content="2019-01-29T03:41:57.000Z">
-<meta property="article:modified_time" content="2022-04-07T02:37:15.877Z">
+<meta property="article:modified_time" content="2022-05-25T16:53:15.821Z">
 <meta property="article:author" content="病已">
 <meta property="article:tag" content="绘制与动画">
-<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://ivonhoe.github.io/res/shadow/android_corner_shadow_0.png">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://ivonhoe.github.io/2019/01/29/android-corner-shadow/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="病已的博客" type="application/atom+xml">
   
   
-  <title>Android系统上绘制圆角和阴影的几种姿势 - 病已的博客</title>
-
-  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
-
-
-  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
-  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
 
   
-    
+  
+  
+  
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+
+<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/Ivonhoe" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.png" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">病已</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Android Developer</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> HangZhou, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/Ivonhoe" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
     
       
-      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Android%E5%AE%89%E5%85%A8/">Android安全</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Android%E6%8F%92%E4%BB%B6%E5%8C%96/">Android插件化</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Flutter/">Flutter</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/">学习总结</a><span class="category-list-count">12</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">性能优化</a><span class="category-list-count">8</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%96%B9%E6%A1%88%E4%B8%8E%E8%AE%BE%E8%AE%A1/">方案与设计</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%BB%98%E5%88%B6%E4%B8%8E%E5%8A%A8%E7%94%BB/">绘制与动画</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%BF%BB%E8%AF%91/">翻译</a><span class="category-list-count">2</span></li></ul>
+    </div>
+  </div>
+
+
     
-  
-
-  
-    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
-  
-
-
-<!-- 主题依赖的图标库，不要自行修改 -->
-
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+      
+  <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/ASM/" rel="tag">ASM</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/" rel="tag">Android</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android%E6%BA%90%E7%A0%81/" rel="tag">Android源码</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Bitmap/" rel="tag">Bitmap</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/BitmapFactory/" rel="tag">BitmapFactory</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Context/" rel="tag">Context</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Copy-on-write/" rel="tag">Copy-on-write</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Delvik/" rel="tag">Delvik</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Drawable/" rel="tag">Drawable</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GC/" rel="tag">GC</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Gradle/" rel="tag">Gradle</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/" rel="tag">JVM</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SPI/" rel="tag">SPI</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Zygote/" rel="tag">Zygote</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/anr/" rel="tag">anr</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/dex2jar/" rel="tag">dex2jar</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/dump-heap/" rel="tag">dump heap</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/flutter/" rel="tag">flutter</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ndk/" rel="tag">ndk</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%A7%E5%93%81%E5%88%86%E6%9E%90/" rel="tag">产品分析</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%86%85%E5%AD%98/" rel="tag">内存</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8E%BB%E5%B9%BF%E5%91%8A/" rel="tag">去广告</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" rel="tag">多线程</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AF%B9%E7%A7%B0%E5%8A%A0%E5%AF%86/" rel="tag">对称加密</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" rel="tag">性能优化</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8F%92%E4%BB%B6%E5%8C%96/" rel="tag">插件化</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D%EF%BC%8C%E6%95%B0%E5%AD%97%E8%AF%81%E4%B9%A6/" rel="tag">数字签名，数字证书</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E8%A7%A3%E6%9E%90/" rel="tag">数据解析</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%97%A0%E7%97%95%E5%9F%8B%E7%82%B9/" rel="tag">无痕埋点</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%AD%BB%E9%94%81/" rel="tag">死锁</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91/" rel="tag">源码编译</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%94%9F%E4%BA%A7%E8%80%85%E6%B6%88%E8%B4%B9%E8%80%85%E6%A8%A1%E5%BC%8F/" rel="tag">生产者消费者模式</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%A7%BB%E5%8A%A8%E5%AE%89%E5%85%A8/" rel="tag">移动安全</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BB%98%E5%88%B6%E4%B8%8E%E5%8A%A8%E7%94%BB/" rel="tag">绘制与动画</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BD%91%E7%BB%9C/" rel="tag">网络</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BF%BB%E8%AF%91/" rel="tag">翻译</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%BD%AC%E8%BD%BD/" rel="tag">转载</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9D%9E%E5%AF%B9%E7%A7%B0%E5%8A%A0%E5%AF%86/" rel="tag">非对称加密</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
 
 
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/ASM/" style="font-size: 13px;">ASM</a> <a href="/tags/Android/" style="font-size: 14px;">Android</a> <a href="/tags/Android%E6%BA%90%E7%A0%81/" style="font-size: 13px;">Android源码</a> <a href="/tags/Bitmap/" style="font-size: 13.2px;">Bitmap</a> <a href="/tags/BitmapFactory/" style="font-size: 13px;">BitmapFactory</a> <a href="/tags/Context/" style="font-size: 13px;">Context</a> <a href="/tags/Copy-on-write/" style="font-size: 13px;">Copy-on-write</a> <a href="/tags/Delvik/" style="font-size: 13px;">Delvik</a> <a href="/tags/Drawable/" style="font-size: 13px;">Drawable</a> <a href="/tags/GC/" style="font-size: 13px;">GC</a> <a href="/tags/Gradle/" style="font-size: 13px;">Gradle</a> <a href="/tags/JVM/" style="font-size: 13.2px;">JVM</a> <a href="/tags/SPI/" style="font-size: 13px;">SPI</a> <a href="/tags/Zygote/" style="font-size: 13.2px;">Zygote</a> <a href="/tags/anr/" style="font-size: 13px;">anr</a> <a href="/tags/dex2jar/" style="font-size: 13px;">dex2jar</a> <a href="/tags/dump-heap/" style="font-size: 13px;">dump heap</a> <a href="/tags/flutter/" style="font-size: 13.2px;">flutter</a> <a href="/tags/ndk/" style="font-size: 13.2px;">ndk</a> <a href="/tags/%E4%BA%A7%E5%93%81%E5%88%86%E6%9E%90/" style="font-size: 13px;">产品分析</a> <a href="/tags/%E5%86%85%E5%AD%98/" style="font-size: 13.2px;">内存</a> <a href="/tags/%E5%8E%BB%E5%B9%BF%E5%91%8A/" style="font-size: 13px;">去广告</a> <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" style="font-size: 13px;">多线程</a> <a href="/tags/%E5%AF%B9%E7%A7%B0%E5%8A%A0%E5%AF%86/" style="font-size: 13px;">对称加密</a> <a href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" style="font-size: 13.8px;">性能优化</a> <a href="/tags/%E6%8F%92%E4%BB%B6%E5%8C%96/" style="font-size: 13.6px;">插件化</a> <a href="/tags/%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D%EF%BC%8C%E6%95%B0%E5%AD%97%E8%AF%81%E4%B9%A6/" style="font-size: 13px;">数字签名，数字证书</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E8%A7%A3%E6%9E%90/" style="font-size: 13px;">数据解析</a> <a href="/tags/%E6%97%A0%E7%97%95%E5%9F%8B%E7%82%B9/" style="font-size: 13.2px;">无痕埋点</a> <a href="/tags/%E6%AD%BB%E9%94%81/" style="font-size: 13px;">死锁</a> <a href="/tags/%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91/" style="font-size: 13px;">源码编译</a> <a href="/tags/%E7%94%9F%E4%BA%A7%E8%80%85%E6%B6%88%E8%B4%B9%E8%80%85%E6%A8%A1%E5%BC%8F/" style="font-size: 13px;">生产者消费者模式</a> <a href="/tags/%E7%A7%BB%E5%8A%A8%E5%AE%89%E5%85%A8/" style="font-size: 13.4px;">移动安全</a> <a href="/tags/%E7%BB%98%E5%88%B6%E4%B8%8E%E5%8A%A8%E7%94%BB/" style="font-size: 13.8px;">绘制与动画</a> <a href="/tags/%E7%BD%91%E7%BB%9C/" style="font-size: 13.2px;">网络</a> <a href="/tags/%E7%BF%BB%E8%AF%91/" style="font-size: 13.2px;">翻译</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 13.6px;">设计模式</a> <a href="/tags/%E8%BD%AC%E8%BD%BD/" style="font-size: 13px;">转载</a> <a href="/tags/%E9%9D%9E%E5%AF%B9%E7%A7%B0%E5%8A%A0%E5%AF%86/" style="font-size: 13px;">非对称加密</a>
+    </div>
+  </div>
 
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/04/">四月 2022</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/02/">二月 2022</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/03/">三月 2021</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">五月 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">三月 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">十一月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">七月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">六月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">一月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">十月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">九月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">七月 2018</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">六月 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">五月 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">九月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">四月 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">三月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">二月 2015</a><span class="archive-list-count">1</span></li></ul>
+    </div>
+  </div>
 
 
-<link  rel="stylesheet" href="/css/main.css" />
-
-<!-- 自定义样式保持在最底部 -->
-
-
-  <script id="fluid-configs">
-    var Fluid = window.Fluid || {};
-    var CONFIG = {"hostname":"ivonhoe.github.io","root":"/","version":"1.8.14","typing":{"enable":false,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"baidu":"666a58de875adc9dd40d5de65ceac026","google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"JdLpddsaWqwfJtXPdDK8woaF-gzGzoHsz","app_key":"CEmtHXH8f0PtvF0zYtVE0EeY","server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
-  </script>
-  <script  src="/js/utils.js" ></script>
-  <script  src="/js/color-schema.js" ></script>
-<meta name="generator" content="Hexo 6.1.0"><link rel="alternate" href="/atom.xml" title="病已的博客" type="application/atom+xml">
-</head>
-
-
-<body>
-  <header style="height: 30vh;">
-    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
-  <div class="container">
-    <a class="navbar-brand" href="/">
-      <strong>病已的博客</strong>
-    </a>
-
-    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
-            data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <div class="animated-icon"><span></span><span></span><span></span></div>
-    </button>
-
-    <!-- Collapsible content -->
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav ml-auto text-center">
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
         
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/">
-                <i class="iconfont icon-home-fill"></i>
-                首页
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/categories/">
-                <i class="iconfont icon-category-fill"></i>
-                分类
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/archives/">
-                <i class="iconfont icon-archive-fill"></i>
-                归档
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/tags/">
-                <i class="iconfont icon-tags-fill"></i>
-                标签
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/about/">
-                <i class="iconfont icon-user-fill"></i>
-                关于
-              </a>
-            </li>
-          
-        
-        
-          <li class="nav-item" id="search-btn">
-            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
-              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
-            </a>
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">性能优化</a>
+              </p>
+              <p class="item-title">
+                <a href="/2022/04/09/flutter-dev-tools/" class="title">如何排查flutter性能问题</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-04-08T16:00:51.000Z" itemprop="datePublished">4月 9 2022</time>
+              </p>
+            </div>
           </li>
-        
-        
-          <li class="nav-item" id="color-toggle-btn">
-            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
-                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">性能优化</a>
+              </p>
+              <p class="item-title">
+                <a href="/2022/02/08/java-spi/" class="title">JDK ServiceLoader加载优化</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-02-08T14:53:51.000Z" itemprop="datePublished">2月 8 2022</time>
+              </p>
+            </div>
           </li>
-        
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E6%96%B9%E6%A1%88%E4%B8%8E%E8%AE%BE%E8%AE%A1/">方案与设计</a>
+              </p>
+              <p class="item-title">
+                <a href="/2021/03/28/design-patterns-visitor/" class="title">访问者模式</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-03-27T16:19:59.000Z" itemprop="datePublished">3月 28 2021</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E6%96%B9%E6%A1%88%E4%B8%8E%E8%AE%BE%E8%AE%A1/">方案与设计</a>
+              </p>
+              <p class="item-title">
+                <a href="/2021/03/28/design-patterns-proxy/" class="title">代理模式</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-03-27T16:19:47.000Z" itemprop="datePublished">3月 28 2021</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E6%96%B9%E6%A1%88%E4%B8%8E%E8%AE%BE%E8%AE%A1/">方案与设计</a>
+              </p>
+              <p class="item-title">
+                <a href="/2021/03/28/design-patterns-chain-of-responsibility/" class="title">责任链模式</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-03-27T16:19:30.000Z" itemprop="datePublished">3月 28 2021</time>
+              </p>
+            </div>
+          </li>
+          
       </ul>
     </div>
   </div>
-</nav>
-
-    <div class="banner" id="banner" parallax=true
-         style="background: url('/img/default_post.jpeg') no-repeat center center;
-           background-size: cover;">
-      <div class="full-bg-img">
-        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0)">
-          <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="Android系统上绘制圆角和阴影的几种姿势">
-              
-                Android系统上绘制圆角和阴影的几种姿势
-              
-            </span>
-
-            
-              <div class="mt-3">
-  
-  
-    <span class="post-meta">
-      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-      <time datetime="2019-01-29 11:41" pubdate>
-        2019年1月29日 中午
-      </time>
-    </span>
-  
-</div>
-
-<div class="mt-1">
-  
-    <span class="post-meta mr-2">
-      <i class="iconfont icon-chart"></i>
-      4.7k 字
-    </span>
   
 
+    
+  </div>
+</aside>
+
   
-    <span class="post-meta mr-2">
-      <i class="iconfont icon-clock-fill"></i>
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-android-corner-shadow" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
       
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Android系统上绘制圆角和阴影的几种姿势
+    </h1>
+  
+
       
-      40 分钟
-    </span>
-  
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2019/01/29/android-corner-shadow/" class="article-date">
+	  <time datetime="2019-01-29T03:41:57.000Z" itemprop="datePublished">1月 29 2019</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/%E7%BB%98%E5%88%B6%E4%B8%8E%E5%8A%A8%E7%94%BB/">绘制与动画</a>
+  </span>
 
-  
-  
-</div>
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/%E7%BB%98%E5%88%B6%E4%B8%8E%E5%8A%A8%E7%94%BB/" rel="tag">绘制与动画</a>
+  </span>
 
-            
-          </div>
 
-          
-        </div>
+        
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2019/01/29/android-corner-shadow/#comments" class="article-comment-link">评论</a></span>
+        
       </div>
     </div>
-  </header>
-
-  <main>
-    
+    <div class="article-entry marked-body" itemprop="articleBody">
       
-
-<div class="container-fluid nopadding-x">
-  <div class="row nomargin-x">
-    <div class="d-none d-lg-block col-lg-2"></div>
-    <div class="col-lg-8 nopadding-x-md">
-      <div class="container nopadding-x-md" id="board-ctn">
-        <div class="py-5" id="board">
-          <article class="post-content mx-auto">
-            <!-- SEO header -->
-            <h1 style="display: none">Android系统上绘制圆角和阴影的几种姿势</h1>
-            
-            <div class="markdown-body">
-              <h3 id="0x01-前言"><a href="#0x01-前言" class="headerlink" title="0x01 前言"></a>0x01 前言</h3><p>在实际的开发工程中，对视图增加圆角和阴影效果的绘制是比较常见的需求，Android系统提供了一系列的方法以帮助开发者实现基础的视图圆角和阴影效果，但在面对实际的视觉需求时，想要完美达到视觉设计师的设计要求就难免需要了解一些基础的绘图原理和绘图方法才能达到特殊的设计需求，这里就简单对比和总结了常见的圆角和阴影的绘图方法。</p>
+        <p>在实际的开发工程中，对视图增加圆角和阴影效果的绘制是比较常见的需求，Android系统提供了一系列的方法以帮助开发者实现基础的视图圆角和阴影效果，但在面对实际的视觉需求时，想要完美达到视觉设计师的设计要求就难免需要了解一些基础的绘图原理和绘图方法才能达到特殊的设计需求，这里就简单对比和总结了常见的圆角和阴影的绘图方法。</p>
 <span id="more"></span>
-<h3 id="0x02-圆角"><a href="#0x02-圆角" class="headerlink" title="0x02 圆角"></a>0x02 圆角</h3><h4 id="2-1-View的圆角背景实现圆角效果"><a href="#2-1-View的圆角背景实现圆角效果" class="headerlink" title="2.1 View的圆角背景实现圆角效果"></a>2.1 View的圆角背景实现圆角效果</h4><p>使用原生提供的ShapeDrawable实现背景。</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></div></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">shape</span> <span class="hljs-attr">xmlns:android</span>=<span class="hljs-string">&quot;http://schemas.android.com/apk/res/android&quot;</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">solid</span> <span class="hljs-attr">android:color</span>=<span class="hljs-string">&quot;#ff0000&quot;</span> /&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">corners</span> <span class="hljs-attr">android:topLeftRadius</span>=<span class="hljs-string">&quot;10dp&quot;</span></span><br><span class="hljs-tag">             <span class="hljs-attr">android:topRightRadius</span>=<span class="hljs-string">&quot;10dp&quot;</span></span><br><span class="hljs-tag">             <span class="hljs-attr">android:bottomRightRadius</span>=<span class="hljs-string">&quot;10dp&quot;</span></span><br><span class="hljs-tag">             <span class="hljs-attr">android:bottomLeftRadius</span>=<span class="hljs-string">&quot;10dp&quot;</span>/&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">shape</span>&gt;</span><br></code></pre></td></tr></table></figure>
-<p><img src="/res/shadow/android_corner_shadow_0.png" srcset="/img/loading.gif" lazyload alt="Alt text"></p>
-<h4 id="2-2-使用圆角贴图实现圆角效果"><a href="#2-2-使用圆角贴图实现圆角效果" class="headerlink" title="2.2 使用圆角贴图实现圆角效果"></a>2.2 使用圆角贴图实现圆角效果</h4><p>在介绍“贴图”之前先说明在Android绘图相关的两个必备知识，分布是Paint Style和Path。</p>
-<h5 id="2-2-1-Paint-Style"><a href="#2-2-1-Paint-Style" class="headerlink" title="2.2.1 Paint Style"></a>2.2.1 Paint Style</h5><p>在用画笔（Paint）的时候有三种Style，选择不同的画笔样式时就可达到不同的画笔效果，分别是 </p>
+<h3 id="圆角"><a href="#圆角" class="headerlink" title="圆角"></a>圆角</h3><h4 id="View的圆角背景实现圆角效果"><a href="#View的圆角背景实现圆角效果" class="headerlink" title="View的圆角背景实现圆角效果"></a>View的圆角背景实现圆角效果</h4><p>使用原生提供的ShapeDrawable实现背景。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">shape</span> <span class="attr">xmlns:android</span>=<span class="string">&quot;http://schemas.android.com/apk/res/android&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">solid</span> <span class="attr">android:color</span>=<span class="string">&quot;#ff0000&quot;</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">corners</span> <span class="attr">android:topLeftRadius</span>=<span class="string">&quot;10dp&quot;</span></span></span><br><span class="line"><span class="tag">             <span class="attr">android:topRightRadius</span>=<span class="string">&quot;10dp&quot;</span></span></span><br><span class="line"><span class="tag">             <span class="attr">android:bottomRightRadius</span>=<span class="string">&quot;10dp&quot;</span></span></span><br><span class="line"><span class="tag">             <span class="attr">android:bottomLeftRadius</span>=<span class="string">&quot;10dp&quot;</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">shape</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p><img src="/res/shadow/android_corner_shadow_0.png" alt="Alt text"></p>
+<h4 id="使用圆角贴图实现圆角效果"><a href="#使用圆角贴图实现圆角效果" class="headerlink" title="使用圆角贴图实现圆角效果"></a>使用圆角贴图实现圆角效果</h4><p>在介绍“贴图”之前先说明在Android绘图相关的两个必备知识，分布是Paint Style和Path。</p>
+<h5 id="Paint-Style"><a href="#Paint-Style" class="headerlink" title="Paint Style"></a>Paint Style</h5><p>在用画笔（Paint）的时候有三种Style，选择不同的画笔样式时就可达到不同的画笔效果，分别是 </p>
 <ul>
 <li>Paint.Style.STROKE 只绘制图形轮廓(描边) </li>
 <li>Paint.Style.FILL 只绘制图形内容 </li>
-<li>Paint.Style.FILL_AND_STROKE 既绘制轮廓也绘制内容<br><img src="/res/shadow/android_corner_shadow_1.png" srcset="/img/loading.gif" lazyload alt="Alt text"></li>
+<li>Paint.Style.FILL_AND_STROKE 既绘制轮廓也绘制内容<br><img src="/res/shadow/android_corner_shadow_1.png" alt="Alt text"></li>
 </ul>
-<h5 id="2-2-2-Path"><a href="#2-2-2-Path" class="headerlink" title="2.2.2 Path"></a>2.2.2 Path</h5><p>当我们在想要绘制一些形状时，Canvas提供了一些基础形状的绘制方法，如圆形、矩形、椭圆等。你只需要选择相应的绘制方法并设置你想要的绘制参数就能绘制出你想要的简单图形效果。但对于那些复杂一点的图形则没法去绘制，如一个心形、正多边形、五角星等，使用Path不仅能够绘制简单图形，也可以绘制这些比较复杂的图形。Path封装了由直线和曲线(二次，三次贝塞尔曲线等)构成的几何路径。你能用Canvas中的drawPath来把这条路径画出来(同样支持Paint的不同绘制模式)，也可以用于剪裁画布和根据路径绘制文字。</p>
-<h5 id="2-2-3-如何制作圆角贴图"><a href="#2-2-3-如何制作圆角贴图" class="headerlink" title="2.2.3 如何制作圆角贴图"></a>2.2.3 如何制作圆角贴图</h5><p><strong>以左上角贴图实现为例，使用Path约束绘图范围</strong></p>
-<figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs reasonml">RectF fakeCornerRectF = sRectF;<br>fakeCornerRectF.set(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, mCornerRoundRadius<span class="hljs-operator"> * </span><span class="hljs-number">2</span>, mCornerRoundRadius<span class="hljs-operator"> * </span><span class="hljs-number">2</span>);<br><span class="hljs-comment">// 绘制左上圆角背景</span><br><span class="hljs-keyword">if</span> (mTopLeftCorner) &#123;<br>    fakeCornerRectF.offset<span class="hljs-constructor">To(<span class="hljs-params">left</span> - <span class="hljs-params">mCornerOffset</span>, <span class="hljs-params">top</span> - <span class="hljs-params">mCornerOffset</span>)</span>;<br>    mCompatibilityModePath.rewind<span class="hljs-literal">()</span>;<br>    mCompatibilityModePath.move<span class="hljs-constructor">To(<span class="hljs-params">left</span> - <span class="hljs-params">mCornerOffset</span>, <span class="hljs-params">top</span> - <span class="hljs-params">mCornerOffset</span>)</span>;<br>    mCompatibilityModePath.line<span class="hljs-constructor">To(<span class="hljs-params">left</span> + <span class="hljs-params">mCornerRoundRadius</span>, <span class="hljs-params">top</span> - <span class="hljs-params">mCornerOffset</span>)</span>;<br>    mCompatibilityModePath.arc<span class="hljs-constructor">To(<span class="hljs-params">fakeCornerRectF</span>, START_TOP, -QUARTER_CIRCLE)</span>;<br>    mCompatibilityModePath.close<span class="hljs-literal">()</span>;<br>    canvas.draw<span class="hljs-constructor">Path(<span class="hljs-params">mCompatibilityModePath</span>, <span class="hljs-params">mBackgroundPaint</span>)</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h5 id="Path"><a href="#Path" class="headerlink" title="Path"></a>Path</h5><p>当我们在想要绘制一些形状时，Canvas提供了一些基础形状的绘制方法，如圆形、矩形、椭圆等。你只需要选择相应的绘制方法并设置你想要的绘制参数就能绘制出你想要的简单图形效果。但对于那些复杂一点的图形则没法去绘制，如一个心形、正多边形、五角星等，使用Path不仅能够绘制简单图形，也可以绘制这些比较复杂的图形。Path封装了由直线和曲线(二次，三次贝塞尔曲线等)构成的几何路径。你能用Canvas中的drawPath来把这条路径画出来(同样支持Paint的不同绘制模式)，也可以用于剪裁画布和根据路径绘制文字。</p>
+<h5 id="如何制作圆角贴图"><a href="#如何制作圆角贴图" class="headerlink" title="如何制作圆角贴图"></a>如何制作圆角贴图</h5><p><strong>以左上角贴图实现为例，使用Path约束绘图范围</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">RectF fakeCornerRectF = sRectF;</span><br><span class="line">fakeCornerRectF.set(0, 0, mCornerRoundRadius * 2, mCornerRoundRadius * 2);</span><br><span class="line">// 绘制左上圆角背景</span><br><span class="line">if (mTopLeftCorner) &#123;</span><br><span class="line">    fakeCornerRectF.offsetTo(left - mCornerOffset, top - mCornerOffset);</span><br><span class="line">    mCompatibilityModePath.rewind();</span><br><span class="line">    mCompatibilityModePath.moveTo(left - mCornerOffset, top - mCornerOffset);</span><br><span class="line">    mCompatibilityModePath.lineTo(left + mCornerRoundRadius, top - mCornerOffset);</span><br><span class="line">    mCompatibilityModePath.arcTo(fakeCornerRectF, START_TOP, -QUARTER_CIRCLE);</span><br><span class="line">    mCompatibilityModePath.close();</span><br><span class="line">    canvas.drawPath(mCompatibilityModePath, mBackgroundPaint);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p><img src="/res/shadow/android_corner_shadow_2.png" srcset="/img/loading.gif" lazyload alt="Alt text"></p>
+<p><img src="/res/shadow/android_corner_shadow_2.png" alt="Alt text"></p>
 <p><strong>使用Paint.Style.FILL画笔绘制，将贴图效果绘制在ImageView容器的（0，0）坐标上。即可达到想要的圆角效果</strong></p>
-<h4 id="2-3-对Bitmap的裁剪实现圆角效果"><a href="#2-3-对Bitmap的裁剪实现圆角效果" class="headerlink" title="2.3 对Bitmap的裁剪实现圆角效果"></a>2.3 对Bitmap的裁剪实现圆角效果</h4><p>例如使用android support包里的RoundedBitmapDrawable，创建一个被裁剪圆角的BitmapDrawable。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">RoundedBitmapDrawable</span> <span class="hljs-variable">drawable</span> <span class="hljs-operator">=</span> RoundedBitmapDrawableFactory.create(mContext.getResources(), bitmap);<br>drawable.setCornerRadius(<span class="hljs-number">40</span>);<br></code></pre></td></tr></table></figure>
+<h4 id="对Bitmap的裁剪实现圆角效果"><a href="#对Bitmap的裁剪实现圆角效果" class="headerlink" title="对Bitmap的裁剪实现圆角效果"></a>对Bitmap的裁剪实现圆角效果</h4><p>例如使用android support包里的RoundedBitmapDrawable，创建一个被裁剪圆角的BitmapDrawable。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">RoundedBitmapDrawable</span> <span class="variable">drawable</span> <span class="operator">=</span> RoundedBitmapDrawableFactory.create(mContext.getResources(), bitmap);</span><br><span class="line">drawable.setCornerRadius(<span class="number">40</span>);</span><br></pre></td></tr></table></figure>
 
-<h4 id="2-4-对Canvas画板做裁剪实现圆角效果"><a href="#2-4-对Canvas画板做裁剪实现圆角效果" class="headerlink" title="2.4 对Canvas画板做裁剪实现圆角效果"></a>2.4 对Canvas画板做裁剪实现圆角效果</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Override</span><br><span class="hljs-keyword">protected</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">onDraw</span><span class="hljs-params">(Canvas canvas)</span> &#123;<br>    <span class="hljs-type">int</span> <span class="hljs-variable">left</span> <span class="hljs-operator">=</span> getPaddingLeft();<br>    <span class="hljs-type">int</span> <span class="hljs-variable">top</span> <span class="hljs-operator">=</span> getPaddingTop();<br>    <span class="hljs-type">int</span> <span class="hljs-variable">right</span> <span class="hljs-operator">=</span> canvas.getWidth() - getPaddingRight();<br>    <span class="hljs-type">int</span> <span class="hljs-variable">bottom</span> <span class="hljs-operator">=</span> getHeight() - getPaddingBottom();<br><br>    mCanvasRect.set(left, top, right, bottom);<br>    mCanvasPath.reset();<br>    mCanvasPath.addRoundRect(mCanvasRect, mRx, mRy, Path.Direction.CW);<br>    canvas.clipPath(mCanvasPath);<br>    <span class="hljs-built_in">super</span>.onDraw(canvas);<br>&#125;<br></code></pre></td></tr></table></figure>
+<h4 id="对Canvas画板做裁剪实现圆角效果"><a href="#对Canvas画板做裁剪实现圆角效果" class="headerlink" title="对Canvas画板做裁剪实现圆角效果"></a>对Canvas画板做裁剪实现圆角效果</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title function_">onDraw</span><span class="params">(Canvas canvas)</span> &#123;</span><br><span class="line">    <span class="type">int</span> <span class="variable">left</span> <span class="operator">=</span> getPaddingLeft();</span><br><span class="line">    <span class="type">int</span> <span class="variable">top</span> <span class="operator">=</span> getPaddingTop();</span><br><span class="line">    <span class="type">int</span> <span class="variable">right</span> <span class="operator">=</span> canvas.getWidth() - getPaddingRight();</span><br><span class="line">    <span class="type">int</span> <span class="variable">bottom</span> <span class="operator">=</span> getHeight() - getPaddingBottom();</span><br><span class="line"></span><br><span class="line">    mCanvasRect.set(left, top, right, bottom);</span><br><span class="line">    mCanvasPath.reset();</span><br><span class="line">    mCanvasPath.addRoundRect(mCanvasRect, mRx, mRy, Path.Direction.CW);</span><br><span class="line">    canvas.clipPath(mCanvasPath);</span><br><span class="line">    <span class="built_in">super</span>.onDraw(canvas);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<h3 id="0x03-阴影"><a href="#0x03-阴影" class="headerlink" title="0x03 阴影"></a>0x03 阴影</h3><h4 id="3-1-elevation属性和translationZ属性"><a href="#3-1-elevation属性和translationZ属性" class="headerlink" title="3.1 elevation属性和translationZ属性"></a>3.1 elevation属性和translationZ属性</h4><p>UI 控件的elevation属性可以设置其高度，呈现在界面中的直观效果就是阴影效果，在 xml 布局文件中，通过 android:elevation 属性设置，在 java 代码中通过 View 类提供的setElevation()方法设置。但是这个属性存在版本兼容问题，是 Android 5.0 引进的 API。所以，当 minSdkVersion 值小于21时，系统会在 xml 的对应使用地方给出一个 lint 提示：</p>
+<h3 id="阴影"><a href="#阴影" class="headerlink" title="阴影"></a>阴影</h3><h4 id="elevation属性和translationZ属性"><a href="#elevation属性和translationZ属性" class="headerlink" title="elevation属性和translationZ属性"></a>elevation属性和translationZ属性</h4><p>UI 控件的elevation属性可以设置其高度，呈现在界面中的直观效果就是阴影效果，在 xml 布局文件中，通过 android:elevation 属性设置，在 java 代码中通过 View 类提供的setElevation()方法设置。但是这个属性存在版本兼容问题，是 Android 5.0 引进的 API。所以，当 minSdkVersion 值小于21时，系统会在 xml 的对应使用地方给出一个 lint 提示：</p>
 <p><code>Attribute elevation is only used in API level 21 and higher</code></p>
 <p>当然你也可以选择忽略这个提示，或者使用tools:targetApi属性消除这个提示，这样做的话，在低于5.0版本的系统中将不会出现阴影效果。然而，有一个更好的办法做到兼容，那就是借助ViewCompat这个万能的兼容类,使View 的 elevation 属性兼容至低版本中：</p>
 <p><code>ViewCompat.setElevation(View view, float elevation)</code></p>
 <p>注意：尤其要注意，视图的阴影一定是由有轮廓的视图投射出来的。简单来说，就是需要设置控件的背景，即 android:background 属性。我们可以选择图片作为背景，也可以使用 <shape> 标签定义一个 drawable 形状。</p>
-<h4 id="3-2-使用-9图实现阴影效果"><a href="#3-2-使用-9图实现阴影效果" class="headerlink" title="3.2 使用.9图实现阴影效果"></a>3.2 使用.9图实现阴影效果</h4><p>说到阴影效果最简单最省力的方法莫过于设置一个.9的背景图啦！这里推荐一个站点，可以在线制作.9阴影图。<a target="_blank" rel="noopener" href="http://inloop.github.io/shadow4android/">http://inloop.github.io/shadow4android/</a></p>
-<h4 id="3-3-使用模糊画笔绘制阴影效果"><a href="#3-3-使用模糊画笔绘制阴影效果" class="headerlink" title="3.3 使用模糊画笔绘制阴影效果"></a>3.3 使用模糊画笔绘制阴影效果</h4><p><img src="/res/shadow/android_corner_shadow_3.png" srcset="/img/loading.gif" lazyload alt="Alt text"></p>
+<h4 id="使用-9图实现阴影效果"><a href="#使用-9图实现阴影效果" class="headerlink" title="使用.9图实现阴影效果"></a>使用.9图实现阴影效果</h4><p>说到阴影效果最简单最省力的方法莫过于设置一个.9的背景图啦！这里推荐一个站点，可以在线制作.9阴影图。<a target="_blank" rel="noopener" href="http://inloop.github.io/shadow4android/">http://inloop.github.io/shadow4android/</a></p>
+<h4 id="使用模糊画笔绘制阴影效果"><a href="#使用模糊画笔绘制阴影效果" class="headerlink" title="使用模糊画笔绘制阴影效果"></a>使用模糊画笔绘制阴影效果</h4><p><img src="/res/shadow/android_corner_shadow_3.png" alt="Alt text"></p>
 <p>先看想要做到的阴影效果，想要在红色的轮播banner下方显示一条红色的阴影效果。用已知的阴影方案比如设置视图的Z轴高度或者设置.9阴影背景都无法实现这种效果。</p>
 <p>可以将实现上图的局部阴影效果的绘制步骤分解成两层：</p>
 <ol>
 <li>自定义一个ShadowLayout容器，在onDraw方法中重写绘制步骤</li>
 <li>如何绘制阴影效果？使用带有BlurMaskFilter效果的画笔在合适的地方绘制一个椭圆阴影。可以理解成先用一个模糊画笔先画眉，再在合适的位置上绘制想要的图片。画眉效果如下图：</li>
 </ol>
-<p><img src="/res/shadow/android_corner_shadow_4.png" srcset="/img/loading.gif" lazyload alt="Alt text"></p>
+<p><img src="/res/shadow/android_corner_shadow_4.png" alt="Alt text"></p>
 <p>这里有个前提，需要关闭当前View的硬件加速功能。<code>setLayerType(LAYER_TYPE_SOFTWARE, null)</code>。具体的实现代码如下所示：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Override</span><br><span class="hljs-keyword">protected</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">onDraw</span><span class="hljs-params">(Canvas canvas)</span> &#123;<br>    drawShadow(canvas);<br><br>    <span class="hljs-built_in">super</span>.onDraw(canvas);<br>&#125;<br><br><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">drawShadow</span><span class="hljs-params">(Canvas canvas)</span> &#123;<br>    <span class="hljs-keyword">if</span> (shadowView != <span class="hljs-literal">null</span> &amp;&amp; shadowOn) &#123;<br>        canvas.drawOval(getDrawOvalRect(), getShadowPaint());<br>    &#125;<br>&#125;<br><br><span class="hljs-keyword">private</span> <span class="hljs-type">int</span> <span class="hljs-title function_">getShadowColor</span><span class="hljs-params">()</span> &#123;<br>    <span class="hljs-keyword">if</span> (!runPalette) &#123;<br>        <span class="hljs-keyword">return</span> shadowColor;<br>    &#125;<br>    runPalette = <span class="hljs-literal">false</span>;<br>    <span class="hljs-keyword">if</span> (shadowView <span class="hljs-keyword">instanceof</span> ImageView) &#123;<br>        <span class="hljs-keyword">if</span> (((ImageView) shadowView).getDrawable() <span class="hljs-keyword">instanceof</span> ColorDrawable) &#123;<br>            shadowColor = getDarkerColor(((ColorDrawable) ((ImageView) shadowView).getDrawable()).getColor());<br>        &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (((ImageView) shadowView).getDrawable() <span class="hljs-keyword">instanceof</span> BitmapDrawable) &#123;<br>            <span class="hljs-type">Bitmap</span> <span class="hljs-variable">bitmap</span> <span class="hljs-operator">=</span> ((BitmapDrawable) ((ImageView) shadowView).getDrawable()).getBitmap();<br>            Palette.<span class="hljs-type">Swatch</span> <span class="hljs-variable">mSwatch</span> <span class="hljs-operator">=</span> Palette.from(bitmap).generate().getDominantSwatch();<br><br>            <span class="hljs-keyword">if</span> (<span class="hljs-literal">null</span> != mSwatch) &#123;<br>                <span class="hljs-type">int</span> <span class="hljs-variable">rgb</span> <span class="hljs-operator">=</span> mSwatch.getRgb();<br>                shadowColor = <span class="hljs-number">0x4C000000</span> | (Color.red(rgb) &lt;&lt; <span class="hljs-number">16</span>) | (Color.green(rgb) &lt;&lt; <span class="hljs-number">8</span>) | Color.blue(rgb);<br>            &#125;<br>        &#125; <span class="hljs-keyword">else</span> &#123;<br>            shadowColor = Color.TRANSPARENT;<br>        &#125;<br>    &#125;<br><br>    <span class="hljs-keyword">return</span> shadowColor;<br>&#125;<br><br><span class="hljs-keyword">private</span> Paint <span class="hljs-title function_">getShadowPaint</span><span class="hljs-params">()</span> &#123;<br>    <span class="hljs-keyword">if</span> (shadowView != <span class="hljs-literal">null</span>) &#123;<br>        <span class="hljs-type">int</span> <span class="hljs-variable">rgb</span> <span class="hljs-operator">=</span> getShadowColor();<br>        shadowPaint.setColor(rgb);<br>        shadowPaint.setMaskFilter(<span class="hljs-keyword">new</span> <span class="hljs-title class_">BlurMaskFilter</span>(paddingBottom, BlurMaskFilter.Blur.NORMAL));<br><span class="hljs-comment">//            shadowPaint.setShadowLayer(radius, 0, shadowDimen, rgb);</span><br>    &#125;<br><br>    <span class="hljs-keyword">return</span> shadowPaint;<br>&#125;<br></code></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title function_">onDraw</span><span class="params">(Canvas canvas)</span> &#123;</span><br><span class="line">    drawShadow(canvas);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">super</span>.onDraw(canvas);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">drawShadow</span><span class="params">(Canvas canvas)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (shadowView != <span class="literal">null</span> &amp;&amp; shadowOn) &#123;</span><br><span class="line">        canvas.drawOval(getDrawOvalRect(), getShadowPaint());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="type">int</span> <span class="title function_">getShadowColor</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (!runPalette) &#123;</span><br><span class="line">        <span class="keyword">return</span> shadowColor;</span><br><span class="line">    &#125;</span><br><span class="line">    runPalette = <span class="literal">false</span>;</span><br><span class="line">    <span class="keyword">if</span> (shadowView <span class="keyword">instanceof</span> ImageView) &#123;</span><br><span class="line">        <span class="keyword">if</span> (((ImageView) shadowView).getDrawable() <span class="keyword">instanceof</span> ColorDrawable) &#123;</span><br><span class="line">            shadowColor = getDarkerColor(((ColorDrawable) ((ImageView) shadowView).getDrawable()).getColor());</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (((ImageView) shadowView).getDrawable() <span class="keyword">instanceof</span> BitmapDrawable) &#123;</span><br><span class="line">            <span class="type">Bitmap</span> <span class="variable">bitmap</span> <span class="operator">=</span> ((BitmapDrawable) ((ImageView) shadowView).getDrawable()).getBitmap();</span><br><span class="line">            Palette.<span class="type">Swatch</span> <span class="variable">mSwatch</span> <span class="operator">=</span> Palette.from(bitmap).generate().getDominantSwatch();</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (<span class="literal">null</span> != mSwatch) &#123;</span><br><span class="line">                <span class="type">int</span> <span class="variable">rgb</span> <span class="operator">=</span> mSwatch.getRgb();</span><br><span class="line">                shadowColor = <span class="number">0x4C000000</span> | (Color.red(rgb) &lt;&lt; <span class="number">16</span>) | (Color.green(rgb) &lt;&lt; <span class="number">8</span>) | Color.blue(rgb);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            shadowColor = Color.TRANSPARENT;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> shadowColor;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> Paint <span class="title function_">getShadowPaint</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (shadowView != <span class="literal">null</span>) &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">rgb</span> <span class="operator">=</span> getShadowColor();</span><br><span class="line">        shadowPaint.setColor(rgb);</span><br><span class="line">        shadowPaint.setMaskFilter(<span class="keyword">new</span> <span class="title class_">BlurMaskFilter</span>(paddingBottom, BlurMaskFilter.Blur.NORMAL));</span><br><span class="line"><span class="comment">//            shadowPaint.setShadowLayer(radius, 0, shadowDimen, rgb);</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> shadowPaint;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<h3 id="0x04-参考文档"><a href="#0x04-参考文档" class="headerlink" title="0x04 参考文档"></a>0x04 参考文档</h3><p><a target="_blank" rel="noopener" href="https://yifeng.studio/2017/02/26/android-elevation-and-shadow/">https://yifeng.studio/2017/02/26/android-elevation-and-shadow/</a></p>
+<h3 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h3><p><a target="_blank" rel="noopener" href="https://yifeng.studio/2017/02/26/android-elevation-and-shadow/">https://yifeng.studio/2017/02/26/android-elevation-and-shadow/</a></p>
 
-            </div>
-            <hr>
-            <div>
-              <div class="post-metas mb-3">
-                
-                  <div class="post-meta mr-3">
-                    <i class="iconfont icon-category"></i>
-                    
-                      <a class="hover-with-bg" href="/categories/%E7%BB%98%E5%88%B6%E4%B8%8E%E5%8A%A8%E7%94%BB/">绘制与动画</a>
-                    
-                  </div>
-                
-                
-                  <div class="post-meta">
-                    <i class="iconfont icon-tags"></i>
-                    
-                      <a class="hover-with-bg" href="/tags/%E7%BB%98%E5%88%B6%E4%B8%8E%E5%8A%A8%E7%94%BB/">绘制与动画</a>
-                    
-                  </div>
-                
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://ivonhoe.github.io/2019/01/29/android-corner-shadow/" title="Android系统上绘制圆角和阴影的几种姿势" target="_blank" rel="external">https://ivonhoe.github.io/2019/01/29/android-corner-shadow/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/Ivonhoe" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.png" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/Ivonhoe" target="_blank"><span class="text-dark">病已</span><small class="ml-1x">Android Developer</small></a></h3>
+        <div></div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="vcomments"></div>
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2019/06/27/android-vm-1/" title="Android虚拟机的几个问题探究"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2018/10/14/android-anr-1/" title="ANR分析记录(一)"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-fancy btn-donate pop-onhover bg-gradient-warning" data-toggle="modal" data-target="#donateModal"><span>赏</span></button>
+  <!-- <div class="wave-icon wave-icon-danger btn-donate" data-toggle="modal" data-target="#donateModal">
+    <div class="wave-circle"><span class="icon"><i class="icon icon-bill"></i></span></div>
+  </div> -->
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+<!-- Modal -->
+<div class="modal modal-center modal-small modal-xs-full fade" id="donateModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content donate">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <div class="modal-body">
+        <div class="donate-box">
+          <div class="donate-head">
+            <p>感谢您的支持，我会继续努力的!</p>
+          </div>
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade active in" id="alipay">
+              <div class="donate-payimg">
+                <img src="/images/donate/alipay.png" alt="扫码支持" title="扫一扫" />
               </div>
-              
-                <p class="note note-warning">
-                  
-                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
-                  
-                </p>
-              
-              
-                <div class="post-prevnext">
-                  <article class="post-prev col-6">
-                    
-                    
-                      <a href="/2019/06/27/android-vm-1/">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">Android虚拟机的几个问题探究</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
-                  </article>
-                  <article class="post-next col-6">
-                    
-                    
-                      <a href="/2018/10/14/android-anr-1/">
-                        <span class="hidden-mobile">ANR分析记录(一)</span>
-                        <span class="visible-mobile">下一篇</span>
-                        <i class="iconfont icon-arrowright"></i>
-                      </a>
-                    
-                  </article>
-                </div>
-              
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开支付宝扫一扫，即可进行扫码打赏哦</p>
             </div>
-
-            
-              <!-- Comments -->
-              <article class="comments" id="comments" lazyload>
-                
-                  
-                
-                
-  <div id="valine"></div>
-  <script type="text/javascript">
-    Fluid.utils.loadComments('#valine', function() {
-      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/valine@1/dist/Valine.min.js', function() {
-        var options = Object.assign(
-          {"appId":"JdLpddsaWqwfJtXPdDK8woaF-gzGzoHsz","appKey":"CEmtHXH8f0PtvF0zYtVE0EeY","path":"window.location.pathname","placeholder":null,"avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
-          {
-            el: "#valine",
-            path: window.location.pathname
-          }
-        )
-        new Valine(options);
-        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
-          Fluid.plugins.initFancyBox('#valine .vcontent img:not(.vemoji)');
-        })
-      });
-    });
-  </script>
-  <noscript>Please enable JavaScript to view the comments</noscript>
-
-
-              </article>
-            
-          </article>
+            <div role="tabpanel" class="tab-pane fade" id="wechatpay">
+              <div class="donate-payimg">
+                <img src="/images/donate/wechatpay.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开微信扫一扫，即可进行扫码打赏哦</p>
+            </div>
+          </div>
+          <div class="donate-footer">
+            <ul class="nav nav-tabs nav-justified" role="tablist">
+              <li role="presentation" class="active">
+                <a href="#alipay" id="alipay-tab" role="tab" data-toggle="tab" aria-controls="alipay" aria-expanded="true"><i class="icon icon-alipay"></i> 支付宝</a>
+              </li>
+              <li role="presentation" class="">
+                <a href="#wechatpay" role="tab" id="wechatpay-tab" data-toggle="tab" aria-controls="wechatpay" aria-expanded="false"><i class="icon icon-wepay"></i> 微信支付</a>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
-    
-      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
-        <div id="toc">
-  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
-  <div class="toc-body" id="toc-body"></div>
-</div>
-
-      </div>
-    
   </div>
 </div>
 
-<!-- Custom -->
 
 
-    
+</main>
 
-    
-      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
-        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
-      </a>
-    
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/Ivonhoe" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
 
-    
-      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
-     aria-hidden="true">
-  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header text-center">
-        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
-        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body mx-3">
-        <div class="md-form mb-5">
-          <input type="text" id="local-search-input" class="form-control validate">
-          <label data-error="x" data-success="v"
-                 for="local-search-input">关键词</label>
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
         </div>
-        <div class="list-group" id="local-search-result"></div>
-      </div>
     </div>
-  </div>
-</div>
-    
-
-    
-  </main>
-
-  <footer class="text-center mt-5 py-3">
-  <div class="footer-content">
-     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
-  </div>
-  
-
-  
-
-  
 </footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
 
 
-  <!-- SCRIPTS -->
-  
-  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
-  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+<script src="/js/application.js"></script>
 
-  <script>
-    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
-    NProgress.start()
-    window.addEventListener('load', function() {
-      NProgress.done();
-    })
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+
+
+
+
+   
+    
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/valine"></script>
+  <script type="text/javascript">
+  var GUEST = ['nick', 'mail', 'link'];
+  var meta = 'nick,mail,link';
+  meta = meta.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#vcomments',
+    verify: false,
+    notify: false,
+    appId: 'JdLpddsaWqwfJtXPdDK8woaF-gzGzoHsz',
+    appKey: 'CEmtHXH8f0PtvF0zYtVE0EeY',
+    placeholder: 'Just go go',
+    avatar: 'mm',
+    meta: meta,
+    pageSize: '10' || 10,
+    visitor: false
+  });
   </script>
 
-
-<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
-<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
-<script  src="/js/events.js" ></script>
-<script  src="/js/plugins.js" ></script>
-
-<!-- Plugins -->
-
-
-  <script  src="/js/local-search.js" ></script>
-
-
-
-  
-    <script  src="/js/img-lazyload.js" ></script>
-  
-
-
-
-  
-
-
-
-  
-    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
-  
-  
-    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
-  
-  
-    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
-  
-  
-    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
-  
-
-
-
-
-  <script defer src="/js/leancloud.js" ></script>
+     
 
 
 
 
 
 
-
-
-
-
-
-
-
-
-  
-    <!-- Baidu Analytics -->
     <script defer>
-      var _hmt = _hmt || [];
-      (function () {
-        var hm = document.createElement("script");
-        hm.src = "https://hm.baidu.com/hm.js?666a58de875adc9dd40d5de65ceac026";
-        var s = document.getElementsByTagName("script")[0];
-        s.parentNode.insertBefore(hm, s);
-      })();
-    </script>
-  
+var _hmt = _hmt || [];
+(function() {
+    var hm = document.createElement("script");
+    hm.src = "//hm.baidu.com/hm.js?666a58de875adc9dd40d5de65ceac026";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+})();
+</script>
 
-  
-
-  
-
-  
-
-  
-
-  
-
-
-
-
-
-<!-- 主题的启动项 保持在最底部 -->
-<script  src="/js/boot.js" ></script>
 
 
 </body>

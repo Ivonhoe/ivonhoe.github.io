@@ -1,257 +1,357 @@
-
-
 <!DOCTYPE html>
-<html lang="zh-CN" data-default-color-scheme=auto>
-
-
-
+<html lang=zh>
 <head>
-  <meta charset="UTF-8">
-  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
-  <link rel="icon" href="/img/favicon.png">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
-  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta charset="utf-8">
   
-  <meta name="theme-color" content="#2f4154">
-  <meta name="author" content="病已">
-  <meta name="keywords" content="">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
   
-    <meta name="description" content="一、Drawble是干嘛的？说到Drawable肯定会第一时间想到图片资源，可能有人会认为Drawable就是图片。Drawble从字面上说就是“可绘制的”，google文档的描述:“A Drawable is a general abstraction for “something that can be drawn.””，Drawable其实就是为那些”可以被绘制的’’提供的抽象类。  哪些东">
+  
+  <title>Drawable,从简化布局谈起 | Hexo</title>
+  <meta name="description" content="说到Drawable肯定会第一时间想到图片资源，可能有人会认为Drawable就是图片。Drawble从字面上说就是“可绘制的”，google文档的描述:“A Drawable is a general abstraction for “something that can be drawn.””，Drawable其实就是为那些”可以被绘制的’’提供的抽象类。  哪些东西是”can be draw">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Drawable,从简化布局谈起">
 <meta property="og:url" content="https://ivonhoe.github.io/2015/04/28/android-performance-drawable/index.html">
 <meta property="og:site_name" content="病已的博客">
-<meta property="og:description" content="一、Drawble是干嘛的？说到Drawable肯定会第一时间想到图片资源，可能有人会认为Drawable就是图片。Drawble从字面上说就是“可绘制的”，google文档的描述:“A Drawable is a general abstraction for “something that can be drawn.””，Drawable其实就是为那些”可以被绘制的’’提供的抽象类。  哪些东">
+<meta property="og:description" content="说到Drawable肯定会第一时间想到图片资源，可能有人会认为Drawable就是图片。Drawble从字面上说就是“可绘制的”，google文档的描述:“A Drawable is a general abstraction for “something that can be drawn.””，Drawable其实就是为那些”可以被绘制的’’提供的抽象类。  哪些东西是”can be draw">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://ivonhoe.github.io/res/drawable/1.jpg">
 <meta property="og:image" content="https://ivonhoe.github.io/res/drawable/2.jpg">
 <meta property="article:published_time" content="2015-04-28T15:31:29.000Z">
-<meta property="article:modified_time" content="2022-04-07T02:38:30.858Z">
+<meta property="article:modified_time" content="2022-05-25T16:53:47.006Z">
 <meta property="article:author" content="病已">
 <meta property="article:tag" content="绘制与动画">
-<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://ivonhoe.github.io/res/drawable/1.jpg">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://ivonhoe.github.io/2015/04/28/android-performance-drawable/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="病已的博客" type="application/atom+xml">
   
   
-  <title>Drawable,从简化布局谈起 - 病已的博客</title>
-
-  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
-
-
-  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
-  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
 
   
-    
+  
+  
+  
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+
+<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/Ivonhoe" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.png" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">病已</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Android Developer</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> HangZhou, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/Ivonhoe" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
     
       
-      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Android%E5%AE%89%E5%85%A8/">Android安全</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Android%E6%8F%92%E4%BB%B6%E5%8C%96/">Android插件化</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Flutter/">Flutter</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/">学习总结</a><span class="category-list-count">12</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">性能优化</a><span class="category-list-count">8</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%96%B9%E6%A1%88%E4%B8%8E%E8%AE%BE%E8%AE%A1/">方案与设计</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%BB%98%E5%88%B6%E4%B8%8E%E5%8A%A8%E7%94%BB/">绘制与动画</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%BF%BB%E8%AF%91/">翻译</a><span class="category-list-count">2</span></li></ul>
+    </div>
+  </div>
+
+
     
-  
-
-  
-    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
-  
-
-
-<!-- 主题依赖的图标库，不要自行修改 -->
-
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+      
+  <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/ASM/" rel="tag">ASM</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/" rel="tag">Android</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android%E6%BA%90%E7%A0%81/" rel="tag">Android源码</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Bitmap/" rel="tag">Bitmap</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/BitmapFactory/" rel="tag">BitmapFactory</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Context/" rel="tag">Context</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Copy-on-write/" rel="tag">Copy-on-write</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Delvik/" rel="tag">Delvik</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Drawable/" rel="tag">Drawable</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GC/" rel="tag">GC</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Gradle/" rel="tag">Gradle</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/" rel="tag">JVM</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SPI/" rel="tag">SPI</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Zygote/" rel="tag">Zygote</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/anr/" rel="tag">anr</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/dex2jar/" rel="tag">dex2jar</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/dump-heap/" rel="tag">dump heap</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/flutter/" rel="tag">flutter</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ndk/" rel="tag">ndk</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%A7%E5%93%81%E5%88%86%E6%9E%90/" rel="tag">产品分析</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%86%85%E5%AD%98/" rel="tag">内存</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8E%BB%E5%B9%BF%E5%91%8A/" rel="tag">去广告</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" rel="tag">多线程</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AF%B9%E7%A7%B0%E5%8A%A0%E5%AF%86/" rel="tag">对称加密</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" rel="tag">性能优化</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8F%92%E4%BB%B6%E5%8C%96/" rel="tag">插件化</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D%EF%BC%8C%E6%95%B0%E5%AD%97%E8%AF%81%E4%B9%A6/" rel="tag">数字签名，数字证书</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E8%A7%A3%E6%9E%90/" rel="tag">数据解析</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%97%A0%E7%97%95%E5%9F%8B%E7%82%B9/" rel="tag">无痕埋点</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%AD%BB%E9%94%81/" rel="tag">死锁</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91/" rel="tag">源码编译</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%94%9F%E4%BA%A7%E8%80%85%E6%B6%88%E8%B4%B9%E8%80%85%E6%A8%A1%E5%BC%8F/" rel="tag">生产者消费者模式</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%A7%BB%E5%8A%A8%E5%AE%89%E5%85%A8/" rel="tag">移动安全</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BB%98%E5%88%B6%E4%B8%8E%E5%8A%A8%E7%94%BB/" rel="tag">绘制与动画</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BD%91%E7%BB%9C/" rel="tag">网络</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BF%BB%E8%AF%91/" rel="tag">翻译</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%BD%AC%E8%BD%BD/" rel="tag">转载</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9D%9E%E5%AF%B9%E7%A7%B0%E5%8A%A0%E5%AF%86/" rel="tag">非对称加密</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
 
 
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/ASM/" style="font-size: 13px;">ASM</a> <a href="/tags/Android/" style="font-size: 14px;">Android</a> <a href="/tags/Android%E6%BA%90%E7%A0%81/" style="font-size: 13px;">Android源码</a> <a href="/tags/Bitmap/" style="font-size: 13.2px;">Bitmap</a> <a href="/tags/BitmapFactory/" style="font-size: 13px;">BitmapFactory</a> <a href="/tags/Context/" style="font-size: 13px;">Context</a> <a href="/tags/Copy-on-write/" style="font-size: 13px;">Copy-on-write</a> <a href="/tags/Delvik/" style="font-size: 13px;">Delvik</a> <a href="/tags/Drawable/" style="font-size: 13px;">Drawable</a> <a href="/tags/GC/" style="font-size: 13px;">GC</a> <a href="/tags/Gradle/" style="font-size: 13px;">Gradle</a> <a href="/tags/JVM/" style="font-size: 13.2px;">JVM</a> <a href="/tags/SPI/" style="font-size: 13px;">SPI</a> <a href="/tags/Zygote/" style="font-size: 13.2px;">Zygote</a> <a href="/tags/anr/" style="font-size: 13px;">anr</a> <a href="/tags/dex2jar/" style="font-size: 13px;">dex2jar</a> <a href="/tags/dump-heap/" style="font-size: 13px;">dump heap</a> <a href="/tags/flutter/" style="font-size: 13.2px;">flutter</a> <a href="/tags/ndk/" style="font-size: 13.2px;">ndk</a> <a href="/tags/%E4%BA%A7%E5%93%81%E5%88%86%E6%9E%90/" style="font-size: 13px;">产品分析</a> <a href="/tags/%E5%86%85%E5%AD%98/" style="font-size: 13.2px;">内存</a> <a href="/tags/%E5%8E%BB%E5%B9%BF%E5%91%8A/" style="font-size: 13px;">去广告</a> <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" style="font-size: 13px;">多线程</a> <a href="/tags/%E5%AF%B9%E7%A7%B0%E5%8A%A0%E5%AF%86/" style="font-size: 13px;">对称加密</a> <a href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" style="font-size: 13.8px;">性能优化</a> <a href="/tags/%E6%8F%92%E4%BB%B6%E5%8C%96/" style="font-size: 13.6px;">插件化</a> <a href="/tags/%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D%EF%BC%8C%E6%95%B0%E5%AD%97%E8%AF%81%E4%B9%A6/" style="font-size: 13px;">数字签名，数字证书</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E8%A7%A3%E6%9E%90/" style="font-size: 13px;">数据解析</a> <a href="/tags/%E6%97%A0%E7%97%95%E5%9F%8B%E7%82%B9/" style="font-size: 13.2px;">无痕埋点</a> <a href="/tags/%E6%AD%BB%E9%94%81/" style="font-size: 13px;">死锁</a> <a href="/tags/%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91/" style="font-size: 13px;">源码编译</a> <a href="/tags/%E7%94%9F%E4%BA%A7%E8%80%85%E6%B6%88%E8%B4%B9%E8%80%85%E6%A8%A1%E5%BC%8F/" style="font-size: 13px;">生产者消费者模式</a> <a href="/tags/%E7%A7%BB%E5%8A%A8%E5%AE%89%E5%85%A8/" style="font-size: 13.4px;">移动安全</a> <a href="/tags/%E7%BB%98%E5%88%B6%E4%B8%8E%E5%8A%A8%E7%94%BB/" style="font-size: 13.8px;">绘制与动画</a> <a href="/tags/%E7%BD%91%E7%BB%9C/" style="font-size: 13.2px;">网络</a> <a href="/tags/%E7%BF%BB%E8%AF%91/" style="font-size: 13.2px;">翻译</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 13.6px;">设计模式</a> <a href="/tags/%E8%BD%AC%E8%BD%BD/" style="font-size: 13px;">转载</a> <a href="/tags/%E9%9D%9E%E5%AF%B9%E7%A7%B0%E5%8A%A0%E5%AF%86/" style="font-size: 13px;">非对称加密</a>
+    </div>
+  </div>
 
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/04/">四月 2022</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/02/">二月 2022</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/03/">三月 2021</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">五月 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">三月 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">十一月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">七月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">六月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">一月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">十月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">九月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">七月 2018</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">六月 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">五月 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">九月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">四月 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">三月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">二月 2015</a><span class="archive-list-count">1</span></li></ul>
+    </div>
+  </div>
 
 
-<link  rel="stylesheet" href="/css/main.css" />
-
-<!-- 自定义样式保持在最底部 -->
-
-
-  <script id="fluid-configs">
-    var Fluid = window.Fluid || {};
-    var CONFIG = {"hostname":"ivonhoe.github.io","root":"/","version":"1.8.14","typing":{"enable":false,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"baidu":"666a58de875adc9dd40d5de65ceac026","google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"JdLpddsaWqwfJtXPdDK8woaF-gzGzoHsz","app_key":"CEmtHXH8f0PtvF0zYtVE0EeY","server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
-  </script>
-  <script  src="/js/utils.js" ></script>
-  <script  src="/js/color-schema.js" ></script>
-<meta name="generator" content="Hexo 6.1.0"><link rel="alternate" href="/atom.xml" title="病已的博客" type="application/atom+xml">
-</head>
-
-
-<body>
-  <header style="height: 30vh;">
-    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
-  <div class="container">
-    <a class="navbar-brand" href="/">
-      <strong>病已的博客</strong>
-    </a>
-
-    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
-            data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <div class="animated-icon"><span></span><span></span><span></span></div>
-    </button>
-
-    <!-- Collapsible content -->
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav ml-auto text-center">
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
         
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/">
-                <i class="iconfont icon-home-fill"></i>
-                首页
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/categories/">
-                <i class="iconfont icon-category-fill"></i>
-                分类
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/archives/">
-                <i class="iconfont icon-archive-fill"></i>
-                归档
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/tags/">
-                <i class="iconfont icon-tags-fill"></i>
-                标签
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/about/">
-                <i class="iconfont icon-user-fill"></i>
-                关于
-              </a>
-            </li>
-          
-        
-        
-          <li class="nav-item" id="search-btn">
-            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
-              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
-            </a>
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">性能优化</a>
+              </p>
+              <p class="item-title">
+                <a href="/2022/04/09/flutter-dev-tools/" class="title">如何排查flutter性能问题</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-04-08T16:00:51.000Z" itemprop="datePublished">4月 9 2022</time>
+              </p>
+            </div>
           </li>
-        
-        
-          <li class="nav-item" id="color-toggle-btn">
-            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
-                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">性能优化</a>
+              </p>
+              <p class="item-title">
+                <a href="/2022/02/08/java-spi/" class="title">JDK ServiceLoader加载优化</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-02-08T14:53:51.000Z" itemprop="datePublished">2月 8 2022</time>
+              </p>
+            </div>
           </li>
-        
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E6%96%B9%E6%A1%88%E4%B8%8E%E8%AE%BE%E8%AE%A1/">方案与设计</a>
+              </p>
+              <p class="item-title">
+                <a href="/2021/03/28/design-patterns-visitor/" class="title">访问者模式</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-03-27T16:19:59.000Z" itemprop="datePublished">3月 28 2021</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E6%96%B9%E6%A1%88%E4%B8%8E%E8%AE%BE%E8%AE%A1/">方案与设计</a>
+              </p>
+              <p class="item-title">
+                <a href="/2021/03/28/design-patterns-proxy/" class="title">代理模式</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-03-27T16:19:47.000Z" itemprop="datePublished">3月 28 2021</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E6%96%B9%E6%A1%88%E4%B8%8E%E8%AE%BE%E8%AE%A1/">方案与设计</a>
+              </p>
+              <p class="item-title">
+                <a href="/2021/03/28/design-patterns-chain-of-responsibility/" class="title">责任链模式</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-03-27T16:19:30.000Z" itemprop="datePublished">3月 28 2021</time>
+              </p>
+            </div>
+          </li>
+          
       </ul>
     </div>
   </div>
-</nav>
-
-    <div class="banner" id="banner" parallax=true
-         style="background: url('/img/default_post.jpeg') no-repeat center center;
-           background-size: cover;">
-      <div class="full-bg-img">
-        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0)">
-          <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="Drawable,从简化布局谈起">
-              
-                Drawable,从简化布局谈起
-              
-            </span>
-
-            
-              <div class="mt-3">
-  
-  
-    <span class="post-meta">
-      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-      <time datetime="2015-04-28 23:31" pubdate>
-        2015年4月28日 晚上
-      </time>
-    </span>
-  
-</div>
-
-<div class="mt-1">
-  
-    <span class="post-meta mr-2">
-      <i class="iconfont icon-chart"></i>
-      4.7k 字
-    </span>
   
 
+    
+  </div>
+</aside>
+
   
-    <span class="post-meta mr-2">
-      <i class="iconfont icon-clock-fill"></i>
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-android-performance-drawable" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
       
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Drawable,从简化布局谈起
+    </h1>
+  
+
       
-      40 分钟
-    </span>
-  
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2015/04/28/android-performance-drawable/" class="article-date">
+	  <time datetime="2015-04-28T15:31:29.000Z" itemprop="datePublished">4月 28 2015</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/%E7%BB%98%E5%88%B6%E4%B8%8E%E5%8A%A8%E7%94%BB/">绘制与动画</a>
+  </span>
 
-  
-  
-</div>
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/%E7%BB%98%E5%88%B6%E4%B8%8E%E5%8A%A8%E7%94%BB/" rel="tag">绘制与动画</a>
+  </span>
 
-            
-          </div>
 
-          
-        </div>
+        
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2015/04/28/android-performance-drawable/#comments" class="article-comment-link">评论</a></span>
+        
       </div>
     </div>
-  </header>
-
-  <main>
-    
+    <div class="article-entry marked-body" itemprop="articleBody">
       
-
-<div class="container-fluid nopadding-x">
-  <div class="row nomargin-x">
-    <div class="d-none d-lg-block col-lg-2"></div>
-    <div class="col-lg-8 nopadding-x-md">
-      <div class="container nopadding-x-md" id="board-ctn">
-        <div class="py-5" id="board">
-          <article class="post-content mx-auto">
-            <!-- SEO header -->
-            <h1 style="display: none">Drawable,从简化布局谈起</h1>
-            
-            <div class="markdown-body">
-              <h2 id="一、Drawble是干嘛的？"><a href="#一、Drawble是干嘛的？" class="headerlink" title="一、Drawble是干嘛的？"></a>一、Drawble是干嘛的？</h2><p>说到Drawable肯定会第一时间想到图片资源，可能有人会认为Drawable就是图片。Drawble从字面上说就是“可绘制的”，google文档的描述:“A Drawable is a general abstraction for “something that can be drawn.””，Drawable其实就是为那些”可以被绘制的’’提供的抽象类。</p>
+        <p>说到Drawable肯定会第一时间想到图片资源，可能有人会认为Drawable就是图片。Drawble从字面上说就是“可绘制的”，google文档的描述:“A Drawable is a general abstraction for “something that can be drawn.””，Drawable其实就是为那些”可以被绘制的’’提供的抽象类。</p>
 <ul>
 <li><strong>哪些东西是”can be drawn”？</strong></li>
 <li><strong>绘制在哪里的？</strong></li>
 </ul>
-<p>看下android原生的Drawable和Canvas提供了的绘图的接口：<a target="_blank" rel="noopener" href="http://developer.android.com/reference/android/graphics/drawable/package-summary.html">android.graphics.drawable</a><br><a target="_blank" rel="noopener" href="http://developer.android.com/reference/android/graphics/Canvas.html">android.graphics.Canvas</a>。Canvas提供了一系列的接口去实现绘制想要的图形、图片、颜色或者其他something，Drawable就是为了这些”something”提供的。</p>
 <span id="more"></span>
-<h2 id="二、如何自定义Drawable？如何简化布局？"><a href="#二、如何自定义Drawable？如何简化布局？" class="headerlink" title="二、如何自定义Drawable？如何简化布局？"></a>二、如何自定义Drawable？如何简化布局？</h2><p><img src="/res/drawable/1.jpg" srcset="/img/loading.gif" lazyload alt="Canvas和布局实现"></p>
+
+<h2 id="一、Drawble是干嘛的？"><a href="#一、Drawble是干嘛的？" class="headerlink" title="一、Drawble是干嘛的？"></a>一、Drawble是干嘛的？</h2><p>看下android原生的Drawable和Canvas提供了的绘图的接口：<a target="_blank" rel="noopener" href="http://developer.android.com/reference/android/graphics/drawable/package-summary.html">android.graphics.drawable</a><br><a target="_blank" rel="noopener" href="http://developer.android.com/reference/android/graphics/Canvas.html">android.graphics.Canvas</a>。Canvas提供了一系列的接口去实现绘制想要的图形、图片、颜色或者其他something，Drawable就是为了这些”something”提供的。</p>
+<h2 id="二、如何自定义Drawable？如何简化布局？"><a href="#二、如何自定义Drawable？如何简化布局？" class="headerlink" title="二、如何自定义Drawable？如何简化布局？"></a>二、如何自定义Drawable？如何简化布局？</h2><p><img src="/res/drawable/1.jpg" alt="Canvas和布局实现"></p>
 <p>相信一定见过类似这样的布局，在Android系统中如何把想要的图形绘制处理，一般有两种方式：</p>
 <ul>
 <li>把你想要的视图简单的定义到布局文件中，系统读取布局文件绘制视图</li>
@@ -269,21 +369,21 @@
 </li>
 </ul>
 <p>实现自定义的Drawable只需要继承Drawable.java，并且在draw方法里通过canvas绘制需要的图形就可以了，听起来很简单。无论是一组图片、一条曲线还是一个色块，所有你想要的图形都可通过canvas参数绘制上去。举个例子，如何使用Drawable简化上图所示的网格布局？假设你需要在网格布局里显示不同的图片，就可以把场景微信朋友群组的图标。当然你可以使用view布局来做，当然也可以使用canvas方式。根据Drawable添加的顺序依次确定每个图片的坐标位置，在draw()方法里根据每个图片的坐标位置和图片显示位置绘制到canvas上。</p>
-<figure class="highlight reasonml"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></div></td><td class="code"><pre><code class="hljs reasonml">@Override<br>public void draw(Canvas canvas) &#123;<br>    final <span class="hljs-built_in">int</span> N = <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Math</span>.</span></span>min(mChildDrawable.size<span class="hljs-literal">()</span>, mRowCount<span class="hljs-operator"> * </span>mColumnCount);<br>    <span class="hljs-keyword">for</span> (<span class="hljs-built_in">int</span> i = <span class="hljs-number">0</span>; i &lt; N; i++) &#123;<br>        ChildDrawable itemToDraw = mChildDrawable.get(i);<br>        Drawable drawable = itemToDraw.mDrawable;<br>        <span class="hljs-keyword">if</span> (drawable != null) &#123;<br>            itemToDraw.mDrawable.set<span class="hljs-constructor">Bounds(<span class="hljs-params">itemToDraw</span>.<span class="hljs-params">mInsetL</span>, <span class="hljs-params">itemToDraw</span>.<span class="hljs-params">mInsetT</span>, <span class="hljs-params">itemToDraw</span>.<span class="hljs-params">mInsetR</span>, <span class="hljs-params">itemToDraw</span>.<span class="hljs-params">mInsetB</span>)</span>;<br>            drawable.draw(canvas);<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">@Override</span><br><span class="line">public void draw(Canvas canvas) &#123;</span><br><span class="line">    final int N = Math.min(mChildDrawable.size(), mRowCount * mColumnCount);</span><br><span class="line">    for (int i = 0; i &lt; N; i++) &#123;</span><br><span class="line">        ChildDrawable itemToDraw = mChildDrawable.get(i);</span><br><span class="line">        Drawable drawable = itemToDraw.mDrawable;</span><br><span class="line">        if (drawable != null) &#123;</span><br><span class="line">            itemToDraw.mDrawable.setBounds(itemToDraw.mInsetL, itemToDraw.mInsetT, itemToDraw.mInsetR, itemToDraw.mInsetB);</span><br><span class="line">            drawable.draw(canvas);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h2 id="三、让Drawable动起来怎么样？"><a href="#三、让Drawable动起来怎么样？" class="headerlink" title="三、让Drawable动起来怎么样？"></a>三、让Drawable动起来怎么样？</h2><ul>
 <li><strong>首先看下Drawable的Canvas从哪里来</strong></li>
 </ul>
 <p>一般使用ImageView显示drawable，看下ImageView的onDraw(Canvas canvas)，可以看到Drawable在ImageView里的绘制发生在View的onDraw回调里，根据scaleType和padding确定绘制的方式和位置。</p>
-<figure class="highlight lasso"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs lasso"><span class="hljs-keyword">protected</span> <span class="hljs-literal">void</span> onDraw(Canvas canvas) &#123;<br>    super.onDraw(canvas);<br>    <span class="hljs-params">...</span>.<br><br>    <span class="hljs-comment">// mDrawMatrix根据ImageView的ScaleType来确定的</span><br>    <span class="hljs-keyword">if</span> (mDrawMatrix == <span class="hljs-built_in">null</span> &amp;&amp; mPaddingTop == <span class="hljs-number">0</span> &amp;&amp; mPaddingLeft == <span class="hljs-number">0</span>) &#123;<br>        mDrawable.draw(canvas);<br>    &#125; <span class="hljs-keyword">else</span> &#123;<br>        <span class="hljs-params">...</span><span class="hljs-params">...</span><br>        mDrawable.draw(canvas);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">protected void onDraw(Canvas canvas) &#123;</span><br><span class="line">    super.onDraw(canvas);</span><br><span class="line">    ....</span><br><span class="line"></span><br><span class="line">    // mDrawMatrix根据ImageView的ScaleType来确定的</span><br><span class="line">    if (mDrawMatrix == null &amp;&amp; mPaddingTop == 0 &amp;&amp; mPaddingLeft == 0) &#123;</span><br><span class="line">        mDrawable.draw(canvas);</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        ......</span><br><span class="line">        mDrawable.draw(canvas);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>View绘制Background Drawable在draw(Canvas canvas)方法，并在setBackgroundDrawable时会执行background.setCallback(this)操作。</p>
-<figure class="highlight lasso"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs lasso"><span class="hljs-comment">// Step 1, draw the background, if needed</span><br><span class="hljs-keyword">if</span> (background != <span class="hljs-built_in">null</span>) &#123;<br>     <span class="hljs-params">...</span><span class="hljs-params">...</span><br>     <span class="hljs-keyword">if</span> ((scrollX | scrollY) == <span class="hljs-number">0</span>) &#123;<br>         background.draw(canvas);<br>     &#125; <span class="hljs-keyword">else</span> &#123;<br>         <span class="hljs-params">...</span><span class="hljs-params">...</span><br>         background.draw(canvas);<br>         <span class="hljs-params">...</span><span class="hljs-params">...</span><br>     &#125;<br> &#125;<br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">// Step 1, draw the background, if needed</span><br><span class="line">if (background != null) &#123;</span><br><span class="line">     ......</span><br><span class="line">     if ((scrollX | scrollY) == 0) &#123;</span><br><span class="line">         background.draw(canvas);</span><br><span class="line">     &#125; else &#123;</span><br><span class="line">         ......</span><br><span class="line">         background.draw(canvas);</span><br><span class="line">         ......</span><br><span class="line">     &#125;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
 <ul>
-<li><strong>再看Drawable如何重绘</strong>，<br>Drawable是依赖Canvas绘制的，查看Drawable源码发现调用invalidateSelf()方法需要获取Callback，在Callback是空的情况下无法重绘Drawable。那么在View里如何实现Drawable的重绘，显然需要先设置Drawable的重绘回调，View.java实现了Drawable.Callback接口，在View里调用setImageDrawable()方法里会首先设置当前View为Drawable的回调。<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">invalidateSelf</span>()</span> &#123;<br>    final Callback callback = getCallback();<br>    <span class="hljs-keyword">if</span> (callback != <span class="hljs-literal">null</span>) &#123;<br>        callback.invalidateDrawable(<span class="hljs-keyword">this</span>);<br>    &#125;<br>&#125;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">interface</span> <span class="hljs-title">Callback</span> &#123;<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">invalidateDrawable</span>(<span class="hljs-params">Drawable who</span>)</span>;<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">scheduleDrawable</span>(<span class="hljs-params">Drawable who, Runnable what, <span class="hljs-built_in">long</span> <span class="hljs-keyword">when</span></span>)</span>;<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">unscheduleDrawable</span>(<span class="hljs-params">Drawable who, Runnable what</span>)</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
-ImageView调用invalidate触发重绘，回调ImageView的onDraw()方法，完成Drawable的重绘。<figure class="highlight scss"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs scss"><span class="hljs-keyword">@Override</span><br>public void invalidateDrawable(Drawable dr) &#123;<br>    if (dr == mDrawable) &#123;<br>        <span class="hljs-comment">/* we invalidate the whole view in this case because it&#x27;s very</span><br><span class="hljs-comment">         * hard to know where the drawable actually is. This is made</span><br><span class="hljs-comment">         * complicated because of the offsets and transformations that</span><br><span class="hljs-comment">         * can be applied. In theory we could get the drawable&#x27;s bounds</span><br><span class="hljs-comment">         * and run them through the transformation and offsets, but this</span><br><span class="hljs-comment">         * is probably not worth the effort.</span><br><span class="hljs-comment">         */</span><br>        <span class="hljs-built_in">invalidate</span>();<br>    &#125; else &#123;<br>        super<span class="hljs-selector-class">.invalidateDrawable</span>(dr);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<li><strong>再看Drawable如何重绘</strong>，<br>Drawable是依赖Canvas绘制的，查看Drawable源码发现调用invalidateSelf()方法需要获取Callback，在Callback是空的情况下无法重绘Drawable。那么在View里如何实现Drawable的重绘，显然需要先设置Drawable的重绘回调，View.java实现了Drawable.Callback接口，在View里调用setImageDrawable()方法里会首先设置当前View为Drawable的回调。<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">public void invalidateSelf() &#123;</span><br><span class="line">    final Callback callback = getCallback();</span><br><span class="line">    if (callback != null) &#123;</span><br><span class="line">        callback.invalidateDrawable(this);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public static interface Callback &#123;</span><br><span class="line">    public void invalidateDrawable(Drawable who);</span><br><span class="line">    public void scheduleDrawable(Drawable who, Runnable what, long when);</span><br><span class="line">    public void unscheduleDrawable(Drawable who, Runnable what);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+ImageView调用invalidate触发重绘，回调ImageView的onDraw()方法，完成Drawable的重绘。<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">@Override</span><br><span class="line">public void invalidateDrawable(Drawable dr) &#123;</span><br><span class="line">    if (dr == mDrawable) &#123;</span><br><span class="line">        /* we invalidate the whole view in this case because it&#x27;s very</span><br><span class="line">         * hard to know where the drawable actually is. This is made</span><br><span class="line">         * complicated because of the offsets and transformations that</span><br><span class="line">         * can be applied. In theory we could get the drawable&#x27;s bounds</span><br><span class="line">         * and run them through the transformation and offsets, but this</span><br><span class="line">         * is probably not worth the effort.</span><br><span class="line">         */</span><br><span class="line">        invalidate();</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        super.invalidateDrawable(dr);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 了解了Drawable绘制的画布和重绘的方法，如何实现动画的Drawable只需要按时重绘Drawable就可以了，用动画控制重绘效果。具体实现可以看<a target="_blank" rel="noopener" href="https://github.com/Ivonhoe/FancyDrawable">https://github.com/Ivonhoe/FancyDrawable</a>，现在看如何实现我在<a href="https://ivonhoe.github.io/2015/04/17/%E5%9F%BA%E4%BA%8E%E8%B4%9D%E5%A1%9E%E5%B0%94%E6%9B%B2%E7%BA%BF%E7%9A%84Android%E5%8A%A8%E7%94%BB%E5%B7%AE%E5%80%BC%E5%99%A8/">贝赛尔插值器</a>里说过的BallsLine进度条效果，只需要在每次重绘的回调里动态的控制每个小球点的位置就可以了，需要的动画插值器参数可以参考<a target="_blank" rel="noopener" href="http://thecodeplayer.com/walkthrough/windows-phone-loading-animation">Web代码</a>。</li>
 </ul>
-<p><img src="/res/drawable/2.jpg" srcset="/img/loading.gif" lazyload alt="动态Drawable和GridDrawable"></p>
-<div class="code-wrapper"><pre><code class="hljs">protected static final long FRAME_DURATION = 1000 / 60;
+<p><img src="/res/drawable/2.jpg" alt="动态Drawable和GridDrawable"></p>
+<pre><code>protected static final long FRAME_DURATION = 1000 / 60;
 
 protected Runnable mUpdater = new Runnable() &#123;
     @Override
@@ -317,7 +417,7 @@ public void stop() &#123;
         onStop();
     &#125;
 &#125;
-</code></pre></div>
+</code></pre>
 <h1 id="五、参考文档"><a href="#五、参考文档" class="headerlink" title="五、参考文档"></a>五、参考文档</h1><p><a target="_blank" rel="noopener" href="http://developer.android.com/reference/android/graphics/drawable/Drawable.html">http://developer.android.com/reference/android/graphics/drawable/Drawable.html</a></p>
 <p><a target="_blank" rel="noopener" href="http://developer.android.com/guide/topics/graphics/2d-graphics.html">http://developer.android.com/guide/topics/graphics/2d-graphics.html</a></p>
 <p><a target="_blank" rel="noopener" href="http://wiresareobsolete.com/2012/12/textdrawable-draw-some-text/">http://wiresareobsolete.com/2012/12/textdrawable-draw-some-text/</a></p>
@@ -325,252 +425,233 @@ public void stop() &#123;
 <p><a target="_blank" rel="noopener" href="http://antoine-merle.com/blog/2013/11/12/make-your-progressbar-more-smooth/">http://antoine-merle.com/blog/2013/11/12/make-your-progressbar-more-smooth/</a></p>
 <h2 id="六、Github"><a href="#六、Github" class="headerlink" title="六、Github"></a>六、Github</h2><p><a target="_blank" rel="noopener" href="https://github.com/Ivonhoe/FancyDrawable">https://github.com/Ivonhoe/FancyDrawable</a></p>
 <h3 id="转载请标明出处病已blog-https-ivonhoe-github-io"><a href="#转载请标明出处病已blog-https-ivonhoe-github-io" class="headerlink" title="转载请标明出处病已blog https://ivonhoe.github.io/"></a>转载请标明出处<a href="https://ivonhoe.github.io/">病已blog https://ivonhoe.github.io/</a></h3>
-            </div>
-            <hr>
-            <div>
-              <div class="post-metas mb-3">
-                
-                  <div class="post-meta mr-3">
-                    <i class="iconfont icon-category"></i>
-                    
-                      <a class="hover-with-bg" href="/categories/%E7%BB%98%E5%88%B6%E4%B8%8E%E5%8A%A8%E7%94%BB/">绘制与动画</a>
-                    
-                  </div>
-                
-                
-                  <div class="post-meta">
-                    <i class="iconfont icon-tags"></i>
-                    
-                      <a class="hover-with-bg" href="/tags/%E7%BB%98%E5%88%B6%E4%B8%8E%E5%8A%A8%E7%94%BB/">绘制与动画</a>
-                    
-                  </div>
-                
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://ivonhoe.github.io/2015/04/28/android-performance-drawable/" title="Drawable,从简化布局谈起" target="_blank" rel="external">https://ivonhoe.github.io/2015/04/28/android-performance-drawable/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/Ivonhoe" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.png" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/Ivonhoe" target="_blank"><span class="text-dark">病已</span><small class="ml-1x">Android Developer</small></a></h3>
+        <div></div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="vcomments"></div>
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2015/08/19/crawler-data-parser/" title="数据解析工具"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2015/04/23/ColorOS%E5%92%8CAPEX%E6%A1%8C%E9%9D%A2%E4%BA%A7%E5%93%81%E5%88%86%E6%9E%90/" title="ColorOS和APEX桌面产品分析"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-fancy btn-donate pop-onhover bg-gradient-warning" data-toggle="modal" data-target="#donateModal"><span>赏</span></button>
+  <!-- <div class="wave-icon wave-icon-danger btn-donate" data-toggle="modal" data-target="#donateModal">
+    <div class="wave-circle"><span class="icon"><i class="icon icon-bill"></i></span></div>
+  </div> -->
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+<!-- Modal -->
+<div class="modal modal-center modal-small modal-xs-full fade" id="donateModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content donate">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <div class="modal-body">
+        <div class="donate-box">
+          <div class="donate-head">
+            <p>感谢您的支持，我会继续努力的!</p>
+          </div>
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade active in" id="alipay">
+              <div class="donate-payimg">
+                <img src="/images/donate/alipay.png" alt="扫码支持" title="扫一扫" />
               </div>
-              
-                <p class="note note-warning">
-                  
-                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
-                  
-                </p>
-              
-              
-                <div class="post-prevnext">
-                  <article class="post-prev col-6">
-                    
-                    
-                      <a href="/2015/08/19/crawler-data-parser/">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">数据解析工具</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
-                  </article>
-                  <article class="post-next col-6">
-                    
-                    
-                      <a href="/2015/04/23/ColorOS%E5%92%8CAPEX%E6%A1%8C%E9%9D%A2%E4%BA%A7%E5%93%81%E5%88%86%E6%9E%90/">
-                        <span class="hidden-mobile">ColorOS和APEX桌面产品分析</span>
-                        <span class="visible-mobile">下一篇</span>
-                        <i class="iconfont icon-arrowright"></i>
-                      </a>
-                    
-                  </article>
-                </div>
-              
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开支付宝扫一扫，即可进行扫码打赏哦</p>
             </div>
-
-            
-              <!-- Comments -->
-              <article class="comments" id="comments" lazyload>
-                
-                  
-                
-                
-  <div id="valine"></div>
-  <script type="text/javascript">
-    Fluid.utils.loadComments('#valine', function() {
-      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/valine@1/dist/Valine.min.js', function() {
-        var options = Object.assign(
-          {"appId":"JdLpddsaWqwfJtXPdDK8woaF-gzGzoHsz","appKey":"CEmtHXH8f0PtvF0zYtVE0EeY","path":"window.location.pathname","placeholder":null,"avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
-          {
-            el: "#valine",
-            path: window.location.pathname
-          }
-        )
-        new Valine(options);
-        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
-          Fluid.plugins.initFancyBox('#valine .vcontent img:not(.vemoji)');
-        })
-      });
-    });
-  </script>
-  <noscript>Please enable JavaScript to view the comments</noscript>
-
-
-              </article>
-            
-          </article>
+            <div role="tabpanel" class="tab-pane fade" id="wechatpay">
+              <div class="donate-payimg">
+                <img src="/images/donate/wechatpay.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开微信扫一扫，即可进行扫码打赏哦</p>
+            </div>
+          </div>
+          <div class="donate-footer">
+            <ul class="nav nav-tabs nav-justified" role="tablist">
+              <li role="presentation" class="active">
+                <a href="#alipay" id="alipay-tab" role="tab" data-toggle="tab" aria-controls="alipay" aria-expanded="true"><i class="icon icon-alipay"></i> 支付宝</a>
+              </li>
+              <li role="presentation" class="">
+                <a href="#wechatpay" role="tab" id="wechatpay-tab" data-toggle="tab" aria-controls="wechatpay" aria-expanded="false"><i class="icon icon-wepay"></i> 微信支付</a>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
-    
-      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
-        <div id="toc">
-  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
-  <div class="toc-body" id="toc-body"></div>
-</div>
-
-      </div>
-    
   </div>
 </div>
 
-<!-- Custom -->
 
 
-    
+</main>
 
-    
-      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
-        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
-      </a>
-    
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/Ivonhoe" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
 
-    
-      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
-     aria-hidden="true">
-  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header text-center">
-        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
-        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body mx-3">
-        <div class="md-form mb-5">
-          <input type="text" id="local-search-input" class="form-control validate">
-          <label data-error="x" data-success="v"
-                 for="local-search-input">关键词</label>
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
         </div>
-        <div class="list-group" id="local-search-result"></div>
-      </div>
     </div>
-  </div>
-</div>
-    
-
-    
-  </main>
-
-  <footer class="text-center mt-5 py-3">
-  <div class="footer-content">
-     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
-  </div>
-  
-
-  
-
-  
 </footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
 
 
-  <!-- SCRIPTS -->
-  
-  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
-  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+<script src="/js/application.js"></script>
 
-  <script>
-    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
-    NProgress.start()
-    window.addEventListener('load', function() {
-      NProgress.done();
-    })
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+
+
+
+
+   
+    
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/valine"></script>
+  <script type="text/javascript">
+  var GUEST = ['nick', 'mail', 'link'];
+  var meta = 'nick,mail,link';
+  meta = meta.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#vcomments',
+    verify: false,
+    notify: false,
+    appId: 'JdLpddsaWqwfJtXPdDK8woaF-gzGzoHsz',
+    appKey: 'CEmtHXH8f0PtvF0zYtVE0EeY',
+    placeholder: 'Just go go',
+    avatar: 'mm',
+    meta: meta,
+    pageSize: '10' || 10,
+    visitor: false
+  });
   </script>
 
-
-<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
-<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
-<script  src="/js/events.js" ></script>
-<script  src="/js/plugins.js" ></script>
-
-<!-- Plugins -->
-
-
-  <script  src="/js/local-search.js" ></script>
-
-
-
-  
-    <script  src="/js/img-lazyload.js" ></script>
-  
-
-
-
-  
-
-
-
-  
-    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
-  
-  
-    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
-  
-  
-    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
-  
-  
-    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
-  
-
-
-
-
-  <script defer src="/js/leancloud.js" ></script>
+     
 
 
 
 
 
 
-
-
-
-
-
-
-
-
-  
-    <!-- Baidu Analytics -->
     <script defer>
-      var _hmt = _hmt || [];
-      (function () {
-        var hm = document.createElement("script");
-        hm.src = "https://hm.baidu.com/hm.js?666a58de875adc9dd40d5de65ceac026";
-        var s = document.getElementsByTagName("script")[0];
-        s.parentNode.insertBefore(hm, s);
-      })();
-    </script>
-  
+var _hmt = _hmt || [];
+(function() {
+    var hm = document.createElement("script");
+    hm.src = "//hm.baidu.com/hm.js?666a58de875adc9dd40d5de65ceac026";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+})();
+</script>
 
-  
-
-  
-
-  
-
-  
-
-  
-
-
-
-
-
-<!-- 主题的启动项 保持在最底部 -->
-<script  src="/js/boot.js" ></script>
 
 
 </body>

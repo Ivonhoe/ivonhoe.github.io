@@ -1,267 +1,368 @@
-
-
 <!DOCTYPE html>
-<html lang="zh-CN" data-default-color-scheme=auto>
-
-
-
+<html lang=zh>
 <head>
-  <meta charset="UTF-8">
-  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
-  <link rel="icon" href="/img/favicon.png">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
-  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta charset="utf-8">
   
-  <meta name="theme-color" content="#2f4154">
-  <meta name="author" content="病已">
-  <meta name="keywords" content="">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
   
-    <meta name="description" content="0x00 前言某周六线上运营报障，在部分用户的Android手机上个别地图图标未能正常显示，只有部分手机有问题(7.0及以下版本)有问题，诡异的是只有个别图标(1个)显示有问题，大部分图标显示并没有问题,开发介入验证后发现更诡异的是，只在release版本才有这个问题，开发debug版本上并没有问题。低版本显示有问题还好理解，这应该是一个版本兼容相关的问题。release和debug上个别图标有差">
+  
+  <title>误用bitmap config导致的故障 | Hexo</title>
+  <meta name="description" content="某周六线上运营报障，在部分用户的Android手机上个别地图图标未能正常显示，只有部分手机有问题(7.0及以下版本)有问题，诡异的是只有个别图标(1个)显示有问题，大部分图标显示并没有问题,开发介入验证后发现更诡异的是，只在release版本才有这个问题，开发debug版本上并没有问题。低版本显示有问题还好理解，这应该是一个版本兼容相关的问题。release和debug上个别图标有差别就有点匪夷所">
 <meta property="og:type" content="article">
 <meta property="og:title" content="误用bitmap config导致的故障">
 <meta property="og:url" content="https://ivonhoe.github.io/2020/03/09/bitmap-preconfig-bug/index.html">
 <meta property="og:site_name" content="病已的博客">
-<meta property="og:description" content="0x00 前言某周六线上运营报障，在部分用户的Android手机上个别地图图标未能正常显示，只有部分手机有问题(7.0及以下版本)有问题，诡异的是只有个别图标(1个)显示有问题，大部分图标显示并没有问题,开发介入验证后发现更诡异的是，只在release版本才有这个问题，开发debug版本上并没有问题。低版本显示有问题还好理解，这应该是一个版本兼容相关的问题。release和debug上个别图标有差">
+<meta property="og:description" content="某周六线上运营报障，在部分用户的Android手机上个别地图图标未能正常显示，只有部分手机有问题(7.0及以下版本)有问题，诡异的是只有个别图标(1个)显示有问题，大部分图标显示并没有问题,开发介入验证后发现更诡异的是，只在release版本才有这个问题，开发debug版本上并没有问题。低版本显示有问题还好理解，这应该是一个版本兼容相关的问题。release和debug上个别图标有差别就有点匪夷所">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://ivonhoe.github.io/res/bitmap_preconfig_bug/923F7833-056A-40DE-849B-205EC24F0F73.png">
 <meta property="og:image" content="https://ivonhoe.github.io/res/bitmap_preconfig_bug/CF7A8756-E61A-4A45-88F7-8356DC3BA452.png">
 <meta property="og:image" content="https://ivonhoe.github.io/res/bitmap_preconfig_bug/3F44D7B5-08AB-4580-BF59-AC7E6E1B9901.png">
 <meta property="article:published_time" content="2020-03-08T16:27:32.000Z">
-<meta property="article:modified_time" content="2022-04-06T15:56:36.194Z">
+<meta property="article:modified_time" content="2022-05-25T16:57:39.889Z">
 <meta property="article:author" content="病已">
 <meta property="article:tag" content="Bitmap">
 <meta property="article:tag" content="BitmapFactory">
-<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://ivonhoe.github.io/res/bitmap_preconfig_bug/923F7833-056A-40DE-849B-205EC24F0F73.png">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://ivonhoe.github.io/2020/03/09/bitmap-preconfig-bug/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="病已的博客" type="application/atom+xml">
   
   
-  <title>误用bitmap config导致的故障 - 病已的博客</title>
-
-  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
-
-
-  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
-  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
 
   
-    
+  
+  
+  
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+
+<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/Ivonhoe" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.png" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">病已</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Android Developer</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> HangZhou, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/Ivonhoe" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
     
       
-      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Android%E5%AE%89%E5%85%A8/">Android安全</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Android%E6%8F%92%E4%BB%B6%E5%8C%96/">Android插件化</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Flutter/">Flutter</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/">学习总结</a><span class="category-list-count">12</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">性能优化</a><span class="category-list-count">8</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%96%B9%E6%A1%88%E4%B8%8E%E8%AE%BE%E8%AE%A1/">方案与设计</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%BB%98%E5%88%B6%E4%B8%8E%E5%8A%A8%E7%94%BB/">绘制与动画</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%BF%BB%E8%AF%91/">翻译</a><span class="category-list-count">2</span></li></ul>
+    </div>
+  </div>
+
+
     
-  
-
-  
-    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
-  
-
-
-<!-- 主题依赖的图标库，不要自行修改 -->
-
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+      
+  <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/ASM/" rel="tag">ASM</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/" rel="tag">Android</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android%E6%BA%90%E7%A0%81/" rel="tag">Android源码</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Bitmap/" rel="tag">Bitmap</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/BitmapFactory/" rel="tag">BitmapFactory</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Context/" rel="tag">Context</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Copy-on-write/" rel="tag">Copy-on-write</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Delvik/" rel="tag">Delvik</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Drawable/" rel="tag">Drawable</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GC/" rel="tag">GC</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Gradle/" rel="tag">Gradle</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/" rel="tag">JVM</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SPI/" rel="tag">SPI</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Zygote/" rel="tag">Zygote</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/anr/" rel="tag">anr</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/dex2jar/" rel="tag">dex2jar</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/dump-heap/" rel="tag">dump heap</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/flutter/" rel="tag">flutter</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ndk/" rel="tag">ndk</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%A7%E5%93%81%E5%88%86%E6%9E%90/" rel="tag">产品分析</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%86%85%E5%AD%98/" rel="tag">内存</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8E%BB%E5%B9%BF%E5%91%8A/" rel="tag">去广告</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" rel="tag">多线程</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AF%B9%E7%A7%B0%E5%8A%A0%E5%AF%86/" rel="tag">对称加密</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" rel="tag">性能优化</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8F%92%E4%BB%B6%E5%8C%96/" rel="tag">插件化</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D%EF%BC%8C%E6%95%B0%E5%AD%97%E8%AF%81%E4%B9%A6/" rel="tag">数字签名，数字证书</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E8%A7%A3%E6%9E%90/" rel="tag">数据解析</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%97%A0%E7%97%95%E5%9F%8B%E7%82%B9/" rel="tag">无痕埋点</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%AD%BB%E9%94%81/" rel="tag">死锁</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91/" rel="tag">源码编译</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%94%9F%E4%BA%A7%E8%80%85%E6%B6%88%E8%B4%B9%E8%80%85%E6%A8%A1%E5%BC%8F/" rel="tag">生产者消费者模式</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%A7%BB%E5%8A%A8%E5%AE%89%E5%85%A8/" rel="tag">移动安全</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BB%98%E5%88%B6%E4%B8%8E%E5%8A%A8%E7%94%BB/" rel="tag">绘制与动画</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BD%91%E7%BB%9C/" rel="tag">网络</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BF%BB%E8%AF%91/" rel="tag">翻译</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%BD%AC%E8%BD%BD/" rel="tag">转载</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9D%9E%E5%AF%B9%E7%A7%B0%E5%8A%A0%E5%AF%86/" rel="tag">非对称加密</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
 
 
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/ASM/" style="font-size: 13px;">ASM</a> <a href="/tags/Android/" style="font-size: 14px;">Android</a> <a href="/tags/Android%E6%BA%90%E7%A0%81/" style="font-size: 13px;">Android源码</a> <a href="/tags/Bitmap/" style="font-size: 13.2px;">Bitmap</a> <a href="/tags/BitmapFactory/" style="font-size: 13px;">BitmapFactory</a> <a href="/tags/Context/" style="font-size: 13px;">Context</a> <a href="/tags/Copy-on-write/" style="font-size: 13px;">Copy-on-write</a> <a href="/tags/Delvik/" style="font-size: 13px;">Delvik</a> <a href="/tags/Drawable/" style="font-size: 13px;">Drawable</a> <a href="/tags/GC/" style="font-size: 13px;">GC</a> <a href="/tags/Gradle/" style="font-size: 13px;">Gradle</a> <a href="/tags/JVM/" style="font-size: 13.2px;">JVM</a> <a href="/tags/SPI/" style="font-size: 13px;">SPI</a> <a href="/tags/Zygote/" style="font-size: 13.2px;">Zygote</a> <a href="/tags/anr/" style="font-size: 13px;">anr</a> <a href="/tags/dex2jar/" style="font-size: 13px;">dex2jar</a> <a href="/tags/dump-heap/" style="font-size: 13px;">dump heap</a> <a href="/tags/flutter/" style="font-size: 13.2px;">flutter</a> <a href="/tags/ndk/" style="font-size: 13.2px;">ndk</a> <a href="/tags/%E4%BA%A7%E5%93%81%E5%88%86%E6%9E%90/" style="font-size: 13px;">产品分析</a> <a href="/tags/%E5%86%85%E5%AD%98/" style="font-size: 13.2px;">内存</a> <a href="/tags/%E5%8E%BB%E5%B9%BF%E5%91%8A/" style="font-size: 13px;">去广告</a> <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" style="font-size: 13px;">多线程</a> <a href="/tags/%E5%AF%B9%E7%A7%B0%E5%8A%A0%E5%AF%86/" style="font-size: 13px;">对称加密</a> <a href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" style="font-size: 13.8px;">性能优化</a> <a href="/tags/%E6%8F%92%E4%BB%B6%E5%8C%96/" style="font-size: 13.6px;">插件化</a> <a href="/tags/%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D%EF%BC%8C%E6%95%B0%E5%AD%97%E8%AF%81%E4%B9%A6/" style="font-size: 13px;">数字签名，数字证书</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E8%A7%A3%E6%9E%90/" style="font-size: 13px;">数据解析</a> <a href="/tags/%E6%97%A0%E7%97%95%E5%9F%8B%E7%82%B9/" style="font-size: 13.2px;">无痕埋点</a> <a href="/tags/%E6%AD%BB%E9%94%81/" style="font-size: 13px;">死锁</a> <a href="/tags/%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91/" style="font-size: 13px;">源码编译</a> <a href="/tags/%E7%94%9F%E4%BA%A7%E8%80%85%E6%B6%88%E8%B4%B9%E8%80%85%E6%A8%A1%E5%BC%8F/" style="font-size: 13px;">生产者消费者模式</a> <a href="/tags/%E7%A7%BB%E5%8A%A8%E5%AE%89%E5%85%A8/" style="font-size: 13.4px;">移动安全</a> <a href="/tags/%E7%BB%98%E5%88%B6%E4%B8%8E%E5%8A%A8%E7%94%BB/" style="font-size: 13.8px;">绘制与动画</a> <a href="/tags/%E7%BD%91%E7%BB%9C/" style="font-size: 13.2px;">网络</a> <a href="/tags/%E7%BF%BB%E8%AF%91/" style="font-size: 13.2px;">翻译</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 13.6px;">设计模式</a> <a href="/tags/%E8%BD%AC%E8%BD%BD/" style="font-size: 13px;">转载</a> <a href="/tags/%E9%9D%9E%E5%AF%B9%E7%A7%B0%E5%8A%A0%E5%AF%86/" style="font-size: 13px;">非对称加密</a>
+    </div>
+  </div>
 
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/04/">四月 2022</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/02/">二月 2022</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/03/">三月 2021</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">五月 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">三月 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">十一月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">七月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">六月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">一月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">十月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">九月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">七月 2018</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">六月 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">五月 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">九月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">四月 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">三月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">二月 2015</a><span class="archive-list-count">1</span></li></ul>
+    </div>
+  </div>
 
 
-<link  rel="stylesheet" href="/css/main.css" />
-
-<!-- 自定义样式保持在最底部 -->
-
-
-  <script id="fluid-configs">
-    var Fluid = window.Fluid || {};
-    var CONFIG = {"hostname":"ivonhoe.github.io","root":"/","version":"1.8.14","typing":{"enable":false,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"baidu":"666a58de875adc9dd40d5de65ceac026","google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"JdLpddsaWqwfJtXPdDK8woaF-gzGzoHsz","app_key":"CEmtHXH8f0PtvF0zYtVE0EeY","server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
-  </script>
-  <script  src="/js/utils.js" ></script>
-  <script  src="/js/color-schema.js" ></script>
-<meta name="generator" content="Hexo 6.1.0"><link rel="alternate" href="/atom.xml" title="病已的博客" type="application/atom+xml">
-</head>
-
-
-<body>
-  <header style="height: 30vh;">
-    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
-  <div class="container">
-    <a class="navbar-brand" href="/">
-      <strong>病已的博客</strong>
-    </a>
-
-    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
-            data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <div class="animated-icon"><span></span><span></span><span></span></div>
-    </button>
-
-    <!-- Collapsible content -->
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav ml-auto text-center">
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
         
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/">
-                <i class="iconfont icon-home-fill"></i>
-                首页
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/categories/">
-                <i class="iconfont icon-category-fill"></i>
-                分类
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/archives/">
-                <i class="iconfont icon-archive-fill"></i>
-                归档
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/tags/">
-                <i class="iconfont icon-tags-fill"></i>
-                标签
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/about/">
-                <i class="iconfont icon-user-fill"></i>
-                关于
-              </a>
-            </li>
-          
-        
-        
-          <li class="nav-item" id="search-btn">
-            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
-              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
-            </a>
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">性能优化</a>
+              </p>
+              <p class="item-title">
+                <a href="/2022/04/09/flutter-dev-tools/" class="title">如何排查flutter性能问题</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-04-08T16:00:51.000Z" itemprop="datePublished">4月 9 2022</time>
+              </p>
+            </div>
           </li>
-        
-        
-          <li class="nav-item" id="color-toggle-btn">
-            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
-                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">性能优化</a>
+              </p>
+              <p class="item-title">
+                <a href="/2022/02/08/java-spi/" class="title">JDK ServiceLoader加载优化</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-02-08T14:53:51.000Z" itemprop="datePublished">2月 8 2022</time>
+              </p>
+            </div>
           </li>
-        
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E6%96%B9%E6%A1%88%E4%B8%8E%E8%AE%BE%E8%AE%A1/">方案与设计</a>
+              </p>
+              <p class="item-title">
+                <a href="/2021/03/28/design-patterns-visitor/" class="title">访问者模式</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-03-27T16:19:59.000Z" itemprop="datePublished">3月 28 2021</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E6%96%B9%E6%A1%88%E4%B8%8E%E8%AE%BE%E8%AE%A1/">方案与设计</a>
+              </p>
+              <p class="item-title">
+                <a href="/2021/03/28/design-patterns-proxy/" class="title">代理模式</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-03-27T16:19:47.000Z" itemprop="datePublished">3月 28 2021</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E6%96%B9%E6%A1%88%E4%B8%8E%E8%AE%BE%E8%AE%A1/">方案与设计</a>
+              </p>
+              <p class="item-title">
+                <a href="/2021/03/28/design-patterns-chain-of-responsibility/" class="title">责任链模式</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-03-27T16:19:30.000Z" itemprop="datePublished">3月 28 2021</time>
+              </p>
+            </div>
+          </li>
+          
       </ul>
     </div>
   </div>
-</nav>
-
-    <div class="banner" id="banner" parallax=true
-         style="background: url('/img/default_post.jpeg') no-repeat center center;
-           background-size: cover;">
-      <div class="full-bg-img">
-        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0)">
-          <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="误用bitmap config导致的故障">
-              
-                误用bitmap config导致的故障
-              
-            </span>
-
-            
-              <div class="mt-3">
-  
-  
-    <span class="post-meta">
-      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-      <time datetime="2020-03-09 00:27" pubdate>
-        2020年3月9日 凌晨
-      </time>
-    </span>
-  
-</div>
-
-<div class="mt-1">
-  
-    <span class="post-meta mr-2">
-      <i class="iconfont icon-chart"></i>
-      6.9k 字
-    </span>
   
 
+    
+  </div>
+</aside>
+
   
-    <span class="post-meta mr-2">
-      <i class="iconfont icon-clock-fill"></i>
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-bitmap-preconfig-bug" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
       
+        
+  
+    <h1 class="article-title" itemprop="name">
+      误用bitmap config导致的故障
+    </h1>
+  
+
       
-      58 分钟
-    </span>
-  
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2020/03/09/bitmap-preconfig-bug/" class="article-date">
+	  <time datetime="2020-03-08T16:27:32.000Z" itemprop="datePublished">3月 9 2020</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/">学习总结</a>
+  </span>
 
-  
-  
-</div>
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/Bitmap/" rel="tag">Bitmap</a>, <a class="article-tag-link-link" href="/tags/BitmapFactory/" rel="tag">BitmapFactory</a>
+  </span>
 
-            
-          </div>
 
-          
-        </div>
+        
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2020/03/09/bitmap-preconfig-bug/#comments" class="article-comment-link">评论</a></span>
+        
       </div>
     </div>
-  </header>
-
-  <main>
-    
+    <div class="article-entry marked-body" itemprop="articleBody">
       
-
-<div class="container-fluid nopadding-x">
-  <div class="row nomargin-x">
-    <div class="d-none d-lg-block col-lg-2"></div>
-    <div class="col-lg-8 nopadding-x-md">
-      <div class="container nopadding-x-md" id="board-ctn">
-        <div class="py-5" id="board">
-          <article class="post-content mx-auto">
-            <!-- SEO header -->
-            <h1 style="display: none">误用bitmap config导致的故障</h1>
-            
-            <div class="markdown-body">
-              <h3 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00 前言"></a>0x00 前言</h3><p>某周六线上运营报障，在部分用户的Android手机上个别地图图标未能正常显示，只有部分手机有问题(7.0及以下版本)有问题，诡异的是只有个别图标(1个)显示有问题，大部分图标显示并没有问题,开发介入验证后发现更诡异的是，只在release版本才有这个问题，开发debug版本上并没有问题。<br>低版本显示有问题还好理解，这应该是一个版本兼容相关的问题。release和debug上个别图标有差别就有点匪夷所思了，写篇博客记录下。</p>
-<h3 id="0x01-问题说明"><a href="#0x01-问题说明" class="headerlink" title="0x01 问题说明"></a>0x01 问题说明</h3><p>问题日志：</p>
-<figure class="highlight apache"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></div></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">java</span>.lang.NullPointerException: Attempt to read from field &#x27;int android.graphics.Bitmap$Config.nativeInt&#x27; <span class="hljs-literal">on</span> a null object reference<br><span class="hljs-attribute">10</span>-<span class="hljs-number">19</span> <span class="hljs-number">14</span>:<span class="hljs-number">27</span>:<span class="hljs-number">36</span>.<span class="hljs-number">501</span> <span class="hljs-number">20394</span>-<span class="hljs-number">20394</span>/? W/System.err:     at android.graphics.Bitmap.copy(Bitmap.java:<span class="hljs-number">557</span>)<br><span class="hljs-attribute">10</span>-<span class="hljs-number">19</span> <span class="hljs-number">14</span>:<span class="hljs-number">27</span>:<span class="hljs-number">36</span>.<span class="hljs-number">501</span> <span class="hljs-number">20394</span>-<span class="hljs-number">20394</span>/? W/System.err:     at com.amap.api.maps.model.BitmapDescriptor.&lt;init&gt;(BitmapDescriptor.java:<span class="hljs-number">28</span>)<br><span class="hljs-attribute">10</span>-<span class="hljs-number">19</span> <span class="hljs-number">14</span>:<span class="hljs-number">27</span>:<span class="hljs-number">36</span>.<span class="hljs-number">501</span> <span class="hljs-number">20394</span>-<span class="hljs-number">20394</span>/? W/System.err:     at com.amap.api.maps.model.BitmapDescriptorFactory.fromBitmap(BitmapDescriptorFactory.java:<span class="hljs-number">258</span>)<br></code></pre></td></tr></table></figure>
+        <p>某周六线上运营报障，在部分用户的Android手机上个别地图图标未能正常显示，只有部分手机有问题(7.0及以下版本)有问题，诡异的是只有个别图标(1个)显示有问题，大部分图标显示并没有问题,开发介入验证后发现更诡异的是，只在release版本才有这个问题，开发debug版本上并没有问题。<br>低版本显示有问题还好理解，这应该是一个版本兼容相关的问题。release和debug上个别图标有差别就有点匪夷所思了，写篇博客记录下。</p>
 <span id="more"></span>
+
+<h3 id="0x01-问题说明"><a href="#0x01-问题说明" class="headerlink" title="0x01 问题说明"></a>0x01 问题说明</h3><p>问题日志：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">java.lang.NullPointerException: Attempt to read from field &#x27;int android.graphics.Bitmap$Config.nativeInt&#x27; on a null object reference</span><br><span class="line">10-19 14:27:36.501 20394-20394/? W/System.err:     at android.graphics.Bitmap.copy(Bitmap.java:557)</span><br><span class="line">10-19 14:27:36.501 20394-20394/? W/System.err:     at com.amap.api.maps.model.BitmapDescriptor.&lt;init&gt;(BitmapDescriptor.java:28)</span><br><span class="line">10-19 14:27:36.501 20394-20394/? W/System.err:     at com.amap.api.maps.model.BitmapDescriptorFactory.fromBitmap(BitmapDescriptorFactory.java:258)</span><br></pre></td></tr></table></figure>
+
 <p>问题代码：</p>
-<figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs reasonml"><span class="hljs-keyword">val</span> opts = BitmapFactory.<span class="hljs-constructor">Options()</span><br>opts.inPreferredConfig = Bitmap.Config.RGB_565<br>opts.inTargetDensity = displayMetrics.densityDpi<br>opts.inScaled = <span class="hljs-literal">true</span><br>opts.inDensity = DisplayMetrics.DENSITY_XXHIGH<span class="hljs-comment">//typedValue.density</span><br><span class="hljs-keyword">val</span> var3 = <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">BitmapFactory</span>.</span></span>decode<span class="hljs-constructor">Stream(<span class="hljs-params">var2</span>, <span class="hljs-params">null</span>, <span class="hljs-params">opts</span>)</span><br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">val opts = BitmapFactory.Options()</span><br><span class="line">opts.inPreferredConfig = Bitmap.Config.RGB_565</span><br><span class="line">opts.inTargetDensity = displayMetrics.densityDpi</span><br><span class="line">opts.inScaled = true</span><br><span class="line">opts.inDensity = DisplayMetrics.DENSITY_XXHIGH//typedValue.density</span><br><span class="line">val var3 = BitmapFactory.decodeStream(var2, null, opts)</span><br></pre></td></tr></table></figure>
 
 <p>根据日志可以看出是Bitmap的config为null引起的空指针问题，在使用BitmapFactory.decodeStream时，正常解析到了Bitmap对象，但是该图片的Config获取为null，进而引发一个空指针异常，导致了后续图片加载的失败。该段代码也很简单，重新写了个demo应用单独运行这段代码，并特别使用了出现线上故障的资源图片，测试的结果依然是debug版本的demo Bitmap.getConfig获取正常，为ARGB.8888。release版本 Bitmap.getConfig获取为null。尝试修改inPreferredConfig为ARGB_8888或删除这个参数。demo运行正常，Bitmap和Bitmap.Config都能正常获取。<br>这是一个和inPreferredConfig参数有关的问题？考虑到该段代码加载的图片资源可能是透明的png，首先需要承认的是使用565模式解析有alpha通道的图片资源是并不科学的，虽然565配置对非透明图片的加载可以省一般的内存空间。但文档不是这么说的呀？<code>inPreferredConfig</code>参数指定的配置并不是一个非强制的选项，而是建议选项，Android在实际解码时会参考此参数的配置，但如果此配置不满足，Android会重新选取一个合适的配置来对图片进行解码。</p>
-<p><img src="/res/bitmap_preconfig_bug/923F7833-056A-40DE-849B-205EC24F0F73.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/res/bitmap_preconfig_bug/923F7833-056A-40DE-849B-205EC24F0F73.png"></p>
 <p>所以基于文档的说明，使用RGB_565的配置decode有alpha通道的图片并不会有什么问题，在<strong>正常情况</strong>下Android系统实际还是会选择ARGB_8888的配置进行加载。现在很明显这不是正常情况。不正常的点在哪里？看起来肯定和这张图片有关，换个图片就能解决这个问题了，不然换个图片？不用<code>inPreferredConfig</code>参数也行，但是为什么？问题到底出在哪里？<br>一头扎进BitmapFactory.cpp中，然而并没有什么明显的线索，头大了~~</p>
 <h3 id="0x03-线索分析"><a href="#0x03-线索分析" class="headerlink" title="0x03 线索分析"></a>0x03 线索分析</h3><p>看了大半天BitmapFactory的源码，对加载流程大致有了了解，但是对解决问题并没有什么思路，和大师交流这个问题时，他的一句话点醒了我。</p>
-<p><img src="/res/bitmap_preconfig_bug/CF7A8756-E61A-4A45-88F7-8356DC3BA452.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/res/bitmap_preconfig_bug/CF7A8756-E61A-4A45-88F7-8356DC3BA452.png"></p>
 <p>最最诡异的其实是debug和release差异的问题啊。难道release打包时，资源打包对这个图片动了手脚？所有，手动将release版本的app解压出来，找到有问题的png。果然发现了不一样的地方，使用AS的图片查看器查看png图片，在右上角可以看到，原本在源码中32-bit color的图片在release包中变成了8-bit color。</p>
-<p><img src="/res/bitmap_preconfig_bug/3F44D7B5-08AB-4580-BF59-AC7E6E1B9901.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/res/bitmap_preconfig_bug/3F44D7B5-08AB-4580-BF59-AC7E6E1B9901.png"></p>
 <p>原本2k的图片在从release包里解压出来后只有700B，aapt对资源做了压缩，难道是压缩引起的问题？在编译文件中配置<code>cruncherEnabled false</code>关闭对png的压缩操作。</p>
-<figure class="highlight fsharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs fsharp"><span class="hljs-keyword">aaptOptins</span>&#123;<br>   cruncherEnabled <span class="hljs-literal">false</span><br>&#125;<br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">aaptOptins&#123;</span><br><span class="line">   cruncherEnabled false</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>问题消失了，实锤！和资源打包时对png的压缩有关~</p>
 <p>什么是alpha通道？</p>
 <h4 id="0x04-调色板模式"><a href="#0x04-调色板模式" class="headerlink" title="0x04 调色板模式"></a>0x04 调色板模式</h4><p>将图像转换为调色板颜色模式时，会给每一个像素分配一个固定的颜色值，这些颜色值储存在简洁的颜色表中，或包含多达256种色的调色板中。因此，调色板颜色模式的图像包含的数据比24位颜色模式的图像小，对于颜色范围有限的图像，通过这个色彩转换模式效果更佳，用户可以设定转换颜色的调色板，从而得到指定颜色的阶数的位图。</p>
@@ -272,7 +373,7 @@
 <li>基于以上两点原因，才出现了在debug模式下打包正常，在release下正常，有的图标正常，个别图标显示不出来的诡异操作。出问题的图片都是被转换成索引模式的图片，理论上可能并不止一个，只是暂时只发现了一个。</li>
 </ol>
 <h4 id="5-2-解决方案"><a href="#5-2-解决方案" class="headerlink" title="5.2 解决方案"></a>5.2 解决方案</h4><p>选择使用ARGB8888或者不设置<code>inPreferredConfig</code>参数进行bitmap decode。其实默认<code>inPreferredConfig</code>值就是<code>ARGB_8888</code>。</p>
-<figure class="highlight abnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs abnf">public Bitmap.Config inPreferredConfig <span class="hljs-operator">=</span> Bitmap.Config.ARGB_8888<span class="hljs-comment">;</span><br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">public Bitmap.Config inPreferredConfig = Bitmap.Config.ARGB_8888;</span><br></pre></td></tr></table></figure>
 
 <h4 id="5-3-在使用inPreferredConfig的时候要注意什么？"><a href="#5-3-在使用inPreferredConfig的时候要注意什么？" class="headerlink" title="5.3 在使用inPreferredConfig的时候要注意什么？"></a>5.3 在使用<code>inPreferredConfig</code>的时候要注意什么？</h4><p>参数inpreferredconfig表示图片解码时使用的颜色模式，也就是图片中每个像素颜色的表示方式。参数inpreferredconfig的可选值有四个，分别为ALPHA_8，RGB_565，ARGB_4444，ARGB_8888。它们的含义列举如下。</p>
 <ul>
@@ -285,267 +386,246 @@
 <p>详细的验证过程可参考<a target="_blank" rel="noopener" href="https://blog.csdn.net/ccpat/article/details/46834089">https://blog.csdn.net/ccpat/article/details/46834089</a></p>
 <h3 id="0x06-为什么Bitmap-getConfig-返回null？"><a href="#0x06-为什么Bitmap-getConfig-返回null？" class="headerlink" title="0x06 为什么Bitmap.getConfig()返回null？"></a>0x06 为什么Bitmap.getConfig()返回null？</h3><p>从 getConfig 方法的文档可以看到这个描述： If the bitmap’s internal config is in one of the public formats, return that config, otherwise return null.<br>如果位图的内部 config 是公开格式的其中之一就返回这个 config，否则返回 null。<br>这里的内部格式，就是指 SkBitmap::Config 枚举值了，这里的公开格式指的是Java层Bitmap.Config的枚举值。如果这个值并未在 Java 层 Bitmap.Config 中公开，就返回 null，像索引颜色对应的 kIndex8_Config 就会导致 getConfig() 会返回 null。</p>
 <p>可查看源码<code>external/skia/include/core/SkBitmap.h</code>，Skia的颜色配置，其中kIndex8_Config表示每像素8bits，使用 SkColorTable 来描述颜色，这个 SkColorTable 顾名思义就是颜色表了。</p>
-<figure class="highlight autohotkey"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs autohotkey">enum Config &#123;<br><span class="hljs-built_in">    kNo_Config,</span>         <br><span class="hljs-built_in">    kA1_Config,</span>         <br><span class="hljs-built_in">    kA8_Config,</span>         <br>    // !&lt; <span class="hljs-number">8</span> -bits per pixel, using SkColorTable to specify the colors<br><span class="hljs-built_in">    kIndex8_Config,</span><br><span class="hljs-built_in">    kRGB_565_Config,</span>    <br><span class="hljs-built_in">    kARGB_4444_Config,</span>  <br><span class="hljs-built_in">    kARGB_8888_Config,</span>  <br><span class="hljs-built_in">    kRLE_Index8_Config,</span><br>&#125;<span class="hljs-comment">;</span><br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">enum Config &#123;</span><br><span class="line">    kNo_Config,         </span><br><span class="line">    kA1_Config,         </span><br><span class="line">    kA8_Config,         </span><br><span class="line">    // !&lt; 8 -bits per pixel, using SkColorTable to specify the colors</span><br><span class="line">    kIndex8_Config,</span><br><span class="line">    kRGB_565_Config,    </span><br><span class="line">    kARGB_4444_Config,  </span><br><span class="line">    kARGB_8888_Config,  </span><br><span class="line">    kRLE_Index8_Config,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
 <p><code>external/skia/src/images/SkImageDecoder_libpng.cpp</code>的getBitmapConfig方法，如果当前图片是调色板模式，会执行<code>canUpscalePaletteToConfig</code>方法，该方法返回 false 则 configp 被设置为 kIndex8_Config。</p>
-<figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs reasonml"><span class="hljs-built_in">bool</span> SkPNGImageDecoder::get<span class="hljs-constructor">BitmapConfig(<span class="hljs-params">png_structp</span> <span class="hljs-params">png_ptr</span>, <span class="hljs-params">png_infop</span> <span class="hljs-params">info_ptr</span>, SkBitmap::Config<span class="hljs-operator">*</span> <span class="hljs-params">configp</span>, <span class="hljs-params">bool</span><span class="hljs-operator">*</span> <span class="hljs-params">hasAlphap</span>, SkPMColor<span class="hljs-operator">*</span> <span class="hljs-params">theTranspColorp</span>)</span> &#123;<br>    png_uint_32 origWidth, origHeight;<br>    <span class="hljs-built_in">int</span> bitDepth, colorType;<br>    png<span class="hljs-constructor">_get_IHDR(<span class="hljs-params">png_ptr</span>, <span class="hljs-params">info_ptr</span>, &amp;<span class="hljs-params">origWidth</span>, &amp;<span class="hljs-params">origHeight</span>, &amp;<span class="hljs-params">bitDepth</span>, &amp;<span class="hljs-params">colorType</span>, <span class="hljs-params">int_p_NULL</span>, <span class="hljs-params">int_p_NULL</span>, <span class="hljs-params">int_p_NULL</span>)</span>;<br>    <span class="hljs-comment">// ...</span><br>    <span class="hljs-keyword">if</span> (colorType<span class="hljs-operator"> == </span>PNG_COLOR_TYPE_PALETTE) &#123;<br>        <span class="hljs-built_in">bool</span> paletteHasAlpha = has<span class="hljs-constructor">TransparencyInPalette(<span class="hljs-params">png_ptr</span>, <span class="hljs-params">info_ptr</span>)</span>;<br>        *configp = this-&gt;get<span class="hljs-constructor">PrefConfig(<span class="hljs-params">kIndex_SrcDepth</span>, <span class="hljs-params">paletteHasAlpha</span>)</span>;<br>        <span class="hljs-comment">// now see if we can upscale to their requested config</span><br>        <span class="hljs-keyword">if</span> (!can<span class="hljs-constructor">UpscalePaletteToConfig(<span class="hljs-operator">*</span><span class="hljs-params">configp</span>, <span class="hljs-params">paletteHasAlpha</span>)</span>) &#123;<br>            *configp = SkBitmap::kIndex8_Config;    <span class="hljs-comment">// 注意这里</span><br>        &#125;<br>    &#125; <span class="hljs-keyword">else</span> &#123;<br>    <span class="hljs-comment">// ...</span><br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">bool SkPNGImageDecoder::getBitmapConfig(png_structp png_ptr, png_infop info_ptr, SkBitmap::Config* configp, bool* hasAlphap, SkPMColor* theTranspColorp) &#123;</span><br><span class="line">    png_uint_32 origWidth, origHeight;</span><br><span class="line">    int bitDepth, colorType;</span><br><span class="line">    png_get_IHDR(png_ptr, info_ptr, &amp;origWidth, &amp;origHeight, &amp;bitDepth, &amp;colorType, int_p_NULL, int_p_NULL, int_p_NULL);</span><br><span class="line">    // ...</span><br><span class="line">    if (colorType == PNG_COLOR_TYPE_PALETTE) &#123;</span><br><span class="line">        bool paletteHasAlpha = hasTransparencyInPalette(png_ptr, info_ptr);</span><br><span class="line">        *configp = this-&gt;getPrefConfig(kIndex_SrcDepth, paletteHasAlpha);</span><br><span class="line">        // now see if we can upscale to their requested config</span><br><span class="line">        if (!canUpscalePaletteToConfig(*configp, paletteHasAlpha)) &#123;</span><br><span class="line">            *configp = SkBitmap::kIndex8_Config;    // 注意这里</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">    // ...</span><br></pre></td></tr></table></figure>
 
 <p>当dstConfig为565_config并且图片包含alpha通道时，或者dstConfig不属于kARGB_8888_Config、kARGB_4444_Config 、kRGB_565_Config之一，则<code>canUpscalePaletteToConfig</code>如何才能令其返回<code>false</code>。</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-function"><span class="hljs-type">static</span> <span class="hljs-type">bool</span> <span class="hljs-title">canUpscalePaletteToConfig</span><span class="hljs-params">(SkBitmap::Config dstConfig, <span class="hljs-type">bool</span> srcHasAlpha)</span> </span>&#123;<br>    <span class="hljs-keyword">switch</span> (dstConfig) &#123;<br>        <span class="hljs-keyword">case</span> SkBitmap::kARGB_8888_Config:<br>        <span class="hljs-keyword">case</span> SkBitmap::kARGB_4444_Config:<br>            <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;<br>        <span class="hljs-keyword">case</span> SkBitmap::kRGB_565_Config:<br>            <span class="hljs-comment">// only return true if the src is opaque (since 565 is opaque)</span><br>            <span class="hljs-keyword">return</span> !srcHasAlpha;<br>        <span class="hljs-keyword">default</span>:<br>            <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">static bool canUpscalePaletteToConfig(SkBitmap::Config dstConfig, bool srcHasAlpha) &#123;</span><br><span class="line">    switch (dstConfig) &#123;</span><br><span class="line">        case SkBitmap::kARGB_8888_Config:</span><br><span class="line">        case SkBitmap::kARGB_4444_Config:</span><br><span class="line">            return true;</span><br><span class="line">        case SkBitmap::kRGB_565_Config:</span><br><span class="line">            // only return true if the src is opaque (since 565 is opaque)</span><br><span class="line">            return !srcHasAlpha;</span><br><span class="line">        default:</span><br><span class="line">            return false;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>再看getPrefConfig的实现，getPrefConfig返回由java层设置的fDefaultPref，当config为kNo_Config时，返回GetDeviceConfig(),其实也是kNo_Config。那么config什么时候为SkBitmap::kNo_Config呢？当Java层设置的inPreferredConfig为null时，fDefaultPref会被赋值为kNo_Config。详情可查看<code>getNativeBitmapConfig </code>方法。</p>
-<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs arduino"><span class="hljs-function">SkBitmap::Config <span class="hljs-title">SkImageDecoder::getPrefConfig</span><span class="hljs-params">(SrcDepth srcDepth, <span class="hljs-type">bool</span> srcHasAlpha)</span> <span class="hljs-type">const</span> </span>&#123;<br>    SkBitmap::Config config = SkBitmap::kNo_Config;<br><br>    <span class="hljs-keyword">if</span> (fUsePrefTable) &#123;    <span class="hljs-comment">// 普通图片解码不会进入这个分支</span><br>        <span class="hljs-keyword">switch</span> (srcDepth) &#123;<br>            <span class="hljs-comment">// ...</span><br>        &#125;<br>    &#125; <span class="hljs-keyword">else</span> &#123;<br>        config = fDefaultPref;  <span class="hljs-comment">// 注意这里</span><br>    &#125;<br><br>    <span class="hljs-keyword">if</span> (SkBitmap::kNo_Config == config) &#123;<br>        config = SkImageDecoder::<span class="hljs-built_in">GetDeviceConfig</span>();<br>    &#125;<br>    <span class="hljs-keyword">return</span> config;<br>&#125;<br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">SkBitmap::Config SkImageDecoder::getPrefConfig(SrcDepth srcDepth, bool srcHasAlpha) const &#123;</span><br><span class="line">    SkBitmap::Config config = SkBitmap::kNo_Config;</span><br><span class="line"></span><br><span class="line">    if (fUsePrefTable) &#123;    // 普通图片解码不会进入这个分支</span><br><span class="line">        switch (srcDepth) &#123;</span><br><span class="line">            // ...</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        config = fDefaultPref;  // 注意这里</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    if (SkBitmap::kNo_Config == config) &#123;</span><br><span class="line">        config = SkImageDecoder::GetDeviceConfig();</span><br><span class="line">    &#125;</span><br><span class="line">    return config;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p><strong>综上所述，只要PNG文件本身是索引颜色格式，且在调用BitmapFactory.decodeXXX方法族时，将传入的BitmapFactory.Options.inPreferredConfig置为null即可解码得到索引颜色格式的Bitmap对象，如果这张PNG是带有alpha通道的，inPreferredConfig设置为RGB_565也可以。此时该Bitmap的Config为null。</strong></p>
 <h3 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h3><p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/ecacf2f60cb2">https://www.jianshu.com/p/ecacf2f60cb2</a><br><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/cc17d18c3447">https://www.jianshu.com/p/cc17d18c3447</a><br><a target="_blank" rel="noopener" href="http://www.coreldrawchina.com/X7jiaocheng/cdr-tiaosebanyanse-moshi.html">http://www.coreldrawchina.com/X7jiaocheng/cdr-tiaosebanyanse-moshi.html</a><br><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/f56292504ad3">https://www.jianshu.com/p/f56292504ad3</a><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/ccpat/article/details/46834089">https://blog.csdn.net/ccpat/article/details/46834089</a><br><a target="_blank" rel="noopener" href="https://android.googlesource.com/platform/frameworks/base/+/marshmallow-dev/tools/aapt2/Png.cpp">https://android.googlesource.com/platform/frameworks/base/+/marshmallow-dev/tools/aapt2/Png.cpp</a></p>
 
-            </div>
-            <hr>
-            <div>
-              <div class="post-metas mb-3">
-                
-                  <div class="post-meta mr-3">
-                    <i class="iconfont icon-category"></i>
-                    
-                      <a class="hover-with-bg" href="/categories/%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/">学习总结</a>
-                    
-                  </div>
-                
-                
-                  <div class="post-meta">
-                    <i class="iconfont icon-tags"></i>
-                    
-                      <a class="hover-with-bg" href="/tags/Bitmap/">Bitmap</a>
-                    
-                      <a class="hover-with-bg" href="/tags/BitmapFactory/">BitmapFactory</a>
-                    
-                  </div>
-                
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://ivonhoe.github.io/2020/03/09/bitmap-preconfig-bug/" title="误用bitmap config导致的故障" target="_blank" rel="external">https://ivonhoe.github.io/2020/03/09/bitmap-preconfig-bug/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/Ivonhoe" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.png" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/Ivonhoe" target="_blank"><span class="text-dark">病已</span><small class="ml-1x">Android Developer</small></a></h3>
+        <div></div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="vcomments"></div>
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2020/05/17/update-androidx-exception/" title="升级AndroidX遇到的问题"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2019/11/08/hello-flutter-aspectd/" title="Flutter aspectd入门指引"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-fancy btn-donate pop-onhover bg-gradient-warning" data-toggle="modal" data-target="#donateModal"><span>赏</span></button>
+  <!-- <div class="wave-icon wave-icon-danger btn-donate" data-toggle="modal" data-target="#donateModal">
+    <div class="wave-circle"><span class="icon"><i class="icon icon-bill"></i></span></div>
+  </div> -->
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+<!-- Modal -->
+<div class="modal modal-center modal-small modal-xs-full fade" id="donateModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content donate">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <div class="modal-body">
+        <div class="donate-box">
+          <div class="donate-head">
+            <p>感谢您的支持，我会继续努力的!</p>
+          </div>
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade active in" id="alipay">
+              <div class="donate-payimg">
+                <img src="/images/donate/alipay.png" alt="扫码支持" title="扫一扫" />
               </div>
-              
-                <p class="note note-warning">
-                  
-                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
-                  
-                </p>
-              
-              
-                <div class="post-prevnext">
-                  <article class="post-prev col-6">
-                    
-                    
-                      <a href="/2020/05/17/update-androidx-exception/">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">升级AndroidX遇到的问题</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
-                  </article>
-                  <article class="post-next col-6">
-                    
-                    
-                      <a href="/2019/11/08/hello-flutter-aspectd/">
-                        <span class="hidden-mobile">Flutter aspectd入门指引</span>
-                        <span class="visible-mobile">下一篇</span>
-                        <i class="iconfont icon-arrowright"></i>
-                      </a>
-                    
-                  </article>
-                </div>
-              
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开支付宝扫一扫，即可进行扫码打赏哦</p>
             </div>
-
-            
-              <!-- Comments -->
-              <article class="comments" id="comments" lazyload>
-                
-                  
-                
-                
-  <div id="valine"></div>
-  <script type="text/javascript">
-    Fluid.utils.loadComments('#valine', function() {
-      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/valine@1/dist/Valine.min.js', function() {
-        var options = Object.assign(
-          {"appId":"JdLpddsaWqwfJtXPdDK8woaF-gzGzoHsz","appKey":"CEmtHXH8f0PtvF0zYtVE0EeY","path":"window.location.pathname","placeholder":null,"avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
-          {
-            el: "#valine",
-            path: window.location.pathname
-          }
-        )
-        new Valine(options);
-        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
-          Fluid.plugins.initFancyBox('#valine .vcontent img:not(.vemoji)');
-        })
-      });
-    });
-  </script>
-  <noscript>Please enable JavaScript to view the comments</noscript>
-
-
-              </article>
-            
-          </article>
+            <div role="tabpanel" class="tab-pane fade" id="wechatpay">
+              <div class="donate-payimg">
+                <img src="/images/donate/wechatpay.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开微信扫一扫，即可进行扫码打赏哦</p>
+            </div>
+          </div>
+          <div class="donate-footer">
+            <ul class="nav nav-tabs nav-justified" role="tablist">
+              <li role="presentation" class="active">
+                <a href="#alipay" id="alipay-tab" role="tab" data-toggle="tab" aria-controls="alipay" aria-expanded="true"><i class="icon icon-alipay"></i> 支付宝</a>
+              </li>
+              <li role="presentation" class="">
+                <a href="#wechatpay" role="tab" id="wechatpay-tab" data-toggle="tab" aria-controls="wechatpay" aria-expanded="false"><i class="icon icon-wepay"></i> 微信支付</a>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
-    
-      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
-        <div id="toc">
-  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
-  <div class="toc-body" id="toc-body"></div>
-</div>
-
-      </div>
-    
   </div>
 </div>
 
-<!-- Custom -->
 
 
-    
+</main>
 
-    
-      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
-        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
-      </a>
-    
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/Ivonhoe" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
 
-    
-      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
-     aria-hidden="true">
-  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header text-center">
-        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
-        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body mx-3">
-        <div class="md-form mb-5">
-          <input type="text" id="local-search-input" class="form-control validate">
-          <label data-error="x" data-success="v"
-                 for="local-search-input">关键词</label>
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
         </div>
-        <div class="list-group" id="local-search-result"></div>
-      </div>
     </div>
-  </div>
-</div>
-    
-
-    
-  </main>
-
-  <footer class="text-center mt-5 py-3">
-  <div class="footer-content">
-     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
-  </div>
-  
-
-  
-
-  
 </footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
 
 
-  <!-- SCRIPTS -->
-  
-  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
-  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+<script src="/js/application.js"></script>
 
-  <script>
-    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
-    NProgress.start()
-    window.addEventListener('load', function() {
-      NProgress.done();
-    })
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+
+
+
+
+   
+    
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/valine"></script>
+  <script type="text/javascript">
+  var GUEST = ['nick', 'mail', 'link'];
+  var meta = 'nick,mail,link';
+  meta = meta.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#vcomments',
+    verify: false,
+    notify: false,
+    appId: 'JdLpddsaWqwfJtXPdDK8woaF-gzGzoHsz',
+    appKey: 'CEmtHXH8f0PtvF0zYtVE0EeY',
+    placeholder: 'Just go go',
+    avatar: 'mm',
+    meta: meta,
+    pageSize: '10' || 10,
+    visitor: false
+  });
   </script>
 
-
-<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
-<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
-<script  src="/js/events.js" ></script>
-<script  src="/js/plugins.js" ></script>
-
-<!-- Plugins -->
-
-
-  <script  src="/js/local-search.js" ></script>
-
-
-
-  
-    <script  src="/js/img-lazyload.js" ></script>
-  
-
-
-
-  
-
-
-
-  
-    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
-  
-  
-    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
-  
-  
-    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
-  
-  
-    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
-  
-
-
-
-
-  <script defer src="/js/leancloud.js" ></script>
+     
 
 
 
 
 
 
-
-
-
-
-
-
-
-
-  
-    <!-- Baidu Analytics -->
     <script defer>
-      var _hmt = _hmt || [];
-      (function () {
-        var hm = document.createElement("script");
-        hm.src = "https://hm.baidu.com/hm.js?666a58de875adc9dd40d5de65ceac026";
-        var s = document.getElementsByTagName("script")[0];
-        s.parentNode.insertBefore(hm, s);
-      })();
-    </script>
-  
+var _hmt = _hmt || [];
+(function() {
+    var hm = document.createElement("script");
+    hm.src = "//hm.baidu.com/hm.js?666a58de875adc9dd40d5de65ceac026";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+})();
+</script>
 
-  
-
-  
-
-  
-
-  
-
-  
-
-
-
-
-
-<!-- 主题的启动项 保持在最底部 -->
-<script  src="/js/boot.js" ></script>
 
 
 </body>

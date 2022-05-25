@@ -1,540 +1,616 @@
-
-
 <!DOCTYPE html>
-<html lang="zh-CN" data-default-color-scheme=auto>
-
-
-
+<html lang=zh>
 <head>
-  <meta charset="UTF-8">
-  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
-  <link rel="icon" href="/img/favicon.png">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
-  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta charset="utf-8">
   
-  <meta name="theme-color" content="#2f4154">
-  <meta name="author" content="病已">
-  <meta name="keywords" content="">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
   
-    <meta name="description" content="0x00 前言这篇文章主要记录了在使用Small插件化框架中遇到的资源加载问题及相应解决方案，并梳理出Android的资源加载流程和插件化框架的资源加载原理。在前两篇插件化技术介绍的基础上会关注更多技术细节，希望能有所收获！ 关于Small插件化的其他文档：《Android插件化之Small框架实践总结》《Android插件化之Small框架原理》《Android插件化之从入门到放弃》 0x01">
+  
+  <title>Android插件化之资源加载机制 | Hexo</title>
+  <meta name="description" content="这篇文章主要记录了在使用Small插件化框架中遇到的资源加载问题及相应解决方案，并梳理出Android的资源加载流程和插件化框架的资源加载原理。在前两篇插件化技术介绍的基础上会关注更多技术细节，希望能有所收获！">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Android插件化之资源加载机制">
 <meta property="og:url" content="https://ivonhoe.github.io/2018/03/14/small-bug-555-fix/index.html">
 <meta property="og:site_name" content="病已的博客">
-<meta property="og:description" content="0x00 前言这篇文章主要记录了在使用Small插件化框架中遇到的资源加载问题及相应解决方案，并梳理出Android的资源加载流程和插件化框架的资源加载原理。在前两篇插件化技术介绍的基础上会关注更多技术细节，希望能有所收获！ 关于Small插件化的其他文档：《Android插件化之Small框架实践总结》《Android插件化之Small框架原理》《Android插件化之从入门到放弃》 0x01">
+<meta property="og:description" content="这篇文章主要记录了在使用Small插件化框架中遇到的资源加载问题及相应解决方案，并梳理出Android的资源加载流程和插件化框架的资源加载原理。在前两篇插件化技术介绍的基础上会关注更多技术细节，希望能有所收获！">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://ivonhoe.github.io/res/small/small-error.png">
 <meta property="og:image" content="https://ivonhoe.github.io/res/small/android-resources1.png">
 <meta property="og:image" content="https://ivonhoe.github.io/res/small/android-resources2.png">
 <meta property="og:image" content="https://ivonhoe.github.io/res/small/android-resources4.png">
 <meta property="article:published_time" content="2018-03-14T09:23:27.000Z">
-<meta property="article:modified_time" content="2018-09-18T09:52:25.000Z">
+<meta property="article:modified_time" content="2022-05-25T17:00:56.219Z">
 <meta property="article:author" content="病已">
 <meta property="article:tag" content="插件化">
 <meta property="article:tag" content="Android">
 <meta property="article:tag" content="Android源码">
-<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://ivonhoe.github.io/res/small/small-error.png">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://ivonhoe.github.io/2018/03/14/small-bug-555-fix/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="病已的博客" type="application/atom+xml">
   
   
-  <title>Android插件化之资源加载机制 - 病已的博客</title>
-
-  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
-
-
-  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
-  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
 
   
-    
+  
+  
+  
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+
+<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/Ivonhoe" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.png" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">病已</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Android Developer</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> HangZhou, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/Ivonhoe" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
     
       
-      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Android%E5%AE%89%E5%85%A8/">Android安全</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Android%E6%8F%92%E4%BB%B6%E5%8C%96/">Android插件化</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Flutter/">Flutter</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/">学习总结</a><span class="category-list-count">12</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">性能优化</a><span class="category-list-count">8</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%96%B9%E6%A1%88%E4%B8%8E%E8%AE%BE%E8%AE%A1/">方案与设计</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%BB%98%E5%88%B6%E4%B8%8E%E5%8A%A8%E7%94%BB/">绘制与动画</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%BF%BB%E8%AF%91/">翻译</a><span class="category-list-count">2</span></li></ul>
+    </div>
+  </div>
+
+
     
-  
-
-  
-    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
-  
-
-
-<!-- 主题依赖的图标库，不要自行修改 -->
-
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+      
+  <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/ASM/" rel="tag">ASM</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/" rel="tag">Android</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android%E6%BA%90%E7%A0%81/" rel="tag">Android源码</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Bitmap/" rel="tag">Bitmap</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/BitmapFactory/" rel="tag">BitmapFactory</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Context/" rel="tag">Context</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Copy-on-write/" rel="tag">Copy-on-write</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Delvik/" rel="tag">Delvik</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Drawable/" rel="tag">Drawable</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GC/" rel="tag">GC</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Gradle/" rel="tag">Gradle</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/" rel="tag">JVM</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SPI/" rel="tag">SPI</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Zygote/" rel="tag">Zygote</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/anr/" rel="tag">anr</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/dex2jar/" rel="tag">dex2jar</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/dump-heap/" rel="tag">dump heap</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/flutter/" rel="tag">flutter</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ndk/" rel="tag">ndk</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%A7%E5%93%81%E5%88%86%E6%9E%90/" rel="tag">产品分析</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%86%85%E5%AD%98/" rel="tag">内存</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8E%BB%E5%B9%BF%E5%91%8A/" rel="tag">去广告</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" rel="tag">多线程</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AF%B9%E7%A7%B0%E5%8A%A0%E5%AF%86/" rel="tag">对称加密</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" rel="tag">性能优化</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8F%92%E4%BB%B6%E5%8C%96/" rel="tag">插件化</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D%EF%BC%8C%E6%95%B0%E5%AD%97%E8%AF%81%E4%B9%A6/" rel="tag">数字签名，数字证书</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E8%A7%A3%E6%9E%90/" rel="tag">数据解析</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%97%A0%E7%97%95%E5%9F%8B%E7%82%B9/" rel="tag">无痕埋点</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%AD%BB%E9%94%81/" rel="tag">死锁</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91/" rel="tag">源码编译</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%94%9F%E4%BA%A7%E8%80%85%E6%B6%88%E8%B4%B9%E8%80%85%E6%A8%A1%E5%BC%8F/" rel="tag">生产者消费者模式</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%A7%BB%E5%8A%A8%E5%AE%89%E5%85%A8/" rel="tag">移动安全</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BB%98%E5%88%B6%E4%B8%8E%E5%8A%A8%E7%94%BB/" rel="tag">绘制与动画</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BD%91%E7%BB%9C/" rel="tag">网络</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BF%BB%E8%AF%91/" rel="tag">翻译</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%BD%AC%E8%BD%BD/" rel="tag">转载</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9D%9E%E5%AF%B9%E7%A7%B0%E5%8A%A0%E5%AF%86/" rel="tag">非对称加密</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
 
 
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/ASM/" style="font-size: 13px;">ASM</a> <a href="/tags/Android/" style="font-size: 14px;">Android</a> <a href="/tags/Android%E6%BA%90%E7%A0%81/" style="font-size: 13px;">Android源码</a> <a href="/tags/Bitmap/" style="font-size: 13.2px;">Bitmap</a> <a href="/tags/BitmapFactory/" style="font-size: 13px;">BitmapFactory</a> <a href="/tags/Context/" style="font-size: 13px;">Context</a> <a href="/tags/Copy-on-write/" style="font-size: 13px;">Copy-on-write</a> <a href="/tags/Delvik/" style="font-size: 13px;">Delvik</a> <a href="/tags/Drawable/" style="font-size: 13px;">Drawable</a> <a href="/tags/GC/" style="font-size: 13px;">GC</a> <a href="/tags/Gradle/" style="font-size: 13px;">Gradle</a> <a href="/tags/JVM/" style="font-size: 13.2px;">JVM</a> <a href="/tags/SPI/" style="font-size: 13px;">SPI</a> <a href="/tags/Zygote/" style="font-size: 13.2px;">Zygote</a> <a href="/tags/anr/" style="font-size: 13px;">anr</a> <a href="/tags/dex2jar/" style="font-size: 13px;">dex2jar</a> <a href="/tags/dump-heap/" style="font-size: 13px;">dump heap</a> <a href="/tags/flutter/" style="font-size: 13.2px;">flutter</a> <a href="/tags/ndk/" style="font-size: 13.2px;">ndk</a> <a href="/tags/%E4%BA%A7%E5%93%81%E5%88%86%E6%9E%90/" style="font-size: 13px;">产品分析</a> <a href="/tags/%E5%86%85%E5%AD%98/" style="font-size: 13.2px;">内存</a> <a href="/tags/%E5%8E%BB%E5%B9%BF%E5%91%8A/" style="font-size: 13px;">去广告</a> <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" style="font-size: 13px;">多线程</a> <a href="/tags/%E5%AF%B9%E7%A7%B0%E5%8A%A0%E5%AF%86/" style="font-size: 13px;">对称加密</a> <a href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" style="font-size: 13.8px;">性能优化</a> <a href="/tags/%E6%8F%92%E4%BB%B6%E5%8C%96/" style="font-size: 13.6px;">插件化</a> <a href="/tags/%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D%EF%BC%8C%E6%95%B0%E5%AD%97%E8%AF%81%E4%B9%A6/" style="font-size: 13px;">数字签名，数字证书</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E8%A7%A3%E6%9E%90/" style="font-size: 13px;">数据解析</a> <a href="/tags/%E6%97%A0%E7%97%95%E5%9F%8B%E7%82%B9/" style="font-size: 13.2px;">无痕埋点</a> <a href="/tags/%E6%AD%BB%E9%94%81/" style="font-size: 13px;">死锁</a> <a href="/tags/%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91/" style="font-size: 13px;">源码编译</a> <a href="/tags/%E7%94%9F%E4%BA%A7%E8%80%85%E6%B6%88%E8%B4%B9%E8%80%85%E6%A8%A1%E5%BC%8F/" style="font-size: 13px;">生产者消费者模式</a> <a href="/tags/%E7%A7%BB%E5%8A%A8%E5%AE%89%E5%85%A8/" style="font-size: 13.4px;">移动安全</a> <a href="/tags/%E7%BB%98%E5%88%B6%E4%B8%8E%E5%8A%A8%E7%94%BB/" style="font-size: 13.8px;">绘制与动画</a> <a href="/tags/%E7%BD%91%E7%BB%9C/" style="font-size: 13.2px;">网络</a> <a href="/tags/%E7%BF%BB%E8%AF%91/" style="font-size: 13.2px;">翻译</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 13.6px;">设计模式</a> <a href="/tags/%E8%BD%AC%E8%BD%BD/" style="font-size: 13px;">转载</a> <a href="/tags/%E9%9D%9E%E5%AF%B9%E7%A7%B0%E5%8A%A0%E5%AF%86/" style="font-size: 13px;">非对称加密</a>
+    </div>
+  </div>
 
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/04/">四月 2022</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/02/">二月 2022</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/03/">三月 2021</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">五月 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">三月 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">十一月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">七月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">六月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">一月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">十月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">九月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">七月 2018</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">六月 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">五月 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">九月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">四月 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">三月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">二月 2015</a><span class="archive-list-count">1</span></li></ul>
+    </div>
+  </div>
 
 
-<link  rel="stylesheet" href="/css/main.css" />
-
-<!-- 自定义样式保持在最底部 -->
-
-
-  <script id="fluid-configs">
-    var Fluid = window.Fluid || {};
-    var CONFIG = {"hostname":"ivonhoe.github.io","root":"/","version":"1.8.14","typing":{"enable":false,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"baidu":"666a58de875adc9dd40d5de65ceac026","google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"JdLpddsaWqwfJtXPdDK8woaF-gzGzoHsz","app_key":"CEmtHXH8f0PtvF0zYtVE0EeY","server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
-  </script>
-  <script  src="/js/utils.js" ></script>
-  <script  src="/js/color-schema.js" ></script>
-<meta name="generator" content="Hexo 6.1.0"><link rel="alternate" href="/atom.xml" title="病已的博客" type="application/atom+xml">
-</head>
-
-
-<body>
-  <header style="height: 30vh;">
-    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
-  <div class="container">
-    <a class="navbar-brand" href="/">
-      <strong>病已的博客</strong>
-    </a>
-
-    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
-            data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <div class="animated-icon"><span></span><span></span><span></span></div>
-    </button>
-
-    <!-- Collapsible content -->
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav ml-auto text-center">
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
         
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/">
-                <i class="iconfont icon-home-fill"></i>
-                首页
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/categories/">
-                <i class="iconfont icon-category-fill"></i>
-                分类
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/archives/">
-                <i class="iconfont icon-archive-fill"></i>
-                归档
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/tags/">
-                <i class="iconfont icon-tags-fill"></i>
-                标签
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/about/">
-                <i class="iconfont icon-user-fill"></i>
-                关于
-              </a>
-            </li>
-          
-        
-        
-          <li class="nav-item" id="search-btn">
-            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
-              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
-            </a>
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">性能优化</a>
+              </p>
+              <p class="item-title">
+                <a href="/2022/04/09/flutter-dev-tools/" class="title">如何排查flutter性能问题</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-04-08T16:00:51.000Z" itemprop="datePublished">4月 9 2022</time>
+              </p>
+            </div>
           </li>
-        
-        
-          <li class="nav-item" id="color-toggle-btn">
-            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
-                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">性能优化</a>
+              </p>
+              <p class="item-title">
+                <a href="/2022/02/08/java-spi/" class="title">JDK ServiceLoader加载优化</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-02-08T14:53:51.000Z" itemprop="datePublished">2月 8 2022</time>
+              </p>
+            </div>
           </li>
-        
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E6%96%B9%E6%A1%88%E4%B8%8E%E8%AE%BE%E8%AE%A1/">方案与设计</a>
+              </p>
+              <p class="item-title">
+                <a href="/2021/03/28/design-patterns-visitor/" class="title">访问者模式</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-03-27T16:19:59.000Z" itemprop="datePublished">3月 28 2021</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E6%96%B9%E6%A1%88%E4%B8%8E%E8%AE%BE%E8%AE%A1/">方案与设计</a>
+              </p>
+              <p class="item-title">
+                <a href="/2021/03/28/design-patterns-proxy/" class="title">代理模式</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-03-27T16:19:47.000Z" itemprop="datePublished">3月 28 2021</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E6%96%B9%E6%A1%88%E4%B8%8E%E8%AE%BE%E8%AE%A1/">方案与设计</a>
+              </p>
+              <p class="item-title">
+                <a href="/2021/03/28/design-patterns-chain-of-responsibility/" class="title">责任链模式</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-03-27T16:19:30.000Z" itemprop="datePublished">3月 28 2021</time>
+              </p>
+            </div>
+          </li>
+          
       </ul>
     </div>
   </div>
-</nav>
-
-    <div class="banner" id="banner" parallax=true
-         style="background: url('/img/default_post.jpeg') no-repeat center center;
-           background-size: cover;">
-      <div class="full-bg-img">
-        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0)">
-          <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="Android插件化之资源加载机制">
-              
-                Android插件化之资源加载机制
-              
-            </span>
-
-            
-              <div class="mt-3">
-  
-  
-    <span class="post-meta">
-      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-      <time datetime="2018-03-14 17:23" pubdate>
-        2018年3月14日 下午
-      </time>
-    </span>
-  
-</div>
-
-<div class="mt-1">
-  
-    <span class="post-meta mr-2">
-      <i class="iconfont icon-chart"></i>
-      8k 字
-    </span>
   
 
+    
+  </div>
+</aside>
+
   
-    <span class="post-meta mr-2">
-      <i class="iconfont icon-clock-fill"></i>
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-small-bug-555-fix" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
       
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Android插件化之资源加载机制
+    </h1>
+  
+
       
-      67 分钟
-    </span>
-  
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2018/03/14/small-bug-555-fix/" class="article-date">
+	  <time datetime="2018-03-14T09:23:27.000Z" itemprop="datePublished">3月 14 2018</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/Android%E6%8F%92%E4%BB%B6%E5%8C%96/">Android插件化</a>
+  </span>
 
-  
-  
-</div>
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/Android/" rel="tag">Android</a>, <a class="article-tag-link-link" href="/tags/Android%E6%BA%90%E7%A0%81/" rel="tag">Android源码</a>, <a class="article-tag-link-link" href="/tags/%E6%8F%92%E4%BB%B6%E5%8C%96/" rel="tag">插件化</a>
+  </span>
 
-            
-          </div>
 
-          
-        </div>
+        
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2018/03/14/small-bug-555-fix/#comments" class="article-comment-link">评论</a></span>
+        
       </div>
     </div>
-  </header>
-
-  <main>
-    
+    <div class="article-entry marked-body" itemprop="articleBody">
       
-
-<div class="container-fluid nopadding-x">
-  <div class="row nomargin-x">
-    <div class="d-none d-lg-block col-lg-2"></div>
-    <div class="col-lg-8 nopadding-x-md">
-      <div class="container nopadding-x-md" id="board-ctn">
-        <div class="py-5" id="board">
-          <article class="post-content mx-auto">
-            <!-- SEO header -->
-            <h1 style="display: none">Android插件化之资源加载机制</h1>
-            
-            <div class="markdown-body">
-              <h3 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00 前言"></a>0x00 前言</h3><p>这篇文章主要记录了在使用Small插件化框架中遇到的资源加载问题及相应解决方案，并梳理出Android的资源加载流程和插件化框架的资源加载原理。在前两篇插件化技术介绍的基础上会关注更多技术细节，希望能有所收获！</p>
-<h3 id="关于Small插件化的其他文档："><a href="#关于Small插件化的其他文档：" class="headerlink" title="关于Small插件化的其他文档："></a>关于Small插件化的其他文档：</h3><p><a href="http://ivonhoe.github.io/2018/01/18/Small%E6%A1%86%E6%9E%B6%E5%AE%9E%E8%B7%B5%E6%80%BB%E7%BB%93/"><strong>《Android插件化之Small框架实践总结》</strong></a><br><a href="http://ivonhoe.github.io/2018/01/18/Small%E6%A1%86%E6%9E%B6%E5%8E%9F%E7%90%86/"><strong>《Android插件化之Small框架原理》</strong></a><br><a href="https://ivonhoe.github.io/2018/07/18/abandon-the-plugin-framework/"><strong>《Android插件化之从入门到放弃》</strong></a></p>
-<h3 id="0x01-Small框架的资源加载异常"><a href="#0x01-Small框架的资源加载异常" class="headerlink" title="0x01 Small框架的资源加载异常"></a>0x01 Small框架的资源加载异常</h3><p>最近收到一个客户反馈，在他们的中兴V0840手机上打开我们的app会持续崩溃。第一时间在百度移动质量平台上短时租用了该机型，抓取了log。发现是资源查找失败异常。并在Small github issues中搜索<code>android.content.res.Resources$NotFoundException</code> 可以发现很多类似的问题，详细日志可查看下图。</p>
+        <p>这篇文章主要记录了在使用Small插件化框架中遇到的资源加载问题及相应解决方案，并梳理出Android的资源加载流程和插件化框架的资源加载原理。在前两篇插件化技术介绍的基础上会关注更多技术细节，希望能有所收获！</p>
 <span id="more"></span>
 
+<h3 id="关于Small插件化的其他文档："><a href="#关于Small插件化的其他文档：" class="headerlink" title="关于Small插件化的其他文档："></a>关于Small插件化的其他文档：</h3><p><a href="http://ivonhoe.github.io/2018/01/18/Small%E6%A1%86%E6%9E%B6%E5%AE%9E%E8%B7%B5%E6%80%BB%E7%BB%93/"><strong>《Android插件化之Small框架实践总结》</strong></a><br><a href="http://ivonhoe.github.io/2018/01/18/Small%E6%A1%86%E6%9E%B6%E5%8E%9F%E7%90%86/"><strong>《Android插件化之Small框架原理》</strong></a><br><a href="https://ivonhoe.github.io/2018/07/18/abandon-the-plugin-framework/"><strong>《Android插件化之从入门到放弃》</strong></a></p>
+<h3 id="0x01-Small框架的资源加载异常"><a href="#0x01-Small框架的资源加载异常" class="headerlink" title="0x01 Small框架的资源加载异常"></a>0x01 Small框架的资源加载异常</h3><p>最近收到一个客户反馈，在他们的中兴V0840手机上打开我们的app会持续崩溃。第一时间在百度移动质量平台上短时租用了该机型，抓取了log。发现是资源查找失败异常。并在Small github issues中搜索<code>android.content.res.Resources$NotFoundException</code> 可以发现很多类似的问题，详细日志可查看下图。</p>
 <p>Github issus链接：<a target="_blank" rel="noopener" href="https://github.com/wequick/Small/issues/555">#555 Small Sample项目打包后在ZTE上闪退</a></p>
 <p><strong>项目崩溃日志：</strong></p>
-<figure class="highlight apache"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></div></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">03</span>-<span class="hljs-number">06</span> <span class="hljs-number">17</span>:<span class="hljs-number">48</span>:<span class="hljs-number">31</span>.<span class="hljs-number">685</span> E/AndroidRuntime( <span class="hljs-number">8189</span>): FATAL EXCEPTION: main<br><span class="hljs-attribute">03</span>-<span class="hljs-number">06</span> <span class="hljs-number">17</span>:<span class="hljs-number">48</span>:<span class="hljs-number">31</span>.<span class="hljs-number">685</span> E/AndroidRuntime( <span class="hljs-number">8189</span>): Process: com.shandiangou.kaguanjia, PID: <span class="hljs-number">8189</span><br><span class="hljs-attribute">03</span>-<span class="hljs-number">06</span> <span class="hljs-number">17</span>:<span class="hljs-number">48</span>:<span class="hljs-number">31</span>.<span class="hljs-number">685</span> E/AndroidRuntime( <span class="hljs-number">8189</span>): java.lang.RuntimeException: Unable to start activity ComponentInfo&#123;com.shandiangou.kaguanjia/com.shandiangou.kaguanjia.app.main.activity.GuideActivity&#125;: android.content.res.Resources$NotFoundException: Resource ID #<span class="hljs-number">0</span>x2a030010<br><span class="hljs-attribute">03</span>-<span class="hljs-number">06</span> <span class="hljs-number">17</span>:<span class="hljs-number">48</span>:<span class="hljs-number">31</span>.<span class="hljs-number">685</span> E/AndroidRuntime( <span class="hljs-number">8189</span>): 	at android.app.ActivityThread.performLaunchActivity(ActivityThread.java:<span class="hljs-number">2669</span>)<br><span class="hljs-attribute">03</span>-<span class="hljs-number">06</span> <span class="hljs-number">17</span>:<span class="hljs-number">48</span>:<span class="hljs-number">31</span>.<span class="hljs-number">685</span> E/AndroidRuntime( <span class="hljs-number">8189</span>): 	at android.app.ActivityThread.handleLaunchActivity(ActivityThread.java:<span class="hljs-number">2730</span>)<br><span class="hljs-attribute">03</span>-<span class="hljs-number">06</span> <span class="hljs-number">17</span>:<span class="hljs-number">48</span>:<span class="hljs-number">31</span>.<span class="hljs-number">685</span> E/AndroidRuntime( <span class="hljs-number">8189</span>): 	at android.app.ActivityThread.-wrap12(ActivityThread.java)<br><span class="hljs-attribute">03</span>-<span class="hljs-number">06</span> <span class="hljs-number">17</span>:<span class="hljs-number">48</span>:<span class="hljs-number">31</span>.<span class="hljs-number">685</span> E/AndroidRuntime( <span class="hljs-number">8189</span>): 	at android.app.ActivityThread$H.handleMessage(ActivityThread.java:<span class="hljs-number">1481</span>)<br><span class="hljs-attribute">03</span>-<span class="hljs-number">06</span> <span class="hljs-number">17</span>:<span class="hljs-number">48</span>:<span class="hljs-number">31</span>.<span class="hljs-number">685</span> E/AndroidRuntime( <span class="hljs-number">8189</span>): 	at android.os.Handler.dispatchMessage(Handler.java:<span class="hljs-number">102</span>)<br><span class="hljs-attribute">03</span>-<span class="hljs-number">06</span> <span class="hljs-number">17</span>:<span class="hljs-number">48</span>:<span class="hljs-number">31</span>.<span class="hljs-number">685</span> E/AndroidRuntime( <span class="hljs-number">8189</span>): 	at android.os.Looper.loop(Looper.java:<span class="hljs-number">154</span>)<br><span class="hljs-attribute">03</span>-<span class="hljs-number">06</span> <span class="hljs-number">17</span>:<span class="hljs-number">48</span>:<span class="hljs-number">31</span>.<span class="hljs-number">685</span> E/AndroidRuntime( <span class="hljs-number">8189</span>): 	at android.app.ActivityThread.main(ActivityThread.java:<span class="hljs-number">6144</span>)<br><span class="hljs-attribute">03</span>-<span class="hljs-number">06</span> <span class="hljs-number">17</span>:<span class="hljs-number">48</span>:<span class="hljs-number">31</span>.<span class="hljs-number">685</span> E/AndroidRuntime( <span class="hljs-number">8189</span>): 	at java.lang.reflect.Method.invoke(Native Method)<br><span class="hljs-attribute">03</span>-<span class="hljs-number">06</span> <span class="hljs-number">17</span>:<span class="hljs-number">48</span>:<span class="hljs-number">31</span>.<span class="hljs-number">685</span> E/AndroidRuntime( <span class="hljs-number">8189</span>): 	at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:<span class="hljs-number">886</span>)<br><span class="hljs-attribute">03</span>-<span class="hljs-number">06</span> <span class="hljs-number">17</span>:<span class="hljs-number">48</span>:<span class="hljs-number">31</span>.<span class="hljs-number">685</span> E/AndroidRuntime( <span class="hljs-number">8189</span>): 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:<span class="hljs-number">776</span>)<br><span class="hljs-attribute">03</span>-<span class="hljs-number">06</span> <span class="hljs-number">17</span>:<span class="hljs-number">48</span>:<span class="hljs-number">31</span>.<span class="hljs-number">685</span> E/AndroidRuntime( <span class="hljs-number">8189</span>): Caused by: android.content.res.Resources$NotFoundException: Resource ID #<span class="hljs-number">0</span>x2a030010<br><span class="hljs-attribute">03</span>-<span class="hljs-number">06</span> <span class="hljs-number">17</span>:<span class="hljs-number">48</span>:<span class="hljs-number">31</span>.<span class="hljs-number">685</span> E/AndroidRuntime( <span class="hljs-number">8189</span>): 	at android.content.res.ResourcesImpl.getValue(ResourcesImpl.java:<span class="hljs-number">196</span>)<br><span class="hljs-attribute">03</span>-<span class="hljs-number">06</span> <span class="hljs-number">17</span>:<span class="hljs-number">48</span>:<span class="hljs-number">31</span>.<span class="hljs-number">685</span> E/AndroidRuntime( <span class="hljs-number">8189</span>): 	at android.content.res.Resources.loadXmlResourceParser(Resources.java:<span class="hljs-number">2101</span>)<br><span class="hljs-attribute">03</span>-<span class="hljs-number">06</span> <span class="hljs-number">17</span>:<span class="hljs-number">48</span>:<span class="hljs-number">31</span>.<span class="hljs-number">685</span> E/AndroidRuntime( <span class="hljs-number">8189</span>): 	at android.content.res.Resources.getLayout(Resources.java:<span class="hljs-number">1115</span>)<br><span class="hljs-attribute">03</span>-<span class="hljs-number">06</span> <span class="hljs-number">17</span>:<span class="hljs-number">48</span>:<span class="hljs-number">31</span>.<span class="hljs-number">685</span> E/AndroidRuntime( <span class="hljs-number">8189</span>): 	at android.view.LayoutInflater.inflate(LayoutInflater.java:<span class="hljs-number">424</span>)<br><span class="hljs-attribute">03</span>-<span class="hljs-number">06</span> <span class="hljs-number">17</span>:<span class="hljs-number">48</span>:<span class="hljs-number">31</span>.<span class="hljs-number">685</span> E/AndroidRuntime( <span class="hljs-number">8189</span>): 	at android.view.LayoutInflater.inflate(LayoutInflater.java:<span class="hljs-number">377</span>)<br><span class="hljs-attribute">03</span>-<span class="hljs-number">06</span> <span class="hljs-number">17</span>:<span class="hljs-number">48</span>:<span class="hljs-number">31</span>.<span class="hljs-number">685</span> E/AndroidRuntime( <span class="hljs-number">8189</span>): 	at com.shandiangou.kaguanjia.common.base.CustomProgressDialog.init(CustomProgressDialog.java:<span class="hljs-number">38</span>)<br><span class="hljs-attribute">03</span>-<span class="hljs-number">06</span> <span class="hljs-number">17</span>:<span class="hljs-number">48</span>:<span class="hljs-number">31</span>.<span class="hljs-number">685</span> E/AndroidRuntime( <span class="hljs-number">8189</span>): 	at com.shandiangou.kaguanjia.common.base.CustomProgressDialog.&lt;init&gt;(CustomProgressDialog.java:<span class="hljs-number">26</span>)<br><span class="hljs-attribute">03</span>-<span class="hljs-number">06</span> <span class="hljs-number">17</span>:<span class="hljs-number">48</span>:<span class="hljs-number">31</span>.<span class="hljs-number">685</span> E/AndroidRuntime( <span class="hljs-number">8189</span>): 	at com.shandiangou.kaguanjia.common.base.BaseActivity.initProgressDialog(BaseActivity.java:<span class="hljs-number">27</span>)<br><span class="hljs-attribute">03</span>-<span class="hljs-number">06</span> <span class="hljs-number">17</span>:<span class="hljs-number">48</span>:<span class="hljs-number">31</span>.<span class="hljs-number">685</span> E/AndroidRuntime( <span class="hljs-number">8189</span>): 	at com.shandiangou.kaguanjia.common.base.BaseActivity.onCreate(BaseActivity.java:<span class="hljs-number">22</span>)<br><span class="hljs-attribute">03</span>-<span class="hljs-number">06</span> <span class="hljs-number">17</span>:<span class="hljs-number">48</span>:<span class="hljs-number">31</span>.<span class="hljs-number">685</span> E/AndroidRuntime( <span class="hljs-number">8189</span>): 	at com.shandiangou.kaguanjia.app.main.activity.GuideActivity.onCreate(GuideActivity.java:<span class="hljs-number">45</span>)<br><span class="hljs-attribute">03</span>-<span class="hljs-number">06</span> <span class="hljs-number">17</span>:<span class="hljs-number">48</span>:<span class="hljs-number">31</span>.<span class="hljs-number">685</span> E/AndroidRuntime( <span class="hljs-number">8189</span>): 	at android.app.Activity.performCreate(Activity.java:<span class="hljs-number">6722</span>)<br><span class="hljs-attribute">03</span>-<span class="hljs-number">06</span> <span class="hljs-number">17</span>:<span class="hljs-number">48</span>:<span class="hljs-number">31</span>.<span class="hljs-number">685</span> E/AndroidRuntime( <span class="hljs-number">8189</span>): 	at android.app.Instrumentation.callActivityOnCreate(Instrumentation.java:<span class="hljs-number">1119</span>)<br><span class="hljs-attribute">03</span>-<span class="hljs-number">06</span> <span class="hljs-number">17</span>:<span class="hljs-number">48</span>:<span class="hljs-number">31</span>.<span class="hljs-number">685</span> E/AndroidRuntime( <span class="hljs-number">8189</span>): 	at net.wequick.small.ApkBundleLauncher$InstrumentationWrapper.callActivityOnCreate(ApkBundleLauncher.java:<span class="hljs-number">334</span>)<br><span class="hljs-attribute">03</span>-<span class="hljs-number">06</span> <span class="hljs-number">17</span>:<span class="hljs-number">48</span>:<span class="hljs-number">31</span>.<span class="hljs-number">685</span> E/AndroidRuntime( <span class="hljs-number">8189</span>): 	at android.app.ActivityThread.performLaunchActivity(ActivityThread.java:<span class="hljs-number">2622</span>)<br><span class="hljs-attribute">03</span>-<span class="hljs-number">06</span> <span class="hljs-number">17</span>:<span class="hljs-number">48</span>:<span class="hljs-number">31</span>.<span class="hljs-number">685</span> E/AndroidRuntime( <span class="hljs-number">8189</span>): 	... <span class="hljs-number">9</span> more<br><span class="hljs-attribute">03</span>-<span class="hljs-number">06</span> <span class="hljs-number">17</span>:<span class="hljs-number">48</span>:<span class="hljs-number">31</span>.<span class="hljs-number">688</span> W/ActivityManager( <span class="hljs-number">1384</span>):   Force finishing activity com.shandiangou.kaguanjia/net.wequick.small.A<br><br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">03-06 17:48:31.685 E/AndroidRuntime( 8189): FATAL EXCEPTION: main</span><br><span class="line">03-06 17:48:31.685 E/AndroidRuntime( 8189): Process: com.shandiangou.kaguanjia, PID: 8189</span><br><span class="line">03-06 17:48:31.685 E/AndroidRuntime( 8189): java.lang.RuntimeException: Unable to start activity ComponentInfo&#123;com.shandiangou.kaguanjia/com.shandiangou.kaguanjia.app.main.activity.GuideActivity&#125;: android.content.res.Resources$NotFoundException: Resource ID #0x2a030010</span><br><span class="line">03-06 17:48:31.685 E/AndroidRuntime( 8189): 	at android.app.ActivityThread.performLaunchActivity(ActivityThread.java:2669)</span><br><span class="line">03-06 17:48:31.685 E/AndroidRuntime( 8189): 	at android.app.ActivityThread.handleLaunchActivity(ActivityThread.java:2730)</span><br><span class="line">03-06 17:48:31.685 E/AndroidRuntime( 8189): 	at android.app.ActivityThread.-wrap12(ActivityThread.java)</span><br><span class="line">03-06 17:48:31.685 E/AndroidRuntime( 8189): 	at android.app.ActivityThread$H.handleMessage(ActivityThread.java:1481)</span><br><span class="line">03-06 17:48:31.685 E/AndroidRuntime( 8189): 	at android.os.Handler.dispatchMessage(Handler.java:102)</span><br><span class="line">03-06 17:48:31.685 E/AndroidRuntime( 8189): 	at android.os.Looper.loop(Looper.java:154)</span><br><span class="line">03-06 17:48:31.685 E/AndroidRuntime( 8189): 	at android.app.ActivityThread.main(ActivityThread.java:6144)</span><br><span class="line">03-06 17:48:31.685 E/AndroidRuntime( 8189): 	at java.lang.reflect.Method.invoke(Native Method)</span><br><span class="line">03-06 17:48:31.685 E/AndroidRuntime( 8189): 	at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:886)</span><br><span class="line">03-06 17:48:31.685 E/AndroidRuntime( 8189): 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:776)</span><br><span class="line">03-06 17:48:31.685 E/AndroidRuntime( 8189): Caused by: android.content.res.Resources$NotFoundException: Resource ID #0x2a030010</span><br><span class="line">03-06 17:48:31.685 E/AndroidRuntime( 8189): 	at android.content.res.ResourcesImpl.getValue(ResourcesImpl.java:196)</span><br><span class="line">03-06 17:48:31.685 E/AndroidRuntime( 8189): 	at android.content.res.Resources.loadXmlResourceParser(Resources.java:2101)</span><br><span class="line">03-06 17:48:31.685 E/AndroidRuntime( 8189): 	at android.content.res.Resources.getLayout(Resources.java:1115)</span><br><span class="line">03-06 17:48:31.685 E/AndroidRuntime( 8189): 	at android.view.LayoutInflater.inflate(LayoutInflater.java:424)</span><br><span class="line">03-06 17:48:31.685 E/AndroidRuntime( 8189): 	at android.view.LayoutInflater.inflate(LayoutInflater.java:377)</span><br><span class="line">03-06 17:48:31.685 E/AndroidRuntime( 8189): 	at com.shandiangou.kaguanjia.common.base.CustomProgressDialog.init(CustomProgressDialog.java:38)</span><br><span class="line">03-06 17:48:31.685 E/AndroidRuntime( 8189): 	at com.shandiangou.kaguanjia.common.base.CustomProgressDialog.&lt;init&gt;(CustomProgressDialog.java:26)</span><br><span class="line">03-06 17:48:31.685 E/AndroidRuntime( 8189): 	at com.shandiangou.kaguanjia.common.base.BaseActivity.initProgressDialog(BaseActivity.java:27)</span><br><span class="line">03-06 17:48:31.685 E/AndroidRuntime( 8189): 	at com.shandiangou.kaguanjia.common.base.BaseActivity.onCreate(BaseActivity.java:22)</span><br><span class="line">03-06 17:48:31.685 E/AndroidRuntime( 8189): 	at com.shandiangou.kaguanjia.app.main.activity.GuideActivity.onCreate(GuideActivity.java:45)</span><br><span class="line">03-06 17:48:31.685 E/AndroidRuntime( 8189): 	at android.app.Activity.performCreate(Activity.java:6722)</span><br><span class="line">03-06 17:48:31.685 E/AndroidRuntime( 8189): 	at android.app.Instrumentation.callActivityOnCreate(Instrumentation.java:1119)</span><br><span class="line">03-06 17:48:31.685 E/AndroidRuntime( 8189): 	at net.wequick.small.ApkBundleLauncher$InstrumentationWrapper.callActivityOnCreate(ApkBundleLauncher.java:334)</span><br><span class="line">03-06 17:48:31.685 E/AndroidRuntime( 8189): 	at android.app.ActivityThread.performLaunchActivity(ActivityThread.java:2622)</span><br><span class="line">03-06 17:48:31.685 E/AndroidRuntime( 8189): 	... 9 more</span><br><span class="line">03-06 17:48:31.688 W/ActivityManager( 1384):   Force finishing activity com.shandiangou.kaguanjia/net.wequick.small.A</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
 <p><strong>Small框架官方Sample崩溃日志</strong></p>
-<p><img src="/res/small/small-error.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/res/small/small-error.png"></p>
 <h3 id="0x02-Android资源加载流程"><a href="#0x02-Android资源加载流程" class="headerlink" title="0x02 Android资源加载流程"></a>0x02 Android资源加载流程</h3><p><strong>Android源码Resources创建流程图：</strong></p>
-<p><img src="/res/small/android-resources1.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/res/small/android-resources1.png"></p>
 <p>ActivityThread在接收到LAUNCH_ACTIVITY消息以后，在 <code>performLaunchActivity </code>方法中，使用Instrumentation通过反射的方式创建Activity实例，再创建Activity的Base Context, 并在创建Context过程中实例化AssetManger和Resources。<br>ActivityThread在LAUNCH_ACTIVITY消息中，完成了Activity生命周期中的三个回调，分别是<code>onCreate</code> <code>onStart </code> <code>onRestoreInstanceState</code>。</p>
 <p>Android中资源管理类在不同sdk版本中的关系如下图所示。</p>
-<p><img src="/res/small/android-resources2.png" srcset="/img/loading.gif" lazyload alt="Android源码资源类图"></p>
+<p><img src="/res/small/android-resources2.png" alt="Android源码资源类图"></p>
 <h3 id="0x03-Small框架插件资源加载方案"><a href="#0x03-Small框架插件资源加载方案" class="headerlink" title="0x03 Small框架插件资源加载方案"></a>0x03 Small框架插件资源加载方案</h3><p>Small框架的资源加载流程在ApkBundleLauncher中完成，<code>setup</code>流程获取到所有插件so的信息，在<code>postSetUp</code>中获取所有插件包的资源路径，通过反射调用AssetManager的<code>addAssetPaths</code>方法，构造一个包含宿主包资源、系统资源和插件包资源的AssetManger。最后还是通过反射，使用包含所有资源的AssetManager替换掉ResourcesManager中Resources的AssetManger，最终达到加载插件中资源的目的。</p>
 <p><strong>Small框架资源加载流程:</strong></p>
-<p><img src="/res/small/android-resources4.png" srcset="/img/loading.gif" lazyload alt="Android源码资源类图"></p>
+<p><img src="/res/small/android-resources4.png" alt="Android源码资源类图"></p>
 <h3 id="0x04-bug修复方案"><a href="#0x04-bug修复方案" class="headerlink" title="0x04 bug修复方案"></a>0x04 bug修复方案</h3><p>看完Small插件资源加载流程，你是否有疑问？Small只在框架加载时对ResourcesManager进行了hook，好像在创建新的Resources并没有进行hook操作？那么当系统新创建Resources实例时，新的Resources中包含的资源路径并没有插件资源，这好像说不通吧。其实关注Small的源码中<code>ReflectAccelerator.ensureCacheResources</code>，这个方法想要的达到的作用是当每次启动Activity时遍历系统缓存的ResourceImpl，将它的AssetManager替换成包含插件资源的AssetManager。当然这个机制只在SDK&gt;&#x3D;24时生效。</p>
-<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs typescript"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-built_in">void</span> <span class="hljs-title function_">ensureCacheResources</span>(<span class="hljs-params"></span>) &#123;<br>    <span class="hljs-keyword">if</span> (<span class="hljs-title class_">Build</span>.<span class="hljs-property">VERSION</span>.<span class="hljs-property">SDK_INT</span> &lt; <span class="hljs-number">24</span>) <span class="hljs-keyword">return</span>;<br>    <span class="hljs-keyword">if</span> (sResourceImpls == <span class="hljs-literal">null</span> || sMergedResourcesImpl == <span class="hljs-literal">null</span>) <span class="hljs-keyword">return</span>;<br><br>    <span class="hljs-title class_">Set</span>&lt;?&gt; resourceKeys = sResourceImpls.<span class="hljs-title function_">keySet</span>();<br>    <span class="hljs-keyword">for</span> (<span class="hljs-title class_">Object</span> resourceKey : resourceKeys) &#123;<br>        <span class="hljs-title class_">WeakReference</span> resourceImpl = (<span class="hljs-title class_">WeakReference</span>)sResourceImpls.<span class="hljs-title function_">get</span>(resourceKey);<br>        <span class="hljs-keyword">if</span> (resourceImpl != <span class="hljs-literal">null</span> &amp;&amp; resourceImpl.<span class="hljs-title function_">get</span>() != sMergedResourcesImpl) &#123;<br>            <span class="hljs-comment">// Sometimes? the weak reference for the key was released by what</span><br>            <span class="hljs-comment">// we can not find the cache resources we had merged before.</span><br>            <span class="hljs-comment">// And the system will recreate a new one which only build with host resources.</span><br>            <span class="hljs-comment">// So we needs to restore the cache. Fix #429.</span><br>            <span class="hljs-comment">// <span class="hljs-doctag">FIXME:</span> we&#x27;d better to find the way to KEEP the weak reference.</span><br>            sResourceImpls.<span class="hljs-title function_">put</span>(resourceKey, <span class="hljs-keyword">new</span> <span class="hljs-title class_">WeakReference</span>&lt;<span class="hljs-title class_">Object</span>&gt;(sMergedResourcesImpl));<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">public static void ensureCacheResources() &#123;</span><br><span class="line">    if (Build.VERSION.SDK_INT &lt; 24) return;</span><br><span class="line">    if (sResourceImpls == null || sMergedResourcesImpl == null) return;</span><br><span class="line"></span><br><span class="line">    Set&lt;?&gt; resourceKeys = sResourceImpls.keySet();</span><br><span class="line">    for (Object resourceKey : resourceKeys) &#123;</span><br><span class="line">        WeakReference resourceImpl = (WeakReference)sResourceImpls.get(resourceKey);</span><br><span class="line">        if (resourceImpl != null &amp;&amp; resourceImpl.get() != sMergedResourcesImpl) &#123;</span><br><span class="line">            // Sometimes? the weak reference for the key was released by what</span><br><span class="line">            // we can not find the cache resources we had merged before.</span><br><span class="line">            // And the system will recreate a new one which only build with host resources.</span><br><span class="line">            // So we needs to restore the cache. Fix #429.</span><br><span class="line">            // FIXME: we&#x27;d better to find the way to KEEP the weak reference.</span><br><span class="line">            sResourceImpls.put(resourceKey, new WeakReference&lt;Object&gt;(sMergedResourcesImpl));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p><strong>这里有两个问题:</strong></p>
 <ol>
 <li>SDK&lt;24时，在原生的Android系统中并不是每启动一个Activity都会创建一个新的Resources实例，ResourcesManager会使用缓存的Resources实例，所以只需要Hook一次资源加载。但是一旦创建多个Resources实例时，是不是意味着新创建的Resources并会包含插件的资源路径。个人理解是这样的。这应该也能解释为啥Small框架会在某些手机的<strong>分屏模式</strong>和某些<strong>横竖屏切换</strong>的时候会发生Crash，详情请查看<a target="_blank" rel="noopener" href="https://github.com/wequick/Small/issues/356">#356</a>和<a target="_blank" rel="noopener" href="https://github.com/wequick/Small/issues/548">#548</a></li>
 <li>SDK&gt;24时，Small会执行<code>ensureCacheResources</code>希望将新创建的ResourcesImpl的AssetsManger替换掉。但是看到源码中的实现方式是，通过反射为ActivityThread的<code>mH</code>Handler注入一个<code>Handler.Callback</code>。当HandlerCallback handleMessage LAUNCH_ACTIVITY消息时，执行<code>ensureCacheResources</code>方法。查看Handler的<code>dispatchMessage </code>发现<code>mCallback.handleMessage</code>是先于<code>mHandler.handleMessage</code>的。</li>
 </ol>
-<figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs reasonml"><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * Handle system messages here.</span><br><span class="hljs-comment"> */</span><br>public void dispatch<span class="hljs-constructor">Message(Message <span class="hljs-params">msg</span>)</span> &#123;<br>    <span class="hljs-keyword">if</span> (msg.callback != null) &#123;<br>        handle<span class="hljs-constructor">Callback(<span class="hljs-params">msg</span>)</span>;<br>    &#125; <span class="hljs-keyword">else</span> &#123;<br>        <span class="hljs-keyword">if</span> (mCallback != null) &#123;<br>            <span class="hljs-keyword">if</span> (mCallback.handle<span class="hljs-constructor">Message(<span class="hljs-params">msg</span>)</span>) &#123;<br>                return;<br>            &#125;<br>        &#125;<br>        handle<span class="hljs-constructor">Message(<span class="hljs-params">msg</span>)</span>;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * Handle system messages here.</span><br><span class="line"> */</span><br><span class="line">public void dispatchMessage(Message msg) &#123;</span><br><span class="line">    if (msg.callback != null) &#123;</span><br><span class="line">        handleCallback(msg);</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        if (mCallback != null) &#123;</span><br><span class="line">            if (mCallback.handleMessage(msg)) &#123;</span><br><span class="line">                return;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        handleMessage(msg);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>查看 <strong>0x02 Android资源加载流程</strong> 的资源流程，你会发现Resources对象的实例化并将ResourcesImpl添加到ResourcesManger的缓存列表中是在<code>Handler.handleMessage</code>之后的。所以<code>ensureCacheResources</code>并不能保证启动Activity时<strong>新创建的</strong>ResourcesImpl实例能够被正常hook的！！</p>
 <p>综上所述，这就是文章开头中兴手机Android7.1系统的手机上使用Small框架会发生Crash问题的原因，因为<strong>中兴系统每次打开新的Activity都会创建一个新的Resources和ResourcesImpl实例，而这些都是没有被hook的，不包含插件资源路径</strong>，自然就会发生资源查找失败的异常。解决方法也比较简单，因为是SDK&gt;24的机器，只需要在Small框架的<code>InstrumentationWrapper.callActivityOnCreate</code>方法中执行<code>ReflectAccelerator.ensureCacheResources()</code>就可以解决上面的问题了。</p>
 <p>同时你需要注意另一个问题，查看ActivityThread的源码，在启动Activity流程的<code>performLaunchActivity</code>方法中，在<code>mInstrumentation.callActivityOnCreate</code>之前系统会为Activity设置主题。如果你选择在<code>mInstrumentation.callActivityOnCreate</code>中执行Resources的hook，并且此时需要的主题资源恰好在插件中，那依然会发生Crash。</p>
-<figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs reasonml"><span class="hljs-keyword">private</span> Activity perform<span class="hljs-constructor">LaunchActivity(ActivityClientRecord <span class="hljs-params">r</span>, Intent <span class="hljs-params">customIntent</span>)</span> &#123;<br>    ....<br>    ....省略其他代码<br>    <span class="hljs-built_in">int</span> theme = r.activityInfo.get<span class="hljs-constructor">ThemeResource()</span>;<br>    <span class="hljs-keyword">if</span> (theme != <span class="hljs-number">0</span>) &#123;<br>        activity.set<span class="hljs-constructor">Theme(<span class="hljs-params">theme</span>)</span>;<br>    &#125;<br><br>    activity.mCalled = <span class="hljs-literal">false</span>;<br>    <span class="hljs-keyword">if</span> (r.is<span class="hljs-constructor">Persistable()</span>) &#123;<br>        mInstrumentation.call<span class="hljs-constructor">ActivityOnCreate(<span class="hljs-params">activity</span>, <span class="hljs-params">r</span>.<span class="hljs-params">state</span>, <span class="hljs-params">r</span>.<span class="hljs-params">persistentState</span>)</span>;<br>    &#125; <span class="hljs-keyword">else</span> &#123;<br>        mInstrumentation.call<span class="hljs-constructor">ActivityOnCreate(<span class="hljs-params">activity</span>, <span class="hljs-params">r</span>.<span class="hljs-params">state</span>)</span>;<br>    &#125;<br>    ....省略其他代码<br>    ....<br>&#125;<br><br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">private Activity performLaunchActivity(ActivityClientRecord r, Intent customIntent) &#123;</span><br><span class="line">    ....</span><br><span class="line">    ....省略其他代码</span><br><span class="line">    int theme = r.activityInfo.getThemeResource();</span><br><span class="line">    if (theme != 0) &#123;</span><br><span class="line">        activity.setTheme(theme);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    activity.mCalled = false;</span><br><span class="line">    if (r.isPersistable()) &#123;</span><br><span class="line">        mInstrumentation.callActivityOnCreate(activity, r.state, r.persistentState);</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        mInstrumentation.callActivityOnCreate(activity, r.state);</span><br><span class="line">    &#125;</span><br><span class="line">    ....省略其他代码</span><br><span class="line">    ....</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
 <p>这里我的建议是把你项目中所有的主题定义都放在宿主中，并且修改Small的框架代码在<code>InstrumentationWrapper.callActivityOnCreate</code>方法中执行<code>ReflectAccelerator.ensureCacheResources</code>方法，这样就可以解决Small框架在某些场景下发生<code>Resources$NotFoundException</code>异常的问题。</p>
-<h3 id="0x05-完"><a href="#0x05-完" class="headerlink" title="0x05 完"></a>0x05 完</h3><p>Small插件化框架是我在项目中使用的框架，他的设计和实现思路上都非常优雅，是首选的轻量级插件化框架。以上分析只是对Android源码和Small框架的个人理解，如有理解有误的地方还望指出，个人微信号:tykYang，邮箱:<a href="mailto:&#x79;&#x61;&#x6e;&#103;&#102;&#x61;&#110;&#x33;&#54;&#x38;&#x37;&#64;&#49;&#54;&#51;&#x2e;&#x63;&#x6f;&#109;">&#x79;&#x61;&#x6e;&#103;&#102;&#x61;&#110;&#x33;&#54;&#x38;&#x37;&#64;&#49;&#54;&#51;&#x2e;&#x63;&#x6f;&#109;</a>。🙏🙏🙏</p>
+<h3 id="0x05-完"><a href="#0x05-完" class="headerlink" title="0x05 完"></a>0x05 完</h3><p>Small插件化框架是我在项目中使用的框架，他的设计和实现思路上都非常优雅，是首选的轻量级插件化框架。以上分析只是对Android源码和Small框架的个人理解，如有理解有误的地方还望指出，个人微信号:tykYang，邮箱:<a href="mailto:&#x79;&#97;&#110;&#103;&#x66;&#x61;&#110;&#x33;&#x36;&#56;&#55;&#x40;&#49;&#54;&#x33;&#46;&#x63;&#111;&#x6d;">&#x79;&#97;&#110;&#103;&#x66;&#x61;&#110;&#x33;&#x36;&#56;&#55;&#x40;&#49;&#54;&#x33;&#46;&#x63;&#111;&#x6d;</a>。🙏🙏🙏</p>
 <h3 id="转载请标明出处病已blog-https-ivonhoe-github-io"><a href="#转载请标明出处病已blog-https-ivonhoe-github-io" class="headerlink" title="转载请标明出处病已blog https://ivonhoe.github.io/"></a>转载请标明出处<a href="https://ivonhoe.github.io/">病已blog https://ivonhoe.github.io/</a></h3>
-            </div>
-            <hr>
-            <div>
-              <div class="post-metas mb-3">
-                
-                  <div class="post-meta mr-3">
-                    <i class="iconfont icon-category"></i>
-                    
-                      <a class="hover-with-bg" href="/categories/Android%E6%8F%92%E4%BB%B6%E5%8C%96/">Android插件化</a>
-                    
-                  </div>
-                
-                
-                  <div class="post-meta">
-                    <i class="iconfont icon-tags"></i>
-                    
-                      <a class="hover-with-bg" href="/tags/%E6%8F%92%E4%BB%B6%E5%8C%96/">插件化</a>
-                    
-                      <a class="hover-with-bg" href="/tags/Android/">Android</a>
-                    
-                      <a class="hover-with-bg" href="/tags/Android%E6%BA%90%E7%A0%81/">Android源码</a>
-                    
-                  </div>
-                
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://ivonhoe.github.io/2018/03/14/small-bug-555-fix/" title="Android插件化之资源加载机制" target="_blank" rel="external">https://ivonhoe.github.io/2018/03/14/small-bug-555-fix/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/Ivonhoe" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.png" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/Ivonhoe" target="_blank"><span class="text-dark">病已</span><small class="ml-1x">Android Developer</small></a></h3>
+        <div></div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="vcomments"></div>
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2018/05/21/https/" title="HTTPS"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2018/01/18/small-plugin-1/" title="Android插件化之Small框架原理"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-fancy btn-donate pop-onhover bg-gradient-warning" data-toggle="modal" data-target="#donateModal"><span>赏</span></button>
+  <!-- <div class="wave-icon wave-icon-danger btn-donate" data-toggle="modal" data-target="#donateModal">
+    <div class="wave-circle"><span class="icon"><i class="icon icon-bill"></i></span></div>
+  </div> -->
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+<!-- Modal -->
+<div class="modal modal-center modal-small modal-xs-full fade" id="donateModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content donate">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <div class="modal-body">
+        <div class="donate-box">
+          <div class="donate-head">
+            <p>感谢您的支持，我会继续努力的!</p>
+          </div>
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade active in" id="alipay">
+              <div class="donate-payimg">
+                <img src="/images/donate/alipay.png" alt="扫码支持" title="扫一扫" />
               </div>
-              
-                <p class="note note-warning">
-                  
-                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
-                  
-                </p>
-              
-              
-                <div class="post-prevnext">
-                  <article class="post-prev col-6">
-                    
-                    
-                      <a href="/2018/05/21/https/">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">HTTPS</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
-                  </article>
-                  <article class="post-next col-6">
-                    
-                    
-                      <a href="/2018/01/18/small-plugin-1/">
-                        <span class="hidden-mobile">Android插件化之Small框架原理</span>
-                        <span class="visible-mobile">下一篇</span>
-                        <i class="iconfont icon-arrowright"></i>
-                      </a>
-                    
-                  </article>
-                </div>
-              
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开支付宝扫一扫，即可进行扫码打赏哦</p>
             </div>
-
-            
-              <!-- Comments -->
-              <article class="comments" id="comments" lazyload>
-                
-                  
-                
-                
-  <div id="valine"></div>
-  <script type="text/javascript">
-    Fluid.utils.loadComments('#valine', function() {
-      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/valine@1/dist/Valine.min.js', function() {
-        var options = Object.assign(
-          {"appId":"JdLpddsaWqwfJtXPdDK8woaF-gzGzoHsz","appKey":"CEmtHXH8f0PtvF0zYtVE0EeY","path":"window.location.pathname","placeholder":null,"avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
-          {
-            el: "#valine",
-            path: window.location.pathname
-          }
-        )
-        new Valine(options);
-        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
-          Fluid.plugins.initFancyBox('#valine .vcontent img:not(.vemoji)');
-        })
-      });
-    });
-  </script>
-  <noscript>Please enable JavaScript to view the comments</noscript>
-
-
-              </article>
-            
-          </article>
+            <div role="tabpanel" class="tab-pane fade" id="wechatpay">
+              <div class="donate-payimg">
+                <img src="/images/donate/wechatpay.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开微信扫一扫，即可进行扫码打赏哦</p>
+            </div>
+          </div>
+          <div class="donate-footer">
+            <ul class="nav nav-tabs nav-justified" role="tablist">
+              <li role="presentation" class="active">
+                <a href="#alipay" id="alipay-tab" role="tab" data-toggle="tab" aria-controls="alipay" aria-expanded="true"><i class="icon icon-alipay"></i> 支付宝</a>
+              </li>
+              <li role="presentation" class="">
+                <a href="#wechatpay" role="tab" id="wechatpay-tab" data-toggle="tab" aria-controls="wechatpay" aria-expanded="false"><i class="icon icon-wepay"></i> 微信支付</a>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
-    
-      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
-        <div id="toc">
-  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
-  <div class="toc-body" id="toc-body"></div>
-</div>
-
-      </div>
-    
   </div>
 </div>
 
-<!-- Custom -->
 
 
-    
+</main>
 
-    
-      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
-        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
-      </a>
-    
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/Ivonhoe" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
 
-    
-      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
-     aria-hidden="true">
-  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header text-center">
-        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
-        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body mx-3">
-        <div class="md-form mb-5">
-          <input type="text" id="local-search-input" class="form-control validate">
-          <label data-error="x" data-success="v"
-                 for="local-search-input">关键词</label>
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
         </div>
-        <div class="list-group" id="local-search-result"></div>
-      </div>
     </div>
-  </div>
-</div>
-    
-
-    
-  </main>
-
-  <footer class="text-center mt-5 py-3">
-  <div class="footer-content">
-     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
-  </div>
-  
-
-  
-
-  
 </footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
 
 
-  <!-- SCRIPTS -->
-  
-  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
-  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+<script src="/js/application.js"></script>
 
-  <script>
-    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
-    NProgress.start()
-    window.addEventListener('load', function() {
-      NProgress.done();
-    })
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+
+
+
+
+   
+    
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/valine"></script>
+  <script type="text/javascript">
+  var GUEST = ['nick', 'mail', 'link'];
+  var meta = 'nick,mail,link';
+  meta = meta.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#vcomments',
+    verify: false,
+    notify: false,
+    appId: 'JdLpddsaWqwfJtXPdDK8woaF-gzGzoHsz',
+    appKey: 'CEmtHXH8f0PtvF0zYtVE0EeY',
+    placeholder: 'Just go go',
+    avatar: 'mm',
+    meta: meta,
+    pageSize: '10' || 10,
+    visitor: false
+  });
   </script>
 
-
-<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
-<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
-<script  src="/js/events.js" ></script>
-<script  src="/js/plugins.js" ></script>
-
-<!-- Plugins -->
-
-
-  <script  src="/js/local-search.js" ></script>
-
-
-
-  
-    <script  src="/js/img-lazyload.js" ></script>
-  
-
-
-
-  
-
-
-
-  
-    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
-  
-  
-    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
-  
-  
-    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
-  
-  
-    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
-  
-
-
-
-
-  <script defer src="/js/leancloud.js" ></script>
+     
 
 
 
 
 
 
-
-
-
-
-
-
-
-
-  
-    <!-- Baidu Analytics -->
     <script defer>
-      var _hmt = _hmt || [];
-      (function () {
-        var hm = document.createElement("script");
-        hm.src = "https://hm.baidu.com/hm.js?666a58de875adc9dd40d5de65ceac026";
-        var s = document.getElementsByTagName("script")[0];
-        s.parentNode.insertBefore(hm, s);
-      })();
-    </script>
-  
+var _hmt = _hmt || [];
+(function() {
+    var hm = document.createElement("script");
+    hm.src = "//hm.baidu.com/hm.js?666a58de875adc9dd40d5de65ceac026";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+})();
+</script>
 
-  
-
-  
-
-  
-
-  
-
-  
-
-
-
-
-
-<!-- 主题的启动项 保持在最底部 -->
-<script  src="/js/boot.js" ></script>
 
 
 </body>
