@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang=zh>
 <head>
+  <meta name="referrer" content="no-referrer" />
   <meta charset="utf-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -38,6 +39,8 @@
 
   
   
+  
+    <link href="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.3.5/dist/jquery.fancybox.min.css" rel="stylesheet">
   
   
 <meta name="generator" content="Hexo 6.1.0"></head>
@@ -333,6 +336,13 @@
 
     <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2019/01/29/android-corner-shadow/#comments" class="article-comment-link">评论</a></span>
     
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 1.5k(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 6(分)</span>
+	
+
   </p>
 </article>
 
@@ -386,6 +396,13 @@
 
     <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2018/10/14/android-anr-1/#comments" class="article-comment-link">评论</a></span>
     
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 1.3k(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 5(分)</span>
+	
+
   </p>
 </article>
 
@@ -427,6 +444,13 @@
 
     <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2018/09/11/how-to-track-users-2/#comments" class="article-comment-link">评论</a></span>
     
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 1.1k(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 4(分)</span>
+	
+
   </p>
 </article>
 
@@ -468,6 +492,13 @@
 
     <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2018/07/18/abandon-the-plugin-framework/#comments" class="article-comment-link">评论</a></span>
     
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 2k(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 6(分)</span>
+	
+
   </p>
 </article>
 
@@ -509,6 +540,13 @@
 
     <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2018/07/08/network-architecture-design/#comments" class="article-comment-link">评论</a></span>
     
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 3k(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 11(分)</span>
+	
+
   </p>
 </article>
 
@@ -550,6 +588,13 @@
 
     <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2018/07/03/how-to-track-users/#comments" class="article-comment-link">评论</a></span>
     
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 1.6k(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 5(分)</span>
+	
+
   </p>
 </article>
 
@@ -567,9 +612,9 @@
   
   <div class="article-entry text-muted" itemprop="description">
     <h4 id="0x01-问题描述"><a href="#0x01-问题描述" class="headerlink" title="0x01 问题描述"></a>0x01 问题描述</h4><p><strong>现象：</strong> 将ndk版本升级到    <code>17.0.4754217</code>编译报错</p>
-<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs gradle">* What went wrong:<br>Execution failed <span class="hljs-keyword">for</span> <span class="hljs-keyword">task</span> <span class="hljs-string">&#x27;:app+stub:transformNativeLibsWithStripDebugSymbolForRelease&#x27;</span>.<br>&gt; A problem occurred starting process <span class="hljs-string">&#x27;command &#x27;</span><span class="hljs-regexp">/Users/I</span>vonhoe<span class="hljs-regexp">/Library/</span>Android<span class="hljs-regexp">/sdk/</span>ndk-bundle<span class="hljs-regexp">/toolchains/mi</span>ps64el-linux-android-<span class="hljs-number">4.9</span><span class="hljs-regexp">/prebuilt/</span>darwin-x86_64<span class="hljs-regexp">/bin/mi</span>ps64el-linux-android-strip<span class="hljs-string">&#x27;&#x27;</span><br><br>* <span class="hljs-keyword">Try</span>:<br>Run with --stacktrace option to get the stack trace. Run with --info or --debug option to get more log output.<br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">* What went wrong:</span><br><span class="line">Execution failed for task &#x27;:app+stub:transformNativeLibsWithStripDebugSymbolForRelease&#x27;.</span><br><span class="line">&gt; A problem occurred starting process &#x27;command &#x27;/Users/Ivonhoe/Library/Android/sdk/ndk-bundle/toolchains/mips64el-linux-android-4.9/prebuilt/darwin-x86_64/bin/mips64el-linux-android-strip&#x27;&#x27;</span><br><span class="line"></span><br><span class="line">* Try:</span><br><span class="line">Run with --stacktrace option to get the stack trace. Run with --info or --debug option to get more log output.</span><br></pre></td></tr></table></figure>
 
-<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs stata">Caused <span class="hljs-keyword">by</span>: java.io.IOException: Cannot <span class="hljs-keyword">run</span> <span class="hljs-keyword">program</span> <span class="hljs-string">&quot;/Users/Ivonhoe/Library/Android/sdk/ndk-bundle/toolchains/mips64el-linux-android-4.9/prebuilt/darwin-x86_64/bin/mips64el-linux-android-strip&quot;</span> (<span class="hljs-keyword">in</span> directory <span class="hljs-string">&quot;/Users/Ivonhoe/Workspace/keyaccount-repo/app+stub&quot;</span>): <span class="hljs-keyword">error</span>=2, <span class="hljs-keyword">No</span> such <span class="hljs-keyword">file</span> or directory<br>        at <span class="hljs-keyword">net</span>.rubygrapefruit.platform.internal.DefaultProcessLauncher.start(DefaultProcessLauncher.java:25)<br>        ... 4 <span class="hljs-keyword">more</span><br>Caused <span class="hljs-keyword">by</span>: java.io.IOException: <span class="hljs-keyword">error</span>=2, <span class="hljs-keyword">No</span> such <span class="hljs-keyword">file</span> or directory<br>        ... 5 <span class="hljs-keyword">more</span><br><br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Caused by: java.io.IOException: Cannot run program &quot;/Users/Ivonhoe/Library/Android/sdk/ndk-bundle/toolchains/mips64el-linux-android-4.9/prebuilt/darwin-x86_64/bin/mips64el-linux-android-strip&quot; (in directory &quot;/Users/Ivonhoe/Workspace/keyaccount-repo/app+stub&quot;): error=2, No such file or directory</span><br><span class="line">        at net.rubygrapefruit.platform.internal.DefaultProcessLauncher.start(DefaultProcessLauncher.java:25)</span><br><span class="line">        ... 4 more</span><br><span class="line">Caused by: java.io.IOException: error=2, No such file or directory</span><br><span class="line">        ... 5 more</span><br><span class="line"></span><br></pre></td></tr></table></figure>
   </div>
   
   <p class="article-meta">
@@ -594,6 +639,13 @@
 
     <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2018/06/05/ndk17-build-error/#comments" class="article-comment-link">评论</a></span>
     
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 410(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 2(分)</span>
+	
+
   </p>
 </article>
 
@@ -635,6 +687,13 @@
 
     <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2018/06/03/jvm-gc-1/#comments" class="article-comment-link">评论</a></span>
     
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 1.4k(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 4(分)</span>
+	
+
   </p>
 </article>
 
@@ -676,6 +735,13 @@
 
     <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2018/05/27/design-patterns-singleton/#comments" class="article-comment-link">评论</a></span>
     
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 1.6k(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 5(分)</span>
+	
+
   </p>
 </article>
 
@@ -717,6 +783,13 @@
 
     <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2018/05/21/https/#comments" class="article-comment-link">评论</a></span>
     
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 1.6k(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 5(分)</span>
+	
+
   </p>
 </article>
 
@@ -810,6 +883,35 @@ window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
 
 
 
+
+  <script src="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.3.5/dist/jquery.fancybox.min.js"></script>
+  <script>
+  //利用 FancyBox 实现点击图片放大
+  $(document).ready(function() {
+    $('article img').not('[hidden]').not('.panel-body img').each(function() {
+      var $image = $(this);
+      var imageCaption = $image.attr('alt');
+      var $imageWrapLink = $image.parent('a');
+      if ($imageWrapLink.length < 1) {
+        var src = this.getAttribute('src');
+        var idx = src.lastIndexOf('?');
+        if (idx != -1) {
+          src = src.substring(0, idx);
+        }
+        $imageWrapLink = $image.wrap('<a href="' + src + '"></a>').parent('a');
+      }
+      $imageWrapLink.attr('data-fancybox', 'images');
+      if (imageCaption) {
+        $imageWrapLink.attr('data-caption', imageCaption);
+      }
+    });
+    $().fancybox({
+      selector: '[data-fancybox="images"]',
+      hash: false,
+      loop: false,
+    });
+  });
+  </script>
 
 
 

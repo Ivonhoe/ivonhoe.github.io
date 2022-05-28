@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang=zh>
 <head>
+  <meta name="referrer" content="no-referrer" />
   <meta charset="utf-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -51,6 +52,8 @@
 
   
   
+  
+    <link href="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.3.5/dist/jquery.fancybox.min.css" rel="stylesheet">
   
   
 <meta name="generator" content="Hexo 6.1.0"></head>
@@ -344,6 +347,13 @@
 
         <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2017/03/22/Bitmap&Memory/#comments" class="article-comment-link">评论</a></span>
         
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 2.1k(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 8(分)</span>
+	
+
       </div>
     </div>
     <div class="article-entry marked-body" itemprop="articleBody">
@@ -389,7 +399,7 @@
 <p>如果用小的Bitmap容器，放置较大的Bitmap，那这个Bitmap的尺寸大小是按照容器的大小计算？还是按照dpi缩放的规则计算？</p>
 <h3 id="四、一张图片占多大内存"><a href="#四、一张图片占多大内存" class="headerlink" title="四、一张图片占多大内存"></a>四、一张图片占多大内存</h3><p>现在我们已经知道了一张图片放置在不同的资源目录中，系统decode的bitmap的尺寸大小是如何计算的了。一张图片大概占用多少内存，其实只用看一个像素占用多少内存就可以喽？我们都知道屏幕上的颜色是有R，G，B加透明度表示的，Android官方支持的RGB格式，主要是<code>ALPHA_8</code>，<code>RGB_565 </code>，<code>ARGB_4444</code>，<code>ARGB_8888 </code>这几种。</p>
 <p>以ARGB_8888为例，表示一个像素点，使用8位表示透明度，8位表示Red，8位表示Green，8位表示Blue。加起来，一个像素就需要4byte，同理，RGB_565一个像素需要2byte。</p>
-<figure class="highlight arduino"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></div></td><td class="code"><pre><code class="hljs arduino"><span class="hljs-keyword">public</span> <span class="hljs-keyword">enum</span> <span class="hljs-title class_">Config</span> &#123;<br>    <span class="hljs-built_in">ALPHA_8</span>     (<span class="hljs-number">1</span>),<br>    <span class="hljs-built_in">RGB_565</span>     (<span class="hljs-number">3</span>),<br>    @<span class="hljs-function">Deprecated</span><br><span class="hljs-function">    <span class="hljs-title">ARGB_4444</span>   <span class="hljs-params">(<span class="hljs-number">4</span>)</span>,</span><br><span class="hljs-function">    <span class="hljs-title">ARGB_8888</span>   <span class="hljs-params">(<span class="hljs-number">5</span>)</span></span>;<br>    <span class="hljs-keyword">final</span> <span class="hljs-type">int</span> nativeInt;<br>    <span class="hljs-built_in">Config</span>(<span class="hljs-type">int</span> ni) &#123;<br>        <span class="hljs-keyword">this</span>.nativeInt = ni;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">public enum Config &#123;</span><br><span class="line">    ALPHA_8     (1),</span><br><span class="line">    RGB_565     (3),</span><br><span class="line">    @Deprecated</span><br><span class="line">    ARGB_4444   (4),</span><br><span class="line">    ARGB_8888   (5);</span><br><span class="line">    final int nativeInt;</span><br><span class="line">    Config(int ni) &#123;</span><br><span class="line">        this.nativeInt = ni;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>Android decode资源图片时默认会选择ARGB_8888，如果将<code>180*180</code>放入hdpi目录中，那实际大小应该为<code>int (180 * (560 / 240) +0.5f ) = 420px</code>，像素内存大小为 <code>420 * 420 * 4 = 705600byte = 689kb</code>。同理:<br>放入xhdpi目录中，实际大小应该为<code>int (180 * (560 / 320) +0.5f ) = 315px</code>，像素内存大小为<code>315 * 315 * 4 = 396900byte = 387.6kb</code><br>放入xxhdpi目录中，实际大小应该为<code>int (180 * (560 / 480) +0.5f ) = 210px</code>，像素内存大小为<code>210 * 210 * 4 = 176400byte = 172.2kb</code></p>
 <h3 id="五、如何分析内存中的图片问题？"><a href="#五、如何分析内存中的图片问题？" class="headerlink" title="五、如何分析内存中的图片问题？"></a>五、如何分析内存中的图片问题？</h3><p>说了这么多，终于到了我原本想说的。Android的内存优化需要重点关注的几个方面，Bitmap的加载，Activity的泄露，webview内存等。图片的内存问题，是很多Android应用，特别是电商APP需要首要关注的问题。那如何简单的分析出内存中Bitmap的情况，这里提供一个工具。借助leakcanary的思路，通过分析内存堆dump文件中<code>android.graphics.Bitmap</code>对象的情况，<strong>将内存中Bitmap对象批量保存到图片文件中</strong>，这样就可以直观的看到内存中加载的Bitmap个数、内容和大小，进而分析可能的内存问题。</p>
@@ -634,6 +644,35 @@ window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
      
 
 
+
+  <script src="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.3.5/dist/jquery.fancybox.min.js"></script>
+  <script>
+  //利用 FancyBox 实现点击图片放大
+  $(document).ready(function() {
+    $('article img').not('[hidden]').not('.panel-body img').each(function() {
+      var $image = $(this);
+      var imageCaption = $image.attr('alt');
+      var $imageWrapLink = $image.parent('a');
+      if ($imageWrapLink.length < 1) {
+        var src = this.getAttribute('src');
+        var idx = src.lastIndexOf('?');
+        if (idx != -1) {
+          src = src.substring(0, idx);
+        }
+        $imageWrapLink = $image.wrap('<a href="' + src + '"></a>').parent('a');
+      }
+      $imageWrapLink.attr('data-fancybox', 'images');
+      if (imageCaption) {
+        $imageWrapLink.attr('data-caption', imageCaption);
+      }
+    });
+    $().fancybox({
+      selector: '[data-fancybox="images"]',
+      hash: false,
+      loop: false,
+    });
+  });
+  </script>
 
 
 

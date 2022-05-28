@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang=zh>
 <head>
+  <meta name="referrer" content="no-referrer" />
   <meta charset="utf-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -38,6 +39,8 @@
 
   
   
+  
+    <link href="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.3.5/dist/jquery.fancybox.min.css" rel="stylesheet">
   
   
 <meta name="generator" content="Hexo 6.1.0"></head>
@@ -333,6 +336,13 @@
 
     <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2018/03/14/small-bug-555-fix/#comments" class="article-comment-link">评论</a></span>
     
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 2.1k(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 9(分)</span>
+	
+
   </p>
 </article>
 
@@ -379,6 +389,13 @@
 
     <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2018/01/18/small-plugin-1/#comments" class="article-comment-link">评论</a></span>
     
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 1.3k(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 5(分)</span>
+	
+
   </p>
 </article>
 
@@ -422,6 +439,13 @@
 
     <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2018/01/18/small-plugin-2/#comments" class="article-comment-link">评论</a></span>
     
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 1.5k(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 5(分)</span>
+	
+
   </p>
 </article>
 
@@ -467,6 +491,13 @@
 
     <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2017/06/18/android-security-gold-flow-hack/#comments" class="article-comment-link">评论</a></span>
     
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 3.1k(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 13(分)</span>
+	
+
   </p>
 </article>
 
@@ -508,6 +539,13 @@
 
     <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2017/05/12/executor-eat-exception/#comments" class="article-comment-link">评论</a></span>
     
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 879(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 3(分)</span>
+	
+
   </p>
 </article>
 
@@ -524,9 +562,9 @@
   </div>
   
   <div class="article-entry text-muted" itemprop="description">
-    <h3 id="使用windowBackground实现应用秒开"><a href="#使用windowBackground实现应用秒开" class="headerlink" title="使用windowBackground实现应用秒开"></a>使用windowBackground实现应用秒开</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">style</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;SplashTheme&quot;</span> <span class="hljs-attr">parent</span>=<span class="hljs-string">&quot;@android:style/Theme.Black.NoTitleBar.Fullscreen&quot;</span>&gt;</span><span class="language-xml"></span><br><span class="language-xml">    <span class="hljs-tag">&lt;<span class="hljs-name">item</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;android:windowBackground&quot;</span>&gt;</span>@drawable/bg_splash_activity<span class="hljs-tag">&lt;/<span class="hljs-name">item</span>&gt;</span></span><br><span class="language-xml">    <span class="hljs-tag">&lt;<span class="hljs-name">item</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;@android:windowAnimationStyle&quot;</span>&gt;</span>@style/myact<span class="hljs-tag">&lt;/<span class="hljs-name">item</span>&gt;</span></span><br><span class="language-xml"></span><span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span><br></code></pre></td></tr></table></figure>
+    <h3 id="使用windowBackground实现应用秒开"><a href="#使用windowBackground实现应用秒开" class="headerlink" title="使用windowBackground实现应用秒开"></a>使用windowBackground实现应用秒开</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;style name=&quot;SplashTheme&quot; parent=&quot;@android:style/Theme.Black.NoTitleBar.Fullscreen&quot;&gt;</span><br><span class="line">    &lt;item name=&quot;android:windowBackground&quot;&gt;@drawable/bg_splash_activity&lt;/item&gt;</span><br><span class="line">    &lt;item name=&quot;@android:windowAnimationStyle&quot;&gt;@style/myact&lt;/item&gt;</span><br><span class="line">&lt;/style&gt;</span><br></pre></td></tr></table></figure>
 
-<h3 id="使用windowBackground减少过度绘制"><a href="#使用windowBackground减少过度绘制" class="headerlink" title="使用windowBackground减少过度绘制"></a>使用windowBackground减少过度绘制</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">style</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;AppMainTheme&quot;</span> <span class="hljs-attr">parent</span>=<span class="hljs-string">&quot;@android:style/Theme.Holo.Light&quot;</span>&gt;</span><span class="language-xml"></span><br><span class="language-xml">    <span class="hljs-tag">&lt;<span class="hljs-name">item</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;android:windowBackground&quot;</span>&gt;</span>@color/white<span class="hljs-tag">&lt;/<span class="hljs-name">item</span>&gt;</span></span><br><span class="language-xml">    <span class="hljs-tag">&lt;<span class="hljs-name">item</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;android:windowNoTitle&quot;</span>&gt;</span>true<span class="hljs-tag">&lt;/<span class="hljs-name">item</span>&gt;</span></span><br><span class="language-xml">    <span class="hljs-tag">&lt;<span class="hljs-name">item</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;@android:windowAnimationStyle&quot;</span>&gt;</span>@style/myact<span class="hljs-tag">&lt;/<span class="hljs-name">item</span>&gt;</span></span><br><span class="language-xml"></span><span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span><br></code></pre></td></tr></table></figure>
+<h3 id="使用windowBackground减少过度绘制"><a href="#使用windowBackground减少过度绘制" class="headerlink" title="使用windowBackground减少过度绘制"></a>使用windowBackground减少过度绘制</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;style name=&quot;AppMainTheme&quot; parent=&quot;@android:style/Theme.Holo.Light&quot;&gt;</span><br><span class="line">    &lt;item name=&quot;android:windowBackground&quot;&gt;@color/white&lt;/item&gt;</span><br><span class="line">    &lt;item name=&quot;android:windowNoTitle&quot;&gt;true&lt;/item&gt;</span><br><span class="line">    &lt;item name=&quot;@android:windowAnimationStyle&quot;&gt;@style/myact&lt;/item&gt;</span><br><span class="line">&lt;/style&gt;</span><br></pre></td></tr></table></figure>
   </div>
   
   <p class="article-meta">
@@ -551,6 +589,13 @@
 
     <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2017/05/05/android-performance-tips/#comments" class="article-comment-link">评论</a></span>
     
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 229(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 1(分)</span>
+	
+
   </p>
 </article>
 
@@ -588,6 +633,13 @@
 
     <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2017/04/26/Zygote-2/#comments" class="article-comment-link">评论</a></span>
     
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 1.7k(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 6(分)</span>
+	
+
   </p>
 </article>
 
@@ -633,6 +685,13 @@
 
     <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2017/04/25/%E5%A6%82%E4%BD%95%E5%86%99%E5%87%BAGC%E5%8F%8B%E5%A5%BD%E7%9A%84Android%E5%BA%94%E7%94%A8/#comments" class="article-comment-link">评论</a></span>
     
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 1.8k(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 6(分)</span>
+	
+
   </p>
 </article>
 
@@ -651,7 +710,7 @@
   <div class="article-entry text-muted" itemprop="description">
     <p>原文地址：<a target="_blank" rel="noopener" href="https://anatomyofandroid.com/2013/10/15/zygote/">Zygote https://anatomyofandroid.com/2013/10/15/zygote/</a></p>
 <p>Zygote（受精卵）是一个启动应用的守护进程，在Server Manager之后被init.rc触发，但其实他是真正被app_process启动的，下面是启动这个特殊进程的流程。</p>
-<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs angelscript">service zygote /system/bin/app_process -Xzygote /system/bin --zygote --start-system-server<br><span class="hljs-keyword">class</span> <span class="hljs-symbol">main</span><br><span class="hljs-symbol">socket</span> <span class="hljs-symbol">zygote</span> <span class="hljs-symbol">stream</span> <span class="hljs-symbol">660</span> <span class="hljs-symbol">root</span> <span class="hljs-symbol">system</span><br><span class="hljs-symbol">onrestart</span> <span class="hljs-symbol">write</span> /<span class="hljs-symbol">sys</span>/<span class="hljs-symbol">android_power</span>/<span class="hljs-symbol">request_state</span> <span class="hljs-symbol">wake</span><br><span class="hljs-symbol">onrestart</span> <span class="hljs-symbol">write</span> /<span class="hljs-symbol">sys</span>/<span class="hljs-symbol">power</span>/<span class="hljs-symbol">state</span> <span class="hljs-symbol">on</span><br><span class="hljs-symbol">onrestart</span> <span class="hljs-symbol">restart</span> <span class="hljs-symbol">media</span><br><span class="hljs-symbol">onrestart</span> <span class="hljs-symbol">restart</span> <span class="hljs-symbol">netd</span><br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">service zygote /system/bin/app_process -Xzygote /system/bin --zygote --start-system-server</span><br><span class="line">class main</span><br><span class="line">socket zygote stream 660 root system</span><br><span class="line">onrestart write /sys/android_power/request_state wake</span><br><span class="line">onrestart write /sys/power/state on</span><br><span class="line">onrestart restart media</span><br><span class="line">onrestart restart netd</span><br></pre></td></tr></table></figure>
 
 <p>你可以发现Zygote是如何当做系统服务启动的，你也可以看到app_process为什么说app_process是启动Zygote的真正命令。就像之前说的，Zygote是一个以专门启动应用为的守护进程。这意味着Zygote是所有App进程的父进程。当app_process启动Zygote时，它通过调用Zygote的main()方法创建了第一个Dalvik虚拟机。当Zygote启动后，zygote会预加载所有必须的Java类和资源，启动System Server并打开一个名为&#x2F;dev&#x2F;socket&#x2F;zygote的socket服务，去监听所有启动应用的请求。 想之前的文章所说，System Server 是一个和它的父进程完全分离的进程。一旦System Server创建完成，它会初始化一系列不同的System Services并启动Activity Manager。那Zygote是如何启动新的应用的呢？</p>
   </div>
@@ -678,6 +737,13 @@
 
     <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2017/04/15/Zygote/#comments" class="article-comment-link">评论</a></span>
     
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 1k(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 4(分)</span>
+	
+
   </p>
 </article>
 
@@ -725,6 +791,13 @@
 
     <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2017/04/09/how-to-dump-heap/#comments" class="article-comment-link">评论</a></span>
     
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 723(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 3(分)</span>
+	
+
   </p>
 </article>
 
@@ -818,6 +891,35 @@ window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
 
 
 
+
+  <script src="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.3.5/dist/jquery.fancybox.min.js"></script>
+  <script>
+  //利用 FancyBox 实现点击图片放大
+  $(document).ready(function() {
+    $('article img').not('[hidden]').not('.panel-body img').each(function() {
+      var $image = $(this);
+      var imageCaption = $image.attr('alt');
+      var $imageWrapLink = $image.parent('a');
+      if ($imageWrapLink.length < 1) {
+        var src = this.getAttribute('src');
+        var idx = src.lastIndexOf('?');
+        if (idx != -1) {
+          src = src.substring(0, idx);
+        }
+        $imageWrapLink = $image.wrap('<a href="' + src + '"></a>').parent('a');
+      }
+      $imageWrapLink.attr('data-fancybox', 'images');
+      if (imageCaption) {
+        $imageWrapLink.attr('data-caption', imageCaption);
+      }
+    });
+    $().fancybox({
+      selector: '[data-fancybox="images"]',
+      hash: false,
+      loop: false,
+    });
+  });
+  </script>
 
 
 

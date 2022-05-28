@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang=zh>
 <head>
+  <meta name="referrer" content="no-referrer" />
   <meta charset="utf-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -38,6 +39,8 @@
 
   
   
+  
+    <link href="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.3.5/dist/jquery.fancybox.min.css" rel="stylesheet">
   
   
 <meta name="generator" content="Hexo 6.1.0"></head>
@@ -339,6 +342,13 @@
 
         <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2017/06/18/android-security-gold-flow-hack/#comments" class="article-comment-link">评论</a></span>
         
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 3.1k(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 13(分)</span>
+	
+
       </div>
     </div>
     <div class="article-entry marked-body" itemprop="articleBody">
@@ -431,6 +441,13 @@
 
         <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2017/05/12/executor-eat-exception/#comments" class="article-comment-link">评论</a></span>
         
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 879(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 3(分)</span>
+	
+
       </div>
     </div>
     <div class="article-entry marked-body" itemprop="articleBody">
@@ -519,13 +536,20 @@
 
         <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2017/05/05/android-performance-tips/#comments" class="article-comment-link">评论</a></span>
         
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 229(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 1(分)</span>
+	
+
       </div>
     </div>
     <div class="article-entry marked-body" itemprop="articleBody">
       
-        <h3 id="使用windowBackground实现应用秒开"><a href="#使用windowBackground实现应用秒开" class="headerlink" title="使用windowBackground实现应用秒开"></a>使用windowBackground实现应用秒开</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">style</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;SplashTheme&quot;</span> <span class="hljs-attr">parent</span>=<span class="hljs-string">&quot;@android:style/Theme.Black.NoTitleBar.Fullscreen&quot;</span>&gt;</span><span class="language-xml"></span><br><span class="language-xml">    <span class="hljs-tag">&lt;<span class="hljs-name">item</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;android:windowBackground&quot;</span>&gt;</span>@drawable/bg_splash_activity<span class="hljs-tag">&lt;/<span class="hljs-name">item</span>&gt;</span></span><br><span class="language-xml">    <span class="hljs-tag">&lt;<span class="hljs-name">item</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;@android:windowAnimationStyle&quot;</span>&gt;</span>@style/myact<span class="hljs-tag">&lt;/<span class="hljs-name">item</span>&gt;</span></span><br><span class="language-xml"></span><span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span><br></code></pre></td></tr></table></figure>
+        <h3 id="使用windowBackground实现应用秒开"><a href="#使用windowBackground实现应用秒开" class="headerlink" title="使用windowBackground实现应用秒开"></a>使用windowBackground实现应用秒开</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;style name=&quot;SplashTheme&quot; parent=&quot;@android:style/Theme.Black.NoTitleBar.Fullscreen&quot;&gt;</span><br><span class="line">    &lt;item name=&quot;android:windowBackground&quot;&gt;@drawable/bg_splash_activity&lt;/item&gt;</span><br><span class="line">    &lt;item name=&quot;@android:windowAnimationStyle&quot;&gt;@style/myact&lt;/item&gt;</span><br><span class="line">&lt;/style&gt;</span><br></pre></td></tr></table></figure>
 
-<h3 id="使用windowBackground减少过度绘制"><a href="#使用windowBackground减少过度绘制" class="headerlink" title="使用windowBackground减少过度绘制"></a>使用windowBackground减少过度绘制</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">style</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;AppMainTheme&quot;</span> <span class="hljs-attr">parent</span>=<span class="hljs-string">&quot;@android:style/Theme.Holo.Light&quot;</span>&gt;</span><span class="language-xml"></span><br><span class="language-xml">    <span class="hljs-tag">&lt;<span class="hljs-name">item</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;android:windowBackground&quot;</span>&gt;</span>@color/white<span class="hljs-tag">&lt;/<span class="hljs-name">item</span>&gt;</span></span><br><span class="language-xml">    <span class="hljs-tag">&lt;<span class="hljs-name">item</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;android:windowNoTitle&quot;</span>&gt;</span>true<span class="hljs-tag">&lt;/<span class="hljs-name">item</span>&gt;</span></span><br><span class="language-xml">    <span class="hljs-tag">&lt;<span class="hljs-name">item</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;@android:windowAnimationStyle&quot;</span>&gt;</span>@style/myact<span class="hljs-tag">&lt;/<span class="hljs-name">item</span>&gt;</span></span><br><span class="language-xml"></span><span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span><br></code></pre></td></tr></table></figure>
+<h3 id="使用windowBackground减少过度绘制"><a href="#使用windowBackground减少过度绘制" class="headerlink" title="使用windowBackground减少过度绘制"></a>使用windowBackground减少过度绘制</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;style name=&quot;AppMainTheme&quot; parent=&quot;@android:style/Theme.Holo.Light&quot;&gt;</span><br><span class="line">    &lt;item name=&quot;android:windowBackground&quot;&gt;@color/white&lt;/item&gt;</span><br><span class="line">    &lt;item name=&quot;android:windowNoTitle&quot;&gt;true&lt;/item&gt;</span><br><span class="line">    &lt;item name=&quot;@android:windowAnimationStyle&quot;&gt;@style/myact&lt;/item&gt;</span><br><span class="line">&lt;/style&gt;</span><br></pre></td></tr></table></figure>
         
           <p class="article-more-link">
             <a href="/2017/05/05/android-performance-tips/#more">Read More</a>
@@ -609,6 +633,13 @@
 
         <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2017/04/26/Zygote-2/#comments" class="article-comment-link">评论</a></span>
         
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 1.7k(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 6(分)</span>
+	
+
       </div>
     </div>
     <div class="article-entry marked-body" itemprop="articleBody">
@@ -617,11 +648,11 @@
 <p><img src="https://cdn.nlark.com/yuque/0/2022/png/411436/1649520554251-787ac290-c650-4353-9fa8-4580cdaccc68.png#clientId=u286870da-2bc7-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=183&id=ua27779bc&margin=%5Bobject%20Object%5D&name=image.png&originHeight=455&originWidth=1240&originalType=binary&ratio=1&rotation=0&showTitle=false&size=522394&status=done&style=none&taskId=ud37b3660-ba3d-4b7b-83b5-68f524f18b2&title=&width=500" alt="image.png"></p>
 <p>分析仔细看一下可以发现，上图中sPreloadedDrawables数组所引用的预加载Drawable就会占用10M以上的内存空间。这些都是Android系统的主题资源图片，为什么会有这么多主题资源被加载？不需要的无用的系统资源能否避免被加载？那么要如何做到？</p>
 <h3 id="二、为什么有这么多系统资源被加载？"><a href="#二、为什么有这么多系统资源被加载？" class="headerlink" title="二、为什么有这么多系统资源被加载？"></a>二、为什么有这么多系统资源被加载？</h3><p>使用Android Studio(简称AS)的monitor工具dump内存如上图所示，hprof中的内存信息分为三类，分别是App heap，Image heap，Zygote heap。App heap很好理解，就是应用进程独占的内存空间，在应用中创建的对象都会在App heap上。而在Dalvik虚拟机上运行的app，只有App heap和Zygote heap，并没有Image heap。<a target="_blank" rel="noopener" href="https://developer.android.com/studio/profile/am-hprof.html#why">Android官网文档</a>的三者的解释是：</p>
-<figure class="highlight pgsql"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></div></td><td class="code"><pre><code class="hljs pgsql">App heap - The heap used <span class="hljs-keyword">by</span> the <span class="hljs-keyword">current</span> app.<br><br>Image heap - The memory mapped <span class="hljs-keyword">copy</span> <span class="hljs-keyword">of</span> the <span class="hljs-keyword">current</span> app <span class="hljs-keyword">on</span> disk.<br><br>Zygote heap - The common <span class="hljs-keyword">set</span> <span class="hljs-keyword">of</span> libraries <span class="hljs-keyword">and</span> runtime classes <span class="hljs-keyword">and</span> data that <span class="hljs-keyword">all</span> apps are forked <span class="hljs-keyword">from</span>. The zygote space <span class="hljs-keyword">is</span> created during device startup <span class="hljs-keyword">and</span> <span class="hljs-keyword">is</span> never allocated <span class="hljs-keyword">into</span>.<br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">App heap - The heap used by the current app.</span><br><span class="line"></span><br><span class="line">Image heap - The memory mapped copy of the current app on disk.</span><br><span class="line"></span><br><span class="line">Zygote heap - The common set of libraries and runtime classes and data that all apps are forked from. The zygote space is created during device startup and is never allocated into.</span><br></pre></td></tr></table></figure>
 
 <p>Zygote机制总的来说是<code>app_process</code>启动Zygote并创建第一个虚拟机进程，Zygote启动时会预加载所有需要的Java classes和”必要的”资源文件，这些资源文件就包括我们在hprof文件中看到的被sPreloadedDrawables所直接引用的Bitmap资源。应用进程都是从Zygote中fork出来的，所以所有的应用进程都会包含上面提到的资源文件。这些资源的拷贝可以看成浅拷贝，并不是真正的内存copy，而是作为进程间的共享内存使用。详细的可以查看<a href="https://ivonhoe.github.io/2017/04/25/Zygote/">《Zygote》</a>这篇文章。</p>
 <p><img src="https://cdn.nlark.com/yuque/0/2022/png/411436/1649520565693-19c80bce-ece4-4695-9b6b-7ed5838e1c48.png#clientId=u286870da-2bc7-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=285&id=u750abc3c&margin=%5Bobject%20Object%5D&name=image.png&originHeight=338&originWidth=592&originalType=binary&ratio=1&rotation=0&showTitle=false&size=74822&status=done&style=none&taskId=u437acb32-3da5-43e6-ba96-55b3832fc81&title=&width=500" alt="image.png"></p>
-<h3 id="三、强制清除未使用的系统资源图片会怎样？"><a href="#三、强制清除未使用的系统资源图片会怎样？" class="headerlink" title="三、强制清除未使用的系统资源图片会怎样？"></a>三、强制清除未使用的系统资源图片会怎样？</h3><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title">clearPreloadedDrawables</span>()</span> &#123;<br>    <span class="hljs-keyword">try</span> &#123;<br>        Field mFieldPreloadedDrawables = getField(Resources.<span class="hljs-keyword">class</span>, <span class="hljs-string">&quot;sPreloadedDrawables&quot;</span>);<br>        <span class="hljs-keyword">if</span> (mFieldPreloadedDrawables != <span class="hljs-literal">null</span>) &#123;<br>            mFieldPreloadedDrawables.setAccessible(<span class="hljs-literal">true</span>);<br><br>            boolean access = mFieldPreloadedDrawables.isAccessible();<br>            <span class="hljs-keyword">if</span> (!access) &#123;<br>                mFieldPreloadedDrawables.setAccessible(<span class="hljs-literal">true</span>);<br>            &#125;<br><br>            <span class="hljs-keyword">if</span> (Build.VERSION.SDK_INT &lt;= <span class="hljs-number">17</span>) &#123;<br>                LongSparseArray&lt;Drawable.ConstantState&gt; dArray = (LongSparseArray&lt;Drawable.ConstantState&gt;) mFieldPreloadedDrawables.<span class="hljs-keyword">get</span>(getResources());<br>                <span class="hljs-keyword">if</span> (dArray != <span class="hljs-literal">null</span>) &#123;<br>                    dArray.clear();<br>                &#125;<br><br>                <span class="hljs-comment">// dArray.put(1, createDrawableConstant());</span><br>            &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (Build.VERSION.SDK_INT &gt;= <span class="hljs-number">18</span>) &#123;<br>                LongSparseArray&lt;Drawable.ConstantState&gt;[] dArray = (LongSparseArray&lt;Drawable.ConstantState&gt;[]) mFieldPreloadedDrawables.<span class="hljs-keyword">get</span>(getResources());<br>                <span class="hljs-keyword">if</span> (dArray != <span class="hljs-literal">null</span>) &#123;<br>                    <span class="hljs-keyword">for</span> (<span class="hljs-built_in">int</span> i = <span class="hljs-number">0</span>; i &lt; dArray.length; i++) &#123;<br>                        <span class="hljs-keyword">if</span> (dArray[i] != <span class="hljs-literal">null</span>) &#123;<br>                            dArray[i].clear();<br>                            <span class="hljs-comment">// dArray[i].put(1, createDrawableConstant());</span><br>                        &#125;<br>                    &#125;<br>                &#125;<br>            &#125;<br><br>            mFieldPreloadedDrawables.setAccessible(<span class="hljs-literal">true</span>);<br>        &#125;<br>    &#125; <span class="hljs-keyword">catch</span> (Exception e) &#123;<br>        e.printStackTrace();<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h3 id="三、强制清除未使用的系统资源图片会怎样？"><a href="#三、强制清除未使用的系统资源图片会怎样？" class="headerlink" title="三、强制清除未使用的系统资源图片会怎样？"></a>三、强制清除未使用的系统资源图片会怎样？</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">private void clearPreloadedDrawables() &#123;</span><br><span class="line">    try &#123;</span><br><span class="line">        Field mFieldPreloadedDrawables = getField(Resources.class, &quot;sPreloadedDrawables&quot;);</span><br><span class="line">        if (mFieldPreloadedDrawables != null) &#123;</span><br><span class="line">            mFieldPreloadedDrawables.setAccessible(true);</span><br><span class="line"></span><br><span class="line">            boolean access = mFieldPreloadedDrawables.isAccessible();</span><br><span class="line">            if (!access) &#123;</span><br><span class="line">                mFieldPreloadedDrawables.setAccessible(true);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            if (Build.VERSION.SDK_INT &lt;= 17) &#123;</span><br><span class="line">                LongSparseArray&lt;Drawable.ConstantState&gt; dArray = (LongSparseArray&lt;Drawable.ConstantState&gt;) mFieldPreloadedDrawables.get(getResources());</span><br><span class="line">                if (dArray != null) &#123;</span><br><span class="line">                    dArray.clear();</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                // dArray.put(1, createDrawableConstant());</span><br><span class="line">            &#125; else if (Build.VERSION.SDK_INT &gt;= 18) &#123;</span><br><span class="line">                LongSparseArray&lt;Drawable.ConstantState&gt;[] dArray = (LongSparseArray&lt;Drawable.ConstantState&gt;[]) mFieldPreloadedDrawables.get(getResources());</span><br><span class="line">                if (dArray != null) &#123;</span><br><span class="line">                    for (int i = 0; i &lt; dArray.length; i++) &#123;</span><br><span class="line">                        if (dArray[i] != null) &#123;</span><br><span class="line">                            dArray[i].clear();</span><br><span class="line">                            // dArray[i].put(1, createDrawableConstant());</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            mFieldPreloadedDrawables.setAccessible(true);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; catch (Exception e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>当通过上述clearPreloadedDrawables函数清除sPreloadDrawable对这些资源的强引用，然后使用Android Studio的monitor工具发现，gc以后App heap发生了断崖式的内存回收，并且使用<code>adb shell dumpsys meminfo</code>命令可以发现Heap Alloc和Heap Size都发生了显著的减小，但Pss total并没有显著变化。这里的理解是PSS &#x3D; Private RAM + 按比例计算的Shared RAM，这两部分都没有发生显著变化，所以PSS Total没有变化。</p>
 <p><img src="https://cdn.nlark.com/yuque/0/2022/png/411436/1649520590899-2263b209-f1d8-4d6e-8eb8-4bb1bd84052c.png#clientId=u286870da-2bc7-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=126&id=u9e101e09&margin=%5Bobject%20Object%5D&name=image.png&originHeight=195&originWidth=1240&originalType=binary&ratio=1&rotation=0&showTitle=false&size=44207&status=done&style=none&taskId=ue66e5a74-33ed-472d-92b9-f281147a940&title=&width=800" alt="image.png"><br><img src="https://cdn.nlark.com/yuque/0/2022/png/411436/1649520601288-e211867f-f1c0-48b2-b7ac-e1017b464b1e.png#clientId=u286870da-2bc7-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=425&id=ud48a301e&margin=%5Bobject%20Object%5D&name=image.png&originHeight=659&originWidth=1240&originalType=binary&ratio=1&rotation=0&showTitle=false&size=354043&status=done&style=none&taskId=u057743c2-0a12-4cc7-8734-0000fc12f5f&title=&width=800" alt="image.png"></p>
@@ -720,6 +751,13 @@
 
         <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2017/04/25/%E5%A6%82%E4%BD%95%E5%86%99%E5%87%BAGC%E5%8F%8B%E5%A5%BD%E7%9A%84Android%E5%BA%94%E7%94%A8/#comments" class="article-comment-link">评论</a></span>
         
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 1.8k(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 6(分)</span>
+	
+
       </div>
     </div>
     <div class="article-entry marked-body" itemprop="articleBody">
@@ -812,13 +850,20 @@
 
         <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2017/04/15/Zygote/#comments" class="article-comment-link">评论</a></span>
         
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 1k(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 4(分)</span>
+	
+
       </div>
     </div>
     <div class="article-entry marked-body" itemprop="articleBody">
       
         <p>原文地址：<a target="_blank" rel="noopener" href="https://anatomyofandroid.com/2013/10/15/zygote/">Zygote https://anatomyofandroid.com/2013/10/15/zygote/</a></p>
 <p>Zygote（受精卵）是一个启动应用的守护进程，在Server Manager之后被init.rc触发，但其实他是真正被app_process启动的，下面是启动这个特殊进程的流程。</p>
-<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs angelscript">service zygote /system/bin/app_process -Xzygote /system/bin --zygote --start-system-server<br><span class="hljs-keyword">class</span> <span class="hljs-symbol">main</span><br><span class="hljs-symbol">socket</span> <span class="hljs-symbol">zygote</span> <span class="hljs-symbol">stream</span> <span class="hljs-symbol">660</span> <span class="hljs-symbol">root</span> <span class="hljs-symbol">system</span><br><span class="hljs-symbol">onrestart</span> <span class="hljs-symbol">write</span> /<span class="hljs-symbol">sys</span>/<span class="hljs-symbol">android_power</span>/<span class="hljs-symbol">request_state</span> <span class="hljs-symbol">wake</span><br><span class="hljs-symbol">onrestart</span> <span class="hljs-symbol">write</span> /<span class="hljs-symbol">sys</span>/<span class="hljs-symbol">power</span>/<span class="hljs-symbol">state</span> <span class="hljs-symbol">on</span><br><span class="hljs-symbol">onrestart</span> <span class="hljs-symbol">restart</span> <span class="hljs-symbol">media</span><br><span class="hljs-symbol">onrestart</span> <span class="hljs-symbol">restart</span> <span class="hljs-symbol">netd</span><br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">service zygote /system/bin/app_process -Xzygote /system/bin --zygote --start-system-server</span><br><span class="line">class main</span><br><span class="line">socket zygote stream 660 root system</span><br><span class="line">onrestart write /sys/android_power/request_state wake</span><br><span class="line">onrestart write /sys/power/state on</span><br><span class="line">onrestart restart media</span><br><span class="line">onrestart restart netd</span><br></pre></td></tr></table></figure>
 
 <p>你可以发现Zygote是如何当做系统服务启动的，你也可以看到app_process为什么说app_process是启动Zygote的真正命令。就像之前说的，Zygote是一个以专门启动应用为的守护进程。这意味着Zygote是所有App进程的父进程。当app_process启动Zygote时，它通过调用Zygote的main()方法创建了第一个Dalvik虚拟机。当Zygote启动后，zygote会预加载所有必须的Java类和资源，启动System Server并打开一个名为&#x2F;dev&#x2F;socket&#x2F;zygote的socket服务，去监听所有启动应用的请求。 想之前的文章所说，System Server 是一个和它的父进程完全分离的进程。一旦System Server创建完成，它会初始化一系列不同的System Services并启动Activity Manager。那Zygote是如何启动新的应用的呢？</p>
         
@@ -904,6 +949,13 @@
 
         <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2017/04/09/how-to-dump-heap/#comments" class="article-comment-link">评论</a></span>
         
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 723(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 3(分)</span>
+	
+
       </div>
     </div>
     <div class="article-entry marked-body" itemprop="articleBody">
@@ -998,6 +1050,13 @@
 
         <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2017/03/22/Bitmap&Memory/#comments" class="article-comment-link">评论</a></span>
         
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 2.1k(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 8(分)</span>
+	
+
       </div>
     </div>
     <div class="article-entry marked-body" itemprop="articleBody">
@@ -1094,6 +1153,13 @@
 
         <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2017/02/09/%E7%BE%8E%E5%9B%A2%E5%A6%82%E4%BD%95%E9%98%B2dex2jar/#comments" class="article-comment-link">评论</a></span>
         
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 2.3k(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 10(分)</span>
+	
+
       </div>
     </div>
     <div class="article-entry marked-body" itemprop="articleBody">
@@ -1182,6 +1248,13 @@
 
         <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2017/02/04/android-security-how-to-remove-ads-from-app/#comments" class="article-comment-link">评论</a></span>
         
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 655(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 2(分)</span>
+	
+
       </div>
     </div>
     <div class="article-entry marked-body" itemprop="articleBody">
@@ -1345,6 +1418,35 @@ window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
 
 
 
+
+  <script src="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.3.5/dist/jquery.fancybox.min.js"></script>
+  <script>
+  //利用 FancyBox 实现点击图片放大
+  $(document).ready(function() {
+    $('article img').not('[hidden]').not('.panel-body img').each(function() {
+      var $image = $(this);
+      var imageCaption = $image.attr('alt');
+      var $imageWrapLink = $image.parent('a');
+      if ($imageWrapLink.length < 1) {
+        var src = this.getAttribute('src');
+        var idx = src.lastIndexOf('?');
+        if (idx != -1) {
+          src = src.substring(0, idx);
+        }
+        $imageWrapLink = $image.wrap('<a href="' + src + '"></a>').parent('a');
+      }
+      $imageWrapLink.attr('data-fancybox', 'images');
+      if (imageCaption) {
+        $imageWrapLink.attr('data-caption', imageCaption);
+      }
+    });
+    $().fancybox({
+      selector: '[data-fancybox="images"]',
+      hash: false,
+      loop: false,
+    });
+  });
+  </script>
 
 
 

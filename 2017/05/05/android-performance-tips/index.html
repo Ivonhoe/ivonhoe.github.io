@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang=zh>
 <head>
+  <meta name="referrer" content="no-referrer" />
   <meta charset="utf-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -45,6 +46,8 @@
 
   
   
+  
+    <link href="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.3.5/dist/jquery.fancybox.min.css" rel="stylesheet">
   
   
 <meta name="generator" content="Hexo 6.1.0"></head>
@@ -338,18 +341,25 @@
 
         <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2017/05/05/android-performance-tips/#comments" class="article-comment-link">评论</a></span>
         
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 229(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 1(分)</span>
+	
+
       </div>
     </div>
     <div class="article-entry marked-body" itemprop="articleBody">
       
-        <h3 id="使用windowBackground实现应用秒开"><a href="#使用windowBackground实现应用秒开" class="headerlink" title="使用windowBackground实现应用秒开"></a>使用windowBackground实现应用秒开</h3><figure class="highlight xml"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></div></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">style</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;SplashTheme&quot;</span> <span class="hljs-attr">parent</span>=<span class="hljs-string">&quot;@android:style/Theme.Black.NoTitleBar.Fullscreen&quot;</span>&gt;</span><span class="language-xml"></span><br><span class="language-xml">    <span class="hljs-tag">&lt;<span class="hljs-name">item</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;android:windowBackground&quot;</span>&gt;</span>@drawable/bg_splash_activity<span class="hljs-tag">&lt;/<span class="hljs-name">item</span>&gt;</span></span><br><span class="language-xml">    <span class="hljs-tag">&lt;<span class="hljs-name">item</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;@android:windowAnimationStyle&quot;</span>&gt;</span>@style/myact<span class="hljs-tag">&lt;/<span class="hljs-name">item</span>&gt;</span></span><br><span class="language-xml"></span><span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span><br></code></pre></td></tr></table></figure>
+        <h3 id="使用windowBackground实现应用秒开"><a href="#使用windowBackground实现应用秒开" class="headerlink" title="使用windowBackground实现应用秒开"></a>使用windowBackground实现应用秒开</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;style name=&quot;SplashTheme&quot; parent=&quot;@android:style/Theme.Black.NoTitleBar.Fullscreen&quot;&gt;</span><br><span class="line">    &lt;item name=&quot;android:windowBackground&quot;&gt;@drawable/bg_splash_activity&lt;/item&gt;</span><br><span class="line">    &lt;item name=&quot;@android:windowAnimationStyle&quot;&gt;@style/myact&lt;/item&gt;</span><br><span class="line">&lt;/style&gt;</span><br></pre></td></tr></table></figure>
 
-<h3 id="使用windowBackground减少过度绘制"><a href="#使用windowBackground减少过度绘制" class="headerlink" title="使用windowBackground减少过度绘制"></a>使用windowBackground减少过度绘制</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">style</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;AppMainTheme&quot;</span> <span class="hljs-attr">parent</span>=<span class="hljs-string">&quot;@android:style/Theme.Holo.Light&quot;</span>&gt;</span><span class="language-xml"></span><br><span class="language-xml">    <span class="hljs-tag">&lt;<span class="hljs-name">item</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;android:windowBackground&quot;</span>&gt;</span>@color/white<span class="hljs-tag">&lt;/<span class="hljs-name">item</span>&gt;</span></span><br><span class="language-xml">    <span class="hljs-tag">&lt;<span class="hljs-name">item</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;android:windowNoTitle&quot;</span>&gt;</span>true<span class="hljs-tag">&lt;/<span class="hljs-name">item</span>&gt;</span></span><br><span class="language-xml">    <span class="hljs-tag">&lt;<span class="hljs-name">item</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;@android:windowAnimationStyle&quot;</span>&gt;</span>@style/myact<span class="hljs-tag">&lt;/<span class="hljs-name">item</span>&gt;</span></span><br><span class="language-xml"></span><span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span><br></code></pre></td></tr></table></figure>
+<h3 id="使用windowBackground减少过度绘制"><a href="#使用windowBackground减少过度绘制" class="headerlink" title="使用windowBackground减少过度绘制"></a>使用windowBackground减少过度绘制</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;style name=&quot;AppMainTheme&quot; parent=&quot;@android:style/Theme.Holo.Light&quot;&gt;</span><br><span class="line">    &lt;item name=&quot;android:windowBackground&quot;&gt;@color/white&lt;/item&gt;</span><br><span class="line">    &lt;item name=&quot;android:windowNoTitle&quot;&gt;true&lt;/item&gt;</span><br><span class="line">    &lt;item name=&quot;@android:windowAnimationStyle&quot;&gt;@style/myact&lt;/item&gt;</span><br><span class="line">&lt;/style&gt;</span><br></pre></td></tr></table></figure>
 
 <span id="more"></span>
 
 <p><img src="/res/performance-tips/overdraw.png" alt="使用windowBackground前后对比"></p>
-<h3 id="手动清除GPU绘图缓存，降低应用PSS内存值"><a href="#手动清除GPU绘图缓存，降低应用PSS内存值" class="headerlink" title="手动清除GPU绘图缓存，降低应用PSS内存值"></a>手动清除GPU绘图缓存，降低应用PSS内存值</h3><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs csharp"><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * 清除GPU绘图缓存</span><br><span class="hljs-comment"> */</span><br><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title">cleanGraphicsCache</span>()</span> &#123;<br>    Object instance = ReflectUtils.getStaticMethod(<span class="hljs-string">&quot;android.view.WindowManagerGlobal&quot;</span>,<br>            <span class="hljs-string">&quot;getInstance&quot;</span>, <span class="hljs-literal">null</span>, <span class="hljs-literal">null</span>);<br><br>    <span class="hljs-keyword">try</span> &#123;<br>        Class threadClazz = Class.forName(<span class="hljs-string">&quot;android.view.WindowManagerGlobal&quot;</span>);<br>        Method m1 = threadClazz.getDeclaredMethod(<span class="hljs-string">&quot;trimMemory&quot;</span>, <span class="hljs-built_in">int</span>.<span class="hljs-keyword">class</span>);<br>        m1.invoke(instance, TRIM_MEMORY_COMPLETE);<br>    &#125; <span class="hljs-keyword">catch</span> (ClassNotFoundException e) &#123;<br>        e.printStackTrace();<br>    &#125; <span class="hljs-keyword">catch</span> (NoSuchMethodException e) &#123;<br>        e.printStackTrace();<br>    &#125; <span class="hljs-keyword">catch</span> (IllegalAccessException e) &#123;<br>        e.printStackTrace();<br>    &#125; <span class="hljs-keyword">catch</span> (InvocationTargetException e) &#123;<br>        e.printStackTrace();<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h3 id="手动清除GPU绘图缓存，降低应用PSS内存值"><a href="#手动清除GPU绘图缓存，降低应用PSS内存值" class="headerlink" title="手动清除GPU绘图缓存，降低应用PSS内存值"></a>手动清除GPU绘图缓存，降低应用PSS内存值</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * 清除GPU绘图缓存</span><br><span class="line"> */</span><br><span class="line">private void cleanGraphicsCache() &#123;</span><br><span class="line">    Object instance = ReflectUtils.getStaticMethod(&quot;android.view.WindowManagerGlobal&quot;,</span><br><span class="line">            &quot;getInstance&quot;, null, null);</span><br><span class="line"></span><br><span class="line">    try &#123;</span><br><span class="line">        Class threadClazz = Class.forName(&quot;android.view.WindowManagerGlobal&quot;);</span><br><span class="line">        Method m1 = threadClazz.getDeclaredMethod(&quot;trimMemory&quot;, int.class);</span><br><span class="line">        m1.invoke(instance, TRIM_MEMORY_COMPLETE);</span><br><span class="line">    &#125; catch (ClassNotFoundException e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125; catch (NoSuchMethodException e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125; catch (IllegalAccessException e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125; catch (InvocationTargetException e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <h3 id="转载请标明出处病已blog-https-ivonhoe-github-io"><a href="#转载请标明出处病已blog-https-ivonhoe-github-io" class="headerlink" title="转载请标明出处病已blog https://ivonhoe.github.io/"></a>转载请标明出处<a href="https://ivonhoe.github.io/">病已blog https://ivonhoe.github.io/</a></h3>
       
@@ -565,6 +575,35 @@ window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
      
 
 
+
+  <script src="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.3.5/dist/jquery.fancybox.min.js"></script>
+  <script>
+  //利用 FancyBox 实现点击图片放大
+  $(document).ready(function() {
+    $('article img').not('[hidden]').not('.panel-body img').each(function() {
+      var $image = $(this);
+      var imageCaption = $image.attr('alt');
+      var $imageWrapLink = $image.parent('a');
+      if ($imageWrapLink.length < 1) {
+        var src = this.getAttribute('src');
+        var idx = src.lastIndexOf('?');
+        if (idx != -1) {
+          src = src.substring(0, idx);
+        }
+        $imageWrapLink = $image.wrap('<a href="' + src + '"></a>').parent('a');
+      }
+      $imageWrapLink.attr('data-fancybox', 'images');
+      if (imageCaption) {
+        $imageWrapLink.attr('data-caption', imageCaption);
+      }
+    });
+    $().fancybox({
+      selector: '[data-fancybox="images"]',
+      hash: false,
+      loop: false,
+    });
+  });
+  </script>
 
 
 

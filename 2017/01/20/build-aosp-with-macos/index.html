@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang=zh>
 <head>
+  <meta name="referrer" content="no-referrer" />
   <meta charset="utf-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -49,6 +50,8 @@
 
   
   
+  
+    <link href="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.3.5/dist/jquery.fancybox.min.css" rel="stylesheet">
   
   
 <meta name="generator" content="Hexo 6.1.0"></head>
@@ -342,6 +345,13 @@
 
         <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2017/01/20/build-aosp-with-macos/#comments" class="article-comment-link">评论</a></span>
         
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 775(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 3(分)</span>
+	
+
       </div>
     </div>
     <div class="article-entry marked-body" itemprop="articleBody">
@@ -354,12 +364,12 @@
 <h4 id="1-2-制作UEFI分区"><a href="#1-2-制作UEFI分区" class="headerlink" title="1.2.制作UEFI分区"></a>1.2.制作UEFI分区</h4><blockquote>
 <p>我是在windows上操作的，<br>使用DiskGenius工具，在移动硬盘的第一分区前部，划分出200MB的空间。<br>在cmd命令行下运行下列命令,记得分步执行啊，小心出错，数据无价。</p>
 </blockquote>
-<figure class="highlight mipsasm"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></div></td><td class="code"><pre><code class="hljs mipsasm"><span class="hljs-keyword">diskpart</span><br><span class="hljs-keyword"></span>list <span class="hljs-keyword">disk</span><br><span class="hljs-keyword"></span>select <span class="hljs-keyword">disk </span><span class="hljs-number">1</span> <span class="hljs-comment">###这里选中要分区的磁盘，因为我是移动硬盘，index是1，这里应该会看到选择光标不要选错了</span><br><br>create partition efi size=<span class="hljs-number">200</span><br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">diskpart</span><br><span class="line">list disk</span><br><span class="line">select disk 1 ###这里选中要分区的磁盘，因为我是移动硬盘，index是1，这里应该会看到选择光标不要选错了</span><br><span class="line"></span><br><span class="line">create partition efi size=200</span><br></pre></td></tr></table></figure>
 
 <p>详细的图文请参考:</p>
 <p><a target="_blank" rel="noopener" href="https://blog.zzzmode.com/2016/05/02/osx-mediakit-reports-partition-map-too-small/">Mac OSX 抹盘发生错误:Mediakit 报告设备上空间不足以执行此操作的解决办法
 </a></p>
-<h3 id="二、下载Android源码"><a href="#二、下载Android源码" class="headerlink" title="二、下载Android源码"></a>二、下载Android源码</h3><h4 id="2-1-repo-sync-出错"><a href="#2-1-repo-sync-出错" class="headerlink" title="2.1.repo sync 出错"></a>2.1.repo sync 出错</h4><figure class="highlight subunit"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs subunit"><span class="hljs-keyword">error: </span>RPC failed; result=56, HTTP code = 200&lt;br&gt;<br>fatal: The remote end hung up unexpectedly&lt;br&gt;<br>fatal: early EOF&lt;br&gt;<br>fatal: index-pack failed<br></code></pre></td></tr></table></figure>
+<h3 id="二、下载Android源码"><a href="#二、下载Android源码" class="headerlink" title="二、下载Android源码"></a>二、下载Android源码</h3><h4 id="2-1-repo-sync-出错"><a href="#2-1-repo-sync-出错" class="headerlink" title="2.1.repo sync 出错"></a>2.1.repo sync 出错</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">error: RPC failed; result=56, HTTP code = 200&lt;br&gt;</span><br><span class="line">fatal: The remote end hung up unexpectedly&lt;br&gt;</span><br><span class="line">fatal: early EOF&lt;br&gt;</span><br><span class="line">fatal: index-pack failed</span><br></pre></td></tr></table></figure>
 <p>repo sync时会出现如上错误，安装<code>gnutls</code>和<code>wget</code>后,<br>并参考<a target="_blank" rel="noopener" href="http://stackoverflow.com/questions/6842687/the-remote-end-hung-up-unexpectedly-while-git-cloning">stackoverflow</a>解决。</p>
 <h4 id="2-2-如何选择驱动"><a href="#2-2-如何选择驱动" class="headerlink" title="2.2.如何选择驱动"></a>2.2.如何选择驱动</h4><p><a target="_blank" rel="noopener" href="https://source.android.com/source/build-numbers.html#source-code-tags-and-builds">Source Code Tags and Builds</a></p>
 <p><img src="/res/compile_android_source/android-source2.jpeg"></p>
@@ -369,26 +379,26 @@
 <p><a target="_blank" rel="noopener" href="http://www.jianshu.com/p/1c3d47b2031f">Mac OS X下编译Android M源码</a></p>
 <h3 id="三、编译"><a href="#三、编译" class="headerlink" title="三、编译"></a>三、编译</h3><p><code>一定要下载并安装驱动，下载nexus5 6.0.1_r17版本为例，需要下载执行下图三个sh</code></p>
 <p><img src="/res/compile_android_source/android-source4.png"></p>
-<figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs jboss-cli">$chmod a+x <span class="hljs-string">./</span>*****<span class="hljs-string">.sh</span><br>$<span class="hljs-string">./</span>*****<span class="hljs-string">.sh</span><br><br>输入I ACCEPT完成安装<br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$chmod a+x ./*****.sh</span><br><span class="line">$./*****.sh</span><br><span class="line"></span><br><span class="line">输入I ACCEPT完成安装</span><br></pre></td></tr></table></figure>
 
-<figure class="highlight gams"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs gams"><span class="hljs-meta"><span class="hljs-keyword">$source</span> build/envsetup.sh</span><br><br><span class="hljs-meta"><span class="hljs-keyword">$lunch</span></span><br><br><span class="hljs-meta"><span class="hljs-keyword">$make</span> -j16</span><br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$source build/envsetup.sh</span><br><span class="line"></span><br><span class="line">$lunch</span><br><span class="line"></span><br><span class="line">$make -j16</span><br></pre></td></tr></table></figure>
 
 <h3 id="四、如何将编译好的Android-img刷入模拟器"><a href="#四、如何将编译好的Android-img刷入模拟器" class="headerlink" title="四、如何将编译好的Android img刷入模拟器"></a>四、如何将编译好的Android img刷入模拟器</h3><p>需要设置<code>ANDROID_PRODUCT_OUT</code>变量到<code>~/.bash_profile</code>文件中</p>
-<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs awk"><span class="hljs-comment">#Android 源码编译目录</span><br>export PATH=<span class="hljs-variable">$PATH</span>:<span class="hljs-regexp">/Volumes/</span>AOSP<span class="hljs-regexp">/android-6.0.1_r17-x86_64/</span>out<span class="hljs-regexp">/host/</span>darwin-x86/bin<br>export ANDROID_PRODUCT_OUT=<span class="hljs-regexp">/Volumes/</span>AOSP<span class="hljs-regexp">/android-6.0.1_r17-x86_64/</span>out<span class="hljs-regexp">/target/</span>product/generic_x86_64<br>export PATH=<span class="hljs-variable">$PATH</span>:<span class="hljs-variable">$ANDROID_PRODUCT_OUT</span><br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#Android 源码编译目录</span><br><span class="line">export PATH=$PATH:/Volumes/AOSP/android-6.0.1_r17-x86_64/out/host/darwin-x86/bin</span><br><span class="line">export ANDROID_PRODUCT_OUT=/Volumes/AOSP/android-6.0.1_r17-x86_64/out/target/product/generic_x86_64</span><br><span class="line">export PATH=$PATH:$ANDROID_PRODUCT_OUT</span><br></pre></td></tr></table></figure>
 
 <p>使用命令启动emulator，加载指定的kernel内核和img</p>
-<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs awk">kans-MacBook-Pro:android-<span class="hljs-number">6.0</span>.<span class="hljs-number">1</span>_r17-x86_64 Ivonhoe$<br>emulator -kernel  <span class="hljs-regexp">/Volumes/</span>AOSP<span class="hljs-regexp">/android-6.0.1_r17-x86_64/</span>prebuilts<span class="hljs-regexp">/qemu-kernel/</span>x86_64<span class="hljs-regexp">/kernel-qemu -sysdir ./</span>out<span class="hljs-regexp">/target/</span>product<span class="hljs-regexp">/generic_x86_64/</span> -system <span class="hljs-regexp">/Volumes/</span>AOSP<span class="hljs-regexp">/android-6.0.1_r17-x86_64/</span>out<span class="hljs-regexp">/target/</span>product<span class="hljs-regexp">/generic_x86_64/</span>system.img -data <span class="hljs-regexp">/Volumes/</span>AOSP<span class="hljs-regexp">/android-6.0.1_r17-x86_64/</span>out<span class="hljs-regexp">/target/</span>product<span class="hljs-regexp">/generic_x86_64/u</span>serdata.img -ramdisk <span class="hljs-regexp">/Volumes/</span>AOSP<span class="hljs-regexp">/android-6.0.1_r17-x86_64/</span>out<span class="hljs-regexp">/target/</span>product<span class="hljs-regexp">/generic_x86_64/</span>ramdisk.img<br><br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">kans-MacBook-Pro:android-6.0.1_r17-x86_64 Ivonhoe$</span><br><span class="line">emulator -kernel  /Volumes/AOSP/android-6.0.1_r17-x86_64/prebuilts/qemu-kernel/x86_64/kernel-qemu -sysdir ./out/target/product/generic_x86_64/ -system /Volumes/AOSP/android-6.0.1_r17-x86_64/out/target/product/generic_x86_64/system.img -data /Volumes/AOSP/android-6.0.1_r17-x86_64/out/target/product/generic_x86_64/userdata.img -ramdisk /Volumes/AOSP/android-6.0.1_r17-x86_64/out/target/product/generic_x86_64/ramdisk.img</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
 <p>参考老罗的博客<a target="_blank" rel="noopener" href="http://blog.csdn.net/luoshengyang/article/details/6559955">在Ubuntu上下载、编译和安装Android最新源代码</a></p>
 <h3 id="五、刷入Nexus6真机"><a href="#五、刷入Nexus6真机" class="headerlink" title="五、刷入Nexus6真机"></a>五、刷入Nexus6真机</h3><p>Nexus6关机状态下,长按音量下+电源,进入recovery模式</p>
 <p>然后在源码根目录下(Android根目录下)执行下面命令:</p>
-<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ebnf"><span class="hljs-attribute">fastboot -w flashall</span><br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fastboot -w flashall</span><br></pre></td></tr></table></figure>
 <p><img src="/res/compile_android_source/android-source5.png"></p>
 <p>使用<code>mmm framework/base</code>单独编译framework代码</p>
 <p>adb push可能会提示 <code>Read-only file system</code></p>
 <p><code>failed to copy &#39;out/target/product/shamu/system/framework/framework.jar&#39;  to &#39;/system/framework/framework.jar&#39;: Read-only file system</code></p>
 <p>通过下列命令解决：</p>
-<figure class="highlight xquery"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs xquery">adb<span class="hljs-built_in"> root</span><br>adb remount<br>adb disable-verity<br>adb reboot<br>adb<span class="hljs-built_in"> root</span><br>adb remount<br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">adb root</span><br><span class="line">adb remount</span><br><span class="line">adb disable-verity</span><br><span class="line">adb reboot</span><br><span class="line">adb root</span><br><span class="line">adb remount</span><br></pre></td></tr></table></figure>
 
 <h3 id="六、参考文档"><a href="#六、参考文档" class="headerlink" title="六、参考文档"></a>六、参考文档</h3><p><a target="_blank" rel="noopener" href="http://blog.csdn.net/ljphhj/article/details/51512263">Android系统源码下载与编译、刷机–Nexus6实测</a></p>
 <h3 id="转载请标明出处病已blog-https-ivonhoe-github-io"><a href="#转载请标明出处病已blog-https-ivonhoe-github-io" class="headerlink" title="转载请标明出处病已blog https://ivonhoe.github.io/"></a>转载请标明出处<a href="https://ivonhoe.github.io/">病已blog https://ivonhoe.github.io/</a></h3>
@@ -605,6 +615,35 @@ window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
      
 
 
+
+  <script src="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.3.5/dist/jquery.fancybox.min.js"></script>
+  <script>
+  //利用 FancyBox 实现点击图片放大
+  $(document).ready(function() {
+    $('article img').not('[hidden]').not('.panel-body img').each(function() {
+      var $image = $(this);
+      var imageCaption = $image.attr('alt');
+      var $imageWrapLink = $image.parent('a');
+      if ($imageWrapLink.length < 1) {
+        var src = this.getAttribute('src');
+        var idx = src.lastIndexOf('?');
+        if (idx != -1) {
+          src = src.substring(0, idx);
+        }
+        $imageWrapLink = $image.wrap('<a href="' + src + '"></a>').parent('a');
+      }
+      $imageWrapLink.attr('data-fancybox', 'images');
+      if (imageCaption) {
+        $imageWrapLink.attr('data-caption', imageCaption);
+      }
+    });
+    $().fancybox({
+      selector: '[data-fancybox="images"]',
+      hash: false,
+      loop: false,
+    });
+  });
+  </script>
 
 
 

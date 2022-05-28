@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang=zh>
 <head>
+  <meta name="referrer" content="no-referrer" />
   <meta charset="utf-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -45,6 +46,8 @@
 
   
   
+  
+    <link href="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.3.5/dist/jquery.fancybox.min.css" rel="stylesheet">
   
   
 <meta name="generator" content="Hexo 6.1.0"></head>
@@ -338,6 +341,13 @@
 
         <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2015/04/08/what-is-context/#comments" class="article-comment-link">评论</a></span>
         
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 2k(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 7(分)</span>
+	
+
       </div>
     </div>
     <div class="article-entry marked-body" itemprop="articleBody">
@@ -352,7 +362,7 @@
 <h3 id="ContentProvider"><a href="#ContentProvider" class="headerlink" title="ContentProvider"></a>ContentProvider</h3><p>ContentProvider同样也不是Context，但是已被创建就可以活取getContext方法，如果ContentProvider和调用者在同一个进程，那会返回相同的Application实例，如果在两个单独的进程里，getContext()会返回一个新创建的Context，代表这个provider进程的Context。（注：可以阅读ActivityThread.java中的installProvider()和ContentProvider的attachInfo()方法，installProvider方法会根据provider的包名和当前进程名进行比较，如果是同一个进程那就使用当前的application context，如果在不同的进程中，就会调用createPackageContext创建一个provider相关的Context，并通过attachInfo绑定provider）。</p>
 <h2 id="保存引用"><a href="#保存引用" class="headerlink" title="保存引用"></a>保存引用</h2><p>我们首先关注的问题是，当我们在一个对象或者类里面保存一个context的引用，但是这个对象或者类的生命周期超过了你保存的context实例的生命周期。例如，创建需要一个Context对象去加载资源或者去调用CotentProvider，保存当前Activity或者Service的引用在这个单例中。</p>
 <p>失败的单例：</p>
-<div class="code-wrapper"><pre><code class="hljs">public class CustomManager &#123;
+<pre><code>public class CustomManager &#123;
     private static CustomManager sInstance;
 
     public static CustomManager getInstance(Context context) &#123;
@@ -369,11 +379,11 @@
         mContext = context;
     &#125;
 &#125;
-</code></pre></div>
+</code></pre>
 <p>这里的问题是我们并不知道这个Context从哪里来，当持有一个结束的Activity或者Service是不安全的，这是因为在这个类里的单例是一个静态引用。这意味着我们引用的对象包括所有被这个对象引用的对象都不会被垃圾回收。如果这个Context是一个Activity，那么就会造成这个Activity引用的所有视图和其他可能跟它关联的对象持续占有内存，造成内存泄露。</p>
 <p>为了防止这种情况，我们把这个单例修改成引用appliction context。</p>
 <p>修改后的单例：</p>
-<div class="code-wrapper"><pre><code class="hljs">public class CustomManager &#123;
+<pre><code>public class CustomManager &#123;
     private static CustomManager sInstance;
 
     public static CustomManager getInstance(Context context) &#123;
@@ -391,7 +401,7 @@
         mContext = context;
     &#125;
 &#125;
-</code></pre></div>
+</code></pre>
 <p>现在不用关心这个Context是什么，因为现在持有的引用是安全的。Application context本身就是一个单例，我们只是创建另一个静态引用并不会造成内存泄露。另一个类似例子就是在一个后台的线程或者等待的Handler里持有一个Context引用。<br>既然这样那我们为什么总是引用一个application context呢？我们就永远不用担心内存泄露的问题。答案当然是不可以，就想我在前面提到的那样，每种类型的Context类型都不相同。</p>
 <h2 id="Context的功能"><a href="#Context的功能" class="headerlink" title="Context的功能"></a>Context的功能</h2><p>我们安全的调用Context的方法取决于这个Context是如何创建的，下面的表是Context功能的使用情况：</p>
 <table>
@@ -688,6 +698,35 @@ window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
      
 
 
+
+  <script src="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.3.5/dist/jquery.fancybox.min.js"></script>
+  <script>
+  //利用 FancyBox 实现点击图片放大
+  $(document).ready(function() {
+    $('article img').not('[hidden]').not('.panel-body img').each(function() {
+      var $image = $(this);
+      var imageCaption = $image.attr('alt');
+      var $imageWrapLink = $image.parent('a');
+      if ($imageWrapLink.length < 1) {
+        var src = this.getAttribute('src');
+        var idx = src.lastIndexOf('?');
+        if (idx != -1) {
+          src = src.substring(0, idx);
+        }
+        $imageWrapLink = $image.wrap('<a href="' + src + '"></a>').parent('a');
+      }
+      $imageWrapLink.attr('data-fancybox', 'images');
+      if (imageCaption) {
+        $imageWrapLink.attr('data-caption', imageCaption);
+      }
+    });
+    $().fancybox({
+      selector: '[data-fancybox="images"]',
+      hash: false,
+      loop: false,
+    });
+  });
+  </script>
 
 
 
