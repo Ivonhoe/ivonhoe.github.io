@@ -2,6 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://ivonhoe.github.io/2022/05/29/android-anr-2/</loc>
+    
+    <lastmod>2022-05-28</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://ivonhoe.github.io/2015/02/09/android-animation/</loc>
     
     <lastmod>2022-05-25</lastmod>

@@ -1,3 +1,4 @@
+https://ivonhoe.github.io/2022/05/29/android-anr-2/
 https://ivonhoe.github.io/2015/02/09/android-animation/
 https://ivonhoe.github.io/2015/09/01/android-fancy-drawable/
 https://ivonhoe.github.io/2017/02/09/%E7%BE%8E%E5%9B%A2%E5%A6%82%E4%BD%95%E9%98%B2dex2jar/
