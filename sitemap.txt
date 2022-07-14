@@ -1,3 +1,4 @@
+https://ivonhoe.github.io/2021/03/28/design-patterns-proxy/
 https://ivonhoe.github.io/2022/05/29/android-anr-2/
 https://ivonhoe.github.io/2015/02/09/android-animation/
 https://ivonhoe.github.io/2015/09/01/android-fancy-drawable/
@@ -20,7 +21,6 @@ https://ivonhoe.github.io/2019/11/08/hello-flutter-aspectd/
 https://ivonhoe.github.io/2018/05/27/design-patterns-singleton/
 https://ivonhoe.github.io/2021/03/28/design-patterns-chain-of-responsibility/
 https://ivonhoe.github.io/2021/03/28/design-patterns-visitor/
-https://ivonhoe.github.io/2021/03/28/design-patterns-proxy/
 https://ivonhoe.github.io/2022/02/08/java-spi/
 https://ivonhoe.github.io/2022/04/09/flutter-dev-tools/
 https://ivonhoe.github.io/2015/04/28/android-performance-drawable/
