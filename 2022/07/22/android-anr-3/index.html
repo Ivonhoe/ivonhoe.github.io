@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta name="referrer" content="no-referrer" />
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>ANR分析记录(三)主线程方法耗时 | Hexo</title>
+  <meta name="description" content="日常Android ANR问题分析记录。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ANR分析记录(三)主线程方法耗时">
+<meta property="og:url" content="https://ivonhoe.github.io/2022/07/22/android-anr-3/index.html">
+<meta property="og:site_name" content="病已的博客">
+<meta property="og:description" content="日常Android ANR问题分析记录。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2022/png/411436/1657619596560-a4f0fdaa-7335-4419-8cdb-904adfbe5b07.png#clientId=u6b2c4f83-fe9e-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=72&id=u1fffec09&margin=%5Bobject%20Object%5D&name=image.png&originHeight=144&originWidth=1024&originalType=binary&ratio=1&rotation=0&showTitle=false&size=60468&status=done&style=none&taskId=u16fce71a-d91d-449c-aa27-e3a6cdfc78b&title=&width=512">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2022/png/411436/1658129918944-faeb6984-e33c-4eac-b6de-ea96e0fffba3.png#clientId=uae18713d-0737-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=607&id=uf6a4b5e7&margin=%5Bobject%20Object%5D&name=image.png&originHeight=1214&originWidth=396&originalType=binary&ratio=1&rotation=0&showTitle=false&size=38549&status=done&style=none&taskId=u827dd0d6-8464-43d2-8566-cd925e4ced9&title=&width=198">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2022/png/411436/1658129923422-bbd9022f-1ade-45ed-933d-b56c9425e7eb.png#clientId=uae18713d-0737-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=444&id=u77c433a5&margin=%5Bobject%20Object%5D&name=image.png&originHeight=539&originWidth=540&originalType=binary&ratio=1&rotation=0&showTitle=false&size=75361&status=done&style=none&taskId=u9225e9bc-692b-459a-afb2-4309f0f132a&title=&width=445">
+<meta property="article:published_time" content="2022-07-22T15:48:49.000Z">
+<meta property="article:modified_time" content="2022-08-05T16:20:53.680Z">
+<meta property="article:author" content="病已">
+<meta property="article:tag" content="anr">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2022/png/411436/1657619596560-a4f0fdaa-7335-4419-8cdb-904adfbe5b07.png#clientId=u6b2c4f83-fe9e-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=72&id=u1fffec09&margin=%5Bobject%20Object%5D&name=image.png&originHeight=144&originWidth=1024&originalType=binary&ratio=1&rotation=0&showTitle=false&size=60468&status=done&style=none&taskId=u16fce71a-d91d-449c-aa27-e3a6cdfc78b&title=&width=512">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://ivonhoe.github.io/2022/07/22/android-anr-3/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="病已的博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+    <link href="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.3.5/dist/jquery.fancybox.min.css" rel="stylesheet">
+  
+  
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+
+<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/Ivonhoe" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.png" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">病已</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Android Developer</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> HangZhou, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/Ivonhoe" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Android%E5%AE%89%E5%85%A8/">Android安全</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Android%E6%8F%92%E4%BB%B6%E5%8C%96/">Android插件化</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Flutter/">Flutter</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/">学习总结</a><span class="category-list-count">12</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">性能优化</a><span class="category-list-count">10</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%96%B9%E6%A1%88%E4%B8%8E%E8%AE%BE%E8%AE%A1/">方案与设计</a><span class="category-list-count">8</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%BB%98%E5%88%B6%E4%B8%8E%E5%8A%A8%E7%94%BB/">绘制与动画</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%BF%BB%E8%AF%91/">翻译</a><span class="category-list-count">2</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/ASM/" rel="tag">ASM</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/" rel="tag">Android</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android%E6%BA%90%E7%A0%81/" rel="tag">Android源码</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Bitmap/" rel="tag">Bitmap</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/BitmapFactory/" rel="tag">BitmapFactory</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Context/" rel="tag">Context</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Copy-on-write/" rel="tag">Copy-on-write</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Delvik/" rel="tag">Delvik</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Drawable/" rel="tag">Drawable</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GC/" rel="tag">GC</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Gradle/" rel="tag">Gradle</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/" rel="tag">JVM</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SPI/" rel="tag">SPI</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Zygote/" rel="tag">Zygote</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/anr/" rel="tag">anr</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/dex2jar/" rel="tag">dex2jar</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/dump-heap/" rel="tag">dump heap</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/flutter/" rel="tag">flutter</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ndk/" rel="tag">ndk</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%A7%E5%93%81%E5%88%86%E6%9E%90/" rel="tag">产品分析</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%86%85%E5%AD%98/" rel="tag">内存</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8E%BB%E5%B9%BF%E5%91%8A/" rel="tag">去广告</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" rel="tag">多线程</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AF%B9%E7%A7%B0%E5%8A%A0%E5%AF%86/" rel="tag">对称加密</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" rel="tag">性能优化</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8F%92%E4%BB%B6%E5%8C%96/" rel="tag">插件化</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D%EF%BC%8C%E6%95%B0%E5%AD%97%E8%AF%81%E4%B9%A6/" rel="tag">数字签名，数字证书</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E8%A7%A3%E6%9E%90/" rel="tag">数据解析</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%97%A0%E7%97%95%E5%9F%8B%E7%82%B9/" rel="tag">无痕埋点</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%AD%BB%E9%94%81/" rel="tag">死锁</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91/" rel="tag">源码编译</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%94%9F%E4%BA%A7%E8%80%85%E6%B6%88%E8%B4%B9%E8%80%85%E6%A8%A1%E5%BC%8F/" rel="tag">生产者消费者模式</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%A7%BB%E5%8A%A8%E5%AE%89%E5%85%A8/" rel="tag">移动安全</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BB%98%E5%88%B6%E4%B8%8E%E5%8A%A8%E7%94%BB/" rel="tag">绘制与动画</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BD%91%E7%BB%9C/" rel="tag">网络</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BF%BB%E8%AF%91/" rel="tag">翻译</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag">设计模式</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%BD%AC%E8%BD%BD/" rel="tag">转载</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9D%9E%E5%AF%B9%E7%A7%B0%E5%8A%A0%E5%AF%86/" rel="tag">非对称加密</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/ASM/" style="font-size: 13px;">ASM</a> <a href="/tags/Android/" style="font-size: 14px;">Android</a> <a href="/tags/Android%E6%BA%90%E7%A0%81/" style="font-size: 13px;">Android源码</a> <a href="/tags/Bitmap/" style="font-size: 13.17px;">Bitmap</a> <a href="/tags/BitmapFactory/" style="font-size: 13px;">BitmapFactory</a> <a href="/tags/Context/" style="font-size: 13px;">Context</a> <a href="/tags/Copy-on-write/" style="font-size: 13px;">Copy-on-write</a> <a href="/tags/Delvik/" style="font-size: 13px;">Delvik</a> <a href="/tags/Drawable/" style="font-size: 13px;">Drawable</a> <a href="/tags/GC/" style="font-size: 13px;">GC</a> <a href="/tags/Gradle/" style="font-size: 13px;">Gradle</a> <a href="/tags/JVM/" style="font-size: 13.17px;">JVM</a> <a href="/tags/SPI/" style="font-size: 13px;">SPI</a> <a href="/tags/Zygote/" style="font-size: 13.17px;">Zygote</a> <a href="/tags/anr/" style="font-size: 13.33px;">anr</a> <a href="/tags/dex2jar/" style="font-size: 13px;">dex2jar</a> <a href="/tags/dump-heap/" style="font-size: 13px;">dump heap</a> <a href="/tags/flutter/" style="font-size: 13.17px;">flutter</a> <a href="/tags/ndk/" style="font-size: 13.17px;">ndk</a> <a href="/tags/%E4%BA%A7%E5%93%81%E5%88%86%E6%9E%90/" style="font-size: 13px;">产品分析</a> <a href="/tags/%E5%86%85%E5%AD%98/" style="font-size: 13.17px;">内存</a> <a href="/tags/%E5%8E%BB%E5%B9%BF%E5%91%8A/" style="font-size: 13px;">去广告</a> <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" style="font-size: 13px;">多线程</a> <a href="/tags/%E5%AF%B9%E7%A7%B0%E5%8A%A0%E5%AF%86/" style="font-size: 13px;">对称加密</a> <a href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" style="font-size: 13.83px;">性能优化</a> <a href="/tags/%E6%8F%92%E4%BB%B6%E5%8C%96/" style="font-size: 13.5px;">插件化</a> <a href="/tags/%E6%95%B0%E5%AD%97%E7%AD%BE%E5%90%8D%EF%BC%8C%E6%95%B0%E5%AD%97%E8%AF%81%E4%B9%A6/" style="font-size: 13px;">数字签名，数字证书</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E8%A7%A3%E6%9E%90/" style="font-size: 13px;">数据解析</a> <a href="/tags/%E6%97%A0%E7%97%95%E5%9F%8B%E7%82%B9/" style="font-size: 13.17px;">无痕埋点</a> <a href="/tags/%E6%AD%BB%E9%94%81/" style="font-size: 13px;">死锁</a> <a href="/tags/%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91/" style="font-size: 13px;">源码编译</a> <a href="/tags/%E7%94%9F%E4%BA%A7%E8%80%85%E6%B6%88%E8%B4%B9%E8%80%85%E6%A8%A1%E5%BC%8F/" style="font-size: 13px;">生产者消费者模式</a> <a href="/tags/%E7%A7%BB%E5%8A%A8%E5%AE%89%E5%85%A8/" style="font-size: 13.33px;">移动安全</a> <a href="/tags/%E7%BB%98%E5%88%B6%E4%B8%8E%E5%8A%A8%E7%94%BB/" style="font-size: 13.83px;">绘制与动画</a> <a href="/tags/%E7%BD%91%E7%BB%9C/" style="font-size: 13.17px;">网络</a> <a href="/tags/%E7%BF%BB%E8%AF%91/" style="font-size: 13.17px;">翻译</a> <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" style="font-size: 13.67px;">设计模式</a> <a href="/tags/%E8%BD%AC%E8%BD%BD/" style="font-size: 13px;">转载</a> <a href="/tags/%E9%9D%9E%E5%AF%B9%E7%A7%B0%E5%8A%A0%E5%AF%86/" style="font-size: 13px;">非对称加密</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/08/">八月 2022</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/07/">七月 2022</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/05/">五月 2022</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/04/">四月 2022</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/02/">二月 2022</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/03/">三月 2021</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">五月 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">三月 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">十一月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">七月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">六月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">一月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">十月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">九月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">七月 2018</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">六月 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">五月 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">六月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">二月 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">九月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">四月 2015</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">三月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">二月 2015</a><span class="archive-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E6%96%B9%E6%A1%88%E4%B8%8E%E8%AE%BE%E8%AE%A1/">方案与设计</a>
+              </p>
+              <p class="item-title">
+                <a href="/2022/08/05/design-patterns-decorator/" class="title">装饰器模式</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-08-05T15:58:58.000Z" itemprop="datePublished">8月 5 2022</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">性能优化</a>
+              </p>
+              <p class="item-title">
+                <a href="/2022/07/22/android-anr-3/" class="title">ANR分析记录(三)主线程方法耗时</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-07-22T15:48:49.000Z" itemprop="datePublished">7月 22 2022</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">性能优化</a>
+              </p>
+              <p class="item-title">
+                <a href="/2022/05/29/android-anr-2/" class="title">ANR分析记录(二)线程死锁</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-05-28T16:29:07.000Z" itemprop="datePublished">5月 29 2022</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">性能优化</a>
+              </p>
+              <p class="item-title">
+                <a href="/2022/04/09/flutter-dev-tools/" class="title">如何排查flutter性能问题</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-04-08T16:00:51.000Z" itemprop="datePublished">4月 9 2022</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">性能优化</a>
+              </p>
+              <p class="item-title">
+                <a href="/2022/02/08/java-spi/" class="title">JDK ServiceLoader加载优化</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-02-08T14:53:51.000Z" itemprop="datePublished">2月 8 2022</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-android-anr-3" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      ANR分析记录(三)主线程方法耗时
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2022/07/22/android-anr-3/" class="article-date">
+	  <time datetime="2022-07-22T15:48:49.000Z" itemprop="datePublished">7月 22 2022</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/">性能优化</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/anr/" rel="tag">anr</a>
+  </span>
+
+
+        
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/07/22/android-anr-3/#comments" class="article-comment-link">评论</a></span>
+        
+	
+		<span class="post-wordcount hidden-xs" itemprop="wordCount">字数统计: 1.8k(字)</span>
+	
+	
+		<span class="post-readcount hidden-xs" itemprop="timeRequired">阅读时长: 8(分)</span>
+	
+
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <p>日常Android ANR问题分析记录。</p>
+<span id="more"></span>
+<h3 id="0x01-ANR六看"><a href="#0x01-ANR六看" class="headerlink" title="0x01 ANR六看"></a>0x01 ANR六看</h3><h4 id="一看-Trace"><a href="#一看-Trace" class="headerlink" title="一看 Trace"></a>一看 Trace</h4><p>关键词：Blocked，waiting to lock，locked<br>看堆栈：死锁堆栈，业务调用堆栈，IPC堆栈，系统调用堆栈</p>
+<h4 id="二看logcat关键字"><a href="#二看logcat关键字" class="headerlink" title="二看logcat关键字"></a>二看logcat关键字</h4><p>关键字：Load，CPU，Slow Operation，Kswapd，Mmcqd，Kwork，Lowmemkiller 等等<br>通过日志中这些关键字判断当前系统是否存在 (CPU，Mem，IO) 资源紧张的情况。</p>
+<h4 id="三看系统负载分布"><a href="#三看系统负载分布" class="headerlink" title="三看系统负载分布"></a>三看系统负载分布</h4><p>关键字：user，sys，IOWait<br>通过观察系统负载，则可以进一步明确是 CPU 资源紧张，还是 IO 资源紧张；如果系统负载过高，一定是有某个进程或多个进程引起的。反之系统负载过高又会影响到所有进程调度性能。通过观察 User，Sys 的 CPU 占比，可以进一步发分析当前负载过高是发生在应用空间，还是系统空间，如大量调用逻辑 (如文件读写，内存紧张导致系统不断回收内存等等)，知道这些之后，排查方向又会进一步缩小范围。</p>
+<h4 id="四看进程-CPU"><a href="#四看进程-CPU" class="headerlink" title="四看进程 CPU"></a>四看进程 CPU</h4><p>关键字：CPU usage<br><img src="https://cdn.nlark.com/yuque/0/2022/png/411436/1657619596560-a4f0fdaa-7335-4419-8cdb-904adfbe5b07.png#clientId=u6b2c4f83-fe9e-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=72&id=u1fffec09&margin=%5Bobject%20Object%5D&name=image.png&originHeight=144&originWidth=1024&originalType=binary&ratio=1&rotation=0&showTitle=false&size=60468&status=done&style=none&taskId=u16fce71a-d91d-449c-aa27-e3a6cdfc78b&title=&width=512" alt="image.png"></p>
+<h4 id="五看-CPU-占比定线程"><a href="#五看-CPU-占比定线程" class="headerlink" title="五看 CPU 占比定线程"></a>五看 CPU 占比定线程</h4><h4 id="六看主线程消息调度"><a href="#六看主线程消息调度" class="headerlink" title="六看主线程消息调度"></a>六看主线程消息调度</h4><h3 id="0x02-错误分析"><a href="#0x02-错误分析" class="headerlink" title="0x02 错误分析"></a>0x02 错误分析</h3><h4 id="2-1-日志分析"><a href="#2-1-日志分析" class="headerlink" title="2.1 日志分析"></a>2.1 日志分析</h4><p>测试同学反馈在测试环境上，某些操作后app必现ANR，通过bugreport命令抓取以下ANR trace。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">DALVIK THREADS (226):</span><br><span class="line">&quot;main&quot; prio=5 tid=1 Runnable</span><br><span class="line">  | group=&quot;main&quot; sCount=0 ucsCount=0 flags=0 obj=0x714acbb0 self=0xb400007416e10800</span><br><span class="line">  | sysTid=14827 nice=-10 cgrp=default sched=0/0 handle=0x74c2f26500</span><br><span class="line">  | state=R schedstat=( 115021450752 1125156276 11142 ) utm=11377 stm=124 core=7 HZ=100</span><br><span class="line">  | stack=0x7fdfbd7000-0x7fdfbd9000 stackSize=8188KB</span><br><span class="line">  | held mutexes= &quot;mutator lock&quot;(shared held)</span><br><span class="line">  at androidx.viewpager.widget.ViewPager.populate(ViewPager.java:1171)</span><br><span class="line">  at androidx.viewpager.widget.ViewPager.populate(ViewPager.java:1092)</span><br><span class="line">  at androidx.viewpager.widget.ViewPager.onMeasure(ViewPager.java:1622)</span><br><span class="line">  at android.view.View.measure(View.java:25977)</span><br><span class="line">  at android.view.ViewGroup.measureChildWithMargins(ViewGroup.java:7073)</span><br><span class="line">  at android.widget.FrameLayout.onMeasure(FrameLayout.java:194)</span><br><span class="line">  at android.view.View.measure(View.java:25977)</span><br><span class="line">  at android.view.ViewGroup.measureChildWithMargins(ViewGroup.java:7073)</span><br><span class="line">  at android.widget.FrameLayout.onMeasure(FrameLayout.java:194)</span><br><span class="line">  at android.view.View.measure(View.java:25977)</span><br><span class="line">  at android.widget.RelativeLayout.measureChildHorizontal(RelativeLayout.java:735)</span><br><span class="line">  at android.widget.RelativeLayout.onMeasure(RelativeLayout.java:481)</span><br><span class="line">  at android.view.View.measure(View.java:25977)</span><br><span class="line">  at android.widget.RelativeLayout.measureChild(RelativeLayout.java:696)</span><br><span class="line">  at android.widget.RelativeLayout.onMeasure(RelativeLayout.java:499)</span><br><span class="line">  at android.view.View.measure(View.java:25977)</span><br><span class="line">  at android.widget.LinearLayout.measureHorizontal(LinearLayout.java:1185)</span><br><span class="line">  at android.widget.LinearLayout.onMeasure(LinearLayout.java:723)</span><br><span class="line">  at android.view.View.measure(View.java:25977)</span><br><span class="line">  at android.view.ViewGroup.measureChildWithMargins(ViewGroup.java:7073)</span><br><span class="line">  at android.widget.LinearLayout.measureChildBeforeLayout(LinearLayout.java:1552)</span><br><span class="line">  at android.widget.LinearLayout.measureHorizontal(LinearLayout.java:1204)</span><br><span class="line">  at android.widget.LinearLayout.onMeasure(LinearLayout.java:723)</span><br><span class="line">  at android.view.View.measure(View.java:25977)</span><br><span class="line">  at android.widget.RelativeLayout.measureChildHorizontal(RelativeLayout.java:735)</span><br><span class="line">  at android.widget.RelativeLayout.onMeasure(RelativeLayout.java:481)</span><br><span class="line">  at android.view.View.measure(View.java:25977)</span><br><span class="line">  at android.view.ViewGroup.measureChildWithMargins(ViewGroup.java:7073)</span><br><span class="line">  at android.widget.LinearLayout.measureChildBeforeLayout(LinearLayout.java:1552)</span><br><span class="line">  at android.widget.LinearLayout.measureVertical(LinearLayout.java:842)</span><br><span class="line">  at android.widget.LinearLayout.onMeasure(LinearLayout.java:721)</span><br></pre></td></tr></table></figure>
+
+<p>通过trace日志和viewpage源码并不能第一时间定位原因，只能看出并不是简单的锁同步问题导致的ANR。转而通过logcat日志查找更多有用的信息。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">Load: 0.6 / 0.62 / 0.48</span><br><span class="line">CPU usage from 24258ms to 13621ms ago (2022-07-12 12:10:12.021 to 2022-07-12 12:10:22.658) with 99% awake:</span><br><span class="line">  82% 16394/xxxxxxxxxxxx: 71% user + 11% kernel / faults: 4691 minor 1 major</span><br><span class="line">  29% 1115/surfaceflinger: 19% user + 9.9% kernel / faults: 5 minor</span><br><span class="line">  16% 1290/system_server: 9.9% user + 6.8% kernel / faults: 3959 minor</span><br><span class="line">  13% 1045/vendor.qti.hardware.display.composer-service: 9.3% user + 4% kernel</span><br><span class="line">  5.5% 23223/com.heytap.market: 4.2% user + 1.2% kernel / faults: 6350 minor 3 major</span><br><span class="line">  5.3% 387/crtc_commit:111: 0% user + 5.3% kernel</span><br><span class="line">  3.8% 28079/kworker/u24:6-ufs_pm_qos_0: 0% user + 3.8% kernel</span><br><span class="line">  3% 11017/kworker/u24:12-ufs_pm_qos_0: 0% user + 3% kernel</span><br><span class="line">  2.9% 296/kgsl_worker_thr: 0% user + 2.9% kernel</span><br><span class="line">  2.7% 9946/kworker/u24:3-kverityd: 0% user + 2.7% kernel</span><br><span class="line">  2% 2940/com.android.systemui: 1.4% user + 0.5% kernel / faults: 702 minor</span><br><span class="line">  .</span><br><span class="line">  .</span><br><span class="line">  .</span><br><span class="line">  24% TOTAL: 15% user + 7% kernel + 0% iowait + 1.6% irq + 0.3% softirq</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">CPU usage from 0ms to 6338ms later (2022-07-12 12:05:52.611 to 2022-07-12 12:05:58.950) with 99% awake:</span><br><span class="line">  119% 14827/xxxxxxxxxxxx: 109% user + 10% kernel / faults: 7495 minor</span><br><span class="line">  46% 1290/system_server: 21% user + 25% kernel / faults: 5888 minor</span><br><span class="line">  20% 627/logd: 16% user + 4.4% kernel / faults: 60205 minor</span><br><span class="line">  8.6% 27447/media.codec: 5.5% user + 3.1% kernel / faults: 8918 minor</span><br><span class="line">  4.4% 1036/android.hardware.sensors@2.0-service.multihal: 1.8% user + 2.5% kernel / faults: 559 minor 6 major</span><br><span class="line">  3.7% 3504/com.android.launcher: 2.6% user + 1.1% kernel / faults: 1874 minor</span><br><span class="line">  0.1% 1564/media.swcodec: 0% user + 0% kernel / faults: 4653 minor</span><br><span class="line">  2.9% 9945/kworker/u24:1+DIAG_CTRL: 0% user + 2.9% kernel</span><br><span class="line">  2.8% 1115/surfaceflinger: 1.1% user + 1.7% kernel / faults: 921 minor</span><br><span class="line">  2.6% 9991/kworker/u24:5-adb: 0% user + 2.6% kernel</span><br><span class="line">  2.6% 28079/kworker/u24:6-ufs_pm_qos_0: 0% user + 2.6% kernel</span><br><span class="line">  2.5% 9946/kworker/u24:3-kverityd: 0% user + 2.5% kernel</span><br><span class="line">  2.2% 2940/com.android.systemui: 0.9% user + 1.2% kernel / faults: 239 minor</span><br><span class="line">  .</span><br><span class="line">  .</span><br><span class="line">  .</span><br><span class="line">  37% TOTAL: 22% user + 11% kernel + 1% iowait + 1.5% irq + 0.3% softirq</span><br></pre></td></tr></table></figure>
+
+<p>通过以上日志可以看到，</p>
+<blockquote>
+<p>Load: 0.6 &#x2F; 0.62 &#x2F; 0.48</p>
+</blockquote>
+<p>ANR 发生前 1 分钟，前 5 分钟，前 15 分钟，系统的整体负载并不高，具体数值代表单位时间等待系统调度的任务数。</p>
+<blockquote>
+<p>CPU usage from 24258ms to 13621ms ago<br>82% 16394&#x2F;xxxxxxxxxxxx: 71% user + 11% kernel &#x2F; faults: 4691 minor 1 major</p>
+</blockquote>
+<p>ANR问题发生之前（CPU usage from XXX to XXX ago），app进程CPU使用率 82%，其中user占比71%，kernel 占比11%。system_server进程CPU使用率16% 。</p>
+<blockquote>
+<p>CPU usage from 0ms to 6338ms later<br> 119% 14827&#x2F;xxxxxxxxxxxx: 109% user + 10% kernel &#x2F; faults: 7495 minor</p>
+</blockquote>
+<p>ANR问题发生以后（CPU usage from XXX to XXX later），app进程CPU使用率 119%，其中user占比109%，kernel 占比10%。system_server进程CPU使用率46% 。<br><strong>通过以上数据可以判断，问题发生时，系统负载并不高，系统调用不频繁，系统IO负载很低。但是app用户进程的CPU资源很紧张，高CPU使用率应该发生在app的用户进程，大概率还是业务代码实现有问题导致的ANR。</strong></p>
+<h4 id="2-2-借助Layout-Inspector定位问题代码"><a href="#2-2-借助Layout-Inspector定位问题代码" class="headerlink" title="2.2 借助Layout Inspector定位问题代码"></a>2.2 借助Layout Inspector定位问题代码</h4><p><img src="https://cdn.nlark.com/yuque/0/2022/png/411436/1658129918944-faeb6984-e33c-4eac-b6de-ea96e0fffba3.png#clientId=uae18713d-0737-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=607&id=uf6a4b5e7&margin=%5Bobject%20Object%5D&name=image.png&originHeight=1214&originWidth=396&originalType=binary&ratio=1&rotation=0&showTitle=false&size=38549&status=done&style=none&taskId=u827dd0d6-8464-43d2-8566-cd925e4ced9&title=&width=198" alt="image.png"><img src="https://cdn.nlark.com/yuque/0/2022/png/411436/1658129923422-bbd9022f-1ade-45ed-933d-b56c9425e7eb.png#clientId=uae18713d-0737-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=444&id=u77c433a5&margin=%5Bobject%20Object%5D&name=image.png&originHeight=539&originWidth=540&originalType=binary&ratio=1&rotation=0&showTitle=false&size=75361&status=done&style=none&taskId=u9225e9bc-692b-459a-afb2-4309f0f132a&title=&width=445" alt="image.png"></p>
+<p>通过日志大致判断问题发生在app业务代码中，梳理了以下的问题排查思路。</p>
+<ol>
+<li>观察trace堆栈可以发现ANR发生在页面布局绘制流程，这样通过调用堆栈可以获取页面布局的层级关系</li>
+<li>借助AS的Layout Inspector工具分析问题发生的页面就可以找到页面中使用viewpager组件的都是哪些业务模块</li>
+<li>结合以上1，2信息定位出发生ANR问题的详细视图位置，再根据具体的视图实现走查业务代码。</li>
+<li>通过查看业务组件的代码实现最终找到了问题原因，业务为了实现图片banner的轮播效果，通过设置Adapter count和Viewpager mCurItem 为一个超大的整数（<strong>Integer.MAX_VALUE</strong>）来实现viewpager无限滚动效果。导致Viewpager的populate方法主线程执行超时。<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">void populate(int newCurrentItem) &#123;</span><br><span class="line">    ...</span><br><span class="line">    ...</span><br><span class="line">    // Fill 3x the available width or up to the number of offscreen</span><br><span class="line">    // pages requested to either side, whichever is larger.</span><br><span class="line">    // If we have no current item we have no work to do.</span><br><span class="line">    if (curItem != null) &#123;</span><br><span class="line">        for (int pos = mCurItem - 1; pos &gt;= 0; pos--) &#123;</span><br><span class="line">            // 超大整数导致循环执行超时</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    ...</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+解决方案也比较简单，针对轮播banner效果重新更换了实现方式。</li>
+</ol>
+<h3 id="0x03-总结"><a href="#0x03-总结" class="headerlink" title="0x03 总结"></a>0x03 总结</h3><p>大部分的ANR问题主要难点在于发现问题和分析问题发生的原因。一般的分析步骤是通过借助分析日志，从ANR Trace、logcat日志、kernel日志到消息队列日志，逐步将可能出现问题的范围缩小，通过CPU、IO、系统调用情况并结合代码走查定位问题原因。本文的分析过程相对比较简单，但是总体遵循这样的分析路径，最终定位并解决了该问题。</p>
+<h3 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h3><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/liuwg1226/article/details/118465301">https://blog.csdn.net/liuwg1226/article/details/118465301</a></p>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://ivonhoe.github.io/2022/07/22/android-anr-3/" title="ANR分析记录(三)主线程方法耗时" target="_blank" rel="external">https://ivonhoe.github.io/2022/07/22/android-anr-3/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/Ivonhoe" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.png" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/Ivonhoe" target="_blank"><span class="text-dark">病已</span><small class="ml-1x">Android Developer</small></a></h3>
+        <div></div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="vcomments"></div>
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2022/08/05/design-patterns-decorator/" title="装饰器模式"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2022/05/29/android-anr-2/" title="ANR分析记录(二)线程死锁"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-fancy btn-donate pop-onhover bg-gradient-warning" data-toggle="modal" data-target="#donateModal"><span>赏</span></button>
+  <!-- <div class="wave-icon wave-icon-danger btn-donate" data-toggle="modal" data-target="#donateModal">
+    <div class="wave-circle"><span class="icon"><i class="icon icon-bill"></i></span></div>
+  </div> -->
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+<!-- Modal -->
+<div class="modal modal-center modal-small modal-xs-full fade" id="donateModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content donate">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <div class="modal-body">
+        <div class="donate-box">
+          <div class="donate-head">
+            <p>感谢您的支持，我会继续努力的!</p>
+          </div>
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade active in" id="alipay">
+              <div class="donate-payimg">
+                <img src="/images/donate/alipay.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开支付宝扫一扫，即可进行扫码打赏哦</p>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="wechatpay">
+              <div class="donate-payimg">
+                <img src="/images/donate/wechatpay.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开微信扫一扫，即可进行扫码打赏哦</p>
+            </div>
+          </div>
+          <div class="donate-footer">
+            <ul class="nav nav-tabs nav-justified" role="tablist">
+              <li role="presentation" class="active">
+                <a href="#alipay" id="alipay-tab" role="tab" data-toggle="tab" aria-controls="alipay" aria-expanded="true"><i class="icon icon-alipay"></i> 支付宝</a>
+              </li>
+              <li role="presentation" class="">
+                <a href="#wechatpay" role="tab" id="wechatpay-tab" data-toggle="tab" aria-controls="wechatpay" aria-expanded="false"><i class="icon icon-wepay"></i> 微信支付</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/Ivonhoe" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+
+
+
+
+   
+    
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/valine"></script>
+  <script type="text/javascript">
+  var GUEST = ['nick', 'mail', 'link'];
+  var meta = 'nick,mail,link';
+  meta = meta.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#vcomments',
+    verify: false,
+    notify: false,
+    appId: 'JdLpddsaWqwfJtXPdDK8woaF-gzGzoHsz',
+    appKey: 'CEmtHXH8f0PtvF0zYtVE0EeY',
+    placeholder: 'Just go go',
+    avatar: 'mm',
+    meta: meta,
+    pageSize: '10' || 10,
+    visitor: false
+  });
+  </script>
+
+     
+
+
+
+  <script src="//cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.3.5/dist/jquery.fancybox.min.js"></script>
+  <script>
+  //利用 FancyBox 实现点击图片放大
+  $(document).ready(function() {
+    $('article img').not('[hidden]').not('.panel-body img').each(function() {
+      var $image = $(this);
+      var imageCaption = $image.attr('alt');
+      var $imageWrapLink = $image.parent('a');
+      if ($imageWrapLink.length < 1) {
+        var src = this.getAttribute('src');
+        var idx = src.lastIndexOf('?');
+        if (idx != -1) {
+          src = src.substring(0, idx);
+        }
+        $imageWrapLink = $image.wrap('<a href="' + src + '"></a>').parent('a');
+      }
+      $imageWrapLink.attr('data-fancybox', 'images');
+      if (imageCaption) {
+        $imageWrapLink.attr('data-caption', imageCaption);
+      }
+    });
+    $().fancybox({
+      selector: '[data-fancybox="images"]',
+      hash: false,
+      loop: false,
+    });
+  });
+  </script>
+
+
+
+
+    <script defer>
+var _hmt = _hmt || [];
+(function() {
+    var hm = document.createElement("script");
+    hm.src = "//hm.baidu.com/hm.js?666a58de875adc9dd40d5de65ceac026";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+</body>
+</html>
